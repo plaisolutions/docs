@@ -1,0 +1,321 @@
+---
+title: "Authentication"
+description: "Learn how to authenticate with PLai Framework APIs and services"
+---
+
+# Authentication
+
+PLai Framework uses multiple authentication methods depending on the context. This guide covers all authentication scenarios you'll encounter.
+
+## Dashboard Authentication
+
+### User Registration & Login
+
+<Steps>
+  <Step title="Create Account">
+    Visit the [PLai Framework dashboard](https://framework.plaisolutions.com) and click "Sign Up"
+  </Step>
+  <Step title="Email Verification">
+    Check your email and click the verification link
+  </Step>
+  <Step title="Organization Setup">
+    Create your first organization or accept an invitation
+  </Step>
+  <Step title="Project Access">
+    Create a project or get invited to existing projects
+  </Step>
+</Steps>
+
+### Session Management
+
+PLai Framework uses secure session cookies for dashboard authentication:
+
+- **Session Duration**: Sessions last 30 days by default
+- **Auto-Renewal**: Sessions renew automatically with activity
+- **Multi-Device**: You can be logged in on multiple devices
+- **Secure Cookies**: All cookies are httpOnly and secure
+
+## API Authentication
+
+### JWT Tokens
+
+API access uses JWT (JSON Web Tokens) for authentication:
+
+```typescript
+// Example API call with JWT
+const response = await fetch('https://api.plaisolutions.com/agents', {
+  headers: {
+    'Authorization': `Bearer ${jwt_token}`,
+    'Content-Type': 'application/json'
+  }
+});
+```
+
+### Token Types
+
+<CardGroup cols={2}>
+  <Card title="User JWT" icon="user">
+    Authenticates user actions and personal resources
+  </Card>
+  <Card title="Project JWT" icon="folder">
+    Provides access to project-specific resources
+  </Card>
+</CardGroup>
+
+### Obtaining Tokens
+
+**Dashboard Method**:
+```typescript
+// Tokens are automatically stored in cookies
+const user_jwt = getCookie('user_jwt');
+const project_jwt = getCookie('project_jwt');
+```
+
+**API Method**:
+```bash
+curl -X POST https://api.plaisolutions.com/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email": "user@example.com", "password": "password"}'
+```
+
+## Agent Chat Authentication
+
+### Share URLs
+
+Agents can be shared publicly or with specific users using secure share URLs:
+
+```
+https://framework.plaisolutions.com/share/{agentId}/{shareId}
+```
+
+<Tabs>
+  <Tab title="Public Shares">
+    - No authentication required
+    - Time-limited access
+    - Rate limiting applied
+    - Limited functionality
+  </Tab>
+  <Tab title="Private Shares">
+    - Authentication required
+    - Full agent capabilities
+    - Usage tracked to organization
+    - Full analytics available
+  </Tab>
+</Tabs>
+
+## Organization & Project Access
+
+### Role-Based Access Control (RBAC)
+
+PLai Framework implements fine-grained RBAC:
+
+<AccordionGroup>
+  <Accordion title="Organization Roles">
+    - **Owner**: Full organization control
+    - **Admin**: Manage users and projects
+    - **Member**: Access assigned projects
+  </Accordion>
+  <Accordion title="Project Roles">
+    - **Owner**: Full project control
+    - **Admin**: Manage project resources
+    - **Member**: Use agents and tools
+    - **Viewer**: Read-only access
+  </Accordion>
+</AccordionGroup>
+
+### Permission Matrix
+
+| Action | Viewer | Member | Admin | Owner |
+|--------|---------|---------|--------|-------|
+| View Agents | ✅ | ✅ | ✅ | ✅ |
+| Chat with Agents | ❌ | ✅ | ✅ | ✅ |
+| Create Agents | ❌ | ❌ | ✅ | ✅ |
+| Manage Tools | ❌ | ❌ | ✅ | ✅ |
+| View Analytics | ✅ | ✅ | ✅ | ✅ |
+| Manage Batches | ❌ | ❌ | ✅ | ✅ |
+| Billing Access | ❌ | ❌ | ❌ | ✅ |
+
+## API Security
+
+### Rate Limiting
+
+API endpoints have rate limits to prevent abuse:
+
+- **Authentication**: 10 requests/minute
+- **Agent Chat**: 60 requests/minute
+- **Management APIs**: 300 requests/minute
+- **Analytics**: 100 requests/minute
+
+### Request Headers
+
+Always include these headers in API requests:
+
+```typescript
+const headers = {
+  'Authorization': `Bearer ${jwt_token}`,
+  'Content-Type': 'application/json',
+  'User-Agent': 'YourApp/1.0.0',
+  'X-API-Version': '1.0'
+};
+```
+
+## Environment-Specific Configuration
+
+### Development Environment
+```typescript
+const config = {
+  apiUrl: 'https://api-dev.plaisolutions.com',
+  authUrl: 'https://auth-dev.plaisolutions.com',
+  dashboardUrl: 'https://app-dev.plaisolutions.com'
+};
+```
+
+### Production Environment
+```typescript
+const config = {
+  apiUrl: 'https://api.plaisolutions.com',
+  authUrl: 'https://auth.plaisolutions.com',
+  dashboardUrl: 'https://framework.plaisolutions.com'
+};
+```
+
+## Error Handling
+
+### Common Authentication Errors
+
+<CodeGroup>
+  ```typescript Response
+  {
+    "error": "unauthorized",
+    "message": "Invalid or expired token",
+    "code": 401
+  }
+  ```
+  ```typescript Response
+  {
+    "error": "forbidden",
+    "message": "Insufficient permissions",
+    "code": 403
+  }
+  ```
+  ```typescript Response
+  {
+    "error": "rate_limit_exceeded",
+    "message": "Too many requests",
+    "code": 429,
+    "retry_after": 60
+  }
+  ```
+</CodeGroup>
+
+### Error Response Handling
+
+```typescript
+async function handleApiRequest(url: string, options: RequestInit) {
+  const response = await fetch(url, options);
+  
+  if (response.status === 401) {
+    // Token expired, redirect to login
+    window.location.href = '/auth/login';
+    return;
+  }
+  
+  if (response.status === 403) {
+    // Insufficient permissions
+    throw new Error('You do not have permission to perform this action');
+  }
+  
+  if (response.status === 429) {
+    // Rate limited
+    const retryAfter = response.headers.get('Retry-After');
+    throw new Error(`Rate limited. Retry after ${retryAfter} seconds`);
+  }
+  
+  return response.json();
+}
+```
+
+## Security Best Practices
+
+<Warning>
+**Never expose JWT tokens** in client-side code or logs. Always use secure storage methods.
+</Warning>
+
+<Tip>
+**Rotate tokens regularly** and implement proper token refresh mechanisms for long-running applications.
+</Tip>
+
+### Token Storage
+
+<Tabs>
+  <Tab title="Web Applications">
+    - Use httpOnly cookies for automatic inclusion
+    - Store in secure sessionStorage for manual handling
+    - Never use localStorage for sensitive tokens
+  </Tab>
+  <Tab title="Mobile Applications">
+    - Use secure keychain/keystore storage
+    - Implement biometric authentication where available
+    - Clear tokens on app logout or uninstall
+  </Tab>
+  <Tab title="Server Applications">
+    - Use environment variables or secure vaults
+    - Implement token refresh logic
+    - Log authentication events for audit
+  </Tab>
+</Tabs>
+
+## Integration Examples
+
+### React Application
+```typescript
+import { useAuth } from '@/hooks/useAuth';
+
+function MyComponent() {
+  const { user, project, isAuthenticated, login, logout } = useAuth();
+  
+  if (!isAuthenticated) {
+    return <LoginForm onLogin={login} />;
+  }
+  
+  return (
+    <div>
+      <h1>Welcome, {user.name}</h1>
+      <p>Current project: {project.name}</p>
+      <button onClick={logout}>Logout</button>
+    </div>
+  );
+}
+```
+
+### Node.js Application
+```typescript
+import jwt from 'jsonwebtoken';
+
+async function authenticateRequest(req: Request, res: Response, next: NextFunction) {
+  const token = req.headers.authorization?.replace('Bearer ', '');
+  
+  if (!token) {
+    return res.status(401).json({ error: 'No token provided' });
+  }
+  
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    return res.status(401).json({ error: 'Invalid token' });
+  }
+}
+```
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Quick Start" icon="play" href="/quickstart">
+    Set up your first authenticated project
+  </Card>
+  <Card title="API Reference" icon="code" href="/api-reference/introduction">
+    Explore API endpoints and examples
+  </Card>
+</CardGroup>

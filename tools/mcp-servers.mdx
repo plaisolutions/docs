@@ -1,0 +1,473 @@
+---
+title: "MCP Server Tool"
+description: "Connect to Model Context Protocol servers for extended functionality"
+icon: "server"
+---
+
+# MCP Server Tool
+
+The MCP Server tool enables agents to connect to remote Model Context Protocol (MCP) servers, extending their capabilities with external services, tools, and data sources through a standardized protocol.
+
+<Frame>
+  <img src="/images/hero-light.png" alt="MCP Server Tool Configuration" />
+</Frame>
+
+<Note>
+This tool has **Preview** status, meaning it's nearly ready for production with potential minor adjustments based on user feedback.
+</Note>
+
+## Overview
+
+The Model Context Protocol (MCP) is an open standard that enables seamless integration between AI agents and external tools. The MCP Server tool allows your PLai agents to:
+
+<CardGroup cols={2}>
+  <Card title="Standardized Integration" icon="plug">
+    Connect to any MCP-compliant server using a unified protocol
+  </Card>
+  <Card title="Extended Capabilities" icon="expand">
+    Access specialized tools and services beyond built-in functionality
+  </Card>
+  <Card title="Secure Authentication" icon="shield">
+    Support for OAuth 2.0 and token-based authentication methods
+  </Card>
+  <Card title="Scalable Architecture" icon="network">
+    Distributed tool architecture for enterprise deployments
+  </Card>
+</CardGroup>
+
+## What is MCP?
+
+The Model Context Protocol provides:
+
+- **Standardized Communication**: Consistent API for tool interactions
+- **Resource Management**: Organized access to external resources
+- **Tool Discovery**: Automatic discovery of available capabilities
+- **Security**: Built-in authentication and authorization
+- **Extensibility**: Easy addition of new tools and services
+
+## Configuration Parameters
+
+<ParamField path="server_url" type="input" required>
+  The URL of the MCP server
+  <br />**Example**: `https://api.example.com/mcp`
+  <br />**Format**: Must be a valid HTTPS URL
+  <br />**Note**: HTTP URLs are not supported for security reasons
+</ParamField>
+
+<ParamField path="auth_type" type="select" required>
+  Authentication method to use with the MCP server
+  <br />**Options**:
+  - `oauth` - OAuth 2.0 authentication flow
+  - `token` - Simple token-based authentication
+</ParamField>
+
+### OAuth Authentication Parameters
+
+<ParamField path="access_token" type="password">
+  OAuth access token for authentication
+  <br />**Example**: `eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...`
+  <br />**Condition**: Only required when `auth_type` is set to `oauth`
+  <br />**Security**: Stored securely and never logged
+</ParamField>
+
+<ParamField path="token_expiry" type="input">
+  Token expiry timestamp or 'never' for long-lived tokens
+  <br />**Example**: `2024-12-31T23:59:59Z` or `never`
+  <br />**Default**: `never`
+  <br />**Condition**: Only shown when `auth_type` is set to `oauth`
+  <br />**Format**: ISO 8601 timestamp or literal `never`
+</ParamField>
+
+### Token Authentication Parameters
+
+<ParamField path="api_token" type="password">
+  API token for authentication
+  <br />**Example**: `mcp_token_abc123xyz789`
+  <br />**Condition**: Only required when `auth_type` is set to `token`
+  <br />**Security**: Stored securely and never logged
+</ParamField>
+
+<ParamField path="header_name" type="input">
+  HTTP header name for the token
+  <br />**Example**: `X-API-Token`, `Authorization`, `X-MCP-Token`
+  <br />**Default**: `X-API-Token`
+  <br />**Condition**: Only shown when `auth_type` is set to `token`
+</ParamField>
+
+<ParamField path="token_prefix" type="input">
+  Token prefix for the authorization header
+  <br />**Example**: `Bearer`, `Token`, `MCP`
+  <br />**Default**: `Bearer`
+  <br />**Condition**: Only shown when `auth_type` is set to `token`
+  <br />**Result**: Header will be formatted as `{prefix} {token}`
+</ParamField>
+
+## Setup Instructions
+
+<Steps>
+  <Step title="Prepare MCP Server">
+    Ensure you have access to an MCP-compliant server with proper credentials
+  </Step>
+  <Step title="Navigate to Tools">
+    Go to the **Tools** section in your project dashboard
+  </Step>
+  <Step title="Create MCP Server Tool">
+    Click **Create Tool** and select **MCP Server**
+  </Step>
+  <Step title="Configure Server URL">
+    Enter the HTTPS URL of your MCP server
+  </Step>
+  <Step title="Select Authentication Method">
+    Choose between OAuth 2.0 or token-based authentication
+  </Step>
+  <Step title="Configure Authentication">
+    Provide the required authentication credentials based on your selected method
+  </Step>
+  <Step title="Test Connection">
+    Use the test button to verify connectivity and authentication
+  </Step>
+  <Step title="Add to Agent">
+    Assign this tool to your agents in agent settings
+  </Step>
+</Steps>
+
+## Authentication Methods
+
+### OAuth 2.0 Authentication
+
+OAuth provides secure, token-based authentication with automatic refresh capabilities:
+
+<Tabs>
+  <Tab title="Configuration">
+    ```json
+    {
+      "server_url": "https://api.example.com/mcp",
+      "auth_type": "oauth",
+      "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...",
+      "token_expiry": "2024-12-31T23:59:59Z"
+    }
+    ```
+  </Tab>
+  <Tab title="Features">
+    - **Automatic Refresh**: Tokens are refreshed automatically
+    - **Secure Storage**: Tokens stored in encrypted format
+    - **Expiration Handling**: Automatic token renewal before expiry
+    - **Scope Management**: Support for OAuth scopes and permissions
+  </Tab>
+  <Tab title="Use Cases">
+    - Enterprise MCP servers with OAuth infrastructure
+    - Servers requiring fine-grained permission control
+    - Multi-tenant environments with user-specific access
+    - Integration with identity providers (Azure AD, Google, etc.)
+  </Tab>
+</Tabs>
+
+### Token Authentication
+
+Simple token-based authentication for straightforward API access:
+
+<Tabs>
+  <Tab title="Configuration">
+    ```json
+    {
+      "server_url": "https://api.example.com/mcp",
+      "auth_type": "token",
+      "api_token": "mcp_token_abc123xyz789",
+      "header_name": "X-API-Token",
+      "token_prefix": "Bearer"
+    }
+    ```
+  </Tab>
+  <Tab title="Header Formats">
+    **Bearer Token**:
+    ```
+    Authorization: Bearer mcp_token_abc123xyz789
+    ```
+    
+    **Custom Header**:
+    ```
+    X-API-Token: mcp_token_abc123xyz789
+    ```
+    
+    **API Key Style**:
+    ```
+    X-MCP-Key: Token mcp_token_abc123xyz789
+    ```
+  </Tab>
+  <Tab title="Use Cases">
+    - Simple MCP server implementations
+    - Development and testing environments
+    - Internal tools with basic security requirements
+    - Legacy systems with token-based auth
+  </Tab>
+</Tabs>
+
+## MCP Server Examples
+
+### Database Query Server
+
+Connect to a database through an MCP server:
+
+```json
+{
+  "server_url": "https://db-mcp.company.com/mcp",
+  "auth_type": "oauth",
+  "access_token": "{{oauth_token}}",
+  "token_expiry": "2024-12-31T23:59:59Z"
+}
+```
+
+**Capabilities**:
+- Execute SQL queries
+- Retrieve table schemas
+- Perform data analysis
+- Generate reports
+
+### File Processing Server
+
+Process documents and files through MCP:
+
+```json
+{
+  "server_url": "https://files-mcp.company.com/mcp",
+  "auth_type": "token",
+  "api_token": "{{file_processor_token}}",
+  "header_name": "Authorization",
+  "token_prefix": "Bearer"
+}
+```
+
+**Capabilities**:
+- PDF text extraction
+- Image analysis
+- Document conversion
+- Metadata extraction
+
+### Business Logic Server
+
+Access custom business logic and calculations:
+
+```json
+{
+  "server_url": "https://business-logic.company.com/mcp",
+  "auth_type": "token",
+  "api_token": "{{business_token}}",
+  "header_name": "X-Business-Token",
+  "token_prefix": "BL"
+}
+```
+
+**Capabilities**:
+- Pricing calculations
+- Compliance checks
+- Workflow automation
+- Custom validations
+
+## MCP Protocol Features
+
+### Resource Management
+
+MCP servers can provide various types of resources:
+
+```mermaid
+graph TD
+    A[MCP Server] --> B[Resources]
+    A --> C[Tools]
+    A --> D[Prompts]
+    
+    B --> B1[Files]
+    B --> B2[Databases]
+    B --> B3[APIs]
+    
+    C --> C1[Calculators]
+    C --> C2[Processors]
+    C --> C3[Analyzers]
+    
+    D --> D1[Templates]
+    D --> D2[Instructions]
+    D --> D3[Examples]
+```
+
+### Tool Discovery
+
+MCP servers automatically expose available tools:
+
+1. **Connection Establishment**: Agent connects to MCP server
+2. **Capability Discovery**: Server provides list of available tools
+3. **Tool Registration**: Tools are registered with the agent
+4. **Dynamic Invocation**: Agent can call tools as needed
+
+### Error Handling
+
+MCP protocol includes comprehensive error handling:
+
+- **Connection Errors**: Network and connectivity issues
+- **Authentication Errors**: Invalid credentials or expired tokens
+- **Authorization Errors**: Insufficient permissions
+- **Tool Errors**: Issues with specific tool execution
+- **Protocol Errors**: MCP-specific communication problems
+
+## Best Practices
+
+### Security
+
+<Warning>
+**Token Security**: Never expose MCP tokens in logs or debug output. Always use secure storage for credentials.
+</Warning>
+
+- **HTTPS Only**: Always use HTTPS for MCP server connections
+- **Token Rotation**: Regularly rotate authentication tokens
+- **Least Privilege**: Grant minimum necessary permissions
+- **Audit Logging**: Monitor MCP server access and usage
+- **Network Security**: Use VPNs or private networks when possible
+
+### Performance
+
+<Tip>
+**Connection Pooling**: MCP connections are pooled for better performance. Multiple agents can share the same MCP server connection.
+</Tip>
+
+- **Caching**: Cache MCP responses when appropriate
+- **Connection Management**: Reuse connections for multiple requests
+- **Timeout Configuration**: Set appropriate timeouts for MCP calls
+- **Load Balancing**: Distribute requests across multiple MCP servers
+- **Monitoring**: Track MCP server performance and availability
+
+### Development
+
+- **Testing**: Use mock MCP servers for development and testing
+- **Documentation**: Document custom MCP server capabilities
+- **Versioning**: Version MCP server APIs for backward compatibility
+- **Monitoring**: Implement health checks for MCP servers
+- **Logging**: Log MCP interactions for debugging and analysis
+
+## Troubleshooting
+
+### Common Issues
+
+<AccordionGroup>
+  <Accordion title="Connection Refused">
+    **Symptoms**: Unable to connect to MCP server
+    
+    **Solutions**:
+    - Verify server URL is correct and accessible
+    - Check network connectivity and firewall rules
+    - Confirm MCP server is running and healthy
+    - Test connection from PLai infrastructure
+  </Accordion>
+  <Accordion title="Authentication Failed">
+    **Symptoms**: 401 or 403 errors during connection
+    
+    **Solutions**:
+    - Verify authentication credentials are correct
+    - Check token expiry dates
+    - Confirm authentication method matches server expectations
+    - Review server-side authentication logs
+  </Accordion>
+  <Accordion title="Tool Not Available">
+    **Symptoms**: Specific tools not appearing or failing
+    
+    **Solutions**:
+    - Check MCP server tool registration
+    - Verify tool permissions and access rights
+    - Review server-side tool implementation
+    - Test tool functionality directly on server
+  </Accordion>
+  <Accordion title="Slow Performance">
+    **Symptoms**: Long response times from MCP server
+    
+    **Solutions**:
+    - Check server performance and resource usage
+    - Review network latency between PLai and server
+    - Implement caching strategies
+    - Optimize tool implementations on server side
+  </Accordion>
+</AccordionGroup>
+
+### Debug Mode
+
+Enable detailed logging for troubleshooting:
+
+```json
+{
+  "debug": true,
+  "log_level": "debug",
+  "trace_requests": true
+}
+```
+
+## MCP Server Development
+
+### Creating Custom MCP Servers
+
+If you need custom functionality, you can develop your own MCP server:
+
+<Tabs>
+  <Tab title="Node.js">
+    ```javascript
+    const { MCPServer } = require('@modelcontextprotocol/server');
+    
+    const server = new MCPServer({
+      name: 'custom-mcp-server',
+      version: '1.0.0'
+    });
+    
+    // Register tools
+    server.registerTool('calculator', {
+      description: 'Perform mathematical calculations',
+      parameters: {
+        expression: { type: 'string', required: true }
+      }
+    }, async (params) => {
+      // Tool implementation
+      return eval(params.expression);
+    });
+    
+    server.start(3000);
+    ```
+  </Tab>
+  <Tab title="Python">
+    ```python
+    from mcp_server import MCPServer
+    
+    app = MCPServer('custom-mcp-server', '1.0.0')
+    
+    @app.tool('text-analyzer')
+    async def analyze_text(text: str):
+        """Analyze text and return insights"""
+        # Tool implementation
+        return {
+            'word_count': len(text.split()),
+            'character_count': len(text),
+            'sentiment': 'neutral'
+        }
+    
+    app.run(port=3000)
+    ```
+  </Tab>
+</Tabs>
+
+### MCP Server Requirements
+
+- **Protocol Compliance**: Must implement MCP specification
+- **HTTPS Support**: Secure communication required
+- **Authentication**: Support OAuth or token-based auth
+- **Error Handling**: Proper error responses and codes
+- **Documentation**: Tool and resource documentation
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Browse Other Tools" icon="grid" href="/tools/overview">
+    Explore other available tools
+  </Card>
+  <Card title="Advanced Tool Setup" icon="settings" href="/guides/multi-tool-setup">
+    Learn advanced tool configuration
+  </Card>
+  <Card title="API Reference" icon="code" href="/api-reference/tools">
+    View the tools API documentation
+  </Card>
+  <Card title="MCP Specification" icon="book" href="https://spec.modelcontextprotocol.io">
+    Read the official MCP specification
+  </Card>
+</CardGroup>

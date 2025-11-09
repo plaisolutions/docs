@@ -1,0 +1,689 @@
+---
+title: "External Data Source"
+description: "Connect to external databases and data sources"
+icon: "database"
+---
+
+# External Data Source
+
+The External Data Source tool enables your agents to connect to external databases, APIs, and data repositories, providing seamless access to structured and unstructured data from various sources.
+
+<Frame>
+  <img src="/images/hero-light.png" alt="External Data Source Tool" />
+</Frame>
+
+<Note>
+This tool has **Pro** status, meaning it requires a professional subscription and provides advanced features for premium users.
+</Note>
+
+## Overview
+
+The External Data Source tool transforms your agents into data-driven powerhouses capable of:
+
+<CardGroup cols={2}>
+  <Card title="Database Connectivity" icon="server">
+    Connect to SQL and NoSQL databases securely
+  </Card>
+  <Card title="Real-Time Data Access" icon="refresh">
+    Query live data sources for up-to-date information
+  </Card>
+  <Card title="Multi-Source Integration" icon="network">
+    Aggregate data from multiple external sources
+  </Card>
+  <Card title="Secure Connections" icon="shield">
+    Enterprise-grade security for sensitive data access
+  </Card>
+</CardGroup>
+
+## Supported Data Sources
+
+### SQL Databases
+
+<Tabs>
+  <Tab title="PostgreSQL">
+    **Features**:
+    - Full SQL query support
+    - JSON/JSONB data types
+    - Advanced indexing and performance
+    - ACID compliance
+    
+    **Use Cases**:
+    - Enterprise data warehouses
+    - Analytics and reporting
+    - Transactional applications
+    - Complex relational data
+    
+    **Connection Example**:
+    ```
+    postgresql://username:password@host:5432/database
+    ```
+  </Tab>
+  <Tab title="MySQL">
+    **Features**:
+    - Wide compatibility
+    - High performance
+    - Replication support
+    - Full-text search
+    
+    **Use Cases**:
+    - Web applications
+    - E-commerce platforms
+    - Content management systems
+    - Legacy system integration
+    
+    **Connection Example**:
+    ```
+    mysql://username:password@host:3306/database
+    ```
+  </Tab>
+  <Tab title="SQL Server">
+    **Features**:
+    - Enterprise integration
+    - Advanced analytics
+    - Business intelligence
+    - Azure cloud integration
+    
+    **Use Cases**:
+    - Microsoft ecosystems
+    - Enterprise applications
+    - Business intelligence
+    - Financial systems
+    
+    **Connection Example**:
+    ```
+    mssql://username:password@host:1433/database
+    ```
+  </Tab>
+</Tabs>
+
+### NoSQL Databases
+
+<Tabs>
+  <Tab title="MongoDB">
+    **Features**:
+    - Document-based storage
+    - Flexible schema
+    - Horizontal scaling
+    - Rich query language
+    
+    **Use Cases**:
+    - Content management
+    - Real-time analytics
+    - Mobile applications
+    - IoT data storage
+    
+    **Connection Example**:
+    ```
+    mongodb://username:password@host:27017/database
+    ```
+  </Tab>
+  <Tab title="Redis">
+    **Features**:
+    - In-memory storage
+    - Ultra-fast performance
+    - Data structures
+    - Pub/Sub messaging
+    
+    **Use Cases**:
+    - Caching layers
+    - Session storage
+    - Real-time messaging
+    - Performance optimization
+    
+    **Connection Example**:
+    ```
+    redis://username:password@host:6379/database
+    ```
+  </Tab>
+  <Tab title="Elasticsearch">
+    **Features**:
+    - Full-text search
+    - Analytics engine
+    - Real-time indexing
+    - Distributed architecture
+    
+    **Use Cases**:
+    - Search applications
+    - Log analytics
+    - Monitoring systems
+    - Business intelligence
+    
+    **Connection Example**:
+    ```
+    elasticsearch://username:password@host:9200
+    ```
+  </Tab>
+</Tabs>
+
+### Cloud Data Sources
+
+<AccordionGroup>
+  <Accordion title="Amazon RDS">
+    **Supported Engines**: PostgreSQL, MySQL, MariaDB, Oracle, SQL Server
+    **Features**: Managed database service, automatic backups, scaling
+    **Authentication**: IAM roles, username/password, SSL certificates
+    **Use Cases**: Scalable web applications, enterprise workloads
+  </Accordion>
+  <Accordion title="Google Cloud SQL">
+    **Supported Engines**: PostgreSQL, MySQL, SQL Server
+    **Features**: Fully managed, high availability, automatic updates
+    **Authentication**: Cloud IAM, SSL certificates, private connectivity
+    **Use Cases**: Google Cloud applications, analytics workloads
+  </Accordion>
+  <Accordion title="Azure SQL Database">
+    **Features**: Serverless computing, intelligent performance, security
+    **Authentication**: Azure Active Directory, SQL authentication
+    **Use Cases**: Enterprise applications, SaaS platforms
+  </Accordion>
+  <Accordion title="Snowflake">
+    **Features**: Cloud data warehouse, elastic scaling, data sharing
+    **Authentication**: Username/password, SSO, key-pair authentication
+    **Use Cases**: Data analytics, business intelligence, data science
+  </Accordion>
+</AccordionGroup>
+
+## Configuration
+
+<Note>
+The External Data Source tool uses a streamlined configuration process through the PLai Framework interface. Specific connection parameters are configured during setup.
+</Note>
+
+### Connection Setup Process
+
+<Steps>
+  <Step title="Navigate to Tools">
+    Go to the **Tools** section in your project dashboard
+  </Step>
+  <Step title="Create External Data Source">
+    Click **Create Tool** and select **External Data Source**
+  </Step>
+  <Step title="Select Data Source Type">
+    Choose your database or data source type from supported options
+  </Step>
+  <Step title="Configure Connection">
+    Provide connection details including host, credentials, and database name
+  </Step>
+  <Step title="Test Connection">
+    Verify connectivity and authentication with the test button
+  </Step>
+  <Step title="Set Access Permissions">
+    Configure read/write permissions and query limitations
+  </Step>
+  <Step title="Add to Agent">
+    Assign this data source to your agents in agent settings
+  </Step>
+</Steps>
+
+### Security Configuration
+
+<CardGroup cols={2}>
+  <Card title="SSL/TLS Encryption" icon="lock">
+    All connections use encrypted transport for data security
+  </Card>
+  <Card title="Credential Management" icon="key">
+    Secure storage and rotation of database credentials
+  </Card>
+  <Card title="Access Controls" icon="shield">
+    Fine-grained permissions and query restrictions
+  </Card>
+  <Card title="Audit Logging" icon="file-text">
+    Complete logging of all data access activities
+  </Card>
+</CardGroup>
+
+## Usage Examples
+
+### Customer Data Integration
+
+```sql
+-- Query customer information for support agents
+SELECT 
+    c.customer_id,
+    c.name,
+    c.email,
+    c.subscription_tier,
+    c.signup_date,
+    COUNT(t.ticket_id) as total_tickets,
+    MAX(t.created_at) as last_ticket_date
+FROM customers c
+LEFT JOIN support_tickets t ON c.customer_id = t.customer_id
+WHERE c.email = ?
+GROUP BY c.customer_id, c.name, c.email, c.subscription_tier, c.signup_date;
+```
+
+**Use Case**: Customer support agents can instantly access customer history, subscription details, and support ticket information to provide personalized assistance.
+
+### Sales Analytics Integration
+
+```sql
+-- Revenue analysis for business intelligence agents
+SELECT 
+    DATE_TRUNC('month', order_date) as month,
+    SUM(total_amount) as monthly_revenue,
+    COUNT(*) as order_count,
+    AVG(total_amount) as avg_order_value,
+    SUM(total_amount) - LAG(SUM(total_amount)) OVER (ORDER BY DATE_TRUNC('month', order_date)) as revenue_growth
+FROM orders
+WHERE order_date >= CURRENT_DATE - INTERVAL '12 months'
+GROUP BY DATE_TRUNC('month', order_date)
+ORDER BY month;
+```
+
+**Use Case**: Business intelligence agents can provide real-time revenue insights, growth analysis, and performance metrics.
+
+### Inventory Management Integration
+
+```javascript
+// MongoDB query for inventory tracking
+{
+  "pipeline": [
+    {
+      "$match": {
+        "product_id": "{{product_id}}",
+        "warehouse": "{{warehouse_location}}"
+      }
+    },
+    {
+      "$group": {
+        "_id": "$product_id",
+        "total_quantity": { "$sum": "$quantity" },
+        "reserved_quantity": { 
+          "$sum": { 
+            "$cond": [{ "$eq": ["$status", "reserved"] }, "$quantity", 0] 
+          }
+        },
+        "available_quantity": {
+          "$sum": { 
+            "$cond": [{ "$eq": ["$status", "available"] }, "$quantity", 0] 
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
+**Use Case**: Inventory management agents can check stock levels, track reservations, and manage warehouse operations.
+
+### User Behavior Analytics
+
+```sql
+-- User engagement analysis for marketing agents
+WITH user_metrics AS (
+  SELECT 
+    user_id,
+    COUNT(DISTINCT session_id) as total_sessions,
+    AVG(session_duration) as avg_session_duration,
+    COUNT(DISTINCT DATE(event_timestamp)) as active_days,
+    MAX(event_timestamp) as last_activity
+  FROM user_events
+  WHERE event_timestamp >= CURRENT_DATE - INTERVAL '30 days'
+  GROUP BY user_id
+)
+SELECT 
+  um.*,
+  CASE 
+    WHEN active_days >= 20 THEN 'High'
+    WHEN active_days >= 10 THEN 'Medium'
+    ELSE 'Low'
+  END as engagement_level
+FROM user_metrics um
+WHERE last_activity >= CURRENT_DATE - INTERVAL '7 days';
+```
+
+**Use Case**: Marketing agents can segment users by engagement level and create targeted campaigns.
+
+## Query Capabilities
+
+### Advanced SQL Features
+
+<Tabs>
+  <Tab title="Complex Joins">
+    ```sql
+    SELECT 
+        o.order_id,
+        c.name as customer_name,
+        p.product_name,
+        oi.quantity,
+        oi.price
+    FROM orders o
+    INNER JOIN customers c ON o.customer_id = c.customer_id
+    INNER JOIN order_items oi ON o.order_id = oi.order_id
+    INNER JOIN products p ON oi.product_id = p.product_id
+    WHERE o.order_date >= CURRENT_DATE - INTERVAL '30 days'
+    ORDER BY o.order_date DESC;
+    ```
+  </Tab>
+  <Tab title="Window Functions">
+    ```sql
+    SELECT 
+        sales_rep,
+        sale_amount,
+        sale_date,
+        ROW_NUMBER() OVER (PARTITION BY sales_rep ORDER BY sale_amount DESC) as rank,
+        SUM(sale_amount) OVER (PARTITION BY sales_rep) as total_sales
+    FROM sales
+    WHERE sale_date >= CURRENT_DATE - INTERVAL '90 days';
+    ```
+  </Tab>
+  <Tab title="CTEs and Subqueries">
+    ```sql
+    WITH monthly_sales AS (
+        SELECT 
+            DATE_TRUNC('month', sale_date) as month,
+            SUM(sale_amount) as total_sales
+        FROM sales
+        GROUP BY DATE_TRUNC('month', sale_date)
+    ),
+    sales_growth AS (
+        SELECT 
+            month,
+            total_sales,
+            LAG(total_sales) OVER (ORDER BY month) as prev_month_sales,
+            (total_sales - LAG(total_sales) OVER (ORDER BY month)) / LAG(total_sales) OVER (ORDER BY month) * 100 as growth_rate
+        FROM monthly_sales
+    )
+    SELECT * FROM sales_growth WHERE growth_rate IS NOT NULL;
+    ```
+  </Tab>
+</Tabs>
+
+### NoSQL Query Examples
+
+<Tabs>
+  <Tab title="MongoDB Aggregation">
+    ```javascript
+    // Product performance analysis
+    db.orders.aggregate([
+      {
+        $match: {
+          order_date: { 
+            $gte: ISODate("2024-01-01"),
+            $lte: ISODate("2024-12-31")
+          }
+        }
+      },
+      {
+        $unwind: "$items"
+      },
+      {
+        $group: {
+          _id: "$items.product_id",
+          total_quantity: { $sum: "$items.quantity" },
+          total_revenue: { $sum: { $multiply: ["$items.quantity", "$items.price"] } },
+          order_count: { $sum: 1 }
+        }
+      },
+      {
+        $sort: { total_revenue: -1 }
+      },
+      {
+        $limit: 10
+      }
+    ])
+    ```
+  </Tab>
+  <Tab title="Elasticsearch Search">
+    ```json
+    {
+      "query": {
+        "bool": {
+          "must": [
+            {
+              "match": {
+                "title": "{{search_term}}"
+              }
+            },
+            {
+              "range": {
+                "publish_date": {
+                  "gte": "2024-01-01",
+                  "lte": "2024-12-31"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "aggs": {
+        "categories": {
+          "terms": {
+            "field": "category.keyword",
+            "size": 10
+          }
+        }
+      }
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Performance Optimization
+
+### Query Optimization
+
+<AccordionGroup>
+  <Accordion title="Index Usage">
+    **Best Practices**:
+    - Use appropriate indexes for frequently queried columns
+    - Avoid full table scans with proper WHERE clauses
+    - Use composite indexes for multi-column queries
+    - Monitor query execution plans
+    
+    **Example**:
+    ```sql
+    -- Use indexes effectively
+    SELECT * FROM orders 
+    WHERE customer_id = ? AND order_date >= ?
+    -- Ensure index on (customer_id, order_date)
+    ```
+  </Accordion>
+  <Accordion title="Connection Pooling">
+    **Benefits**:
+    - Reuse database connections
+    - Reduce connection overhead
+    - Better resource utilization
+    - Improved response times
+    
+    **Configuration**:
+    - Pool size: 10-50 connections
+    - Connection timeout: 30 seconds
+    - Idle timeout: 10 minutes
+    - Max lifetime: 1 hour
+  </Accordion>
+  <Accordion title="Query Caching">
+    **Strategies**:
+    - Cache frequently accessed data
+    - Use appropriate TTL values
+    - Implement cache invalidation
+    - Monitor cache hit rates
+    
+    **Example**:
+    ```json
+    {
+      "cache_policy": {
+        "enable": true,
+        "ttl": 300,
+        "key_template": "datasource_{{query_hash}}"
+      }
+    }
+    ```
+  </Accordion>
+</AccordionGroup>
+
+### Monitoring & Analytics
+
+Track data source performance and usage:
+
+- **Query Performance**: Response times and execution plans
+- **Connection Health**: Connection pool status and errors
+- **Data Volume**: Amount of data transferred and processed
+- **Error Rates**: Failed queries and connection issues
+- **Usage Patterns**: Most frequent queries and access patterns
+
+## Security & Compliance
+
+### Data Protection
+
+<CardGroup cols={2}>
+  <Card title="Encryption in Transit" icon="shield">
+    All data transfers use TLS 1.3 encryption
+  </Card>
+  <Card title="Encryption at Rest" icon="lock">
+    Database credentials encrypted in secure storage
+  </Card>
+  <Card title="Access Auditing" icon="eye">
+    Complete audit trail of all data access
+  </Card>
+  <Card title="Role-Based Access" icon="users">
+    Fine-grained permissions per user and agent
+  </Card>
+</CardGroup>
+
+### Compliance Features
+
+- **GDPR Compliance**: Data minimization and user rights support
+- **SOC 2 Type II**: Security and availability controls
+- **HIPAA Support**: Healthcare data protection capabilities
+- **PCI DSS**: Payment card industry security standards
+- **ISO 27001**: Information security management
+
+### Best Practices
+
+<Warning>
+**Sensitive Data**: Never store sensitive credentials in query strings or logs. Use parameterized queries and secure credential management.
+</Warning>
+
+<Tip>
+**Least Privilege**: Grant minimum necessary permissions to database users for security and compliance.
+</Tip>
+
+- **Use Read-Only Accounts**: For data retrieval operations
+- **Parameterize Queries**: Prevent SQL injection attacks
+- **Monitor Access**: Log and monitor all database access
+- **Regular Audits**: Perform security and compliance audits
+- **Data Classification**: Classify data by sensitivity level
+
+## Troubleshooting
+
+### Common Issues
+
+<AccordionGroup>
+  <Accordion title="Connection Failures">
+    **Symptoms**: Cannot connect to database
+    **Solutions**:
+    - Verify network connectivity and firewall rules
+    - Check database server status and availability
+    - Validate connection string and credentials
+    - Ensure SSL/TLS configuration is correct
+    - Test connection from PLai infrastructure
+  </Accordion>
+  <Accordion title="Query Timeouts">
+    **Symptoms**: Queries taking too long or timing out
+    **Solutions**:
+    - Optimize query performance with proper indexes
+    - Reduce result set size with appropriate filters
+    - Increase query timeout limits if needed
+    - Break complex queries into smaller parts
+    - Monitor database performance metrics
+  </Accordion>
+  <Accordion title="Permission Errors">
+    **Symptoms**: Access denied or insufficient privileges
+    **Solutions**:
+    - Verify database user permissions
+    - Check table and schema access rights
+    - Ensure proper role assignments
+    - Review database security policies
+    - Contact database administrator if needed
+  </Accordion>
+  <Accordion title="Data Format Issues">
+    **Symptoms**: Unexpected data types or formats
+    **Solutions**:
+    - Check data type mappings between systems
+    - Handle NULL values appropriately
+    - Validate date and time formats
+    - Test with sample data first
+    - Implement proper error handling
+  </Accordion>
+</AccordionGroup>
+
+## Integration Examples
+
+### CRM Data Integration
+
+Connect to Salesforce, HubSpot, or custom CRM systems:
+
+```sql
+-- Customer 360 view combining multiple sources
+SELECT 
+    c.customer_id,
+    c.name,
+    c.email,
+    s.subscription_status,
+    s.mrr,
+    t.total_tickets,
+    t.avg_response_time,
+    m.last_marketing_touch
+FROM crm.customers c
+LEFT JOIN billing.subscriptions s ON c.customer_id = s.customer_id
+LEFT JOIN support.ticket_summary t ON c.customer_id = t.customer_id
+LEFT JOIN marketing.customer_touches m ON c.customer_id = m.customer_id
+WHERE c.customer_id = ?;
+```
+
+### E-commerce Analytics
+
+Connect to e-commerce platforms for sales intelligence:
+
+```sql
+-- Product performance across channels
+SELECT 
+    p.product_name,
+    p.category,
+    SUM(oi.quantity) as total_sold,
+    SUM(oi.quantity * oi.price) as total_revenue,
+    AVG(r.rating) as avg_rating,
+    COUNT(DISTINCT o.customer_id) as unique_customers
+FROM products p
+JOIN order_items oi ON p.product_id = oi.product_id
+JOIN orders o ON oi.order_id = o.order_id
+LEFT JOIN reviews r ON p.product_id = r.product_id
+WHERE o.order_date >= ?
+GROUP BY p.product_id, p.product_name, p.category
+ORDER BY total_revenue DESC;
+```
+
+### Financial Data Integration
+
+Connect to financial systems for business intelligence:
+
+```sql
+-- Monthly financial summary
+SELECT 
+    DATE_TRUNC('month', transaction_date) as month,
+    account_type,
+    SUM(CASE WHEN transaction_type = 'credit' THEN amount ELSE 0 END) as total_credits,
+    SUM(CASE WHEN transaction_type = 'debit' THEN amount ELSE 0 END) as total_debits,
+    SUM(CASE WHEN transaction_type = 'credit' THEN amount ELSE -amount END) as net_amount
+FROM financial_transactions
+WHERE transaction_date >= CURRENT_DATE - INTERVAL '12 months'
+GROUP BY DATE_TRUNC('month', transaction_date), account_type
+ORDER BY month, account_type;
+```
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Set Up Data Connection" icon="play" href="/guides/first-agent">
+    Connect your first external data source
+  </Card>
+  <Card title="Query Optimization Guide" icon="graduation-cap" href="/guides/best-practices">
+    Learn advanced query techniques
+  </Card>
+  <Card title="Other Tools" icon="grid" href="/tools/overview">
+    Explore other available tools
+  </Card>
+  <Card title="API Reference" icon="code" href="/api-reference/tools">
+    View the tools API documentation
+  </Card>
+</CardGroup>

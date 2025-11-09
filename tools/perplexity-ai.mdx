@@ -1,0 +1,479 @@
+---
+title: "Perplexity AI Tool"
+description: "Web search and research capabilities powered by Perplexity AI"
+icon: "magnifying-glass"
+---
+
+# Perplexity AI Tool
+
+The Perplexity AI tool provides your agents with powerful web search and research capabilities. It leverages Perplexity's advanced AI models to search the web, analyze information, and provide comprehensive, citation-backed responses.
+
+<Frame>
+  <img src="/images/hero-light.png" alt="Perplexity AI Tool Configuration" />
+</Frame>
+
+<Note>
+This tool has **Pro** status, meaning it requires a professional subscription and provides advanced features for premium users.
+</Note>
+
+## Overview
+
+The Perplexity AI tool transforms your agents into research assistants capable of:
+
+<CardGroup cols={2}>
+  <Card title="Real-Time Web Search" icon="globe">
+    Search the latest information from across the web
+  </Card>
+  <Card title="AI-Powered Analysis" icon="brain">
+    Intelligent analysis and synthesis of search results
+  </Card>
+  <Card title="Source Citations" icon="quote">
+    Automatic citation and source tracking for all information
+  </Card>
+  <Card title="Domain Filtering" icon="filter">
+    Focus searches on specific domains or exclude unwanted sources
+  </Card>
+</CardGroup>
+
+## Configuration Parameters
+
+<ParamField path="model" type="select" required>
+  The Perplexity AI model to use for search and analysis
+  <br />**Options**:
+  - `sonar` - Fast, general-purpose search model
+  - `sonar-pro` - Enhanced search with better reasoning
+  - `sonar-reasoning` - Advanced reasoning capabilities
+  - `sonar-reasoning-pro` - Most advanced model with superior analysis
+</ParamField>
+
+<ParamField path="system_message" type="textarea" required>
+  System instructions that define the search behavior and response style
+  <br />**Default**: `"Search the web"`
+  <br />**Example**: `"Search for the latest information and provide a comprehensive analysis with sources"`
+  <br />**Tips**: Be specific about the type of information needed and response format
+</ParamField>
+
+<ParamField path="search_domain_filter" type="input">
+  Optional domain filter to restrict or focus searches
+  <br />**Example**: `"site:news.com OR site:reuters.com"` (include only these domains)
+  <br />**Example**: `"-site:reddit.com -site:forum.com"` (exclude these domains)
+  <br />**Format**: Use Google search operators for domain filtering
+  <br />**Default**: No filtering (searches entire web)
+</ParamField>
+
+## Setup Instructions
+
+<Steps>
+  <Step title="Verify Pro Subscription">
+    Ensure your account has Pro access for Perplexity AI tools
+  </Step>
+  <Step title="Navigate to Tools">
+    Go to the **Tools** section in your project dashboard
+  </Step>
+  <Step title="Create Perplexity AI Tool">
+    Click **Create Tool** and select **Perplexity AI**
+  </Step>
+  <Step title="Select Model">
+    Choose the appropriate Perplexity model for your use case
+  </Step>
+  <Step title="Configure System Message">
+    Define how the tool should approach searches and format responses
+  </Step>
+  <Step title="Set Domain Filter (Optional)">
+    Configure domain restrictions if needed for your use case
+  </Step>
+  <Step title="Test Search">
+    Use the test button to verify search functionality
+  </Step>
+  <Step title="Add to Agent">
+    Assign this tool to your agents in agent settings
+  </Step>
+</Steps>
+
+## Model Options
+
+### Sonar Models
+
+<Tabs>
+  <Tab title="Sonar">
+    **Best for**: Quick searches, basic information gathering
+    
+    **Characteristics**:
+    - Fast response times
+    - Good for straightforward queries
+    - Efficient for high-volume searches
+    - Cost-effective option
+    
+    **Use Cases**:
+    - News updates
+    - Basic fact checking
+    - Simple research queries
+    - Real-time information needs
+  </Tab>
+  <Tab title="Sonar Pro">
+    **Best for**: Enhanced search quality, better analysis
+    
+    **Characteristics**:
+    - Improved search accuracy
+    - Better source selection
+    - Enhanced result synthesis
+    - More detailed responses
+    
+    **Use Cases**:
+    - Market research
+    - Competitive analysis
+    - Detailed fact checking
+    - Professional research tasks
+  </Tab>
+  <Tab title="Sonar Reasoning">
+    **Best for**: Complex queries requiring logical reasoning
+    
+    **Characteristics**:
+    - Advanced reasoning capabilities
+    - Multi-step analysis
+    - Complex query understanding
+    - Logical conclusion drawing
+    
+    **Use Cases**:
+    - Technical research
+    - Scientific inquiries
+    - Complex problem solving
+    - Analytical research
+  </Tab>
+  <Tab title="Sonar Reasoning Pro">
+    **Best for**: Most demanding research and analysis tasks
+    
+    **Characteristics**:
+    - Highest quality analysis
+    - Superior reasoning abilities
+    - Comprehensive result synthesis
+    - Most accurate source evaluation
+    
+    **Use Cases**:
+    - Academic research
+    - Investment analysis
+    - Legal research
+    - Critical decision support
+  </Tab>
+</Tabs>
+
+## Configuration Examples
+
+### General Research Assistant
+
+```json
+{
+  "model": "sonar-pro",
+  "system_message": "Search for comprehensive, up-to-date information on the given topic. Provide a detailed analysis with multiple perspectives and cite all sources. Focus on authoritative and recent sources.",
+  "search_domain_filter": ""
+}
+```
+
+### News & Current Events
+
+```json
+{
+  "model": "sonar",
+  "system_message": "Search for the latest news and developments. Prioritize recent articles from reputable news sources. Provide a summary of key points with publication dates and source links.",
+  "search_domain_filter": "site:reuters.com OR site:ap.org OR site:bbc.com OR site:cnn.com"
+}
+```
+
+### Technical & Scientific Research
+
+```json
+{
+  "model": "sonar-reasoning-pro",
+  "system_message": "Search for technical and scientific information with emphasis on peer-reviewed sources, official documentation, and expert analysis. Provide detailed explanations with proper citations.",
+  "search_domain_filter": "site:arxiv.org OR site:nature.com OR site:science.org OR site:ieee.org"
+}
+```
+
+### Market & Business Intelligence
+
+```json
+{
+  "model": "sonar-reasoning",
+  "system_message": "Search for business and market information including trends, company news, financial data, and industry analysis. Focus on authoritative business sources and recent developments.",
+  "search_domain_filter": "site:bloomberg.com OR site:reuters.com OR site:wsj.com OR site:ft.com -site:reddit.com"
+}
+```
+
+### Academic Research
+
+```json
+{
+  "model": "sonar-reasoning-pro",
+  "system_message": "Search for academic and scholarly information. Prioritize peer-reviewed papers, educational institutions, and authoritative academic sources. Provide comprehensive analysis with proper academic citations.",
+  "search_domain_filter": "site:edu OR site:scholar.google.com OR site:jstor.org OR site:pubmed.ncbi.nlm.nih.gov"
+}
+```
+
+## Domain Filtering
+
+### Include Specific Domains
+
+Focus searches on trusted sources:
+
+```
+site:reuters.com OR site:bbc.com OR site:ap.org
+```
+
+### Exclude Unreliable Sources
+
+Remove low-quality or irrelevant sources:
+
+```
+-site:reddit.com -site:yahoo.com -site:answers.com
+```
+
+### Combine Include and Exclude
+
+```
+site:edu OR site:gov -site:reddit.com -site:forum.com
+```
+
+### Domain Categories
+
+<AccordionGroup>
+  <Accordion title="News Sources">
+    **Reputable News**: `site:reuters.com OR site:ap.org OR site:bbc.com OR site:npr.org`
+    **Business News**: `site:bloomberg.com OR site:wsj.com OR site:ft.com`
+    **Tech News**: `site:techcrunch.com OR site:ars-technica.com OR site:wired.com`
+  </Accordion>
+  <Accordion title="Academic Sources">
+    **Educational**: `site:edu` (all .edu domains)
+    **Research**: `site:arxiv.org OR site:pubmed.ncbi.nlm.nih.gov`
+    **Journals**: `site:nature.com OR site:science.org OR site:ieee.org`
+  </Accordion>
+  <Accordion title="Official Sources">
+    **Government**: `site:gov` (all .gov domains)
+    **Organizations**: `site:who.int OR site:un.org OR site:worldbank.org`
+    **Standards**: `site:iso.org OR site:ietf.org OR site:w3.org`
+  </Accordion>
+</AccordionGroup>
+
+## Use Cases & Applications
+
+### Customer Support Enhancement
+
+```yaml
+Purpose: Provide agents with real-time information lookup capabilities
+Configuration:
+  Model: sonar-pro
+  System Message: "Search for product information, troubleshooting guides, and support documentation. Provide clear, actionable answers with source links."
+  Domain Filter: "site:company-docs.com OR site:support.product.com"
+Benefits:
+  - Up-to-date product information
+  - Real-time troubleshooting guidance
+  - Access to latest documentation
+```
+
+### Content Creation Assistant
+
+```yaml
+Purpose: Research topics and gather information for content creation
+Configuration:
+  Model: sonar-reasoning
+  System Message: "Search for comprehensive information on the topic. Include multiple perspectives, recent developments, and authoritative sources for content creation."
+  Domain Filter: "-site:wikipedia.org -site:reddit.com" (exclude for originality)
+Benefits:
+  - Fresh, current information
+  - Multiple source perspectives
+  - Citation-ready research
+```
+
+### Investment Research
+
+```yaml
+Purpose: Gather financial and market intelligence
+Configuration:
+  Model: sonar-reasoning-pro
+  System Message: "Search for financial data, market analysis, company news, and investment insights. Focus on recent developments and authoritative financial sources."
+  Domain Filter: "site:bloomberg.com OR site:reuters.com OR site:sec.gov OR site:marketwatch.com"
+Benefits:
+  - Real-time market data
+  - Company financial information
+  - Regulatory filings access
+```
+
+### Competitive Intelligence
+
+```yaml
+Purpose: Monitor competitors and industry trends
+Configuration:
+  Model: sonar-pro
+  System Message: "Search for competitor information, industry trends, product launches, and market developments. Provide analysis of competitive landscape."
+  Domain Filter: "site:techcrunch.com OR site:venturebeat.com OR site:crunchbase.com"
+Benefits:
+  - Competitor monitoring
+  - Industry trend analysis
+  - Market intelligence gathering
+```
+
+## Response Format
+
+### Structured Responses
+
+Perplexity AI provides structured responses with:
+
+```json
+{
+  "search_results": [
+    {
+      "title": "Article Title",
+      "url": "https://source.com/article",
+      "snippet": "Relevant excerpt from the source",
+      "published_date": "2024-01-15",
+      "domain": "source.com"
+    }
+  ],
+  "synthesized_response": "AI-generated synthesis of the search results",
+  "citations": [
+    "[1] Source Title - https://source.com/article",
+    "[2] Another Source - https://another-source.com/page"
+  ],
+  "confidence_score": 0.85,
+  "search_query": "reformulated search query used"
+}
+```
+
+### Citation Format
+
+All responses include proper citations:
+
+- **In-line Citations**: Information is marked with [1], [2], etc.
+- **Reference List**: Complete source list with URLs
+- **Source Metadata**: Publication dates, domains, and titles
+- **Confidence Indicators**: Quality and reliability scores
+
+## Best Practices
+
+### Search Query Optimization
+
+<Tip>
+**Specific Queries**: More specific search requests yield better results. Instead of "market trends," try "SaaS market trends Q4 2024."
+</Tip>
+
+- **Use Keywords**: Include specific terms and phrases
+- **Ask Questions**: Natural language questions work well
+- **Specify Timeframes**: Include dates when relevance matters
+- **Define Scope**: Clarify geographic or industry scope
+- **Request Analysis**: Ask for comparisons or analysis explicitly
+
+### System Message Best Practices
+
+```yaml
+Effective System Messages:
+  ✅ "Search for recent developments in AI regulation, focusing on EU and US policies from 2024. Provide analysis of key differences and implications."
+  ✅ "Find the latest earnings reports and analyst opinions for tech companies in the S&P 500. Summarize key trends and outlook."
+  
+Less Effective:
+  ❌ "Search the web"
+  ❌ "Find information"
+```
+
+### Domain Filtering Strategy
+
+- **Quality Over Quantity**: Filter for authoritative sources
+- **Avoid Echo Chambers**: Include diverse perspectives
+- **Time Sensitivity**: Use recent sources for current events
+- **Source Type**: Match source type to information need
+- **Exclude Noise**: Remove forums and user-generated content when needed
+
+## Performance Optimization
+
+### Caching Strategies
+
+```json
+{
+  "cache_policy": {
+    "enable": true,
+    "ttl": 1800,
+    "key_template": "perplexity_{{query_hash}}_{{domain_filter}}"
+  }
+}
+```
+
+### Cost Management
+
+- **Model Selection**: Use appropriate model for task complexity
+- **Query Optimization**: Craft efficient search queries
+- **Result Caching**: Cache frequently requested information
+- **Domain Filtering**: Reduce search scope when possible
+
+## Troubleshooting
+
+### Common Issues
+
+<AccordionGroup>
+  <Accordion title="Poor Search Results">
+    **Symptoms**: Irrelevant or low-quality search results
+    
+    **Solutions**:
+    - Refine system message with more specific instructions
+    - Add domain filtering to focus on quality sources
+    - Use more specific search queries
+    - Try a different model (upgrade to Pro or Reasoning)
+  </Accordion>
+  <Accordion title="Outdated Information">
+    **Symptoms**: Search results contain old or stale information
+    
+    **Solutions**:
+    - Include time constraints in system message
+    - Filter domains known for current content
+    - Use keywords like "latest," "recent," "2024"
+    - Avoid cached or archived sources
+  </Accordion>
+  <Accordion title="Rate Limiting">
+    **Symptoms**: Search requests being throttled or delayed
+    
+    **Solutions**:
+    - Implement request queuing
+    - Use caching for repeated queries
+    - Distribute requests across time
+    - Monitor usage against limits
+  </Accordion>
+  <Accordion title="Citation Issues">
+    **Symptoms**: Missing or broken source citations
+    
+    **Solutions**:
+    - Verify domain filtering isn't too restrictive
+    - Check if sources are accessible
+    - Review system message citation requirements
+    - Test with different model variants
+  </Accordion>
+</AccordionGroup>
+
+## Security & Compliance
+
+### Data Privacy
+
+- **Search Queries**: All queries are encrypted in transit
+- **Result Storage**: Search results can be cached securely
+- **Source Access**: No direct access to proprietary content
+- **User Privacy**: Individual search patterns are not tracked
+
+### Content Filtering
+
+- **Inappropriate Content**: Built-in content filtering
+- **Copyright Respect**: Only uses publicly available information
+- **Fact Checking**: AI-powered accuracy verification
+- **Source Verification**: Authoritative source prioritization
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Configure Your First Search Tool" icon="play" href="/guides/first-agent">
+    Set up Perplexity AI for your agent
+  </Card>
+  <Card title="Advanced Search Strategies" icon="graduation-cap" href="/guides/best-practices">
+    Learn advanced search optimization
+  </Card>
+  <Card title="Other Tools" icon="grid" href="/tools/overview">
+    Explore other available tools
+  </Card>
+  <Card title="API Reference" icon="code" href="/api-reference/tools">
+    View the tools API documentation
+  </Card>
+</CardGroup>

@@ -1,0 +1,513 @@
+---
+title: "Code Interpreter"
+description: "Execute code in a secure sandboxed environment"
+icon: "code"
+---
+
+# Code Interpreter
+
+The Code Interpreter tool enables your agents to execute code in a secure, sandboxed environment. This powerful capability allows agents to perform complex calculations, data analysis, file processing, and algorithmic tasks.
+
+<Frame>
+  <img src="/images/hero-light.png" alt="Code Interpreter Tool" />
+</Frame>
+
+<Warning>
+This tool has **Alpha** status, meaning it's in early access with features that may change based on user feedback.
+</Warning>
+
+## Overview
+
+The Code Interpreter transforms your agents into computational powerhouses capable of:
+
+<CardGroup cols={2}>
+  <Card title="Code Execution" icon="play">
+    Run Python, JavaScript, and other programming languages securely
+  </Card>
+  <Card title="Data Analysis" icon="chart-line">
+    Perform complex data analysis and statistical computations
+  </Card>
+  <Card title="File Processing" icon="file-code">
+    Process, analyze, and manipulate various file formats
+  </Card>
+  <Card title="Mathematical Computing" icon="calculator">
+    Solve complex mathematical problems and algorithms
+  </Card>
+</CardGroup>
+
+## Key Features
+
+### Secure Execution Environment
+
+- **Sandboxed Runtime**: Code runs in isolated containers
+- **Resource Limits**: Memory and CPU usage controls
+- **Network Isolation**: No external network access from code
+- **File System Isolation**: Controlled file system access
+- **Timeout Protection**: Automatic termination of long-running processes
+
+### Supported Languages
+
+<Tabs>
+  <Tab title="Python">
+    **Version**: Python 3.11+
+    **Libraries**: NumPy, Pandas, Matplotlib, SciPy, Requests, and more
+    **Use Cases**: Data analysis, machine learning, scientific computing
+    **Example**:
+    ```python
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    
+    # Create sample data
+    data = {'sales': [100, 150, 200, 180, 220]}
+    df = pd.DataFrame(data)
+    
+    # Generate plot
+    df.plot(kind='line')
+    plt.title('Sales Trend')
+    plt.show()
+    ```
+  </Tab>
+  <Tab title="JavaScript">
+    **Version**: Node.js 18+
+    **Libraries**: Lodash, Moment.js, Chart.js, and common utilities
+    **Use Cases**: Web scraping, API interactions, JSON processing
+    **Example**:
+    ```javascript
+    // Process JSON data
+    const data = [
+      { name: 'John', age: 30, city: 'New York' },
+      { name: 'Jane', age: 25, city: 'San Francisco' }
+    ];
+    
+    // Calculate average age
+    const avgAge = data.reduce((sum, person) => sum + person.age, 0) / data.length;
+    console.log(`Average age: ${avgAge}`);
+    ```
+  </Tab>
+  <Tab title="R">
+    **Version**: R 4.3+
+    **Libraries**: ggplot2, dplyr, tidyr, and statistical packages
+    **Use Cases**: Statistical analysis, data visualization, research
+    **Example**:
+    ```r
+    # Statistical analysis
+    data <- c(12, 15, 18, 20, 22, 25, 28)
+    
+    # Calculate statistics
+    mean_val <- mean(data)
+    sd_val <- sd(data)
+    
+    # Create histogram
+    hist(data, main="Data Distribution", xlab="Values")
+    ```
+  </Tab>
+</Tabs>
+
+## Configuration
+
+<Note>
+The Code Interpreter tool requires no configuration parameters. It's ready to use immediately after creation.
+</Note>
+
+## Setup Instructions
+
+<Steps>
+  <Step title="Navigate to Tools">
+    Go to the **Tools** section in your project dashboard
+  </Step>
+  <Step title="Create Code Interpreter">
+    Click **Create Tool** and select **Code Interpreter**
+  </Step>
+  <Step title="Name Your Tool">
+    Provide a descriptive name for the code interpreter tool
+  </Step>
+  <Step title="Test Execution">
+    Use the test button to verify code execution with a simple script
+  </Step>
+  <Step title="Add to Agent">
+    Assign this tool to your agents in agent settings
+  </Step>
+</Steps>
+
+## Usage Examples
+
+### Data Analysis Agent
+
+**Purpose**: Analyze CSV data and generate insights
+
+```python
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Load data
+data = pd.read_csv('sales_data.csv')
+
+# Basic statistics
+print("Dataset Overview:")
+print(data.describe())
+
+# Calculate monthly growth
+data['growth_rate'] = data['sales'].pct_change() * 100
+
+# Create visualization
+plt.figure(figsize=(10, 6))
+plt.plot(data['month'], data['sales'], marker='o')
+plt.title('Monthly Sales Trend')
+plt.xlabel('Month')
+plt.ylabel('Sales ($)')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+
+# Generate insights
+avg_growth = data['growth_rate'].mean()
+print(f"Average monthly growth rate: {avg_growth:.2f}%")
+```
+
+### Financial Calculator Agent
+
+**Purpose**: Perform financial calculations and projections
+
+```python
+import numpy as np
+from datetime import datetime, timedelta
+
+def calculate_compound_interest(principal, rate, time, compound_freq=12):
+    """Calculate compound interest"""
+    amount = principal * (1 + rate/compound_freq) ** (compound_freq * time)
+    interest = amount - principal
+    return amount, interest
+
+def calculate_loan_payment(principal, rate, years):
+    """Calculate monthly loan payment"""
+    monthly_rate = rate / 12
+    num_payments = years * 12
+    payment = principal * (monthly_rate * (1 + monthly_rate)**num_payments) / ((1 + monthly_rate)**num_payments - 1)
+    return payment
+
+# Investment projection
+initial_investment = 10000
+annual_rate = 0.07
+years = 10
+
+final_amount, earned_interest = calculate_compound_interest(initial_investment, annual_rate, years)
+print(f"Investment of ${initial_investment:,.2f}")
+print(f"After {years} years at {annual_rate*100}% annual rate:")
+print(f"Final amount: ${final_amount:,.2f}")
+print(f"Interest earned: ${earned_interest:,.2f}")
+
+# Loan calculation
+loan_amount = 250000
+loan_rate = 0.045
+loan_years = 30
+
+monthly_payment = calculate_loan_payment(loan_amount, loan_rate, loan_years)
+total_paid = monthly_payment * loan_years * 12
+total_interest = total_paid - loan_amount
+
+print(f"\nLoan Analysis for ${loan_amount:,.2f}:")
+print(f"Monthly payment: ${monthly_payment:,.2f}")
+print(f"Total interest: ${total_interest:,.2f}")
+```
+
+### Document Processing Agent
+
+**Purpose**: Extract and analyze text from documents
+
+```python
+import re
+from collections import Counter
+import json
+
+def analyze_text(text):
+    """Comprehensive text analysis"""
+    # Basic metrics
+    word_count = len(text.split())
+    char_count = len(text)
+    sentence_count = len(re.split(r'[.!?]+', text))
+    
+    # Word frequency analysis
+    words = re.findall(r'\b\w+\b', text.lower())
+    word_freq = Counter(words)
+    most_common = word_freq.most_common(10)
+    
+    # Reading statistics
+    avg_words_per_sentence = word_count / sentence_count if sentence_count > 0 else 0
+    
+    # Extract key information
+    emails = re.findall(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b', text)
+    phone_numbers = re.findall(r'\b\d{3}[-.]?\d{3}[-.]?\d{4}\b', text)
+    dates = re.findall(r'\b\d{1,2}/\d{1,2}/\d{4}\b', text)
+    
+    return {
+        'word_count': word_count,
+        'character_count': char_count,
+        'sentence_count': sentence_count,
+        'avg_words_per_sentence': round(avg_words_per_sentence, 2),
+        'most_common_words': most_common,
+        'emails_found': emails,
+        'phone_numbers': phone_numbers,
+        'dates_found': dates
+    }
+
+# Example usage
+sample_text = """
+This is a sample document for analysis. It contains various types of information
+including contact details like john.doe@example.com and phone numbers such as 
+555-123-4567. Important dates mentioned include 12/25/2024 and 01/15/2025.
+The document discusses business metrics and performance indicators.
+"""
+
+analysis = analyze_text(sample_text)
+print(json.dumps(analysis, indent=2))
+```
+
+### Scientific Computing Agent
+
+**Purpose**: Perform scientific calculations and simulations
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import stats
+from scipy.optimize import minimize
+
+# Monte Carlo simulation
+def monte_carlo_pi(num_samples):
+    """Estimate π using Monte Carlo method"""
+    x = np.random.uniform(-1, 1, num_samples)
+    y = np.random.uniform(-1, 1, num_samples)
+    
+    # Check if points are inside unit circle
+    inside_circle = (x**2 + y**2) <= 1
+    pi_estimate = 4 * np.sum(inside_circle) / num_samples
+    
+    return pi_estimate
+
+# Statistical analysis
+def analyze_dataset(data):
+    """Comprehensive statistical analysis"""
+    results = {
+        'mean': np.mean(data),
+        'median': np.median(data),
+        'std_dev': np.std(data),
+        'variance': np.var(data),
+        'min': np.min(data),
+        'max': np.max(data),
+        'quartiles': np.percentile(data, [25, 50, 75])
+    }
+    
+    # Normality test
+    _, p_value = stats.normaltest(data)
+    results['is_normal'] = p_value > 0.05
+    results['p_value'] = p_value
+    
+    return results
+
+# Generate sample data
+np.random.seed(42)
+sample_data = np.random.normal(100, 15, 1000)
+
+# Run analyses
+pi_estimate = monte_carlo_pi(100000)
+print(f"π estimate using Monte Carlo: {pi_estimate:.6f}")
+print(f"Actual π: {np.pi:.6f}")
+print(f"Error: {abs(pi_estimate - np.pi):.6f}")
+
+print("\nStatistical Analysis:")
+stats_results = analyze_dataset(sample_data)
+for key, value in stats_results.items():
+    if isinstance(value, (int, float)):
+        print(f"{key}: {value:.4f}")
+    else:
+        print(f"{key}: {value}")
+
+# Create visualization
+plt.figure(figsize=(12, 4))
+
+plt.subplot(1, 2, 1)
+plt.hist(sample_data, bins=50, alpha=0.7, edgecolor='black')
+plt.title('Data Distribution')
+plt.xlabel('Value')
+plt.ylabel('Frequency')
+
+plt.subplot(1, 2, 2)
+stats.probplot(sample_data, dist="norm", plot=plt)
+plt.title('Q-Q Plot (Normal Distribution)')
+
+plt.tight_layout()
+plt.show()
+```
+
+## Use Cases
+
+### Business Intelligence
+
+<AccordionGroup>
+  <Accordion title="Sales Analytics">
+    - Revenue trend analysis
+    - Customer segmentation
+    - Forecasting and projections
+    - Performance metrics calculation
+    - Market share analysis
+  </Accordion>
+  <Accordion title="Financial Modeling">
+    - Budget planning and analysis
+    - Risk assessment calculations
+    - Investment portfolio optimization
+    - Cash flow projections
+    - ROI calculations
+  </Accordion>
+  <Accordion title="Operations Research">
+    - Supply chain optimization
+    - Resource allocation
+    - Scheduling algorithms
+    - Inventory management
+    - Quality control analysis
+  </Accordion>
+</AccordionGroup>
+
+### Research & Development
+
+<AccordionGroup>
+  <Accordion title="Data Science">
+    - Statistical hypothesis testing
+    - Machine learning model development
+    - Feature engineering and selection
+    - A/B test analysis
+    - Predictive modeling
+  </Accordion>
+  <Accordion title="Scientific Computing">
+    - Mathematical simulations
+    - Numerical analysis
+    - Signal processing
+    - Image analysis
+    - Bioinformatics calculations
+  </Accordion>
+  <Accordion title="Engineering Analysis">
+    - Structural calculations
+    - Fluid dynamics simulations
+    - Control system design
+    - Optimization problems
+    - Safety factor analysis
+  </Accordion>
+</AccordionGroup>
+
+## Security & Limitations
+
+### Security Features
+
+<CardGroup cols={2}>
+  <Card title="Sandboxed Execution" icon="shield">
+    Code runs in isolated containers with no access to host system
+  </Card>
+  <Card title="Resource Limits" icon="gauge">
+    CPU, memory, and execution time limits prevent resource abuse
+  </Card>
+  <Card title="Network Isolation" icon="wifi-off">
+    No outbound network connections allowed from executing code
+  </Card>
+  <Card title="File System Isolation" icon="folder-lock">
+    Access only to temporary, isolated file systems
+  </Card>
+</CardGroup>
+
+### Current Limitations
+
+<Warning>
+**Alpha Status**: This tool is in early access. Features and capabilities may change.
+</Warning>
+
+- **Execution Time**: Maximum execution time of 5 minutes per code block
+- **Memory Limit**: 2GB RAM limit per execution
+- **File Size**: Maximum 100MB for uploaded/generated files
+- **Network Access**: No external network connections allowed
+- **Persistent Storage**: Files are not persisted between executions
+
+### Best Practices
+
+<Tip>
+**Optimize Performance**: Break large computations into smaller chunks to stay within resource limits.
+</Tip>
+
+- **Error Handling**: Always include try-catch blocks for robust code
+- **Resource Management**: Clean up variables and close files properly
+- **Modular Code**: Write functions for reusable code components
+- **Documentation**: Comment code for better understanding
+- **Testing**: Test with small datasets before scaling up
+
+## Troubleshooting
+
+### Common Issues
+
+<AccordionGroup>
+  <Accordion title="Execution Timeout">
+    **Symptoms**: Code stops executing after 5 minutes
+    **Solutions**:
+    - Break large computations into smaller chunks
+    - Optimize algorithms for better performance
+    - Use more efficient data structures
+    - Consider approximation methods for complex calculations
+  </Accordion>
+  <Accordion title="Memory Errors">
+    **Symptoms**: Out of memory errors during execution
+    **Solutions**:
+    - Process data in batches
+    - Use memory-efficient libraries (e.g., NumPy)
+    - Delete unnecessary variables
+    - Use generators instead of lists for large datasets
+  </Accordion>
+  <Accordion title="Library Import Errors">
+    **Symptoms**: Cannot import certain libraries
+    **Solutions**:
+    - Check if library is in supported list
+    - Use alternative libraries with similar functionality
+    - Implement functionality manually if needed
+    - Request library addition through support
+  </Accordion>
+  <Accordion title="File Access Issues">
+    **Symptoms**: Cannot read or write files
+    **Solutions**:
+    - Ensure proper file paths in isolated environment
+    - Check file size limits (100MB max)
+    - Use supported file formats
+    - Handle file operations with error checking
+  </Accordion>
+</AccordionGroup>
+
+## Roadmap & Future Features
+
+### Planned Enhancements
+
+- **Additional Languages**: Support for more programming languages
+- **Extended Libraries**: More scientific and data analysis libraries
+- **Persistent Storage**: Option for file persistence between executions
+- **GPU Computing**: Support for GPU-accelerated computations
+- **Collaborative Notebooks**: Jupyter-like notebook interface
+- **Package Management**: Custom package installation capabilities
+
+### Beta Features (Coming Soon)
+
+- **Database Connections**: Secure database access from code
+- **API Integrations**: Controlled external API access
+- **Scheduled Execution**: Time-based code execution
+- **Code Templates**: Pre-built templates for common tasks
+- **Version Control**: Code versioning and history
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Try Code Interpreter" icon="play" href="/guides/first-agent">
+    Set up your first code-executing agent
+  </Card>
+  <Card title="Advanced Examples" icon="graduation-cap" href="/guides/best-practices">
+    Explore advanced code interpreter patterns
+  </Card>
+  <Card title="Other Tools" icon="grid" href="/tools/overview">
+    Discover other available tools
+  </Card>
+  <Card title="API Reference" icon="code" href="/api-reference/tools">
+    View the tools API documentation
+  </Card>
+</CardGroup>

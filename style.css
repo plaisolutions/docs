@@ -1,0 +1,114 @@
+:root {
+    --sidenav-move-up: 16rem;
+}
+
+#navbar {
+    padding: 1rem 0 1rem 0;
+    background-color: white;
+}
+
+.dark #navbar {
+    padding: 1rem 0 1rem 0;
+    background-color: black;
+}
+
+#navbar .h-12 {
+    height: 4rem;
+}
+
+.nav-tabs {
+    margin-top: 2rem;
+}
+
+#table-of-contents {
+    margin-top: -1.5rem;
+}
+
+#sidebar-content {
+  margin-top: 4rem;
+}
+
+.nav-tabs-item .absolute {
+    top: 0;
+    bottom: inherit;
+}
+
+a.bg-primary\/10 {
+    background: transparent;
+}
+
+#sidebar {
+    top: var(--sidenav-move-up);
+}
+
+.nav-logo {
+    height: 48px;
+}
+
+::-webkit-scrollbar {
+  width: 0.5rem;
+  height: 0.5rem;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 5px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background-color: #555;
+  border-radius: 5px;
+}
+
+/* Dark mode styles for documentation */
+.dark {
+  color-scheme: dark;
+  --sidenav-move-up: 11rem;
+}
+
+.dark body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+.dark .nav-tabs-item {
+  color: hsl(var(--foreground));
+}
+
+.dark .nav-tabs-item:hover {
+  background-color: hsl(var(--muted));
+}
+
+.dark a {
+  color: hsl(var(--foreground));
+}
+
+.dark a:hover {
+  color: hsl(var(--primary));
+}
+
+.dark #sidebar {
+  background-color: hsl(var(--card));
+  border-color: hsl(var(--border));
+}
+
+.dark code {
+  background-color: hsl(var(--muted));
+  color: hsl(var(--foreground));
+}
+
+.dark pre {
+  background-color: hsl(var(--card));
+  border-color: hsl(var(--border));
+}
+
+.dark blockquote {
+  border-left-color: hsl(var(--border));
+  background-color: hsl(var(--muted));
+}

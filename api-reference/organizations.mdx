@@ -1,0 +1,820 @@
+---
+title: "Organizations"
+description: "API endpoints for managing organizations"
+---
+
+## List Organizations
+
+<api-endpoint method="GET" path="/organizations" />
+
+List all organizations for the current user.
+
+### Response
+
+<ResponseField name="organizations" type="array">
+  Array of organization objects with membership details
+  <Expandable title="Organization Object">
+    <ResponseField name="id" type="string">
+      Organization unique identifier
+    </ResponseField>
+    <ResponseField name="name" type="string">
+      Organization name
+    </ResponseField>
+    <ResponseField name="created_at" type="string">
+      When the organization was created (ISO 8601 format)
+    </ResponseField>
+    <ResponseField name="updated_at" type="string">
+      When the organization was last updated (ISO 8601 format)
+    </ResponseField>
+    <ResponseField name="membership" type="object">
+      User's membership details in this organization
+      <Expandable title="Membership Object">
+        <ResponseField name="id" type="string">
+          Membership unique identifier
+        </ResponseField>
+        <ResponseField name="user_id" type="string">
+          User ID
+        </ResponseField>
+        <ResponseField name="organization_id" type="string">
+          Organization ID
+        </ResponseField>
+        <ResponseField name="role" type="string">
+          User's role in the organization (OWNER, ADMIN, MEMBER, VIEWER)
+        </ResponseField>
+        <ResponseField name="created_at" type="string">
+          When the membership was created
+        </ResponseField>
+        <ResponseField name="updated_at" type="string">
+          When the membership was last updated
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request GET 'https://api.plaisolutions.com/organizations' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.plaisolutions.com/organizations', {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+const organizations = await response.json();
+console.log(organizations);
+```
+
+```python Python
+import requests
+
+url = "https://api.plaisolutions.com/organizations"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+
+response = requests.get(url, headers=headers)
+organizations = response.json()
+print(organizations)
+```
+
+</CodeGroup>
+
+---
+
+## Create New Organization
+
+<api-endpoint method="POST" path="/organizations" />
+
+Create a new organization.
+
+### Request Body
+
+<ParamField body="name" type="string" required>
+  Organization name
+</ParamField>
+
+<ParamField body="address_line1" type="string" optional>
+  First line of organization address
+</ParamField>
+
+<ParamField body="address_line2" type="string" optional>
+  Second line of organization address
+</ParamField>
+
+<ParamField body="zipcode" type="string" optional>
+  Organization postal/zip code
+</ParamField>
+
+<ParamField body="state" type="string" optional>
+  Organization state/province
+</ParamField>
+
+<ParamField body="country" type="string" optional>
+  Organization country
+</ParamField>
+
+### Response
+
+Returns the created organization object with membership details.
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request POST 'https://api.plaisolutions.com/organizations' \
+--header 'Authorization: Bearer YOUR_TOKEN' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "name": "My Organization",
+  "address_line1": "123 Main St",
+  "city": "San Francisco",
+  "state": "CA",
+  "zipcode": "94105",
+  "country": "USA"
+}'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.plaisolutions.com/organizations', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    name: "My Organization",
+    address_line1: "123 Main St",
+    city: "San Francisco",
+    state: "CA",
+    zipcode: "94105",
+    country: "USA"
+  })
+});
+
+const organization = await response.json();
+console.log(organization);
+```
+
+```python Python
+import requests
+
+url = "https://api.plaisolutions.com/organizations"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+data = {
+    "name": "My Organization",
+    "address_line1": "123 Main St",
+    "city": "San Francisco",
+    "state": "CA",
+    "zipcode": "94105",
+    "country": "USA"
+}
+
+response = requests.post(url, headers=headers, json=data)
+organization = response.json()
+print(organization)
+```
+
+</CodeGroup>
+
+---
+
+## Get Organization
+
+<api-endpoint method="GET" path="/organizations/{organization_id}" />
+
+Get a single organization by ID.
+
+### Path Parameters
+
+<ParamField path="organization_id" type="string" required>
+  The unique identifier of the organization
+</ParamField>
+
+### Response
+
+Returns the organization object with membership details.
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request GET 'https://api.plaisolutions.com/organizations/org_123' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const organizationId = 'org_123';
+const response = await fetch(`https://api.plaisolutions.com/organizations/${organizationId}`, {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+const organization = await response.json();
+console.log(organization);
+```
+
+```python Python
+import requests
+
+organization_id = "org_123"
+url = f"https://api.plaisolutions.com/organizations/{organization_id}"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+
+response = requests.get(url, headers=headers)
+organization = response.json()
+print(organization)
+```
+
+</CodeGroup>
+
+---
+
+## Update Organization
+
+<api-endpoint method="PATCH" path="/organizations/{organization_id}" />
+
+Update an existing organization.
+
+### Path Parameters
+
+<ParamField path="organization_id" type="string" required>
+  The unique identifier of the organization
+</ParamField>
+
+### Request Body
+
+<ParamField body="name" type="string" optional>
+  Updated organization name
+</ParamField>
+
+<ParamField body="address_line1" type="string" optional>
+  Updated first line of organization address
+</ParamField>
+
+<ParamField body="address_line2" type="string" optional>
+  Updated second line of organization address
+</ParamField>
+
+<ParamField body="zipcode" type="string" optional>
+  Updated organization postal/zip code
+</ParamField>
+
+<ParamField body="state" type="string" optional>
+  Updated organization state/province
+</ParamField>
+
+<ParamField body="country" type="string" optional>
+  Updated organization country
+</ParamField>
+
+### Response
+
+Returns the updated organization object.
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request PATCH 'https://api.plaisolutions.com/organizations/org_123' \
+--header 'Authorization: Bearer YOUR_TOKEN' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "name": "Updated Organization Name"
+}'
+```
+
+```javascript JavaScript
+const organizationId = 'org_123';
+const response = await fetch(`https://api.plaisolutions.com/organizations/${organizationId}`, {
+  method: 'PATCH',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    name: "Updated Organization Name"
+  })
+});
+
+const organization = await response.json();
+console.log(organization);
+```
+
+```python Python
+import requests
+
+organization_id = "org_123"
+url = f"https://api.plaisolutions.com/organizations/{organization_id}"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+data = {
+    "name": "Updated Organization Name"
+}
+
+response = requests.patch(url, headers=headers, json=data)
+organization = response.json()
+print(organization)
+```
+
+</CodeGroup>
+
+---
+
+## Delete Organization
+
+<api-endpoint method="DELETE" path="/organizations/{organization_id}" />
+
+Delete an organization. This action cannot be undone.
+
+### Path Parameters
+
+<ParamField path="organization_id" type="string" required>
+  The unique identifier of the organization
+</ParamField>
+
+### Response
+
+Returns a 200 status code on successful deletion.
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request DELETE 'https://api.plaisolutions.com/organizations/org_123' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const organizationId = 'org_123';
+const response = await fetch(`https://api.plaisolutions.com/organizations/${organizationId}`, {
+  method: 'DELETE',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+console.log('Organization deleted:', response.status === 200);
+```
+
+```python Python
+import requests
+
+organization_id = "org_123"
+url = f"https://api.plaisolutions.com/organizations/{organization_id}"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+
+response = requests.delete(url, headers=headers)
+print(f"Organization deleted: {response.status_code == 200}")
+```
+
+</CodeGroup>
+
+---
+
+## List Memberships
+
+<api-endpoint method="GET" path="/organizations/{organization_id}/memberships" />
+
+List all memberships in an organization.
+
+### Path Parameters
+
+<ParamField path="organization_id" type="string" required>
+  The unique identifier of the organization
+</ParamField>
+
+### Response
+
+<ResponseField name="memberships" type="array">
+  Array of membership objects with user details
+  <Expandable title="Member Object">
+    <ResponseField name="id" type="string">
+      User unique identifier
+    </ResponseField>
+    <ResponseField name="email" type="string">
+      User's email address
+    </ResponseField>
+    <ResponseField name="first_name" type="string">
+      User's first name
+    </ResponseField>
+    <ResponseField name="last_name" type="string">
+      User's last name
+    </ResponseField>
+    <ResponseField name="created_at" type="string">
+      When the user was created
+    </ResponseField>
+    <ResponseField name="updated_at" type="string">
+      When the user was last updated
+    </ResponseField>
+    <ResponseField name="membership" type="object">
+      Membership details
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request GET 'https://api.plaisolutions.com/organizations/org_123/memberships' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const organizationId = 'org_123';
+const response = await fetch(`https://api.plaisolutions.com/organizations/${organizationId}/memberships`, {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+const memberships = await response.json();
+console.log(memberships);
+```
+
+```python Python
+import requests
+
+organization_id = "org_123"
+url = f"https://api.plaisolutions.com/organizations/{organization_id}/memberships"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+
+response = requests.get(url, headers=headers)
+memberships = response.json()
+print(memberships)
+```
+
+</CodeGroup>
+
+---
+
+## Update Membership
+
+<api-endpoint method="PATCH" path="/organizations/{organization_id}/memberships/{membership_id}" />
+
+Update a member's role in the organization.
+
+### Path Parameters
+
+<ParamField path="organization_id" type="string" required>
+  The unique identifier of the organization
+</ParamField>
+
+<ParamField path="membership_id" type="string" required>
+  The unique identifier of the membership
+</ParamField>
+
+### Request Body
+
+<ParamField body="role" type="string" required>
+  New role for the member (OWNER, ADMIN, MEMBER, VIEWER)
+</ParamField>
+
+### Response
+
+Returns the updated membership object.
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request PATCH 'https://api.plaisolutions.com/organizations/org_123/memberships/mem_456' \
+--header 'Authorization: Bearer YOUR_TOKEN' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "role": "ADMIN"
+}'
+```
+
+```javascript JavaScript
+const organizationId = 'org_123';
+const membershipId = 'mem_456';
+const response = await fetch(`https://api.plaisolutions.com/organizations/${organizationId}/memberships/${membershipId}`, {
+  method: 'PATCH',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    role: "ADMIN"
+  })
+});
+
+const membership = await response.json();
+console.log(membership);
+```
+
+```python Python
+import requests
+
+organization_id = "org_123"
+membership_id = "mem_456"
+url = f"https://api.plaisolutions.com/organizations/{organization_id}/memberships/{membership_id}"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+data = {
+    "role": "ADMIN"
+}
+
+response = requests.patch(url, headers=headers, json=data)
+membership = response.json()
+print(membership)
+```
+
+</CodeGroup>
+
+---
+
+## Remove Membership
+
+<api-endpoint method="DELETE" path="/organizations/{organization_id}/memberships/{membership_id}" />
+
+Remove a member from the organization.
+
+### Path Parameters
+
+<ParamField path="organization_id" type="string" required>
+  The unique identifier of the organization
+</ParamField>
+
+<ParamField path="membership_id" type="string" required>
+  The unique identifier of the membership
+</ParamField>
+
+### Response
+
+Returns a 200 status code on successful removal.
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request DELETE 'https://api.plaisolutions.com/organizations/org_123/memberships/mem_456' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const organizationId = 'org_123';
+const membershipId = 'mem_456';
+const response = await fetch(`https://api.plaisolutions.com/organizations/${organizationId}/memberships/${membershipId}`, {
+  method: 'DELETE',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+console.log('Membership removed:', response.status === 200);
+```
+
+```python Python
+import requests
+
+organization_id = "org_123"
+membership_id = "mem_456"
+url = f"https://api.plaisolutions.com/organizations/{organization_id}/memberships/{membership_id}"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+
+response = requests.delete(url, headers=headers)
+print(f"Membership removed: {response.status_code == 200}")
+```
+
+</CodeGroup>
+
+---
+
+## List Invitations
+
+<api-endpoint method="GET" path="/organizations/{organization_id}/invitations" />
+
+List all invitations in the organization.
+
+### Path Parameters
+
+<ParamField path="organization_id" type="string" required>
+  The unique identifier of the organization
+</ParamField>
+
+### Response
+
+<ResponseField name="invitations" type="array">
+  Array of invitation objects
+</ResponseField>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request GET 'https://api.plaisolutions.com/organizations/org_123/invitations' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const organizationId = 'org_123';
+const response = await fetch(`https://api.plaisolutions.com/organizations/${organizationId}/invitations`, {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+const invitations = await response.json();
+console.log(invitations);
+```
+
+```python Python
+import requests
+
+organization_id = "org_123"
+url = f"https://api.plaisolutions.com/organizations/{organization_id}/invitations"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+
+response = requests.get(url, headers=headers)
+invitations = response.json()
+print(invitations)
+```
+
+</CodeGroup>
+
+---
+
+## Add Invitation
+
+<api-endpoint method="POST" path="/organizations/{organization_id}/invitations" />
+
+Invite a user to the organization.
+
+### Path Parameters
+
+<ParamField path="organization_id" type="string" required>
+  The unique identifier of the organization
+</ParamField>
+
+### Request Body
+
+<ParamField body="email" type="string" required>
+  Email address of the user to invite
+</ParamField>
+
+<ParamField body="organization_role" type="string" optional>
+  Role in the organization (OWNER, ADMIN, MEMBER, VIEWER). Defaults to MEMBER
+</ParamField>
+
+<ParamField body="project_id" type="string" required>
+  ID of the project for this invitation
+</ParamField>
+
+<ParamField body="project_role" type="string" required>
+  Role in the project (OWNER, ADMIN, MEMBER, VIEWER)
+</ParamField>
+
+### Response
+
+Returns the created invitation object.
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request POST 'https://api.plaisolutions.com/organizations/org_123/invitations' \
+--header 'Authorization: Bearer YOUR_TOKEN' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "email": "user@example.com",
+  "organization_role": "MEMBER",
+  "project_id": "proj_789",
+  "project_role": "MEMBER"
+}'
+```
+
+```javascript JavaScript
+const organizationId = 'org_123';
+const response = await fetch(`https://api.plaisolutions.com/organizations/${organizationId}/invitations`, {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    email: "user@example.com",
+    organization_role: "MEMBER",
+    project_id: "proj_789",
+    project_role: "MEMBER"
+  })
+});
+
+const invitation = await response.json();
+console.log(invitation);
+```
+
+```python Python
+import requests
+
+organization_id = "org_123"
+url = f"https://api.plaisolutions.com/organizations/{organization_id}/invitations"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+data = {
+    "email": "user@example.com",
+    "organization_role": "MEMBER",
+    "project_id": "proj_789",
+    "project_role": "MEMBER"
+}
+
+response = requests.post(url, headers=headers, json=data)
+invitation = response.json()
+print(invitation)
+```
+
+</CodeGroup>
+
+---
+
+## Remove Invitation
+
+<api-endpoint method="DELETE" path="/organizations/{organization_id}/invitations/{invitation_id}" />
+
+Remove an invitation from the organization.
+
+### Path Parameters
+
+<ParamField path="organization_id" type="string" required>
+  The unique identifier of the organization
+</ParamField>
+
+<ParamField path="invitation_id" type="string" required>
+  The unique identifier of the invitation
+</ParamField>
+
+### Response
+
+Returns a 204 status code on successful removal.
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request DELETE 'https://api.plaisolutions.com/organizations/org_123/invitations/inv_456' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const organizationId = 'org_123';
+const invitationId = 'inv_456';
+const response = await fetch(`https://api.plaisolutions.com/organizations/${organizationId}/invitations/${invitationId}`, {
+  method: 'DELETE',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+console.log('Invitation removed:', response.status === 204);
+```
+
+```python Python
+import requests
+
+organization_id = "org_123"
+invitation_id = "inv_456"
+url = f"https://api.plaisolutions.com/organizations/{organization_id}/invitations/{invitation_id}"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+
+response = requests.delete(url, headers=headers)
+print(f"Invitation removed: {response.status_code == 204}")
+```
+
+</CodeGroup>

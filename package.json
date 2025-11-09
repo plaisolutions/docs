@@ -1,0 +1,42 @@
+{
+  "name": "plai-framework-docs",
+  "version": "1.0.0",
+  "description": "Documentation for PLai Framework - The low-code AI multi-agent framework",
+  "scripts": {
+    "dev": "mintlify dev",
+    "build": "mintlify build",
+    "sync": "node scripts/sync-tools-from-app.js",
+    "sync:tools": "node scripts/sync-tools-from-app.js",
+    "preview": "mintlify dev",
+    "deploy": "mintlify build && mintlify deploy",
+    "lint": "mintlify broken-links",
+    "validate": "mintlify validate"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/plaisolutions/docs.git"
+  },
+  "keywords": [
+    "plai-framework",
+    "ai-agents",
+    "documentation",
+    "mintlify",
+    "multi-agent",
+    "artificial-intelligence"
+  ],
+  "author": "PLai Solutions",
+  "license": "MIT",
+  "dependencies": {
+    "@mintlify/cli": "^4.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "homepage": "https://docs.plaisolutions.com",
+  "bugs": {
+    "url": "https://github.com/plaisolutions/docs/issues"
+  }
+}

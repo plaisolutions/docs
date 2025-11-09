@@ -1,0 +1,421 @@
+---
+title: "Create Your First Agent"
+description: "Step-by-step guide to building your first AI agent in PLai Framework"
+icon: "play"
+---
+
+# Create Your First Agent
+
+This comprehensive tutorial will guide you through creating your first AI agent in PLai Framework. You'll learn the fundamentals of agent creation, configuration, and testing.
+
+<Frame>
+  <img src="/images/hero-light.png" alt="Create Your First Agent" />
+</Frame>
+
+## What You'll Build
+
+In this tutorial, you'll create a **Customer Support Agent** that can:
+
+<CardGroup cols={2}>
+  <Card title="Answer Questions" icon="comments">
+    Provide helpful responses to customer inquiries
+  </Card>
+  <Card title="Search Information" icon="magnifying-glass">
+    Look up real-time information using Perplexity AI
+  </Card>
+  <Card title="Process Requests" icon="gear">
+    Handle various customer service tasks
+  </Card>
+  <Card title="Escalate Issues" icon="arrow-up">
+    Know when to escalate complex issues to humans
+  </Card>
+</CardGroup>
+
+## Prerequisites
+
+Before you begin, ensure you have:
+
+- [ ] A PLai Framework account with Pro access (for Perplexity AI)
+- [ ] Access to a project (create one if needed)
+- [ ] Basic understanding of AI agents and customer service
+
+## Step 1: Create the Agent
+
+<Steps>
+  <Step title="Access Your Project">
+    1. Log in to [PLai Framework Dashboard](https://framework.plaisolutions.com)
+    2. Select your organization and project
+    3. Navigate to the **Agents** section
+  </Step>
+  <Step title="Start Agent Creation">
+    Click the **Create Agent** button (+ icon) in the top right
+  </Step>
+  <Step title="Configure Basic Information">
+    Fill in the agent details:
+    
+    **Name**: `Customer Support Agent`
+    **Description**: `Helpful customer support agent that can answer questions and provide assistance`
+  </Step>
+  <Step title="Set System Instructions">
+    Copy and paste this system prompt:
+    
+    ```text
+    You are a helpful and professional customer support agent. Your role is to:
+    
+    1. Provide accurate and helpful information to customers
+    2. Maintain a friendly and professional tone
+    3. Search for current information when needed
+    4. Escalate complex issues to human agents when appropriate
+    5. Always prioritize customer satisfaction
+    
+    Guidelines:
+    - Be concise but thorough in your responses
+    - Ask clarifying questions when needed
+    - Provide specific solutions and next steps
+    - If you can't help with something, explain why and suggest alternatives
+    - Always end conversations on a positive note
+    ```
+  </Step>
+</Steps>
+
+## Step 2: Configure the Model
+
+<Steps>
+  <Step title="Select LLM Provider">
+    Choose **OpenAI** as your provider (recommended for customer support)
+  </Step>
+  <Step title="Choose Model">
+    Select **GPT-4 Turbo** for the best performance, or **GPT-3.5 Turbo** for cost efficiency
+  </Step>
+  <Step title="Adjust Parameters (Optional)">
+    - **Temperature**: 0.3 (more focused responses)
+    - **Max Tokens**: 1000 (sufficient for most support responses)
+  </Step>
+  <Step title="Save Configuration">
+    Click **Save** to store your model configuration
+  </Step>
+</Steps>
+
+## Step 3: Add Tools
+
+Now let's enhance your agent with the Perplexity AI tool for real-time information lookup.
+
+<Steps>
+  <Step title="Navigate to Tools">
+    Go to the **Tools** section in your project
+  </Step>
+  <Step title="Create Perplexity AI Tool">
+    1. Click **Create Tool**
+    2. Select **Perplexity AI**
+    3. Configure the tool:
+    
+    **Name**: `Web Search Tool`
+    **Model**: `sonar-pro`
+    **System Message**: `Search for current information to help answer customer questions. Focus on official sources and recent information.`
+    **Search Domain Filter**: Leave empty for general search
+  </Step>
+  <Step title="Test the Tool">
+    Click **Test** and try a sample query like "latest iPhone features"
+  </Step>
+  <Step title="Add Tool to Agent">
+    1. Return to your agent's settings
+    2. Go to the **Tools** tab
+    3. Click **Add Tool** and select your "Web Search Tool"
+  </Step>
+</Steps>
+
+## Step 4: Configure Agent Settings
+
+<Steps>
+  <Step title="Set Agent Avatar (Optional)">
+    Upload a professional avatar image or use the default
+  </Step>
+  <Step title="Enable Features">
+    Turn on these recommended features:
+    - **File Upload**: Allow customers to share screenshots or documents
+    - **Voice Input**: Enable voice conversations (if supported)
+  </Step>
+  <Step title="Configure Guardrails">
+    Set up basic safety measures:
+    - Enable **Content Filtering**
+    - Set **Rate Limiting** to 10 messages per minute
+    - Enable **Inappropriate Content Detection**
+  </Step>
+  <Step title="Activate Agent">
+    Toggle the agent status to **Active**
+  </Step>
+</Steps>
+
+## Step 5: Test Your Agent
+
+Now let's test your agent with realistic customer support scenarios.
+
+<Steps>
+  <Step title="Start a Test Chat">
+    Click the **Chat** button on your agent to open the chat interface
+  </Step>
+  <Step title="Test Basic Interaction">
+    Try this conversation starter:
+    
+    **You**: `Hi, I need help with my account`
+    
+    Your agent should respond professionally and ask for more details.
+  </Step>
+  <Step title="Test Tool Integration">
+    Ask a question that requires current information:
+    
+    **You**: `What are the latest features in the iPhone 15?`
+    
+    Your agent should use the Perplexity tool to search for current information.
+  </Step>
+  <Step title="Test Escalation">
+    Present a complex scenario:
+    
+    **You**: `I've been charged twice for the same order and need an immediate refund`
+    
+    Your agent should recognize this needs human intervention.
+  </Step>
+</Steps>
+
+## Step 6: Refine and Optimize
+
+Based on your testing, let's optimize the agent's performance.
+
+<Tabs>
+  <Tab title="Improve System Instructions">
+    If responses aren't quite right, refine your system prompt:
+    
+    ```text
+    You are a helpful customer support agent for [Company Name]. 
+    
+    Key responsibilities:
+    - Answer product questions using current information
+    - Help with account and billing issues
+    - Provide troubleshooting guidance
+    - Escalate complex issues to human agents
+    
+    Response guidelines:
+    - Keep responses under 150 words when possible
+    - Use bullet points for step-by-step instructions
+    - Always include next steps or follow-up actions
+    - For billing issues, always escalate to human agents
+    - For technical issues, try to resolve first, then escalate if needed
+    
+    Tone: Professional, helpful, and empathetic
+    ```
+  </Tab>
+  <Tab title="Adjust Tool Configuration">
+    Fine-tune your Perplexity tool:
+    
+    ```text
+    Search for the most current and accurate information to help answer customer questions. 
+    Prioritize:
+    1. Official company documentation
+    2. Recent product announcements
+    3. Authoritative news sources
+    4. User guides and help articles
+    
+    Provide concise, actionable information.
+    ```
+  </Tab>
+  <Tab title="Add More Tools (Optional)">
+    Consider adding these tools as you grow:
+    - **API Request Tool**: Connect to your CRM or help desk
+    - **External Data Source**: Access customer database
+    - **Browser Tool**: Scrape your own documentation
+  </Tab>
+</Tabs>
+
+## Common Test Scenarios
+
+Here are realistic scenarios to test your agent:
+
+<AccordionGroup>
+  <Accordion title="Product Information Requests">
+    **Test Input**: "What's the difference between your Pro and Enterprise plans?"
+    
+    **Expected Behavior**: 
+    - Use web search tool to find current pricing information
+    - Provide clear comparison
+    - Offer to help with plan selection
+  </Accordion>
+  <Accordion title="Technical Support">
+    **Test Input**: "I can't log into my account, it says my password is incorrect"
+    
+    **Expected Behavior**:
+    - Provide password reset instructions
+    - Suggest checking for caps lock, typos
+    - Offer alternative solutions
+    - Escalate if issue persists
+  </Accordion>
+  <Accordion title="Billing Issues">
+    **Test Input**: "I was charged $99 but I cancelled my subscription last month"
+    
+    **Expected Behavior**:
+    - Acknowledge the concern empathetically
+    - Explain it needs human review
+    - Provide escalation path
+    - Give reference number or next steps
+  </Accordion>
+  <Accordion title="Feature Questions">
+    **Test Input**: "Does your platform support integration with Slack?"
+    
+    **Expected Behavior**:
+    - Search for current integration information
+    - Provide specific details about Slack integration
+    - Explain setup process if available
+    - Offer additional resources
+  </Accordion>
+</AccordionGroup>
+
+## Advanced Configuration Tips
+
+### Performance Optimization
+
+<Tip>
+**Response Speed**: Use GPT-3.5 Turbo for faster responses if speed is more important than complexity handling.
+</Tip>
+
+```json
+{
+  "model_config": {
+    "provider": "openai",
+    "model": "gpt-3.5-turbo",
+    "temperature": 0.2,
+    "max_tokens": 500,
+    "top_p": 0.9
+  }
+}
+```
+
+### Cost Management
+
+Monitor your agent's usage:
+
+- **Token Usage**: Track input/output tokens per conversation
+- **Tool Calls**: Monitor Perplexity AI usage
+- **Conversation Length**: Set reasonable limits
+- **Rate Limiting**: Prevent abuse
+
+### Quality Assurance
+
+<CardGroup cols={2}>
+  <Card title="Regular Testing" icon="check">
+    Test your agent weekly with new scenarios
+  </Card>
+  <Card title="User Feedback" icon="message">
+    Collect and analyze user feedback
+  </Card>
+  <Card title="Performance Metrics" icon="chart">
+    Monitor response quality and resolution rates
+  </Card>
+  <Card title="Continuous Training" icon="graduation-cap">
+    Update system prompts based on learnings
+  </Card>
+</CardGroup>
+
+## Troubleshooting Common Issues
+
+<AccordionGroup>
+  <Accordion title="Agent Not Responding">
+    **Possible Causes**:
+    - Agent is set to inactive
+    - Model configuration errors
+    - Network connectivity issues
+    
+    **Solutions**:
+    - Check agent status is "Active"
+    - Verify model configuration
+    - Test with simple queries first
+  </Accordion>
+  <Accordion title="Tool Not Working">
+    **Possible Causes**:
+    - Tool not properly configured
+    - Authentication issues
+    - Tool not added to agent
+    
+    **Solutions**:
+    - Test tool independently
+    - Check tool configuration
+    - Verify tool is assigned to agent
+  </Accordion>
+  <Accordion title="Poor Response Quality">
+    **Possible Causes**:
+    - Unclear system instructions
+    - Wrong model selection
+    - Inappropriate temperature setting
+    
+    **Solutions**:
+    - Refine system prompt with specific examples
+    - Try different model (GPT-4 for complexity)
+    - Adjust temperature (lower for more focused)
+  </Accordion>
+  <Accordion title="High Costs">
+    **Possible Causes**:
+    - Using expensive models unnecessarily
+    - Long conversations without limits
+    - Excessive tool usage
+    
+    **Solutions**:
+    - Use GPT-3.5 for simple tasks
+    - Set conversation length limits
+    - Monitor and optimize tool usage
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+Congratulations! You've created your first AI agent. Here's what to do next:
+
+<CardGroup cols={2}>
+  <Card title="Deploy to Production" icon="rocket" href="/guides/production-deployment">
+    Learn how to deploy your agent for real users
+  </Card>
+  <Card title="Add More Tools" icon="plus" href="/guides/multi-tool-setup">
+    Enhance your agent with additional capabilities
+  </Card>
+  <Card title="Monitor Performance" icon="chart-line" href="/monitoring/overview">
+    Set up analytics and monitoring
+  </Card>
+  <Card title="Advanced Configurations" icon="settings" href="/agents/analytics/overview">
+    Explore advanced agent features
+  </Card>
+</CardGroup>
+
+## Best Practices Summary
+
+<Warning>
+**Production Readiness**: Always test thoroughly before deploying agents to handle real customer interactions.
+</Warning>
+
+✅ **Do's**:
+- Test with realistic scenarios
+- Set clear system instructions
+- Monitor performance regularly
+- Collect user feedback
+- Start simple and iterate
+
+❌ **Don'ts**:
+- Deploy untested agents
+- Use overly complex prompts initially
+- Ignore cost monitoring
+- Forget to set guardrails
+- Skip regular updates
+
+## Getting Help
+
+If you encounter issues:
+
+<CardGroup cols={3}>
+  <Card title="Documentation" icon="book" href="/concepts">
+    Review core concepts and features
+  </Card>
+  <Card title="Community" icon="discord" href="https://discord.gg/plaisolutions">
+    Join our Discord community
+  </Card>
+  <Card title="Support" icon="life-ring" href="mailto:support@plaisolutions.com">
+    Contact our support team
+  </Card>
+</CardGroup>
+
+You've successfully created your first AI agent! This foundation will serve you well as you build more sophisticated agents and explore advanced features of PLai Framework.

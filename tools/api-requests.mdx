@@ -1,0 +1,426 @@
+---
+title: "API Request Tool"
+description: "Connect to any REST API with full configuration control"
+icon: "cloud"
+---
+
+# API Request Tool
+
+The API Request tool allows your agents to interact with any REST API endpoint. It provides complete control over HTTP methods, headers, request bodies, and response handling.
+
+<Frame>
+  <img src="/images/hero-light.png" alt="API Request Tool Configuration" />
+</Frame>
+
+<Note>
+This tool has **Default** status, meaning it's production-ready and available on all subscription plans.
+</Note>
+
+## Overview
+
+The API Request tool is one of the most versatile tools in PLai Framework, enabling agents to:
+
+<CardGroup cols={2}>
+  <Card title="Connect to APIs" icon="plug">
+    Integrate with any REST API service or endpoint
+  </Card>
+  <Card title="Custom Headers" icon="settings">
+    Configure authentication, content types, and custom headers
+  </Card>
+  <Card title="Flexible Methods" icon="arrows-alt">
+    Support for GET, POST, PUT, DELETE, and other HTTP methods
+  </Card>
+  <Card title="Template System" icon="code">
+    Dynamic URL and body templating with variable substitution
+  </Card>
+</CardGroup>
+
+## Configuration Parameters
+
+<ParamField path="url_template" type="input" required>
+  The API endpoint URL with optional template variables
+  <br />**Example**: `https://api.example.com/users/{{user_id}}/profile`
+  <br />**Variables**: Use `{{variable_name}}` for dynamic substitution
+</ParamField>
+
+<ParamField path="method" type="input" required>
+  HTTP method for the request
+  <br />**Common values**: `GET`, `POST`, `PUT`, `DELETE`, `PATCH`
+  <br />**Default**: `GET`
+</ParamField>
+
+<ParamField path="headers_template" type="json" required>
+  HTTP headers as a JSON object
+  <br />**Example**: `{"Authorization": "Bearer {{api_token}}", "User-Agent": "PLai-Agent/1.0"}`
+  <br />**Default**: `{}`
+</ParamField>
+
+<ParamField path="content_type" type="select" required>
+  Content type for request body
+  <br />**Options**:
+  - `application/json` - For JSON payloads
+  - `application/x-www-form-urlencoded` - For form data
+</ParamField>
+
+<ParamField path="body_template" type="json" required>
+  Request body as JSON template
+  <br />**Example**: `{"name": "{{user_name}}", "email": "{{user_email}}"}`
+  <br />**Default**: `{}`
+  <br />**Note**: Only used for POST, PUT, PATCH methods
+</ParamField>
+
+## Setup Instructions
+
+<Steps>
+  <Step title="Navigate to Tools">
+    Go to the **Tools** section in your project dashboard
+  </Step>
+  <Step title="Create API Request Tool">
+    Click **Create Tool** and select **API Request**
+  </Step>
+  <Step title="Configure URL">
+    Enter the API endpoint URL in the **URL Template** field
+  </Step>
+  <Step title="Set HTTP Method">
+    Specify the HTTP method (GET, POST, etc.) in the **Method** field
+  </Step>
+  <Step title="Configure Headers">
+    Add required headers including authentication in **Headers Template**
+  </Step>
+  <Step title="Set Content Type">
+    Choose the appropriate content type for your API
+  </Step>
+  <Step title="Configure Body (if needed)">
+    For POST/PUT requests, configure the **Body Template**
+  </Step>
+  <Step title="Test Configuration">
+    Use the test button to verify your configuration works
+  </Step>
+  <Step title="Add to Agent">
+    Assign this tool to your agents in agent settings
+  </Step>
+</Steps>
+
+## Usage Examples
+
+### Basic GET Request
+
+```json
+{
+  "url_template": "https://jsonplaceholder.typicode.com/posts/{{post_id}}",
+  "method": "GET",
+  "headers_template": {
+    "Accept": "application/json",
+    "User-Agent": "PLai-Agent/1.0"
+  },
+  "content_type": "application/json",
+  "body_template": {}
+}
+```
+
+### Authenticated API Call
+
+```json
+{
+  "url_template": "https://api.github.com/user/repos",
+  "method": "GET",
+  "headers_template": {
+    "Authorization": "Bearer {{github_token}}",
+    "Accept": "application/vnd.github.v3+json"
+  },
+  "content_type": "application/json",
+  "body_template": {}
+}
+```
+
+### POST Request with Data
+
+```json
+{
+  "url_template": "https://api.example.com/users",
+  "method": "POST",
+  "headers_template": {
+    "Authorization": "Bearer {{api_token}}",
+    "Content-Type": "application/json"
+  },
+  "content_type": "application/json",
+  "body_template": {
+    "name": "{{user_name}}",
+    "email": "{{user_email}}",
+    "role": "user"
+  }
+}
+```
+
+### CRM Integration (Salesforce)
+
+```json
+{
+  "url_template": "https://{{instance}}.salesforce.com/services/data/v57.0/sobjects/Contact",
+  "method": "POST",
+  "headers_template": {
+    "Authorization": "Bearer {{sf_access_token}}",
+    "Content-Type": "application/json"
+  },
+  "content_type": "application/json",
+  "body_template": {
+    "FirstName": "{{first_name}}",
+    "LastName": "{{last_name}}",
+    "Email": "{{email}}",
+    "Phone": "{{phone}}"
+  }
+}
+```
+
+## Common Use Cases
+
+### Customer Relationship Management (CRM)
+
+<Tabs>
+  <Tab title="Salesforce">
+    - Create/update leads and contacts
+    - Retrieve customer information
+    - Update opportunity status
+    - Sync customer data
+  </Tab>
+  <Tab title="HubSpot">
+    - Manage contact properties
+    - Track deal pipeline
+    - Create support tickets
+    - Generate reports
+  </Tab>
+</Tabs>
+
+### Payment Processing
+
+<Tabs>
+  <Tab title="Stripe">
+    - Process payments
+    - Manage customer subscriptions
+    - Handle refunds
+    - Retrieve transaction history
+  </Tab>
+  <Tab title="PayPal">
+    - Create payment links
+    - Process invoices
+    - Handle disputes
+    - Manage merchant accounts
+  </Tab>
+</Tabs>
+
+### Communication Services
+
+<Tabs>
+  <Tab title="Slack">
+    - Send messages to channels
+    - Create private conversations
+    - Post file attachments
+    - Manage workspace users
+  </Tab>
+  <Tab title="Discord">
+    - Send bot messages
+    - Create embeds
+    - Manage server roles
+    - Handle webhooks
+  </Tab>
+</Tabs>
+
+## Template Variables
+
+### Variable Substitution
+
+The API Request tool supports dynamic variable substitution in URLs and request bodies:
+
+```json
+{
+  "url_template": "https://api.example.com/users/{{user_id}}/orders/{{order_id}}",
+  "body_template": {
+    "status": "{{new_status}}",
+    "updated_by": "{{agent_name}}",
+    "timestamp": "{{current_time}}"
+  }
+}
+```
+
+### Available Variables
+
+Variables are provided by the agent during execution:
+
+- **User-provided**: Variables from chat context or form inputs
+- **System variables**: Current time, agent name, user ID, etc.
+- **Previous responses**: Data from earlier tool calls in the conversation
+- **Context variables**: Information from the current conversation
+
+### Conditional Logic
+
+Use conditional templating for dynamic behavior:
+
+```json
+{
+  "body_template": {
+    "action": "{{action_type}}",
+    "data": "{{#if user_premium}}{{premium_data}}{{else}}{{basic_data}}{{/if}}"
+  }
+}
+```
+
+## Response Handling
+
+### Response Processing
+
+The API Request tool automatically processes responses:
+
+1. **Status Code Validation**: Checks for successful HTTP status codes
+2. **Content Parsing**: Automatically parses JSON, XML, or text responses
+3. **Error Handling**: Provides meaningful error messages for failures
+4. **Data Extraction**: Makes response data available to the agent
+
+### Response Format
+
+Successful responses are returned in this format:
+
+```json
+{
+  "status": 200,
+  "headers": {
+    "content-type": "application/json",
+    "x-rate-limit-remaining": "99"
+  },
+  "data": {
+    "id": 123,
+    "name": "John Doe",
+    "email": "john@example.com"
+  },
+  "success": true
+}
+```
+
+## Error Handling
+
+### Common Error Scenarios
+
+<AccordionGroup>
+  <Accordion title="Authentication Errors (401/403)">
+    **Cause**: Invalid or expired API keys, insufficient permissions
+    
+    **Solutions**:
+    - Verify API key is correct and active
+    - Check permission scopes for the API key
+    - Ensure proper header format for authentication
+    - Confirm the API endpoint supports your authentication method
+  </Accordion>
+  <Accordion title="Rate Limiting (429)">
+    **Cause**: Exceeded API rate limits
+    
+    **Solutions**:
+    - Implement retry logic with exponential backoff
+    - Reduce request frequency
+    - Upgrade API plan if available
+    - Use caching to reduce redundant requests
+  </Accordion>
+  <Accordion title="Bad Request (400)">
+    **Cause**: Invalid request format or missing required fields
+    
+    **Solutions**:
+    - Validate request body against API documentation
+    - Check required fields are included
+    - Verify data types match API expectations
+    - Test with API documentation examples
+  </Accordion>
+  <Accordion title="Network Timeouts">
+    **Cause**: Slow API responses or network issues
+    
+    **Solutions**:
+    - Increase timeout values
+    - Implement retry logic
+    - Check API status and performance
+    - Use alternative endpoints if available
+  </Accordion>
+</AccordionGroup>
+
+## Security Best Practices
+
+<Warning>
+**API Key Security**: Never hardcode API keys in templates. Use secure variable substitution instead.
+</Warning>
+
+### Secure Configuration
+
+```json
+{
+  "headers_template": {
+    "Authorization": "Bearer {{secure_api_token}}",
+    "X-API-Key": "{{api_key}}"
+  }
+}
+```
+
+### Security Checklist
+
+- **Use HTTPS**: Always use secure HTTPS endpoints
+- **Validate Certificates**: Ensure SSL certificate validation
+- **Rotate Keys**: Regular API key rotation
+- **Minimal Permissions**: Use API keys with minimal required permissions
+- **Monitor Usage**: Track API usage for unusual activity
+- **Rate Limiting**: Implement client-side rate limiting
+
+## Performance Optimization
+
+### Caching Strategies
+
+```json
+{
+  "cache_policy": {
+    "enable": true,
+    "ttl": 300,
+    "key_template": "api_{{endpoint}}_{{user_id}}"
+  }
+}
+```
+
+### Optimization Tips
+
+- **Batch Requests**: Combine multiple operations when possible
+- **Conditional Requests**: Use ETags and If-Modified-Since headers
+- **Compression**: Enable gzip compression for large responses
+- **Connection Pooling**: Reuse connections for better performance
+
+## Troubleshooting
+
+### Debug Mode
+
+Enable detailed logging to troubleshoot issues:
+
+```json
+{
+  "debug": true,
+  "log_requests": true,
+  "log_responses": true
+}
+```
+
+### Testing Tools
+
+Use these approaches to test your configuration:
+
+1. **API Testing Tools**: Postman, Insomnia, or curl
+2. **Mock Servers**: Test with mock API responses
+3. **Staging Environments**: Test against non-production APIs
+4. **Request Logs**: Review detailed request/response logs
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Create Your First API Tool" icon="play" href="/guides/first-agent">
+    Follow the step-by-step guide
+  </Card>
+  <Card title="Advanced Configurations" icon="settings" href="/guides/multi-tool-setup">
+    Learn advanced API tool patterns
+  </Card>
+  <Card title="Other Tools" icon="grid" href="/tools/overview">
+    Explore other available tools
+  </Card>
+  <Card title="API Reference" icon="code" href="/api-reference/tools">
+    View the tools API documentation
+  </Card>
+</CardGroup>

@@ -1,68 +1,143 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Mint Starter Kit",
+  "name": "PLai Framework Documentation",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#0DCA87",
+    "light": "#0DCA87",
+    "dark": "#0DCA87"
   },
   "favicon": "/favicon.svg",
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "Documentation",
         "groups": [
           {
-            "group": "Getting started",
+            "group": "Getting Started",
             "pages": [
               "index",
               "quickstart",
-              "development"
+              "concepts",
+              "authentication"
             ]
           },
           {
-            "group": "Customization",
+            "group": "🤖 Agents",
             "pages": [
-              "essentials/settings",
-              "essentials/navigation"
+              "agents/overview",
+              "agents/creating-agents",
+              "agents/agent-settings",
+              {
+                "group": "Analytics",
+                "pages": [
+                  "agents/analytics/overview",
+                  "agents/analytics/progress-tracking",
+                  "agents/analytics/filters",
+                  "agents/analytics/reports",
+                  "agents/analytics/settings-panel"
+                ]
+              },
+              {
+                "group": "Filters",
+                "pages": [
+                  "agents/filters/answer-filters",
+                  "agents/filters/creating-filters",
+                  "agents/filters/managing-filters"
+                ]
+              },
+              {
+                "group": "Guardrails",
+                "pages": [
+                  "agents/guardrails/overview",
+                  "agents/guardrails/configuration",
+                  "agents/guardrails/best-practices"
+                ]
+              }
             ]
           },
           {
-            "group": "Writing content",
+            "group": "🔧 Tools",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
+              "tools/overview",
+              "tools/api-requests",
+              "tools/perplexity-ai",
+              "tools/mcp-servers",
+              "tools/browser-tools",
+              "tools/code-interpreter",
+              "tools/external-datasource"
             ]
           },
           {
-            "group": "AI tools",
+            "group": "🗄️ Datasources",
             "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
+              "datasources/overview",
+              "datasources/external-sources",
+              "datasources/management"
+            ]
+          },
+          {
+            "group": "📋 Batches",
+            "pages": [
+              "batches/overview",
+              "batches/creating-batches",
+              "batches/monitoring-status",
+              "batches/downloading-results"
+            ]
+          },
+          {
+            "group": "📊 Monitor",
+            "pages": [
+              "monitoring/overview",
+              "monitoring/usage-analytics",
+              "monitoring/billing-summary",
+              "monitoring/performance-metrics",
+              "monitoring/charts-and-reports"
+            ]
+          },
+          {
+            "group": "Advanced",
+            "pages": [
+              "advanced/project-management",
+              "advanced/team-collaboration",
+              "advanced/rbac",
+              "advanced/billing-management"
             ]
           }
         ]
       },
       {
-        "tab": "API reference",
+        "tab": "Guides & Tutorials",
         "groups": [
           {
-            "group": "API documentation",
+            "group": "Step-by-Step Guides",
             "pages": [
-              "api-reference/introduction"
+              "guides/first-agent",
+              "guides/multi-tool-setup",
+              "guides/production-deployment",
+              "guides/troubleshooting",
+              "guides/best-practices"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "API Documentation",
+            "pages": [
+              "api-reference/introduction",
+              "api-reference/authentication"
             ]
           },
           {
-            "group": "Endpoint examples",
+            "group": "Endpoints",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "api-reference/agents",
+              "api-reference/tools",
+              "api-reference/batches",
+              "api-reference/monitoring"
             ]
           }
         ]
@@ -71,45 +146,57 @@
     "global": {
       "anchors": [
         {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
+          "anchor": "PLai Solutions",
+          "href": "https://plaisolutions.com",
+          "icon": "house"
+        },
+        {
+          "anchor": "Support",
+          "href": "mailto:support@plaisolutions.com",
+          "icon": "life-ring"
         },
         {
           "anchor": "Community",
-          "href": "https://mintlify.com/community",
-          "icon": "slack"
+          "href": "https://discord.gg/plaisolutions",
+          "icon": "discord"
         },
         {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
+          "anchor": "GitHub",
+          "href": "https://github.com/plaisolutions",
+          "icon": "github"
         }
       ]
     }
   },
   "logo": {
     "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "dark": "/logo/dark.svg",
+    "height": 64,
+    "text": "PLai Framework"
   },
   "navbar": {
     "links": [
       {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "label": "Dashboard",
+        "href": "https://framework.plaisolutions.com/"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "label": "Get Started",
+      "href": "https://framework.plaisolutions.com/"
     }
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "website": "https://plaisolutions.com",
+      "linkedin": "https://www.linkedin.com/company/plai-solutions"
+    }
+  },
+  "api": {
+    "baseUrl": "https://api.plaisolutions.com",
+    "auth": {
+      "method": "bearer"
     }
   }
 }

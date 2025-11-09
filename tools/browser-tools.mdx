@@ -1,0 +1,495 @@
+---
+title: "Browser Tool"
+description: "Web scraping and browser automation with ScraperAPI integration"
+icon: "globe"
+---
+
+# Browser Tool
+
+The Browser tool enables your agents to extract data from websites, perform web scraping, and interact with web pages. It supports multiple scraping engines including ScraperAPI for reliable, large-scale web scraping.
+
+<Frame>
+  <img src="/images/hero-light.png" alt="Browser Tool Configuration" />
+</Frame>
+
+<Note>
+This tool has **Default** status, meaning it's production-ready and available on all subscription plans.
+</Note>
+
+## Overview
+
+The Browser tool transforms your agents into web scraping specialists capable of:
+
+<CardGroup cols={2}>
+  <Card title="Web Scraping" icon="spider">
+    Extract data from any publicly accessible website
+  </Card>
+  <Card title="JavaScript Rendering" icon="code">
+    Handle dynamic content and single-page applications
+  </Card>
+  <Card title="Scalable Architecture" icon="server">
+    Reliable scraping with proxy rotation and rate limiting
+  </Card>
+  <Card title="Multiple Engines" icon="settings">
+    Choose between ScraperAPI and Beautiful Soup engines
+  </Card>
+</CardGroup>
+
+## Configuration Parameters
+
+<ParamField path="scraper" type="select" required>
+  The scraping engine to use for web data extraction
+  <br />**Options**:
+  - `scraperapi` - Professional scraping service with proxy rotation
+  - `beautifulsoup` - Python-based HTML parsing for simple scraping
+</ParamField>
+
+<ParamField path="render" type="select">
+  Whether to render JavaScript when using ScraperAPI
+  <br />**Options**:
+  - `true` - Enable JavaScript rendering for dynamic content
+  - `false` - Disable JavaScript rendering for faster scraping
+  <br />**Condition**: Only shown when `scraper` is set to `scraperapi`
+  <br />**Default**: `false`
+  <br />**Note**: Enabling JavaScript rendering increases processing time and costs
+</ParamField>
+
+## Setup Instructions
+
+<Steps>
+  <Step title="Navigate to Tools">
+    Go to the **Tools** section in your project dashboard
+  </Step>
+  <Step title="Create Browser Tool">
+    Click **Create Tool** and select **Browser**
+  </Step>
+  <Step title="Select Scraper Engine">
+    Choose between ScraperAPI for advanced features or Beautiful Soup for simple scraping
+  </Step>
+  <Step title="Configure JavaScript Rendering">
+    If using ScraperAPI, decide whether to enable JavaScript rendering
+  </Step>
+  <Step title="Test Scraping">
+    Use the test button to verify scraping functionality with a sample URL
+  </Step>
+  <Step title="Add to Agent">
+    Assign this tool to your agents in agent settings
+  </Step>
+</Steps>
+
+## Scraper Engines
+
+### ScraperAPI
+
+Professional scraping service with enterprise-grade features:
+
+<Tabs>
+  <Tab title="Features">
+    - **Proxy Rotation**: Automatic IP rotation to avoid blocking
+    - **CAPTCHA Handling**: Automatic CAPTCHA solving
+    - **JavaScript Rendering**: Full browser rendering for SPAs
+    - **Geographic Targeting**: Scrape from specific countries
+    - **High Success Rate**: 99.9% uptime and reliability
+    - **Rate Limiting**: Built-in request throttling
+  </Tab>
+  <Tab title="Best For">
+    - Large-scale scraping operations
+    - E-commerce price monitoring
+    - Social media data extraction
+    - News and content aggregation
+    - Competitive intelligence
+    - Market research
+  </Tab>
+  <Tab title="Configuration">
+    ```json
+    {
+      "scraper": "scraperapi",
+      "render": true
+    }
+    ```
+  </Tab>
+</Tabs>
+
+### Beautiful Soup
+
+Python-based HTML parsing for lightweight scraping:
+
+<Tabs>
+  <Tab title="Features">
+    - **Fast Processing**: Lightweight HTML parsing
+    - **CSS Selectors**: jQuery-like element selection
+    - **XPath Support**: Advanced element targeting
+    - **Low Cost**: No external service fees
+    - **Simple Setup**: Minimal configuration required
+    - **Local Processing**: Data processed internally
+  </Tab>
+  <Tab title="Best For">
+    - Simple HTML scraping
+    - Static website data extraction
+    - Development and testing
+    - Low-volume scraping needs
+    - Internal tool integration
+    - Quick data extraction
+  </Tab>
+  <Tab title="Configuration">
+    ```json
+    {
+      "scraper": "beautifulsoup"
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Usage Examples
+
+### E-commerce Price Monitoring
+
+```json
+{
+  "scraper": "scraperapi",
+  "render": false
+}
+```
+
+**Use Case**: Monitor product prices across multiple retailers
+- Extract product names, prices, and availability
+- Track price changes over time
+- Compare competitor pricing
+- Generate price alerts
+
+### News Content Extraction
+
+```json
+{
+  "scraper": "scraperapi",
+  "render": true
+}
+```
+
+**Use Case**: Aggregate news articles and content
+- Extract article titles, content, and metadata
+- Handle dynamic loading of articles
+- Collect author information and publication dates
+- Process multiple news sources
+
+### Social Media Monitoring
+
+```json
+{
+  "scraper": "scraperapi",
+  "render": true
+}
+```
+
+**Use Case**: Monitor public social media content
+- Extract post content and engagement metrics
+- Track hashtag usage and trends
+- Monitor brand mentions
+- Analyze public sentiment
+
+### Lead Generation
+
+```json
+{
+  "scraper": "beautifulsoup"
+}
+```
+
+**Use Case**: Extract contact information from business directories
+- Scrape company names and addresses
+- Extract contact details and websites
+- Build prospect databases
+- Verify business information
+
+## JavaScript Rendering
+
+### When to Enable JavaScript
+
+Enable JavaScript rendering when scraping:
+
+<AccordionGroup>
+  <Accordion title="Single Page Applications (SPAs)">
+    **Examples**: React, Vue.js, Angular applications
+    **Why**: Content is dynamically loaded after initial page load
+    **Impact**: Essential for accessing actual content
+  </Accordion>
+  <Accordion title="Infinite Scroll Pages">
+    **Examples**: Social media feeds, product listings
+    **Why**: Content loads as user scrolls
+    **Impact**: Captures more complete data sets
+  </Accordion>
+  <Accordion title="Dynamic Forms">
+    **Examples**: Search results, filtered content
+    **Why**: Content changes based on user interaction
+    **Impact**: Access to filtered or searched content
+  </Accordion>
+  <Accordion title="AJAX-Heavy Sites">
+    **Examples**: Modern e-commerce, news sites
+    **Why**: Content loaded via asynchronous requests
+    **Impact**: Gets fully rendered page content
+  </Accordion>
+</AccordionGroup>
+
+### When to Disable JavaScript
+
+Disable JavaScript rendering for:
+
+- **Static HTML Sites**: Traditional websites with server-rendered content
+- **Speed Optimization**: Faster scraping for simple content
+- **Cost Control**: Reduce processing time and costs
+- **API Endpoints**: Direct data access without rendering
+- **RSS Feeds**: XML-based content feeds
+
+## Advanced Features
+
+### ScraperAPI Advanced Options
+
+```json
+{
+  "scraper": "scraperapi",
+  "render": true,
+  "advanced_options": {
+    "country_code": "US",
+    "device_type": "desktop",
+    "premium_proxy": true,
+    "session_number": 1,
+    "wait_for": ".dynamic-content"
+  }
+}
+```
+
+### Beautiful Soup Selectors
+
+```python
+# CSS Selectors
+soup.select('.product-name')          # Class selector
+soup.select('#product-price')         # ID selector
+soup.select('div.item > h3')         # Child combinator
+soup.select('a[href*="product"]')    # Attribute selector
+
+# XPath-like functionality
+soup.find_all('div', class_='product')
+soup.find('span', {'id': 'price'})
+```
+
+## Data Extraction Patterns
+
+### Structured Data Extraction
+
+<Tabs>
+  <Tab title="Product Information">
+    ```javascript
+    {
+      "selectors": {
+        "product_name": "h1.product-title",
+        "price": ".price-current",
+        "description": ".product-description",
+        "images": "img.product-image",
+        "availability": ".stock-status"
+      }
+    }
+    ```
+  </Tab>
+  <Tab title="Article Content">
+    ```javascript
+    {
+      "selectors": {
+        "headline": "h1.headline",
+        "author": ".byline .author",
+        "publish_date": "time.publish-date",
+        "content": ".article-body p",
+        "tags": ".tags a"
+      }
+    }
+    ```
+  </Tab>
+  <Tab title="Contact Information">
+    ```javascript
+    {
+      "selectors": {
+        "company_name": ".company-name",
+        "address": ".address",
+        "phone": ".phone",
+        "email": ".email",
+        "website": ".website a"
+      }
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Error Handling & Resilience
+
+### Common Scraping Challenges
+
+<AccordionGroup>
+  <Accordion title="Rate Limiting">
+    **Problem**: Websites blocking frequent requests
+    **Solution**: 
+    - Use ScraperAPI's built-in rate limiting
+    - Implement random delays between requests
+    - Rotate user agents and IP addresses
+    - Respect robots.txt guidelines
+  </Accordion>
+  <Accordion title="Dynamic Content">
+    **Problem**: Content not appearing in scraped HTML
+    **Solution**:
+    - Enable JavaScript rendering
+    - Wait for specific elements to load
+    - Use session persistence for multi-step flows
+    - Handle AJAX loading states
+  </Accordion>
+  <Accordion title="Anti-Bot Measures">
+    **Problem**: CAPTCHA challenges, bot detection
+    **Solution**:
+    - Use ScraperAPI's CAPTCHA solving
+    - Implement human-like browsing patterns
+    - Use residential proxy networks
+    - Vary request timing and patterns
+  </Accordion>
+  <Accordion title="Content Changes">
+    **Problem**: Website structure changes breaking selectors
+    **Solution**:
+    - Use multiple selector fallbacks
+    - Implement structural change detection
+    - Regular selector validation
+    - Flexible parsing strategies
+  </Accordion>
+</AccordionGroup>
+
+## Best Practices
+
+### Ethical Scraping
+
+<Warning>
+**Respect Website Terms**: Always review and comply with website terms of service and robots.txt files before scraping.
+</Warning>
+
+<Tip>
+**Rate Limiting**: Implement reasonable delays between requests to avoid overwhelming target servers.
+</Tip>
+
+- **Check Robots.txt**: Review `/robots.txt` for scraping guidelines
+- **Respect Rate Limits**: Don't overwhelm servers with requests
+- **Use Public Data**: Only scrape publicly accessible information
+- **Attribution**: Credit sources when republishing scraped content
+- **Privacy Compliance**: Respect user privacy and data protection laws
+
+### Performance Optimization
+
+```json
+{
+  "optimization": {
+    "concurrent_requests": 5,
+    "request_delay": "1-3s",
+    "timeout": 30,
+    "retry_attempts": 3,
+    "cache_responses": true
+  }
+}
+```
+
+### Selector Best Practices
+
+1. **Robust Selectors**: Use stable element attributes
+2. **Fallback Options**: Multiple selector options for reliability
+3. **Specific Targeting**: Avoid overly generic selectors
+4. **Future-Proof**: Choose selectors likely to persist
+5. **Test Regularly**: Validate selectors against live sites
+
+## Monitoring & Analytics
+
+### Scraping Metrics
+
+Track important scraping performance indicators:
+
+- **Success Rate**: Percentage of successful scrapes
+- **Response Time**: Average time per scraping request
+- **Data Quality**: Completeness and accuracy of extracted data
+- **Error Frequency**: Common failure patterns
+- **Cost Analysis**: Scraping costs per data point
+
+### Alerting & Monitoring
+
+```yaml
+Monitoring Setup:
+  - Success rate drops below 90%
+  - Response time exceeds 30 seconds
+  - Unusual increase in errors
+  - Selector failure detection
+  - Cost threshold alerts
+```
+
+## Compliance & Legal
+
+### Data Protection
+
+- **GDPR Compliance**: Handle EU personal data appropriately
+- **CCPA Compliance**: Respect California privacy rights
+- **Data Minimization**: Collect only necessary information
+- **Secure Storage**: Protect scraped data appropriately
+- **Access Controls**: Limit access to scraped data
+
+### Copyright Considerations
+
+- **Fair Use**: Understand fair use limitations
+- **Attribution**: Provide proper source attribution
+- **Commercial Use**: Review commercial usage rights
+- **Content Licensing**: Respect content licensing terms
+- **DMCA Compliance**: Handle takedown requests properly
+
+## Troubleshooting
+
+### Common Issues
+
+<AccordionGroup>
+  <Accordion title="Empty Results">
+    **Symptoms**: Scraping returns no data
+    **Solutions**:
+    - Check if JavaScript rendering is needed
+    - Verify selectors against current page structure
+    - Confirm website is accessible
+    - Review rate limiting and blocking
+  </Accordion>
+  <Accordion title="Incomplete Data">
+    **Symptoms**: Missing or partial data extraction
+    **Solutions**:
+    - Enable JavaScript rendering for dynamic content
+    - Increase wait times for loading elements
+    - Review and update CSS selectors
+    - Check for pagination or infinite scroll
+  </Accordion>
+  <Accordion title="Scraping Blocked">
+    **Symptoms**: HTTP 403, 429, or CAPTCHA responses
+    **Solutions**:
+    - Switch to ScraperAPI for proxy rotation
+    - Implement request delays and throttling
+    - Use different user agents
+    - Review robots.txt compliance
+  </Accordion>
+  <Accordion title="Performance Issues">
+    **Symptoms**: Slow scraping or timeouts
+    **Solutions**:
+    - Optimize CSS selectors for specificity
+    - Disable JavaScript rendering if not needed
+    - Reduce concurrent request limits
+    - Implement response caching
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Set Up Your First Scraper" icon="play" href="/guides/first-agent">
+    Create your first web scraping agent
+  </Card>
+  <Card title="Advanced Scraping Techniques" icon="graduation-cap" href="/guides/best-practices">
+    Learn advanced scraping strategies
+  </Card>
+  <Card title="Other Tools" icon="grid" href="/tools/overview">
+    Explore other available tools
+  </Card>
+  <Card title="API Reference" icon="code" href="/api-reference/tools">
+    View the tools API documentation
+  </Card>
+</CardGroup>
