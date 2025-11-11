@@ -132,12 +132,51 @@
             ]
           },
           {
-            "group": "Endpoints",
+            "group": "User & Organization Management",
             "pages": [
+              "api-reference/me",
+              "api-reference/organizations",
+              "api-reference/invitations",
+              "api-reference/users"
+            ]
+          },
+          {
+            "group": "Projects & Agents",
+            "pages": [
+              "api-reference/projects",
               "api-reference/agents",
+              "api-reference/answer-filters"
+            ]
+          },
+          {
+            "group": "Data Management",
+            "pages": [
+              "api-reference/datasources",
+              "api-reference/folders",
+              "api-reference/resources"
+            ]
+          },
+          {
+            "group": "Tools & Models",
+            "pages": [
               "api-reference/tools",
+              "api-reference/llms",
+              "api-reference/vector-databases"
+            ]
+          },
+          {
+            "group": "Processing & Analytics",
+            "pages": [
               "api-reference/batches",
-              "api-reference/monitoring"
+              "api-reference/threads",
+              "api-reference/usage"
+            ]
+          },
+          {
+            "group": "Advanced Features",
+            "pages": [
+              "api-reference/guardrails",
+              "api-reference/vectors"
             ]
           }
         ]

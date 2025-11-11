@@ -1,0 +1,809 @@
+---
+title: "Usage"
+description: "API endpoints for tracking and analyzing usage analytics across all PLai services"
+---
+
+## Get Requests Usage
+
+<api-endpoint method="GET" path="/usage/requests" />
+
+Get aggregated request statistics for your project, showing API usage patterns over time.
+
+### Query Parameters
+
+<ParamField query="page" type="integer" optional>
+  Page number for pagination (default: 1)
+</ParamField>
+
+<ParamField query="date_from" type="string" optional>
+  Start date for usage data (ISO 8601 format, e.g., "2024-01-01")
+</ParamField>
+
+<ParamField query="date_to" type="string" optional>
+  End date for usage data (ISO 8601 format, e.g., "2024-01-31")
+</ParamField>
+
+### Response
+
+<ResponseField name="requests" type="array">
+  Array of daily request statistics
+  <Expandable title="Request Statistics Object">
+    <ResponseField name="date" type="string">
+      Date in YYYY-MM-DD format
+    </ResponseField>
+    <ResponseField name="count" type="integer">
+      Total number of API requests for that date
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request GET 'https://api.plaisolutions.com/usage/requests?date_from=2024-01-01&date_to=2024-01-31' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.plaisolutions.com/usage/requests?date_from=2024-01-01&date_to=2024-01-31', {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+const requestsUsage = await response.json();
+console.log(requestsUsage);
+```
+
+```python Python
+import requests
+
+url = "https://api.plaisolutions.com/usage/requests"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+params = {
+    "date_from": "2024-01-01",
+    "date_to": "2024-01-31"
+}
+
+response = requests.get(url, headers=headers, params=params)
+requests_usage = response.json()
+print(requests_usage)
+```
+
+</CodeGroup>
+
+---
+
+## Get Threads Usage
+
+<api-endpoint method="GET" path="/usage/threads" />
+
+Get conversation thread statistics showing how users interact with your agents over time.
+
+### Query Parameters
+
+<ParamField query="date_from" type="string" optional>
+  Start date for usage data (ISO 8601 format)
+</ParamField>
+
+<ParamField query="date_to" type="string" optional>
+  End date for usage data (ISO 8601 format)
+</ParamField>
+
+### Response
+
+<ResponseField name="threads" type="array">
+  Array of daily thread statistics
+  <Expandable title="Thread Statistics Object">
+    <ResponseField name="date" type="string">
+      Date in YYYY-MM-DD format
+    </ResponseField>
+    <ResponseField name="count" type="integer">
+      Number of new conversation threads created on that date
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request GET 'https://api.plaisolutions.com/usage/threads?date_from=2024-01-01&date_to=2024-01-31' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.plaisolutions.com/usage/threads?date_from=2024-01-01&date_to=2024-01-31', {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+const threadsUsage = await response.json();
+console.log(threadsUsage);
+```
+
+```python Python
+import requests
+
+url = "https://api.plaisolutions.com/usage/threads"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+params = {
+    "date_from": "2024-01-01",
+    "date_to": "2024-01-31"
+}
+
+response = requests.get(url, headers=headers, params=params)
+threads_usage = response.json()
+print(threads_usage)
+```
+
+</CodeGroup>
+
+---
+
+## Get LLM Usage
+
+<api-endpoint method="GET" path="/usage/llm" />
+
+Get detailed statistics about language model usage including token consumption and costs.
+
+### Query Parameters
+
+<ParamField query="date_from" type="string" optional>
+  Start date for usage data (ISO 8601 format)
+</ParamField>
+
+<ParamField query="date_to" type="string" optional>
+  End date for usage data (ISO 8601 format)
+</ParamField>
+
+### Response
+
+<ResponseField name="llm_usage" type="array">
+  Array of LLM usage statistics
+  <Expandable title="LLM Usage Object">
+    <ResponseField name="llm_model" type="string">
+      The specific language model used (e.g., "gpt-4", "claude-3-sonnet")
+    </ResponseField>
+    <ResponseField name="type" type="string">
+      Type of operation (e.g., "completion", "chat")
+    </ResponseField>
+    <ResponseField name="sum" type="object">
+      Token consumption aggregation
+      <Expandable title="Token Aggregation">
+        <ResponseField name="prompt_tokens" type="integer">
+          Total input tokens consumed
+        </ResponseField>
+        <ResponseField name="completion_tokens" type="integer">
+          Total output tokens generated
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request GET 'https://api.plaisolutions.com/usage/llm?date_from=2024-01-01&date_to=2024-01-31' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.plaisolutions.com/usage/llm?date_from=2024-01-01&date_to=2024-01-31', {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+const llmUsage = await response.json();
+console.log(llmUsage);
+```
+
+```python Python
+import requests
+
+url = "https://api.plaisolutions.com/usage/llm"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+params = {
+    "date_from": "2024-01-01",
+    "date_to": "2024-01-31"
+}
+
+response = requests.get(url, headers=headers, params=params)
+llm_usage = response.json()
+print(llm_usage)
+```
+
+</CodeGroup>
+
+---
+
+## Get Rerank Usage
+
+<api-endpoint method="GET" path="/usage/rerank" />
+
+Get statistics about vector reranking operations used to improve search result quality.
+
+### Query Parameters
+
+<ParamField query="date_from" type="string" optional>
+  Start date for usage data (ISO 8601 format)
+</ParamField>
+
+<ParamField query="date_to" type="string" optional>
+  End date for usage data (ISO 8601 format)
+</ParamField>
+
+### Response
+
+<ResponseField name="rerank_usage" type="array">
+  Array of reranking usage statistics
+  <Expandable title="Rerank Usage Object">
+    <ResponseField name="model" type="string">
+      The reranking model used
+    </ResponseField>
+    <ResponseField name="provider" type="string">
+      The service provider (e.g., "cohere", "openai")
+    </ResponseField>
+    <ResponseField name="search_units" type="integer">
+      Total search units consumed for reranking operations
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request GET 'https://api.plaisolutions.com/usage/rerank?date_from=2024-01-01&date_to=2024-01-31' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.plaisolutions.com/usage/rerank?date_from=2024-01-01&date_to=2024-01-31', {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+const rerankUsage = await response.json();
+console.log(rerankUsage);
+```
+
+```python Python
+import requests
+
+url = "https://api.plaisolutions.com/usage/rerank"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+params = {
+    "date_from": "2024-01-01",
+    "date_to": "2024-01-31"
+}
+
+response = requests.get(url, headers=headers, params=params)
+rerank_usage = response.json()
+print(rerank_usage)
+```
+
+</CodeGroup>
+
+---
+
+## Get Embeddings Usage
+
+<api-endpoint method="GET" path="/usage/embeddings" />
+
+Get statistics about embedding generation for vector search and semantic operations.
+
+### Query Parameters
+
+<ParamField query="date_from" type="string" optional>
+  Start date for usage data (ISO 8601 format)
+</ParamField>
+
+<ParamField query="date_to" type="string" optional>
+  End date for usage data (ISO 8601 format)
+</ParamField>
+
+### Response
+
+<ResponseField name="embeddings_usage" type="array">
+  Array of embedding usage statistics
+  <Expandable title="Embeddings Usage Object">
+    <ResponseField name="llm_model" type="string">
+      The embedding model used (e.g., "text-embedding-3-small", "text-embedding-ada-002")
+    </ResponseField>
+    <ResponseField name="type" type="string">
+      Type of embedding operation
+    </ResponseField>
+    <ResponseField name="prompt_tokens" type="integer">
+      Total tokens processed for embedding generation
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request GET 'https://api.plaisolutions.com/usage/embeddings?date_from=2024-01-01&date_to=2024-01-31' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.plaisolutions.com/usage/embeddings?date_from=2024-01-01&date_to=2024-01-31', {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+const embeddingsUsage = await response.json();
+console.log(embeddingsUsage);
+```
+
+```python Python
+import requests
+
+url = "https://api.plaisolutions.com/usage/embeddings"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+params = {
+    "date_from": "2024-01-01",
+    "date_to": "2024-01-31"
+}
+
+response = requests.get(url, headers=headers, params=params)
+embeddings_usage = response.json()
+print(embeddings_usage)
+```
+
+</CodeGroup>
+
+---
+
+## Get Scraping Usage
+
+<api-endpoint method="GET" path="/usage/scraping" />
+
+Get statistics about web scraping operations performed for content extraction.
+
+### Query Parameters
+
+<ParamField query="date_from" type="string" optional>
+  Start date for usage data (ISO 8601 format)
+</ParamField>
+
+<ParamField query="date_to" type="string" optional>
+  End date for usage data (ISO 8601 format)
+</ParamField>
+
+### Response
+
+<ResponseField name="scraping_usage" type="array">
+  Array of scraping usage statistics
+  <Expandable title="Scraping Usage Object">
+    <ResponseField name="provider" type="string">
+      The scraping service provider used
+    </ResponseField>
+    <ResponseField name="type" type="string">
+      Type of scraping operation performed
+    </ResponseField>
+    <ResponseField name="credits" type="integer">
+      Total scraping credits consumed
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request GET 'https://api.plaisolutions.com/usage/scraping?date_from=2024-01-01&date_to=2024-01-31' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.plaisolutions.com/usage/scraping?date_from=2024-01-01&date_to=2024-01-31', {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+const scrapingUsage = await response.json();
+console.log(scrapingUsage);
+```
+
+```python Python
+import requests
+
+url = "https://api.plaisolutions.com/usage/scraping"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+params = {
+    "date_from": "2024-01-01",
+    "date_to": "2024-01-31"
+}
+
+response = requests.get(url, headers=headers, params=params)
+scraping_usage = response.json()
+print(scraping_usage)
+```
+
+</CodeGroup>
+
+---
+
+## Get Web Search Usage
+
+<api-endpoint method="GET" path="/usage/web-search" />
+
+Get statistics about web search operations performed through integrated search tools.
+
+### Query Parameters
+
+<ParamField query="date_from" type="string" optional>
+  Start date for usage data (ISO 8601 format)
+</ParamField>
+
+<ParamField query="date_to" type="string" optional>
+  End date for usage data (ISO 8601 format)
+</ParamField>
+
+### Response
+
+<ResponseField name="web_search_usage" type="array">
+  Array of web search usage statistics
+  <Expandable title="Web Search Usage Object">
+    <ResponseField name="provider" type="string">
+      The search service provider (e.g., "perplexity", "google")
+    </ResponseField>
+    <ResponseField name="model" type="string">
+      The search model or service tier used
+    </ResponseField>
+    <ResponseField name="prompt_tokens" type="integer">
+      Input tokens used for search queries
+    </ResponseField>
+    <ResponseField name="completion_tokens" type="integer">
+      Output tokens generated from search results
+    </ResponseField>
+    <ResponseField name="num_search_queries" type="integer">
+      Total number of search queries performed
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request GET 'https://api.plaisolutions.com/usage/web-search?date_from=2024-01-01&date_to=2024-01-31' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.plaisolutions.com/usage/web-search?date_from=2024-01-01&date_to=2024-01-31', {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+const webSearchUsage = await response.json();
+console.log(webSearchUsage);
+```
+
+```python Python
+import requests
+
+url = "https://api.plaisolutions.com/usage/web-search"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+params = {
+    "date_from": "2024-01-01",
+    "date_to": "2024-01-31"
+}
+
+response = requests.get(url, headers=headers, params=params)
+web_search_usage = response.json()
+print(web_search_usage)
+```
+
+</CodeGroup>
+
+---
+
+## Get Speech-to-Text Usage
+
+<api-endpoint method="GET" path="/usage/speech-to-text" />
+
+Get statistics about audio transcription operations performed using speech-to-text services.
+
+### Query Parameters
+
+<ParamField query="date_from" type="string" optional>
+  Start date for usage data (ISO 8601 format)
+</ParamField>
+
+<ParamField query="date_to" type="string" optional>
+  End date for usage data (ISO 8601 format)
+</ParamField>
+
+### Response
+
+<ResponseField name="speech_to_text_usage" type="array">
+  Array of speech-to-text usage statistics
+  <Expandable title="Speech-to-Text Usage Object">
+    <ResponseField name="llm_provider" type="string">
+      The service provider used for transcription
+    </ResponseField>
+    <ResponseField name="llm_model" type="string">
+      The transcription model used (e.g., "whisper-1")
+    </ResponseField>
+    <ResponseField name="bytes" type="integer">
+      Total audio bytes processed for transcription
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request GET 'https://api.plaisolutions.com/usage/speech-to-text?date_from=2024-01-01&date_to=2024-01-31' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.plaisolutions.com/usage/speech-to-text?date_from=2024-01-01&date_to=2024-01-31', {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+const speechToTextUsage = await response.json();
+console.log(speechToTextUsage);
+```
+
+```python Python
+import requests
+
+url = "https://api.plaisolutions.com/usage/speech-to-text"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+params = {
+    "date_from": "2024-01-01",
+    "date_to": "2024-01-31"
+}
+
+response = requests.get(url, headers=headers, params=params)
+speech_to_text_usage = response.json()
+print(speech_to_text_usage)
+```
+
+</CodeGroup>
+
+---
+
+## Register Speech-to-Text Usage
+
+<api-endpoint method="POST" path="/usage/whisper" />
+
+Register speech-to-text usage in the system. This endpoint is typically used by internal services to track transcription usage.
+
+<Warning>
+  This endpoint requires API key authentication with `Users-Management-Key` header and is intended for administrative use.
+</Warning>
+
+### Request Body
+
+<ParamField body="llm_model" type="string" required>
+  The transcription model used (e.g., "OPENAI_WHISPER")
+</ParamField>
+
+<ParamField body="llm_provider" type="string" required>
+  The service provider used for transcription
+</ParamField>
+
+<ParamField body="bytes" type="integer" required>
+  Number of audio bytes processed
+</ParamField>
+
+<ParamField body="project_id" type="string" required>
+  ID of the project to attribute the usage to
+</ParamField>
+
+### Response
+
+Returns a confirmation of usage registration.
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request POST 'https://api.plaisolutions.com/usage/whisper' \
+--header 'Users-Management-Key: YOUR_MANAGEMENT_KEY' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "llm_model": "OPENAI_WHISPER",
+  "llm_provider": "OPENAI",
+  "bytes": 1048576,
+  "project_id": "project_123"
+}'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.plaisolutions.com/usage/whisper', {
+  method: 'POST',
+  headers: {
+    'Users-Management-Key': 'YOUR_MANAGEMENT_KEY',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    llm_model: "OPENAI_WHISPER",
+    llm_provider: "OPENAI",
+    bytes: 1048576,
+    project_id: "project_123"
+  })
+});
+
+const result = await response.json();
+console.log(result);
+```
+
+```python Python
+import requests
+
+url = "https://api.plaisolutions.com/usage/whisper"
+headers = {
+    "Users-Management-Key": "YOUR_MANAGEMENT_KEY",
+    "Content-Type": "application/json"
+}
+data = {
+    "llm_model": "OPENAI_WHISPER",
+    "llm_provider": "OPENAI",
+    "bytes": 1048576,
+    "project_id": "project_123"
+}
+
+response = requests.post(url, headers=headers, json=data)
+result = response.json()
+print(result)
+```
+
+</CodeGroup>
+
+---
+
+## Usage Analytics Best Practices
+
+<Steps>
+  <Step title="Monitor Regularly">
+    Check usage statistics regularly to track consumption patterns and optimize costs
+  </Step>
+  <Step title="Set Alerts">
+    Implement usage monitoring and alerts to prevent unexpected cost overruns
+  </Step>
+  <Step title="Analyze Trends">
+    Use time-based filtering to identify usage trends and plan capacity accordingly
+  </Step>
+  <Step title="Optimize Performance">
+    Use detailed usage data to identify inefficient operations and optimize them
+  </Step>
+  <Step title="Budget Planning">
+    Leverage historical usage data for accurate budget forecasting and planning
+  </Step>
+</Steps>
+
+### Understanding Usage Metrics
+
+<CardGroup cols={2}>
+  <Card title="Token Consumption" icon="calculator">
+    Monitor prompt and completion tokens to understand LLM costs and optimize prompt engineering
+  </Card>
+  <Card title="Request Patterns" icon="chart-line">
+    Analyze request timing and frequency to identify peak usage periods and scale accordingly
+  </Card>
+  <Card title="Service Distribution" icon="pie-chart">
+    Track usage across different services to identify your primary cost drivers
+  </Card>
+  <Card title="Thread Activity" icon="message-circle">
+    Monitor conversation patterns to understand user engagement and agent effectiveness
+  </Card>
+</CardGroup>
+
+### Cost Optimization Tips
+
+<Tip>
+  **Token Management:**
+  - Use shorter prompts when possible to reduce input token costs
+  - Implement response length limits to control completion token usage
+  - Consider using smaller models for simple tasks
+
+  **Batch Processing:**
+  - Use batch APIs for non-real-time operations to reduce costs by up to 50%
+  - Aggregate similar requests to minimize API overhead
+
+  **Caching Strategy:**
+  - Implement response caching for frequently asked questions
+  - Use embeddings caching to avoid re-generating vectors for existing content
+</Tip>
+
+### Usage Reporting Dashboard
+
+Create comprehensive usage dashboards using the analytics data:
+
+```javascript
+// Example: Building a usage dashboard
+async function fetchAllUsageData(dateFrom, dateTo) {
+  const endpoints = [
+    'requests',
+    'threads', 
+    'llm',
+    'embeddings',
+    'scraping',
+    'web-search',
+    'speech-to-text'
+  ];
+  
+  const usageData = {};
+  
+  for (const endpoint of endpoints) {
+    const response = await fetch(`/usage/${endpoint}?date_from=${dateFrom}&date_to=${dateTo}`, {
+      headers: { 'Authorization': 'Bearer YOUR_TOKEN' }
+    });
+    usageData[endpoint] = await response.json();
+  }
+  
+  return usageData;
+}
+```
+
+### Billing Integration
+
+<Note>
+  Usage statistics directly correlate with billing charges:
+  - **LLM Usage**: Charged per token (input + output)
+  - **Embeddings**: Charged per token processed
+  - **Scraping**: Charged per credit consumed
+  - **Web Search**: Charged per query + token usage
+  - **Speech-to-Text**: Charged per audio minute/byte
+  - **Reranking**: Charged per search unit
+</Note>
+
+<Warning>
+  **Rate Limiting Considerations:**
+  - High usage may trigger rate limiting
+  - Monitor request patterns to stay within limits
+  - Implement exponential backoff for retry logic
+  - Consider upgrading to higher tier plans for increased limits
+</Warning>

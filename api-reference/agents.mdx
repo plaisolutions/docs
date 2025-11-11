@@ -1,0 +1,1149 @@
+---
+title: "Agents"
+description: "API endpoints for managing AI agents"
+---
+
+## List Agents
+
+<api-endpoint method="GET" path="/agents" />
+
+List all agents in the current project.
+
+### Response
+
+<ResponseField name="agents" type="array">
+  Array of agent objects
+  <Expandable title="Agent Object">
+    <ResponseField name="id" type="string">
+      Agent unique identifier
+    </ResponseField>
+    <ResponseField name="name" type="string">
+      Agent name
+    </ResponseField>
+    <ResponseField name="description" type="string">
+      Agent description
+    </ResponseField>
+    <ResponseField name="is_active" type="boolean">
+      Whether the agent is active
+    </ResponseField>
+    <ResponseField name="prompt" type="string" optional>
+      System prompt for the agent
+    </ResponseField>
+    <ResponseField name="avatar" type="string" optional>
+      URL to agent avatar image
+    </ResponseField>
+    <ResponseField name="initial_message" type="string" optional>
+      Initial greeting message from the agent
+    </ResponseField>
+    <ResponseField name="llm_provider" type="string">
+      LLM provider (OPENAI, ANTHROPIC, TOGETHERAI, etc.)
+    </ResponseField>
+    <ResponseField name="llm_model" type="string">
+      LLM model identifier
+    </ResponseField>
+    <ResponseField name="max_output_tokens" type="integer" optional>
+      Maximum number of tokens in response
+    </ResponseField>
+    <ResponseField name="temperature" type="number" optional>
+      Temperature setting for response generation (0.0 - 2.0)
+    </ResponseField>
+    <ResponseField name="enable_streaming" type="boolean">
+      Whether streaming responses are enabled
+    </ResponseField>
+    <ResponseField name="enable_tools" type="boolean">
+      Whether tool usage is enabled
+    </ResponseField>
+    <ResponseField name="max_steps" type="integer">
+      Maximum number of reasoning steps
+    </ResponseField>
+    <ResponseField name="vector_topk" type="integer">
+      Number of top results from vector search
+    </ResponseField>
+    <ResponseField name="rerank_enabled" type="boolean">
+      Whether reranking is enabled
+    </ResponseField>
+    <ResponseField name="rerank_topk" type="integer">
+      Number of top results after reranking
+    </ResponseField>
+    <ResponseField name="structured_output" type="boolean">
+      Whether structured output is enabled
+    </ResponseField>
+    <ResponseField name="json_schema" type="string" optional>
+      JSON schema for structured output
+    </ResponseField>
+    <ResponseField name="enable_citations" type="boolean">
+      Whether to include citations in responses
+    </ResponseField>
+    <ResponseField name="project_id" type="string">
+      ID of the project this agent belongs to
+    </ResponseField>
+    <ResponseField name="created_at" type="string">
+      When the agent was created (ISO 8601 format)
+    </ResponseField>
+    <ResponseField name="updated_at" type="string">
+      When the agent was last updated (ISO 8601 format)
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request GET 'https://api.plaisolutions.com/agents' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.plaisolutions.com/agents', {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+const agents = await response.json();
+console.log(agents);
+```
+
+```python Python
+import requests
+
+url = "https://api.plaisolutions.com/agents"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+
+response = requests.get(url, headers=headers)
+agents = response.json()
+print(agents)
+```
+
+</CodeGroup>
+
+---
+
+## Create Agent
+
+<api-endpoint method="POST" path="/agents" />
+
+Create a new AI agent.
+
+### Request Body
+
+<ParamField body="name" type="string" required>
+  Agent name
+</ParamField>
+
+<ParamField body="description" type="string" required>
+  Agent description
+</ParamField>
+
+<ParamField body="is_active" type="boolean" required>
+  Whether the agent should be active
+</ParamField>
+
+<ParamField body="llm_model" type="string" required>
+  LLM model to use (e.g., "OPENAI_GPT_4_O", "ANTHROPIC_CLAUDE_3_5_SONNET_V1")
+</ParamField>
+
+<ParamField body="llm_provider" type="string" required>
+  LLM provider (OPENAI, ANTHROPIC, TOGETHERAI, BEDROCK, GROQ, OPENROUTER, COHERE, PERPLEXITY, GOOGLE, ROUTELLM)
+</ParamField>
+
+<ParamField body="prompt" type="string" optional>
+  System prompt for the agent
+</ParamField>
+
+<ParamField body="avatar" type="string" optional>
+  URL to agent avatar image
+</ParamField>
+
+<ParamField body="initial_message" type="string" optional>
+  Initial greeting message from the agent
+</ParamField>
+
+<ParamField body="max_output_tokens" type="integer" optional>
+  Maximum number of tokens in response
+</ParamField>
+
+<ParamField body="temperature" type="number" optional>
+  Temperature setting for response generation (0.0 - 2.0)
+</ParamField>
+
+<ParamField body="enable_streaming" type="boolean" optional>
+  Whether to enable streaming responses (default: true)
+</ParamField>
+
+<ParamField body="enable_tools" type="boolean" optional>
+  Whether to enable tool usage (default: true)
+</ParamField>
+
+<ParamField body="max_steps" type="integer" optional>
+  Maximum number of reasoning steps (default: 1)
+</ParamField>
+
+<ParamField body="vector_topk" type="integer" optional>
+  Number of top results from vector search (default: 8)
+</ParamField>
+
+<ParamField body="rerank_enabled" type="boolean" optional>
+  Whether to enable reranking (default: false)
+</ParamField>
+
+<ParamField body="rerank_topk" type="integer" optional>
+  Number of top results after reranking (default: 8)
+</ParamField>
+
+<ParamField body="structured_output" type="boolean" optional>
+  Whether to enable structured output (default: false)
+</ParamField>
+
+<ParamField body="json_schema" type="string" optional>
+  JSON schema for structured output
+</ParamField>
+
+<ParamField body="enable_citations" type="boolean" optional>
+  Whether to include citations in responses (default: false)
+</ParamField>
+
+### Response
+
+Returns the created agent object.
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request POST 'https://api.plaisolutions.com/agents' \
+--header 'Authorization: Bearer YOUR_TOKEN' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "name": "Customer Support Agent",
+  "description": "An AI agent for handling customer support inquiries",
+  "is_active": true,
+  "llm_model": "OPENAI_GPT_4_O",
+  "llm_provider": "OPENAI",
+  "prompt": "You are a helpful customer support agent. Always be polite and professional.",
+  "temperature": 0.7,
+  "enable_streaming": true,
+  "enable_tools": true
+}'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.plaisolutions.com/agents', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    name: "Customer Support Agent",
+    description: "An AI agent for handling customer support inquiries",
+    is_active: true,
+    llm_model: "OPENAI_GPT_4_O",
+    llm_provider: "OPENAI",
+    prompt: "You are a helpful customer support agent. Always be polite and professional.",
+    temperature: 0.7,
+    enable_streaming: true,
+    enable_tools: true
+  })
+});
+
+const agent = await response.json();
+console.log(agent);
+```
+
+```python Python
+import requests
+
+url = "https://api.plaisolutions.com/agents"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+data = {
+    "name": "Customer Support Agent",
+    "description": "An AI agent for handling customer support inquiries",
+    "is_active": True,
+    "llm_model": "OPENAI_GPT_4_O",
+    "llm_provider": "OPENAI",
+    "prompt": "You are a helpful customer support agent. Always be polite and professional.",
+    "temperature": 0.7,
+    "enable_streaming": True,
+    "enable_tools": True
+}
+
+response = requests.post(url, headers=headers, json=data)
+agent = response.json()
+print(agent)
+```
+
+</CodeGroup>
+
+---
+
+## Get Agent
+
+<api-endpoint method="GET" path="/agents/{agent_id}" />
+
+Get a single agent by ID.
+
+### Path Parameters
+
+<ParamField path="agent_id" type="string" required>
+  The unique identifier of the agent
+</ParamField>
+
+### Response
+
+Returns the agent object.
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request GET 'https://api.plaisolutions.com/agents/agent_123' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const agentId = 'agent_123';
+const response = await fetch(`https://api.plaisolutions.com/agents/${agentId}`, {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+const agent = await response.json();
+console.log(agent);
+```
+
+```python Python
+import requests
+
+agent_id = "agent_123"
+url = f"https://api.plaisolutions.com/agents/{agent_id}"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+
+response = requests.get(url, headers=headers)
+agent = response.json()
+print(agent)
+```
+
+</CodeGroup>
+
+---
+
+## Update Agent
+
+<api-endpoint method="PATCH" path="/agents/{agent_id}" />
+
+Update an existing agent.
+
+### Path Parameters
+
+<ParamField path="agent_id" type="string" required>
+  The unique identifier of the agent
+</ParamField>
+
+### Request Body
+
+All fields are optional and only provided fields will be updated.
+
+<ParamField body="name" type="string" optional>
+  Updated agent name
+</ParamField>
+
+<ParamField body="description" type="string" optional>
+  Updated agent description
+</ParamField>
+
+<ParamField body="is_active" type="boolean" optional>
+  Updated active status
+</ParamField>
+
+<ParamField body="prompt" type="string" optional>
+  Updated system prompt
+</ParamField>
+
+<ParamField body="temperature" type="number" optional>
+  Updated temperature setting
+</ParamField>
+
+### Response
+
+Returns the updated agent object.
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request PATCH 'https://api.plaisolutions.com/agents/agent_123' \
+--header 'Authorization: Bearer YOUR_TOKEN' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "name": "Updated Agent Name",
+  "is_active": false,
+  "temperature": 0.5
+}'
+```
+
+```javascript JavaScript
+const agentId = 'agent_123';
+const response = await fetch(`https://api.plaisolutions.com/agents/${agentId}`, {
+  method: 'PATCH',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    name: "Updated Agent Name",
+    is_active: false,
+    temperature: 0.5
+  })
+});
+
+const agent = await response.json();
+console.log(agent);
+```
+
+```python Python
+import requests
+
+agent_id = "agent_123"
+url = f"https://api.plaisolutions.com/agents/{agent_id}"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+data = {
+    "name": "Updated Agent Name",
+    "is_active": False,
+    "temperature": 0.5
+}
+
+response = requests.patch(url, headers=headers, json=data)
+agent = response.json()
+print(agent)
+```
+
+</CodeGroup>
+
+---
+
+## Delete Agent
+
+<api-endpoint method="DELETE" path="/agents/{agent_id}" />
+
+Delete an agent. This action cannot be undone.
+
+### Path Parameters
+
+<ParamField path="agent_id" type="string" required>
+  The unique identifier of the agent
+</ParamField>
+
+### Response
+
+Returns a 204 status code on successful deletion.
+
+<Warning>
+  Deleting an agent will also delete all associated threads, messages, and conversation history.
+</Warning>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request DELETE 'https://api.plaisolutions.com/agents/agent_123' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const agentId = 'agent_123';
+const response = await fetch(`https://api.plaisolutions.com/agents/${agentId}`, {
+  method: 'DELETE',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+console.log('Agent deleted:', response.status === 204);
+```
+
+```python Python
+import requests
+
+agent_id = "agent_123"
+url = f"https://api.plaisolutions.com/agents/{agent_id}"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+
+response = requests.delete(url, headers=headers)
+print(f"Agent deleted: {response.status_code == 204}")
+```
+
+</CodeGroup>
+
+---
+
+## Invoke Agent
+
+<api-endpoint method="POST" path="/agents/{agent_id}/invoke" />
+
+Send a message to an agent and get a response.
+
+### Path Parameters
+
+<ParamField path="agent_id" type="string" required>
+  The unique identifier of the agent
+</ParamField>
+
+### Request Body
+
+<ParamField body="input" type="string" required>
+  The input message to send to the agent
+</ParamField>
+
+<ParamField body="thread_id" type="string" optional>
+  Thread ID to continue an existing conversation
+</ParamField>
+
+<ParamField body="enable_streaming" type="boolean" optional>
+  Whether to enable streaming responses (default: false)
+</ParamField>
+
+<ParamField body="show_tool_calls" type="boolean" optional>
+  Whether to show tool calls in the response (default: false)
+</ParamField>
+
+<ParamField body="output_schema" type="string" optional>
+  JSON schema for structured output
+</ParamField>
+
+<ParamField body="enabled_tools" type="array" optional>
+  Array of tool IDs to enable for this invocation
+</ParamField>
+
+<ParamField body="variables" type="array" optional>
+  Array of metadata variables to pass to the agent
+</ParamField>
+
+<ParamField body="metadata_filter" type="object" optional>
+  Filter for datasource resources by metadata
+</ParamField>
+
+<ParamField body="documents" type="array" optional>
+  Array of documents (images or PDFs) to include in the request
+  <Expandable title="Document Object">
+    <ParamField body="type" type="string" required>
+      Document type ("image" or "pdf")
+    </ParamField>
+    <ParamField body="url" type="string" required>
+      URL to the document
+    </ParamField>
+    <ParamField body="title" type="string" optional>
+      Document title
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+### Response
+
+<ResponseField name="success" type="boolean">
+  Whether the invocation was successful
+</ResponseField>
+
+<ResponseField name="error" type="string" optional>
+  Error message if the invocation failed
+</ResponseField>
+
+<ResponseField name="data" type="object" optional>
+  Response data from the agent
+</ResponseField>
+
+<ResponseField name="message_id" type="string" optional>
+  ID of the generated message
+</ResponseField>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request POST 'https://api.plaisolutions.com/agents/agent_123/invoke' \
+--header 'Authorization: Bearer YOUR_TOKEN' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "input": "Hello, can you help me with my order?",
+  "enable_streaming": false,
+  "show_tool_calls": true
+}'
+```
+
+```javascript JavaScript
+const agentId = 'agent_123';
+const response = await fetch(`https://api.plaisolutions.com/agents/${agentId}/invoke`, {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    input: "Hello, can you help me with my order?",
+    enable_streaming: false,
+    show_tool_calls: true
+  })
+});
+
+const result = await response.json();
+console.log(result);
+```
+
+```python Python
+import requests
+
+agent_id = "agent_123"
+url = f"https://api.plaisolutions.com/agents/{agent_id}/invoke"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+data = {
+    "input": "Hello, can you help me with my order?",
+    "enable_streaming": False,
+    "show_tool_calls": True
+}
+
+response = requests.post(url, headers=headers, json=data)
+result = response.json()
+print(result)
+```
+
+</CodeGroup>
+
+---
+
+## Rate Agent Response
+
+<api-endpoint method="POST" path="/agents/{agent_id}/rate" />
+
+Rate a message from the agent to provide feedback.
+
+### Path Parameters
+
+<ParamField path="agent_id" type="string" required>
+  The unique identifier of the agent
+</ParamField>
+
+### Request Body
+
+<ParamField body="message_id" type="string" required>
+  ID of the message to rate
+</ParamField>
+
+<ParamField body="rating" type="string" required>
+  Rating value (POSITIVE, NEGATIVE, NEUTRAL)
+</ParamField>
+
+<ParamField body="user_id" type="string" optional>
+  ID of the user providing the rating
+</ParamField>
+
+<ParamField body="description" type="string" optional>
+  Additional feedback description
+</ParamField>
+
+### Response
+
+Returns a success confirmation.
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request POST 'https://api.plaisolutions.com/agents/agent_123/rate' \
+--header 'Authorization: Bearer YOUR_TOKEN' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "message_id": "msg_456",
+  "rating": "POSITIVE",
+  "description": "Very helpful response"
+}'
+```
+
+```javascript JavaScript
+const agentId = 'agent_123';
+const response = await fetch(`https://api.plaisolutions.com/agents/${agentId}/rate`, {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    message_id: "msg_456",
+    rating: "POSITIVE",
+    description: "Very helpful response"
+  })
+});
+
+const result = await response.json();
+console.log(result);
+```
+
+```python Python
+import requests
+
+agent_id = "agent_123"
+url = f"https://api.plaisolutions.com/agents/{agent_id}/rate"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+data = {
+    "message_id": "msg_456",
+    "rating": "POSITIVE",
+    "description": "Very helpful response"
+}
+
+response = requests.post(url, headers=headers, json=data)
+result = response.json()
+print(result)
+```
+
+</CodeGroup>
+
+---
+
+## Add Tool to Agent
+
+<api-endpoint method="POST" path="/agents/{agent_id}/tools" />
+
+Add a tool to an agent, enabling it to perform additional functions.
+
+### Path Parameters
+
+<ParamField path="agent_id" type="string" required>
+  The unique identifier of the agent
+</ParamField>
+
+### Request Body
+
+<ParamField body="id" type="string" required>
+  ID of the tool to add
+</ParamField>
+
+### Response
+
+Returns a 204 status code on success.
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request POST 'https://api.plaisolutions.com/agents/agent_123/tools' \
+--header 'Authorization: Bearer YOUR_TOKEN' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "id": "tool_789"
+}'
+```
+
+```javascript JavaScript
+const agentId = 'agent_123';
+const response = await fetch(`https://api.plaisolutions.com/agents/${agentId}/tools`, {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    id: "tool_789"
+  })
+});
+
+console.log('Tool added:', response.status === 204);
+```
+
+```python Python
+import requests
+
+agent_id = "agent_123"
+url = f"https://api.plaisolutions.com/agents/{agent_id}/tools"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+data = {
+    "id": "tool_789"
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(f"Tool added: {response.status_code == 204}")
+```
+
+</CodeGroup>
+
+---
+
+## List Agent Tools
+
+<api-endpoint method="GET" path="/agents/{agent_id}/tools" />
+
+List all tools assigned to an agent.
+
+### Path Parameters
+
+<ParamField path="agent_id" type="string" required>
+  The unique identifier of the agent
+</ParamField>
+
+### Response
+
+<ResponseField name="tools" type="array">
+  Array of tool objects
+  <Expandable title="Tool Object">
+    <ResponseField name="id" type="string">
+      Tool unique identifier
+    </ResponseField>
+    <ResponseField name="name" type="string">
+      Tool name
+    </ResponseField>
+    <ResponseField name="name_slug" type="string">
+      Tool name slug
+    </ResponseField>
+    <ResponseField name="type" type="string">
+      Tool type (BROWSER, HTTP, PERPLEXITY, EXTERNAL_DATASOURCE, REMOTE_MCP_SERVER)
+    </ResponseField>
+    <ResponseField name="description" type="string">
+      Tool description
+    </ResponseField>
+    <ResponseField name="config" type="object">
+      Tool configuration
+    </ResponseField>
+    <ResponseField name="project_id" type="string">
+      Project ID this tool belongs to
+    </ResponseField>
+    <ResponseField name="created_at" type="string">
+      When the tool was created
+    </ResponseField>
+    <ResponseField name="updated_at" type="string">
+      When the tool was last updated
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request GET 'https://api.plaisolutions.com/agents/agent_123/tools' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const agentId = 'agent_123';
+const response = await fetch(`https://api.plaisolutions.com/agents/${agentId}/tools`, {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+const tools = await response.json();
+console.log(tools);
+```
+
+```python Python
+import requests
+
+agent_id = "agent_123"
+url = f"https://api.plaisolutions.com/agents/{agent_id}/tools"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+
+response = requests.get(url, headers=headers)
+tools = response.json()
+print(tools)
+```
+
+</CodeGroup>
+
+---
+
+## Remove Tool from Agent
+
+<api-endpoint method="DELETE" path="/agents/{agent_id}/tools/{tool_id}" />
+
+Remove a tool from an agent.
+
+### Path Parameters
+
+<ParamField path="agent_id" type="string" required>
+  The unique identifier of the agent
+</ParamField>
+
+<ParamField path="tool_id" type="string" required>
+  The unique identifier of the tool to remove
+</ParamField>
+
+### Response
+
+Returns a 204 status code on success.
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request DELETE 'https://api.plaisolutions.com/agents/agent_123/tools/tool_789' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const agentId = 'agent_123';
+const toolId = 'tool_789';
+const response = await fetch(`https://api.plaisolutions.com/agents/${agentId}/tools/${toolId}`, {
+  method: 'DELETE',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+console.log('Tool removed:', response.status === 204);
+```
+
+```python Python
+import requests
+
+agent_id = "agent_123"
+tool_id = "tool_789"
+url = f"https://api.plaisolutions.com/agents/{agent_id}/tools/{tool_id}"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+
+response = requests.delete(url, headers=headers)
+print(f"Tool removed: {response.status_code == 204}")
+```
+
+</CodeGroup>
+
+---
+
+## Add Datasource to Agent
+
+<api-endpoint method="POST" path="/agents/{agent_id}/datasources" />
+
+Add a datasource to an agent, allowing it to access the datasource's knowledge.
+
+### Path Parameters
+
+<ParamField path="agent_id" type="string" required>
+  The unique identifier of the agent
+</ParamField>
+
+### Request Body
+
+<ParamField body="datasource_id" type="string" required>
+  ID of the datasource to add
+</ParamField>
+
+### Response
+
+Returns a 204 status code on success.
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request POST 'https://api.plaisolutions.com/agents/agent_123/datasources' \
+--header 'Authorization: Bearer YOUR_TOKEN' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "datasource_id": "ds_456"
+}'
+```
+
+```javascript JavaScript
+const agentId = 'agent_123';
+const response = await fetch(`https://api.plaisolutions.com/agents/${agentId}/datasources`, {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    datasource_id: "ds_456"
+  })
+});
+
+console.log('Datasource added:', response.status === 204);
+```
+
+```python Python
+import requests
+
+agent_id = "agent_123"
+url = f"https://api.plaisolutions.com/agents/{agent_id}/datasources"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+data = {
+    "datasource_id": "ds_456"
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(f"Datasource added: {response.status_code == 204}")
+```
+
+</CodeGroup>
+
+---
+
+## List Agent Datasources
+
+<api-endpoint method="GET" path="/agents/{agent_id}/datasources" />
+
+List all datasources assigned to an agent.
+
+### Path Parameters
+
+<ParamField path="agent_id" type="string" required>
+  The unique identifier of the agent
+</ParamField>
+
+### Response
+
+<ResponseField name="datasources" type="array">
+  Array of datasource objects
+  <Expandable title="Datasource Object">
+    <ResponseField name="id" type="string">
+      Datasource unique identifier
+    </ResponseField>
+    <ResponseField name="name" type="string">
+      Datasource name
+    </ResponseField>
+    <ResponseField name="description" type="string">
+      Datasource description
+    </ResponseField>
+    <ResponseField name="summary" type="string" optional>
+      Datasource summary
+    </ResponseField>
+    <ResponseField name="type" type="string">
+      Datasource type (STRUCTURED, UNSTRUCTURED)
+    </ResponseField>
+    <ResponseField name="project_id" type="string">
+      Project ID this datasource belongs to
+    </ResponseField>
+    <ResponseField name="created_at" type="string">
+      When the datasource was created
+    </ResponseField>
+    <ResponseField name="updated_at" type="string">
+      When the datasource was last updated
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request GET 'https://api.plaisolutions.com/agents/agent_123/datasources' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const agentId = 'agent_123';
+const response = await fetch(`https://api.plaisolutions.com/agents/${agentId}/datasources`, {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+const datasources = await response.json();
+console.log(datasources);
+```
+
+```python Python
+import requests
+
+agent_id = "agent_123"
+url = f"https://api.plaisolutions.com/agents/{agent_id}/datasources"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+
+response = requests.get(url, headers=headers)
+datasources = response.json()
+print(datasources)
+```
+
+</CodeGroup>
+
+---
+
+## Remove Datasource from Agent
+
+<api-endpoint method="DELETE" path="/agents/{agent_id}/datasources/{datasource_id}" />
+
+Remove a datasource from an agent.
+
+### Path Parameters
+
+<ParamField path="agent_id" type="string" required>
+  The unique identifier of the agent
+</ParamField>
+
+<ParamField path="datasource_id" type="string" required>
+  The unique identifier of the datasource to remove
+</ParamField>
+
+### Response
+
+Returns a 204 status code on success.
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request DELETE 'https://api.plaisolutions.com/agents/agent_123/datasources/ds_456' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const agentId = 'agent_123';
+const datasourceId = 'ds_456';
+const response = await fetch(`https://api.plaisolutions.com/agents/${agentId}/datasources/${datasourceId}`, {
+  method: 'DELETE',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+console.log('Datasource removed:', response.status === 204);
+```
+
+```python Python
+import requests
+
+agent_id = "agent_123"
+datasource_id = "ds_456"
+url = f"https://api.plaisolutions.com/agents/{agent_id}/datasources/{datasource_id}"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+
+response = requests.delete(url, headers=headers)
+print(f"Datasource removed: {response.status_code == 204}")
+```
+
+</CodeGroup>

@@ -1,0 +1,496 @@
+---
+title: "Answer Filters"
+description: "API endpoints for managing agent answer filters"
+---
+
+## Create Answer Filter
+
+<api-endpoint method="POST" path="/agents/{agent_id}/answer-filters" />
+
+Add an answer filter to an agent. Answer filters help fine-tune the agent for specific queries by providing examples of good and bad responses.
+
+### Path Parameters
+
+<ParamField path="agent_id" type="string" required>
+  The unique identifier of the agent
+</ParamField>
+
+### Request Body
+
+<ParamField body="queries" type="array" required>
+  Array of query strings that this filter should apply to
+</ParamField>
+
+<ParamField body="trigger_threshold" type="number" optional>
+  Threshold value for triggering the filter (0.0 - 1.0, default: 0.5)
+</ParamField>
+
+<ParamField body="bad_responses" type="array" required>
+  Array of examples of bad/unwanted responses
+</ParamField>
+
+<ParamField body="good_responses" type="array" required>
+  Array of examples of good/desired responses
+</ParamField>
+
+### Response
+
+<ResponseField name="id" type="string">
+  Answer filter unique identifier
+</ResponseField>
+
+<ResponseField name="agent_id" type="string">
+  ID of the agent this filter belongs to
+</ResponseField>
+
+<ResponseField name="trigger_threshold" type="number">
+  Threshold value for triggering the filter
+</ResponseField>
+
+<ResponseField name="queries" type="array">
+  Array of query strings this filter applies to
+</ResponseField>
+
+<ResponseField name="bad_responses" type="array">
+  Array of bad response examples
+</ResponseField>
+
+<ResponseField name="good_responses" type="array">
+  Array of good response examples
+</ResponseField>
+
+<ResponseField name="created_at" type="string">
+  When the filter was created (ISO 8601 format)
+</ResponseField>
+
+<ResponseField name="updated_at" type="string">
+  When the filter was last updated (ISO 8601 format)
+</ResponseField>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request POST 'https://api.plaisolutions.com/agents/agent_123/answer-filters' \
+--header 'Authorization: Bearer YOUR_TOKEN' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "queries": [
+    "What are your refund policies?",
+    "How do I return an item?",
+    "Can I get my money back?"
+  ],
+  "trigger_threshold": 0.7,
+  "bad_responses": [
+    "I dont know about refunds.",
+    "You cannot return anything.",
+    "No refunds allowed."
+  ],
+  "good_responses": [
+    "Our refund policy allows returns within 30 days of purchase with original receipt.",
+    "You can return items in their original condition within 30 days for a full refund.",
+    "We offer hassle-free returns within 30 days of purchase."
+  ]
+}'
+```
+
+```javascript JavaScript
+const agentId = 'agent_123';
+const response = await fetch(`https://api.plaisolutions.com/agents/${agentId}/answer-filters`, {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    queries: [
+      "What are your refund policies?",
+      "How do I return an item?",
+      "Can I get my money back?"
+    ],
+    trigger_threshold: 0.7,
+    bad_responses: [
+      "I dont know about refunds.",
+      "You cannot return anything.",
+      "No refunds allowed."
+    ],
+    good_responses: [
+      "Our refund policy allows returns within 30 days of purchase with original receipt.",
+      "You can return items in their original condition within 30 days for a full refund.",
+      "We offer hassle-free returns within 30 days of purchase."
+    ]
+  })
+});
+
+const filter = await response.json();
+console.log(filter);
+```
+
+```python Python
+import requests
+
+agent_id = "agent_123"
+url = f"https://api.plaisolutions.com/agents/{agent_id}/answer-filters"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+data = {
+    "queries": [
+        "What are your refund policies?",
+        "How do I return an item?",
+        "Can I get my money back?"
+    ],
+    "trigger_threshold": 0.7,
+    "bad_responses": [
+        "I dont know about refunds.",
+        "You cannot return anything.",
+        "No refunds allowed."
+    ],
+    "good_responses": [
+        "Our refund policy allows returns within 30 days of purchase with original receipt.",
+        "You can return items in their original condition within 30 days for a full refund.",
+        "We offer hassle-free returns within 30 days of purchase."
+    ]
+}
+
+response = requests.post(url, headers=headers, json=data)
+filter_result = response.json()
+print(filter_result)
+```
+
+</CodeGroup>
+
+---
+
+## Get Answer Filters
+
+<api-endpoint method="GET" path="/agents/{agent_id}/answer-filters" />
+
+Get all answer filters for an agent.
+
+### Path Parameters
+
+<ParamField path="agent_id" type="string" required>
+  The unique identifier of the agent
+</ParamField>
+
+### Response
+
+<ResponseField name="count" type="integer">
+  Total number of answer filters
+</ResponseField>
+
+<ResponseField name="has_more" type="boolean">
+  Whether there are more results available
+</ResponseField>
+
+<ResponseField name="data" type="array">
+  Array of answer filter objects
+  <Expandable title="Answer Filter Object">
+    <ResponseField name="id" type="string">
+      Answer filter unique identifier
+    </ResponseField>
+    <ResponseField name="agent_id" type="string">
+      ID of the agent this filter belongs to
+    </ResponseField>
+    <ResponseField name="trigger_threshold" type="number">
+      Threshold value for triggering the filter
+    </ResponseField>
+    <ResponseField name="queries" type="array">
+      Array of query strings this filter applies to
+    </ResponseField>
+    <ResponseField name="bad_responses" type="array">
+      Array of bad response examples
+    </ResponseField>
+    <ResponseField name="good_responses" type="array">
+      Array of good response examples
+    </ResponseField>
+    <ResponseField name="created_at" type="string">
+      When the filter was created
+    </ResponseField>
+    <ResponseField name="updated_at" type="string">
+      When the filter was last updated
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request GET 'https://api.plaisolutions.com/agents/agent_123/answer-filters' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const agentId = 'agent_123';
+const response = await fetch(`https://api.plaisolutions.com/agents/${agentId}/answer-filters`, {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+const filters = await response.json();
+console.log(filters);
+```
+
+```python Python
+import requests
+
+agent_id = "agent_123"
+url = f"https://api.plaisolutions.com/agents/{agent_id}/answer-filters"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+
+response = requests.get(url, headers=headers)
+filters = response.json()
+print(filters)
+```
+
+</CodeGroup>
+
+---
+
+## Update Answer Filter
+
+<api-endpoint method="PATCH" path="/agents/{agent_id}/answer-filters/{answer_filter_id}" />
+
+Update an existing answer filter for an agent.
+
+### Path Parameters
+
+<ParamField path="agent_id" type="string" required>
+  The unique identifier of the agent
+</ParamField>
+
+<ParamField path="answer_filter_id" type="string" required>
+  The unique identifier of the answer filter
+</ParamField>
+
+### Request Body
+
+<ParamField body="queries" type="array" optional>
+  Updated array of query strings that this filter should apply to
+</ParamField>
+
+<ParamField body="trigger_threshold" type="number" optional>
+  Updated threshold value for triggering the filter (0.0 - 1.0)
+</ParamField>
+
+<ParamField body="bad_responses" type="array" optional>
+  Updated array of examples of bad/unwanted responses
+</ParamField>
+
+<ParamField body="good_responses" type="array" optional>
+  Updated array of examples of good/desired responses
+</ParamField>
+
+### Response
+
+Returns the updated answer filter object.
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request PATCH 'https://api.plaisolutions.com/agents/agent_123/answer-filters/filter_456' \
+--header 'Authorization: Bearer YOUR_TOKEN' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "trigger_threshold": 0.8,
+  "good_responses": [
+    "Our comprehensive refund policy allows returns within 30 days of purchase with original receipt.",
+    "You can easily return items in their original condition within 30 days for a full refund.",
+    "We offer a customer-friendly return policy with hassle-free returns within 30 days of purchase."
+  ]
+}'
+```
+
+```javascript JavaScript
+const agentId = 'agent_123';
+const filterId = 'filter_456';
+const response = await fetch(`https://api.plaisolutions.com/agents/${agentId}/answer-filters/${filterId}`, {
+  method: 'PATCH',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    trigger_threshold: 0.8,
+    good_responses: [
+      "Our comprehensive refund policy allows returns within 30 days of purchase with original receipt.",
+      "You can easily return items in their original condition within 30 days for a full refund.",
+      "We offer a customer-friendly return policy with hassle-free returns within 30 days of purchase."
+    ]
+  })
+});
+
+const updatedFilter = await response.json();
+console.log(updatedFilter);
+```
+
+```python Python
+import requests
+
+agent_id = "agent_123"
+filter_id = "filter_456"
+url = f"https://api.plaisolutions.com/agents/{agent_id}/answer-filters/{filter_id}"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+data = {
+    "trigger_threshold": 0.8,
+    "good_responses": [
+        "Our comprehensive refund policy allows returns within 30 days of purchase with original receipt.",
+        "You can easily return items in their original condition within 30 days for a full refund.",
+        "We offer a customer-friendly return policy with hassle-free returns within 30 days of purchase."
+    ]
+}
+
+response = requests.patch(url, headers=headers, json=data)
+updated_filter = response.json()
+print(updated_filter)
+```
+
+</CodeGroup>
+
+---
+
+## Delete Answer Filter
+
+<api-endpoint method="DELETE" path="/agents/{agent_id}/answer-filters/{answer_filter_id}" />
+
+Delete an answer filter from an agent.
+
+### Path Parameters
+
+<ParamField path="agent_id" type="string" required>
+  The unique identifier of the agent
+</ParamField>
+
+<ParamField path="answer_filter_id" type="string" required>
+  The unique identifier of the answer filter to delete
+</ParamField>
+
+### Response
+
+Returns a 204 status code on successful deletion.
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request DELETE 'https://api.plaisolutions.com/agents/agent_123/answer-filters/filter_456' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const agentId = 'agent_123';
+const filterId = 'filter_456';
+const response = await fetch(`https://api.plaisolutions.com/agents/${agentId}/answer-filters/${filterId}`, {
+  method: 'DELETE',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+console.log('Answer filter deleted:', response.status === 204);
+```
+
+```python Python
+import requests
+
+agent_id = "agent_123"
+filter_id = "filter_456"
+url = f"https://api.plaisolutions.com/agents/{agent_id}/answer-filters/{filter_id}"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+
+response = requests.delete(url, headers=headers)
+print(f"Answer filter deleted: {response.status_code == 204}")
+```
+
+</CodeGroup>
+
+---
+
+## Understanding Answer Filters
+
+Answer filters are a powerful mechanism for improving agent responses through example-based learning. They work by:
+
+<Steps>
+  <Step title="Query Matching">
+    When a user query comes in, the system calculates similarity scores against the filter's query examples
+  </Step>
+  <Step title="Threshold Check">
+    If the similarity score exceeds the trigger threshold, the filter activates
+  </Step>
+  <Step title="Response Guidance">
+    The agent uses the good/bad response examples to guide its answer generation
+  </Step>
+  <Step title="Quality Improvement">
+    Over time, this leads to more consistent and higher-quality responses for specific topics
+  </Step>
+</Steps>
+
+### Best Practices
+
+<AccordionGroup>
+  <Accordion title="Query Examples">
+    - Include 3-5 different ways users might ask the same question
+    - Use natural language variations and synonyms
+    - Consider different levels of formality
+    - Include common misspellings or abbreviations if relevant
+  </Accordion>
+  
+  <Accordion title="Response Examples">
+    - Provide 2-3 examples of ideal responses
+    - Include 2-3 examples of poor responses to avoid
+    - Make examples specific and detailed
+    - Ensure good examples follow your brand voice and guidelines
+  </Accordion>
+  
+  <Accordion title="Threshold Tuning">
+    - Start with 0.5 and adjust based on performance
+    - Higher thresholds (0.7-0.9) for very specific topics
+    - Lower thresholds (0.3-0.5) for broader topic categories
+    - Monitor and adjust based on activation frequency
+  </Accordion>
+  
+  <Accordion title="Maintenance">
+    - Regularly review and update filters based on new queries
+    - Remove or modify filters that are no longer relevant
+    - Add new filters for emerging topics or issues
+    - Test filters with real user queries
+  </Accordion>
+</AccordionGroup>
+
+### Use Cases
+
+<CardGroup cols={2}>
+  <Card title="Customer Support" icon="headset">
+    Filter common support queries like refunds, shipping, or technical issues to ensure consistent, accurate responses
+  </Card>
+  <Card title="Product Information" icon="box">
+    Standardize responses about product features, specifications, and availability
+  </Card>
+  <Card title="Policy Clarification" icon="file-contract">
+    Ensure accurate communication of company policies, terms of service, or legal information
+  </Card>
+  <Card title="Brand Voice" icon="microphone">
+    Maintain consistent tone and messaging across all agent interactions
+  </Card>
+</CardGroup>
+
+<Note>
+  Answer filters complement but do not replace comprehensive training data. They work best for fine-tuning specific response patterns rather than teaching entirely new knowledge.
+</Note>
+
+<Tip>
+  Monitor filter performance through agent analytics to identify which filters are most effective and which may need adjustment.
+</Tip>

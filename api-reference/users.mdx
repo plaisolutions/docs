@@ -1,0 +1,487 @@
+---
+title: "Users"
+description: "API endpoints for user management (Admin access required)"
+---
+
+<Warning>
+  These endpoints require admin-level access and use API key authentication (`Users-Management-Key` header) rather than user tokens.
+</Warning>
+
+## List Users
+
+<api-endpoint method="GET" path="/users" />
+
+List all users in the system with pagination support.
+
+### Query Parameters
+
+<ParamField query="skip" type="integer" optional>
+  Number of users to skip (default: 0)
+</ParamField>
+
+<ParamField query="take" type="integer" optional>
+  Number of users to return (default: 50, max: 100)
+</ParamField>
+
+### Headers
+
+<ParamField header="Users-Management-Key" type="string" required>
+  Admin API key for user management operations
+</ParamField>
+
+### Response
+
+<ResponseField name="data" type="array">
+  Array of user objects
+  <Expandable title="User Object">
+    <ResponseField name="id" type="string">
+      User unique identifier
+    </ResponseField>
+    <ResponseField name="email" type="string">
+      User's email address
+    </ResponseField>
+    <ResponseField name="first_name" type="string">
+      User's first name
+    </ResponseField>
+    <ResponseField name="last_name" type="string">
+      User's last name
+    </ResponseField>
+    <ResponseField name="is_active" type="boolean">
+      Whether the user account is active
+    </ResponseField>
+    <ResponseField name="created_at" type="string">
+      When the user was created (ISO 8601 format)
+    </ResponseField>
+    <ResponseField name="updated_at" type="string">
+      When the user was last updated (ISO 8601 format)
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="total_pages" type="integer">
+  Total number of pages available
+</ResponseField>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request GET 'https://api.plaisolutions.com/users?skip=0&take=50' \
+--header 'Users-Management-Key: YOUR_ADMIN_KEY'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.plaisolutions.com/users?skip=0&take=50', {
+  method: 'GET',
+  headers: {
+    'Users-Management-Key': 'YOUR_ADMIN_KEY',
+    'Content-Type': 'application/json'
+  }
+});
+
+const users = await response.json();
+console.log(users);
+```
+
+```python Python
+import requests
+
+url = "https://api.plaisolutions.com/users"
+headers = {
+    "Users-Management-Key": "YOUR_ADMIN_KEY",
+    "Content-Type": "application/json"
+}
+params = {
+    "skip": 0,
+    "take": 50
+}
+
+response = requests.get(url, headers=headers, params=params)
+users = response.json()
+print(users)
+```
+
+</CodeGroup>
+
+<ResponseExample>
+
+```json Example Response
+{
+  "data": [
+    {
+      "id": "user_123",
+      "email": "john.doe@example.com",
+      "first_name": "John",
+      "last_name": "Doe",
+      "is_active": true,
+      "created_at": "2024-01-15T10:30:00Z",
+      "updated_at": "2024-01-20T14:45:00Z"
+    },
+    {
+      "id": "user_456",
+      "email": "jane.smith@example.com",
+      "first_name": "Jane",
+      "last_name": "Smith",
+      "is_active": true,
+      "created_at": "2024-01-16T09:20:00Z",
+      "updated_at": "2024-01-18T16:30:00Z"
+    }
+  ],
+  "total_pages": 12
+}
+```
+
+</ResponseExample>
+
+---
+
+## Search Users
+
+<api-endpoint method="GET" path="/users/search" />
+
+Find users by email address.
+
+### Query Parameters
+
+<ParamField query="email" type="string" optional>
+  Email address to search for (supports partial matching)
+</ParamField>
+
+### Headers
+
+<ParamField header="Users-Management-Key" type="string" required>
+  Admin API key for user management operations
+</ParamField>
+
+### Response
+
+Returns a single user object if found, or null if no user matches the search criteria.
+
+<ResponseField name="id" type="string" optional>
+  User unique identifier
+</ResponseField>
+
+<ResponseField name="email" type="string" optional>
+  User's email address
+</ResponseField>
+
+<ResponseField name="first_name" type="string" optional>
+  User's first name
+</ResponseField>
+
+<ResponseField name="last_name" type="string" optional>
+  User's last name
+</ResponseField>
+
+<ResponseField name="is_active" type="boolean" optional>
+  Whether the user account is active
+</ResponseField>
+
+<ResponseField name="created_at" type="string" optional>
+  When the user was created (ISO 8601 format)
+</ResponseField>
+
+<ResponseField name="updated_at" type="string" optional>
+  When the user was last updated (ISO 8601 format)
+</ResponseField>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request GET 'https://api.plaisolutions.com/users/search?email=john.doe@example.com' \
+--header 'Users-Management-Key: YOUR_ADMIN_KEY'
+```
+
+```javascript JavaScript
+const email = 'john.doe@example.com';
+const response = await fetch(`https://api.plaisolutions.com/users/search?email=${encodeURIComponent(email)}`, {
+  method: 'GET',
+  headers: {
+    'Users-Management-Key': 'YOUR_ADMIN_KEY',
+    'Content-Type': 'application/json'
+  }
+});
+
+const user = await response.json();
+console.log(user);
+```
+
+```python Python
+import requests
+
+url = "https://api.plaisolutions.com/users/search"
+headers = {
+    "Users-Management-Key": "YOUR_ADMIN_KEY",
+    "Content-Type": "application/json"
+}
+params = {
+    "email": "john.doe@example.com"
+}
+
+response = requests.get(url, headers=headers, params=params)
+user = response.json()
+print(user)
+```
+
+</CodeGroup>
+
+<ResponseExample>
+
+```json Example Response
+{
+  "id": "user_123",
+  "email": "john.doe@example.com",
+  "first_name": "John",
+  "last_name": "Doe",
+  "is_active": true,
+  "created_at": "2024-01-15T10:30:00Z",
+  "updated_at": "2024-01-20T14:45:00Z"
+}
+```
+
+</ResponseExample>
+
+---
+
+## Get User
+
+<api-endpoint method="GET" path="/users/{user_id}" />
+
+Get detailed information about a specific user.
+
+### Path Parameters
+
+<ParamField path="user_id" type="string" required>
+  The unique identifier of the user
+</ParamField>
+
+### Headers
+
+<ParamField header="Users-Management-Key" type="string" required>
+  Admin API key for user management operations
+</ParamField>
+
+### Response
+
+Returns the user object with detailed information.
+
+<ResponseField name="id" type="string">
+  User unique identifier
+</ResponseField>
+
+<ResponseField name="email" type="string">
+  User's email address
+</ResponseField>
+
+<ResponseField name="first_name" type="string">
+  User's first name
+</ResponseField>
+
+<ResponseField name="last_name" type="string">
+  User's last name
+</ResponseField>
+
+<ResponseField name="is_active" type="boolean">
+  Whether the user account is active
+</ResponseField>
+
+<ResponseField name="created_at" type="string">
+  When the user was created (ISO 8601 format)
+</ResponseField>
+
+<ResponseField name="updated_at" type="string">
+  When the user was last updated (ISO 8601 format)
+</ResponseField>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request GET 'https://api.plaisolutions.com/users/user_123' \
+--header 'Users-Management-Key: YOUR_ADMIN_KEY'
+```
+
+```javascript JavaScript
+const userId = 'user_123';
+const response = await fetch(`https://api.plaisolutions.com/users/${userId}`, {
+  method: 'GET',
+  headers: {
+    'Users-Management-Key': 'YOUR_ADMIN_KEY',
+    'Content-Type': 'application/json'
+  }
+});
+
+const user = await response.json();
+console.log(user);
+```
+
+```python Python
+import requests
+
+user_id = "user_123"
+url = f"https://api.plaisolutions.com/users/{user_id}"
+headers = {
+    "Users-Management-Key": "YOUR_ADMIN_KEY",
+    "Content-Type": "application/json"
+}
+
+response = requests.get(url, headers=headers)
+user = response.json()
+print(user)
+```
+
+</CodeGroup>
+
+<ResponseExample>
+
+```json Example Response
+{
+  "id": "user_123",
+  "email": "john.doe@example.com",
+  "first_name": "John",
+  "last_name": "Doe",
+  "is_active": true,
+  "created_at": "2024-01-15T10:30:00Z",
+  "updated_at": "2024-01-20T14:45:00Z"
+}
+```
+
+</ResponseExample>
+
+---
+
+## Delete User
+
+<api-endpoint method="DELETE" path="/users/{user_id}" />
+
+Delete a user account. This action is irreversible and will remove all associated data.
+
+### Path Parameters
+
+<ParamField path="user_id" type="string" required>
+  The unique identifier of the user to delete
+</ParamField>
+
+### Headers
+
+<ParamField header="Users-Management-Key" type="string" required>
+  Admin API key for user management operations
+</ParamField>
+
+### Response
+
+Returns a 204 status code on successful deletion.
+
+<Warning>
+  Deleting a user will permanently remove:
+  - User account and profile information
+  - Organization and project memberships
+  - All created agents, datasources, and tools
+  - Conversation history and analytics data
+  - Any pending invitations
+  
+  This action cannot be undone.
+</Warning>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request DELETE 'https://api.plaisolutions.com/users/user_123' \
+--header 'Users-Management-Key: YOUR_ADMIN_KEY'
+```
+
+```javascript JavaScript
+const userId = 'user_123';
+const response = await fetch(`https://api.plaisolutions.com/users/${userId}`, {
+  method: 'DELETE',
+  headers: {
+    'Users-Management-Key': 'YOUR_ADMIN_KEY',
+    'Content-Type': 'application/json'
+  }
+});
+
+console.log('User deleted:', response.status === 204);
+```
+
+```python Python
+import requests
+
+user_id = "user_123"
+url = f"https://api.plaisolutions.com/users/{user_id}"
+headers = {
+    "Users-Management-Key": "YOUR_ADMIN_KEY",
+    "Content-Type": "application/json"
+}
+
+response = requests.delete(url, headers=headers)
+print(f"User deleted: {response.status_code == 204}")
+```
+
+</CodeGroup>
+
+---
+
+## Admin Access Requirements
+
+These endpoints are designed for system administrators and require special authentication:
+
+### Authentication
+
+<Steps>
+  <Step title="Obtain Admin API Key">
+    Contact PLai Solutions support to obtain a Users-Management-Key for your organization
+  </Step>
+  <Step title="Include Header">
+    Add the `Users-Management-Key` header to all user management requests
+  </Step>
+  <Step title="Verify Permissions">
+    Ensure your API key has the necessary permissions for the operations you need
+  </Step>
+</Steps>
+
+### Use Cases
+
+<AccordionGroup>
+  <Accordion title="User Auditing">
+    - Review user activity and account status
+    - Generate compliance reports
+    - Monitor user growth and engagement
+  </Accordion>
+  
+  <Accordion title="Account Management">
+    - Deactivate suspicious accounts
+    - Merge duplicate user accounts
+    - Resolve customer support issues
+  </Accordion>
+  
+  <Accordion title="Data Management">
+    - Process GDPR deletion requests
+    - Export user data for compliance
+    - Cleanup inactive accounts
+  </Accordion>
+  
+  <Accordion title="Integration">
+    - Sync users with external systems
+    - Automate user provisioning
+    - Build admin dashboards
+  </Accordion>
+</AccordionGroup>
+
+### Security Considerations
+
+<Note>
+  - Admin API keys should be stored securely and rotated regularly
+  - Log all user management operations for audit purposes
+  - Implement proper access controls in your applications
+  - Consider implementing additional approval workflows for destructive operations
+</Note>
+
+### Rate Limits
+
+User management endpoints may have different rate limits than regular API endpoints:
+- **List Users**: 100 requests per minute
+- **Search Users**: 200 requests per minute  
+- **Get User**: 500 requests per minute
+- **Delete User**: 10 requests per minute
+
+<Tip>
+  For bulk operations, consider implementing exponential backoff and pagination to stay within rate limits.
+</Tip>

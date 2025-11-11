@@ -1,0 +1,608 @@
+---
+title: "Vectors"
+description: "API endpoints for direct vector operations including upsert and query operations"
+---
+
+## Upsert Vectors
+
+<api-endpoint method="POST" path="/vectors" />
+
+Insert or update vectors directly in the vector store. This endpoint allows you to add new vectors or update existing ones for semantic search and similarity operations.
+
+### Request Body
+
+<ParamField body="vectors" type="array" required>
+  Array of vector objects to upsert
+  <Expandable title="Vector Object">
+    <ParamField body="id" type="string" required>
+      Unique identifier for the vector
+    </ParamField>
+    <ParamField body="values" type="array" required>
+      Array of floating-point numbers representing the vector embeddings
+      - Must be consistent dimensions (typically 768, 1536, or 3072)
+      - Values should be normalized for optimal similarity calculations
+    </ParamField>
+    <ParamField body="metadata" type="object" required>
+      Associated metadata for filtering and context
+      - Can contain any key-value pairs
+      - Used for filtering during queries
+      - Supports strings, numbers, and booleans
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+### Response
+
+<ResponseField name="message" type="string">
+  Confirmation message about the upsert operation
+</ResponseField>
+
+<ResponseField name="vectors_count" type="integer">
+  Number of vectors successfully upserted
+</ResponseField>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request POST 'https://api.plaisolutions.com/vectors' \
+--header 'Authorization: Bearer YOUR_TOKEN' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "vectors": [
+    {
+      "id": "doc_001",
+      "values": [0.1, 0.2, 0.3, 0.4, 0.5],
+      "metadata": {
+        "title": "Product Overview",
+        "category": "documentation",
+        "version": 1,
+        "published": true
+      }
+    },
+    {
+      "id": "doc_002", 
+      "values": [0.2, 0.3, 0.1, 0.5, 0.4],
+      "metadata": {
+        "title": "API Reference",
+        "category": "documentation",
+        "version": 2,
+        "published": false
+      }
+    }
+  ]
+}'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.plaisolutions.com/vectors', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    vectors: [
+      {
+        id: "doc_001",
+        values: [0.1, 0.2, 0.3, 0.4, 0.5],
+        metadata: {
+          title: "Product Overview",
+          category: "documentation",
+          version: 1,
+          published: true
+        }
+      },
+      {
+        id: "doc_002",
+        values: [0.2, 0.3, 0.1, 0.5, 0.4],
+        metadata: {
+          title: "API Reference",
+          category: "documentation",
+          version: 2,
+          published: false
+        }
+      }
+    ]
+  })
+});
+
+const result = await response.json();
+console.log(`Upserted ${result.vectors_count} vectors`);
+```
+
+```python Python
+import requests
+
+url = "https://api.plaisolutions.com/vectors"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+data = {
+    "vectors": [
+        {
+            "id": "doc_001",
+            "values": [0.1, 0.2, 0.3, 0.4, 0.5],
+            "metadata": {
+                "title": "Product Overview",
+                "category": "documentation", 
+                "version": 1,
+                "published": True
+            }
+        },
+        {
+            "id": "doc_002",
+            "values": [0.2, 0.3, 0.1, 0.5, 0.4],
+            "metadata": {
+                "title": "API Reference",
+                "category": "documentation",
+                "version": 2,
+                "published": False
+            }
+        }
+    ]
+}
+
+response = requests.post(url, headers=headers, json=data)
+result = response.json()
+print(f"Upserted {result['vectors_count']} vectors")
+```
+
+</CodeGroup>
+
+---
+
+## Query Vectors
+
+<api-endpoint method="POST" path="/vectors/query" />
+
+Query the vector store to find the most similar vectors based on semantic similarity.
+
+### Request Body
+
+<ParamField body="vector" type="array" required>
+  Query vector to find similar vectors against
+  - Must have the same dimensions as stored vectors
+  - Should be normalized for optimal results
+</ParamField>
+
+<ParamField body="top_k" type="integer" optional>
+  Number of most similar vectors to return (default: 10, max: 100)
+</ParamField>
+
+<ParamField body="filter" type="object" optional>
+  Metadata filter to apply to the search
+  - Supports exact match filtering on metadata fields
+  - Can combine multiple filter conditions
+  - Only vectors matching all filter conditions will be returned
+</ParamField>
+
+### Response
+
+<ResponseField name="matches" type="array">
+  Array of matching vectors ordered by similarity score
+  <Expandable title="Query Match Object">
+    <ResponseField name="id" type="string">
+      Unique identifier of the matching vector
+    </ResponseField>
+    <ResponseField name="metadata" type="object">
+      Associated metadata for the matching vector
+    </ResponseField>
+    <ResponseField name="score" type="number">
+      Similarity score (0.0 to 1.0, higher = more similar)
+      - 1.0 = identical vectors
+      - 0.8+ = very similar
+      - 0.6-0.8 = moderately similar
+      - 0.4-0.6 = somewhat similar
+      - <0.4 = low similarity
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request POST 'https://api.plaisolutions.com/vectors/query' \
+--header 'Authorization: Bearer YOUR_TOKEN' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "vector": [0.15, 0.25, 0.2, 0.45, 0.45],
+  "top_k": 5,
+  "filter": {
+    "category": "documentation",
+    "published": true
+  }
+}'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.plaisolutions.com/vectors/query', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    vector: [0.15, 0.25, 0.2, 0.45, 0.45],
+    top_k: 5,
+    filter: {
+      category: "documentation",
+      published: true
+    }
+  })
+});
+
+const results = await response.json();
+results.forEach(match => {
+  console.log(`${match.id}: ${match.score} - ${match.metadata.title}`);
+});
+```
+
+```python Python
+import requests
+
+url = "https://api.plaisolutions.com/vectors/query"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+data = {
+    "vector": [0.15, 0.25, 0.2, 0.45, 0.45],
+    "top_k": 5,
+    "filter": {
+        "category": "documentation",
+        "published": True
+    }
+}
+
+response = requests.post(url, headers=headers, json=data)
+results = response.json()
+
+for match in results:
+    print(f"{match['id']}: {match['score']:.3f} - {match['metadata']['title']}")
+```
+
+</CodeGroup>
+
+---
+
+## Vector Operations Best Practices
+
+<Steps>
+  <Step title="Vector Preparation">
+    Ensure vectors are properly normalized and have consistent dimensions
+  </Step>
+  <Step title="Metadata Strategy">
+    Design meaningful metadata schemas for effective filtering and context
+  </Step>
+  <Step title="Batch Operations">
+    Use batch upserts for efficient bulk operations rather than single vector updates
+  </Step>
+  <Step title="Query Optimization">
+    Use appropriate top_k values and metadata filters to optimize query performance
+  </Step>
+  <Step title="Dimension Management">
+    Maintain consistent vector dimensions across all operations in your project
+  </Step>
+</Steps>
+
+### Vector Dimension Guidelines
+
+<CardGroup cols={2}>
+  <Card title="Small Models (768 dims)" icon="zap">
+    **Use for**: Fast queries, large datasets, real-time applications
+    **Models**: BERT, DistilBERT, sentence-transformers/all-MiniLM-L6-v2
+  </Card>
+  <Card title="Large Models (1536+ dims)" icon="target">
+    **Use for**: High accuracy, complex semantic understanding
+    **Models**: OpenAI text-embedding-3-large, text-embedding-ada-002
+  </Card>
+</CardGroup>
+
+### Metadata Schema Design
+
+<Tip>
+  **Effective Metadata Patterns:**
+  ```json
+  {
+    "content_type": "document|image|audio|video",
+    "category": "support|product|marketing|legal", 
+    "language": "en|es|fr|de",
+    "created_date": "2024-01-15",
+    "author": "user_123",
+    "tags": ["important", "public"],
+    "version": 1,
+    "status": "published|draft|archived"
+  }
+  ```
+</Tip>
+
+### Filtering Strategies
+
+<AccordionGroup>
+  <Accordion title="Exact Match Filtering">
+    Filter vectors by exact metadata values
+    ```json
+    {
+      "filter": {
+        "category": "support",
+        "language": "en",
+        "status": "published"
+      }
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="Multi-Value Filtering">
+    Filter using arrays or multiple possible values
+    ```json
+    {
+      "filter": {
+        "tags": ["public", "featured"],
+        "content_type": "document"
+      }
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="Date-Based Filtering">
+    Filter by date ranges or specific dates
+    ```json
+    {
+      "filter": {
+        "created_date": "2024-01-15",
+        "updated_after": "2024-01-01"
+      }
+    }
+    ```
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Common Use Cases
+
+### Semantic Search Implementation
+
+```javascript
+// Example: Implementing semantic search
+async function semanticSearch(queryText, options = {}) {
+  // First, convert query text to vector (using your embedding model)
+  const queryVector = await generateEmbedding(queryText);
+  
+  // Query the vector store
+  const response = await fetch('/vectors/query', {
+    method: 'POST',
+    headers: { 'Authorization': 'Bearer YOUR_TOKEN' },
+    body: JSON.stringify({
+      vector: queryVector,
+      top_k: options.limit || 10,
+      filter: options.filter || {}
+    })
+  });
+  
+  return await response.json();
+}
+
+// Usage
+const results = await semanticSearch("How to reset password", {
+  limit: 5,
+  filter: { category: "support", language: "en" }
+});
+```
+
+### Document Similarity
+
+```python
+# Example: Finding similar documents
+import requests
+
+def find_similar_documents(document_id, limit=5):
+    # First get the document's vector
+    doc_vector = get_document_vector(document_id)
+    
+    # Query for similar vectors
+    response = requests.post('/vectors/query', {
+        headers={'Authorization': 'Bearer YOUR_TOKEN'},
+        json={
+            'vector': doc_vector,
+            'top_k': limit + 1,  # +1 to exclude self
+            'filter': {'content_type': 'document'}
+        }
+    })
+    
+    results = response.json()
+    # Filter out the original document
+    return [r for r in results if r['id'] != document_id]
+```
+
+### Content Recommendation
+
+<AccordionGroup>
+  <Accordion title="User-Based Recommendations">
+    Use user preference vectors to find relevant content
+    ```json
+    {
+      "vector": [user_preference_vector],
+      "top_k": 20,
+      "filter": {
+        "content_type": "article",
+        "status": "published",
+        "language": "user_language"
+      }
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="Content-Based Recommendations">
+    Find similar content based on what user is currently viewing
+    ```json
+    {
+      "vector": [current_content_vector],
+      "top_k": 10,
+      "filter": {
+        "category": "same_category",
+        "created_date": "recent"
+      }
+    }
+    ```
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Performance Optimization
+
+### Batch Processing
+
+<Tip>
+  **Optimize Upsert Operations:**
+  - Batch up to 100 vectors per upsert request
+  - Use consistent vector dimensions
+  - Normalize vectors before upserting
+  - Include relevant metadata for filtering
+</Tip>
+
+### Query Efficiency
+
+<Note>
+  **Query Performance Tips:**
+  - Use appropriate `top_k` values (10-50 for most cases)
+  - Apply metadata filters to reduce search space
+  - Cache frequently used query vectors
+  - Monitor query response times and adjust accordingly
+</Note>
+
+### Memory and Storage
+
+<CardGroup cols={2}>
+  <Card title="Vector Storage" icon="database">
+    **Storage Considerations**
+    - Higher dimensions = more storage
+    - Metadata size affects performance
+    - Regular cleanup of unused vectors
+  </Card>
+  <Card title="Query Memory" icon="cpu">
+    **Memory Usage**
+    - Larger top_k = more memory
+    - Complex filters = more processing
+    - Monitor resource usage
+  </Card>
+</CardGroup>
+
+---
+
+## Error Handling and Troubleshooting
+
+### Common Issues
+
+<AccordionGroup>
+  <Accordion title="Dimension Mismatch">
+    **Error**: Vector dimensions don't match existing vectors
+    
+    **Solution**: 
+    - Ensure all vectors have consistent dimensions
+    - Check your embedding model output size
+    - Verify vector preprocessing steps
+  </Accordion>
+  
+  <Accordion title="Invalid Vector Values">
+    **Error**: Vector contains NaN or infinite values
+    
+    **Solution**:
+    - Validate vector values before upserting
+    - Handle edge cases in embedding generation
+    - Normalize vectors properly
+  </Accordion>
+  
+  <Accordion title="Query Performance">
+    **Error**: Slow query response times
+    
+    **Solution**:
+    - Reduce top_k value
+    - Add more specific metadata filters
+    - Consider vector database optimization
+    - Monitor vector store size and performance
+  </Accordion>
+</AccordionGroup>
+
+### Validation Example
+
+```javascript
+// Example: Vector validation before upsert
+function validateVector(vector) {
+  const errors = [];
+  
+  if (!Array.isArray(vector.values)) {
+    errors.push('Vector values must be an array');
+  }
+  
+  if (vector.values.some(v => !Number.isFinite(v))) {
+    errors.push('Vector contains invalid values (NaN or Infinity)');
+  }
+  
+  if (vector.values.length !== EXPECTED_DIMENSIONS) {
+    errors.push(`Expected ${EXPECTED_DIMENSIONS} dimensions, got ${vector.values.length}`);
+  }
+  
+  if (!vector.id || typeof vector.id !== 'string') {
+    errors.push('Vector must have a valid string ID');
+  }
+  
+  return errors;
+}
+```
+
+### Monitoring and Debugging
+
+<Warning>
+  **Production Considerations:**
+  - Monitor vector store size and growth
+  - Set up alerts for query performance degradation
+  - Implement proper error handling and retries
+  - Log vector operations for debugging
+  - Regular backup and maintenance procedures
+</Warning>
+
+---
+
+## Integration with PLai Services
+
+### Automatic Vector Generation
+
+<Note>
+  When using PLai's datasources and resources, vectors are automatically generated and managed. The direct vector API is primarily for:
+  - Custom vector sources
+  - External system integration
+  - Advanced vector operations
+  - Performance optimization scenarios
+</Note>
+
+### Hybrid Search Patterns
+
+```javascript
+// Example: Combining PLai resources with custom vectors
+async function hybridSearch(query, options = {}) {
+  // Search PLai managed resources
+  const agentResponse = await fetch(`/agents/${agentId}/invoke`, {
+    method: 'POST',
+    body: JSON.stringify({
+      input: query,
+      metadata_filter: options.resourceFilter
+    })
+  });
+  
+  // Search custom vectors
+  const queryVector = await generateEmbedding(query);
+  const vectorResults = await fetch('/vectors/query', {
+    method: 'POST', 
+    body: JSON.stringify({
+      vector: queryVector,
+      top_k: options.vectorLimit || 5,
+      filter: options.vectorFilter
+    })
+  });
+  
+  // Combine and rank results
+  return combineResults(agentResponse, vectorResults);
+}

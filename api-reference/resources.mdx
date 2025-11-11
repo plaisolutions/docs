@@ -1,0 +1,852 @@
+---
+title: "Resources"
+description: "API endpoints for managing resources within datasources"
+---
+
+## Create Resource
+
+<api-endpoint method="POST" path="/datasources/{datasource_id}/resources" />
+
+Create a new resource within a datasource. Resources are individual pieces of content like documents, web pages, files, or data that will be processed and made available for agent interactions.
+
+### Path Parameters
+
+<ParamField path="datasource_id" type="string" required>
+  The unique identifier of the datasource
+</ParamField>
+
+### Request Body
+
+<ParamField body="name" type="string" required>
+  Resource name or title
+</ParamField>
+
+<ParamField body="type" type="string" required>
+  Resource type. Supported values:
+  - `text/plain` - Plain text files
+  - `application/pdf` - PDF documents
+  - `text/csv` - CSV data files
+  - `text/markdown` - Markdown documents
+  - `text/html` - HTML content
+  - `WEBPAGE` - Web page to be scraped
+  - `URL` - Generic URL resource
+  - `audio/wav` - WAV audio files
+  - `video/mp4` - MP4 video files
+  - `video/youtube` - YouTube videos
+  - `image/png` - PNG images
+  - `image/jpeg` - JPEG images
+  - `image/webp` - WebP images
+</ParamField>
+
+<ParamField body="url" type="string" optional>
+  URL to the resource content (required for web/URL resources)
+</ParamField>
+
+<ParamField body="content" type="string" optional>
+  Direct content (for text-based resources when not using URL)
+</ParamField>
+
+<ParamField body="config" type="object" optional>
+  Resource-specific configuration options (default: {})
+</ParamField>
+
+<ParamField body="metadata" type="object" optional>
+  Resource metadata following the datasource schema (default: {})
+</ParamField>
+
+<ParamField body="extra_info" type="object" optional>
+  Additional information about the resource (default: {})
+</ParamField>
+
+<ParamField body="external_url" type="string" optional>
+  External reference URL
+</ParamField>
+
+<ParamField body="external_resource_id" type="string" optional>
+  External system resource identifier
+</ParamField>
+
+<ParamField body="store" type="boolean" optional>
+  Whether to store the processed content (default: true)
+</ParamField>
+
+<ParamField body="callback_url" type="string" optional>
+  URL to call when processing is complete
+</ParamField>
+
+<ParamField body="folder_id" type="string" optional>
+  ID of the folder to place this resource in
+</ParamField>
+
+### Response
+
+<ResponseField name="id" type="string">
+  Resource unique identifier
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  Resource name
+</ResponseField>
+
+<ResponseField name="type" type="string">
+  Resource type
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Processing status (IN_PROGRESS, VECTORIZING, SCRAPING, SUMMARIZING, DONE, FAILED)
+</ResponseField>
+
+<ResponseField name="url" type="string" optional>
+  URL to the resource content
+</ResponseField>
+
+<ResponseField name="content" type="string" optional>
+  Direct content (for text resources)
+</ResponseField>
+
+<ResponseField name="summary" type="string">
+  Auto-generated summary of the resource
+</ResponseField>
+
+<ResponseField name="metadata" type="object">
+  Resource metadata
+</ResponseField>
+
+<ResponseField name="vectors" type="integer">
+  Number of vector embeddings created
+</ResponseField>
+
+<ResponseField name="size" type="integer">
+  Resource size in bytes
+</ResponseField>
+
+<ResponseField name="created_at" type="string">
+  When the resource was created (ISO 8601 format)
+</ResponseField>
+
+<ResponseField name="updated_at" type="string">
+  When the resource was last updated (ISO 8601 format)
+</ResponseField>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request POST 'https://api.plaisolutions.com/datasources/ds_123/resources' \
+--header 'Authorization: Bearer YOUR_TOKEN' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "name": "Product Documentation",
+  "type": "WEBPAGE",
+  "url": "https://example.com/docs",
+  "metadata": {
+    "category": "documentation",
+    "priority": 1,
+    "public": true
+  },
+  "folder_id": "folder_456"
+}'
+```
+
+```javascript JavaScript
+const datasourceId = 'ds_123';
+const response = await fetch(`https://api.plaisolutions.com/datasources/${datasourceId}/resources`, {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    name: "Product Documentation",
+    type: "WEBPAGE",
+    url: "https://example.com/docs",
+    metadata: {
+      category: "documentation",
+      priority: 1,
+      public: true
+    },
+    folder_id: "folder_456"
+  })
+});
+
+const resource = await response.json();
+console.log(resource);
+```
+
+```python Python
+import requests
+
+datasource_id = "ds_123"
+url = f"https://api.plaisolutions.com/datasources/{datasource_id}/resources"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+data = {
+    "name": "Product Documentation",
+    "type": "WEBPAGE",
+    "url": "https://example.com/docs",
+    "metadata": {
+        "category": "documentation",
+        "priority": 1,
+        "public": True
+    },
+    "folder_id": "folder_456"
+}
+
+response = requests.post(url, headers=headers, json=data)
+resource = response.json()
+print(resource)
+```
+
+</CodeGroup>
+
+---
+
+## List Resources
+
+<api-endpoint method="GET" path="/datasources/{datasource_id}/resources" />
+
+List resources in a datasource with filtering and pagination support.
+
+### Path Parameters
+
+<ParamField path="datasource_id" type="string" required>
+  The unique identifier of the datasource
+</ParamField>
+
+### Query Parameters
+
+<ParamField query="metadata_filter" type="string" optional>
+  JSON string for filtering by metadata fields
+</ParamField>
+
+<ParamField query="type" type="string" optional>
+  Filter by resource type
+</ParamField>
+
+<ParamField query="status" type="string" optional>
+  Filter by processing status (IN_PROGRESS, VECTORIZING, SCRAPING, SUMMARIZING, DONE, FAILED)
+</ParamField>
+
+<ParamField query="name" type="string" optional>
+  Filter by resource name (partial matching)
+</ParamField>
+
+<ParamField query="folder_id" type="string" optional>
+  Filter by folder ID
+</ParamField>
+
+<ParamField query="page" type="integer" optional>
+  Page number (default: 1)
+</ParamField>
+
+<ParamField query="page_size" type="integer" optional>
+  Items per page (default: 20, max: 100)
+</ParamField>
+
+### Response
+
+<ResponseField name="count" type="integer">
+  Total number of resources
+</ResponseField>
+
+<ResponseField name="page" type="integer">
+  Current page number
+</ResponseField>
+
+<ResponseField name="next" type="string" optional>
+  URL for the next page
+</ResponseField>
+
+<ResponseField name="previous" type="string" optional>
+  URL for the previous page
+</ResponseField>
+
+<ResponseField name="results" type="array">
+  Array of resource objects
+</ResponseField>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request GET 'https://api.plaisolutions.com/datasources/ds_123/resources?status=DONE&page=1&page_size=20' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const datasourceId = 'ds_123';
+const params = new URLSearchParams({
+  status: 'DONE',
+  page: '1',
+  page_size: '20'
+});
+
+const response = await fetch(`https://api.plaisolutions.com/datasources/${datasourceId}/resources?${params}`, {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+const resources = await response.json();
+console.log(resources);
+```
+
+```python Python
+import requests
+
+datasource_id = "ds_123"
+url = f"https://api.plaisolutions.com/datasources/{datasource_id}/resources"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+params = {
+    "status": "DONE",
+    "page": 1,
+    "page_size": 20
+}
+
+response = requests.get(url, headers=headers, params=params)
+resources = response.json()
+print(resources)
+```
+
+</CodeGroup>
+
+---
+
+## Get Resource
+
+<api-endpoint method="GET" path="/datasources/{datasource_id}/resources/{resource_id}" />
+
+Get detailed information about a specific resource.
+
+### Path Parameters
+
+<ParamField path="datasource_id" type="string" required>
+  The unique identifier of the datasource
+</ParamField>
+
+<ParamField path="resource_id" type="string" required>
+  The unique identifier of the resource
+</ParamField>
+
+### Response
+
+Returns the complete resource object with all details.
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request GET 'https://api.plaisolutions.com/datasources/ds_123/resources/resource_456' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const datasourceId = 'ds_123';
+const resourceId = 'resource_456';
+const response = await fetch(`https://api.plaisolutions.com/datasources/${datasourceId}/resources/${resourceId}`, {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+const resource = await response.json();
+console.log(resource);
+```
+
+```python Python
+import requests
+
+datasource_id = "ds_123"
+resource_id = "resource_456"
+url = f"https://api.plaisolutions.com/datasources/{datasource_id}/resources/{resource_id}"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+
+response = requests.get(url, headers=headers)
+resource = response.json()
+print(resource)
+```
+
+</CodeGroup>
+
+---
+
+## Update Resource
+
+<api-endpoint method="PATCH" path="/datasources/{datasource_id}/resources/{resource_id}" />
+
+Update resource metadata and properties.
+
+### Path Parameters
+
+<ParamField path="datasource_id" type="string" required>
+  The unique identifier of the datasource
+</ParamField>
+
+<ParamField path="resource_id" type="string" required>
+  The unique identifier of the resource
+</ParamField>
+
+### Request Body
+
+<ParamField body="name" type="string" optional>
+  Updated resource name
+</ParamField>
+
+<ParamField body="summary" type="string" optional>
+  Updated resource summary
+</ParamField>
+
+<ParamField body="datasource_id" type="string" optional>
+  Move resource to different datasource
+</ParamField>
+
+### Response
+
+Returns the updated resource object.
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request PATCH 'https://api.plaisolutions.com/datasources/ds_123/resources/resource_456' \
+--header 'Authorization: Bearer YOUR_TOKEN' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "name": "Updated Documentation Title",
+  "summary": "Updated comprehensive product documentation"
+}'
+```
+
+```javascript JavaScript
+const datasourceId = 'ds_123';
+const resourceId = 'resource_456';
+const response = await fetch(`https://api.plaisolutions.com/datasources/${datasourceId}/resources/${resourceId}`, {
+  method: 'PATCH',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    name: "Updated Documentation Title",
+    summary: "Updated comprehensive product documentation"
+  })
+});
+
+const resource = await response.json();
+console.log(resource);
+```
+
+```python Python
+import requests
+
+datasource_id = "ds_123"
+resource_id = "resource_456"
+url = f"https://api.plaisolutions.com/datasources/{datasource_id}/resources/{resource_id}"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+data = {
+    "name": "Updated Documentation Title",
+    "summary": "Updated comprehensive product documentation"
+}
+
+response = requests.patch(url, headers=headers, json=data)
+resource = response.json()
+print(resource)
+```
+
+</CodeGroup>
+
+---
+
+## Delete Resource
+
+<api-endpoint method="DELETE" path="/datasources/{datasource_id}/resources/{resource_id}" />
+
+Delete a resource and all associated data.
+
+### Path Parameters
+
+<ParamField path="datasource_id" type="string" required>
+  The unique identifier of the datasource
+</ParamField>
+
+<ParamField path="resource_id" type="string" required>
+  The unique identifier of the resource to delete
+</ParamField>
+
+### Response
+
+Returns a 204 status code on successful deletion.
+
+<Warning>
+  Deleting a resource will permanently remove:
+  - The resource and its content
+  - All vector embeddings
+  - Processing history and analytics
+  - Any associated resource links
+  
+  This action cannot be undone.
+</Warning>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request DELETE 'https://api.plaisolutions.com/datasources/ds_123/resources/resource_456' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const datasourceId = 'ds_123';
+const resourceId = 'resource_456';
+const response = await fetch(`https://api.plaisolutions.com/datasources/${datasourceId}/resources/${resourceId}`, {
+  method: 'DELETE',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+console.log('Resource deleted:', response.status === 204);
+```
+
+```python Python
+import requests
+
+datasource_id = "ds_123"
+resource_id = "resource_456"
+url = f"https://api.plaisolutions.com/datasources/{datasource_id}/resources/{resource_id}"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+
+response = requests.delete(url, headers=headers)
+print(f"Resource deleted: {response.status_code == 204}")
+```
+
+</CodeGroup>
+
+---
+
+## Retry Resource Processing
+
+<api-endpoint method="POST" path="/datasources/{datasource_id}/resources/{resource_id}/retry" />
+
+Retry processing for a failed resource or reprocess with updated settings.
+
+### Path Parameters
+
+<ParamField path="datasource_id" type="string" required>
+  The unique identifier of the datasource
+</ParamField>
+
+<ParamField path="resource_id" type="string" required>
+  The unique identifier of the resource
+</ParamField>
+
+### Request Body
+
+<ParamField body="statuses" type="array" required>
+  Array of resource statuses to retry (e.g., ["FAILED", "IN_PROGRESS"])
+</ParamField>
+
+<ParamField body="date_from" type="string" optional>
+  Only retry resources created/updated after this date
+</ParamField>
+
+<ParamField body="date_to" type="string" optional>
+  Only retry resources created/updated before this date
+</ParamField>
+
+### Response
+
+Returns a success confirmation.
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request POST 'https://api.plaisolutions.com/datasources/ds_123/resources/resource_456/retry' \
+--header 'Authorization: Bearer YOUR_TOKEN' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "statuses": ["FAILED"]
+}'
+```
+
+```javascript JavaScript
+const datasourceId = 'ds_123';
+const resourceId = 'resource_456';
+const response = await fetch(`https://api.plaisolutions.com/datasources/${datasourceId}/resources/${resourceId}/retry`, {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    statuses: ["FAILED"]
+  })
+});
+
+const result = await response.json();
+console.log(result);
+```
+
+```python Python
+import requests
+
+datasource_id = "ds_123"
+resource_id = "resource_456"
+url = f"https://api.plaisolutions.com/datasources/{datasource_id}/resources/{resource_id}/retry"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+data = {
+    "statuses": ["FAILED"]
+}
+
+response = requests.post(url, headers=headers, json=data)
+result = response.json()
+print(result)
+```
+
+</CodeGroup>
+
+---
+
+## Download Resource
+
+<api-endpoint method="GET" path="/datasources/{datasource_id}/resources/{resource_id}/download" />
+
+Get a download URL for the processed resource content.
+
+### Path Parameters
+
+<ParamField path="datasource_id" type="string" required>
+  The unique identifier of the datasource
+</ParamField>
+
+<ParamField path="resource_id" type="string" required>
+  The unique identifier of the resource
+</ParamField>
+
+### Response
+
+<ResponseField name="download_url" type="string">
+  Temporary signed URL for downloading the resource content
+</ResponseField>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request GET 'https://api.plaisolutions.com/datasources/ds_123/resources/resource_456/download' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const datasourceId = 'ds_123';
+const resourceId = 'resource_456';
+const response = await fetch(`https://api.plaisolutions.com/datasources/${datasourceId}/resources/${resourceId}/download`, {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+const downloadInfo = await response.json();
+console.log(downloadInfo);
+
+// Use the URL to download the file
+const fileResponse = await fetch(downloadInfo.download_url);
+const content = await fileResponse.text();
+```
+
+```python Python
+import requests
+
+datasource_id = "ds_123"
+resource_id = "resource_456"
+url = f"https://api.plaisolutions.com/datasources/{datasource_id}/resources/{resource_id}/download"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+
+response = requests.get(url, headers=headers)
+download_info = response.json()
+
+# Use the URL to download the file
+file_response = requests.get(download_info["download_url"])
+content = file_response.text
+print(content)
+```
+
+</CodeGroup>
+
+---
+
+## Get Scraping Status
+
+<api-endpoint method="GET" path="/resources/{resource_id}/scraping-status" />
+
+Get the scraping status for web-based resources (WEBPAGE, URL types).
+
+### Path Parameters
+
+<ParamField path="resource_id" type="string" required>
+  The unique identifier of the resource
+</ParamField>
+
+### Response
+
+<ResponseField name="resource_id" type="string">
+  Resource unique identifier
+</ResponseField>
+
+<ResponseField name="links_count" type="integer">
+  Total number of links found during scraping
+</ResponseField>
+
+<ResponseField name="done" type="integer">
+  Number of links successfully processed
+</ResponseField>
+
+<ResponseField name="in_progress" type="integer">
+  Number of links currently being processed
+</ResponseField>
+
+<ResponseField name="failed" type="integer">
+  Number of links that failed to process
+</ResponseField>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request GET 'https://api.plaisolutions.com/resources/resource_456/scraping-status'
+```
+
+```javascript JavaScript
+const resourceId = 'resource_456';
+const response = await fetch(`https://api.plaisolutions.com/resources/${resourceId}/scraping-status`, {
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
+
+const status = await response.json();
+console.log(status);
+```
+
+```python Python
+import requests
+
+resource_id = "resource_456"
+url = f"https://api.plaisolutions.com/resources/{resource_id}/scraping-status"
+headers = {
+    "Content-Type": "application/json"
+}
+
+response = requests.get(url, headers=headers)
+status = response.json()
+print(status)
+```
+
+</CodeGroup>
+
+---
+
+## Resource Processing Pipeline
+
+Understanding how resources are processed helps you monitor and troubleshoot issues:
+
+<Steps>
+  <Step title="Upload/Submit">
+    Resource is created with initial metadata and content reference
+  </Step>
+  <Step title="Content Extraction">
+    System extracts text/data from the resource based on its type
+  </Step>
+  <Step title="Processing">
+    Content is chunked, cleaned, and prepared for vectorization
+  </Step>
+  <Step title="Vectorization">
+    Text chunks are converted to vector embeddings for semantic search
+  </Step>
+  <Step title="Indexing">
+    Vectors are stored and indexed for fast retrieval
+  </Step>
+  <Step title="Completion">
+    Resource status is updated to DONE and becomes available to agents
+  </Step>
+</Steps>
+
+### Resource Status Meanings
+
+<AccordionGroup>
+  <Accordion title="IN_PROGRESS">
+    Initial processing stage - content extraction and preparation
+  </Accordion>
+  
+  <Accordion title="SCRAPING">
+    For web resources - actively scraping content from URLs
+  </Accordion>
+  
+  <Accordion title="SUMMARIZING">
+    Generating automatic summaries of the content
+  </Accordion>
+  
+  <Accordion title="VECTORIZING">
+    Converting text content to vector embeddings
+  </Accordion>
+  
+  <Accordion title="DONE">
+    Processing complete - resource is ready for agent use
+  </Accordion>
+  
+  <Accordion title="FAILED">
+    Processing encountered an error - check logs and retry if needed
+  </Accordion>
+</AccordionGroup>
+
+### Content Type Support
+
+<Tabs>
+  <Tab title="Documents">
+    - **PDF**: Full text extraction with metadata
+    - **Text/Markdown**: Direct processing with formatting preservation
+    - **HTML**: Clean text extraction with structure preservation
+    - **CSV**: Structured data processing with schema inference
+  </Tab>
+  
+  <Tab title="Web Content">
+    - **Webpages**: Intelligent content extraction, link following
+    - **URLs**: Generic URL handling with content type detection
+    - **YouTube**: Video transcript extraction and metadata
+  </Tab>
+  
+  <Tab title="Media">
+    - **Images**: OCR text extraction for PNG, JPEG, WebP
+    - **Audio**: Speech-to-text transcription for WAV files
+    - **Video**: Audio extraction and transcription
+  </Tab>
+</Tabs>
+
+<Note>
+  Processing times vary based on resource type and size. Web scraping can take longer due to external dependencies and rate limiting.
+</Note>
+
+<Tip>
+  Use the scraping status endpoint to monitor progress for web-based resources, and set up callback URLs for automatic notifications when processing completes.
+</Tip>

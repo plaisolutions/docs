@@ -1,0 +1,557 @@
+---
+title: "Vector Databases"
+description: "API endpoints for managing vector database configurations and connections"
+---
+
+## Create Vector Database
+
+<api-endpoint method="POST" path="/vector-db" />
+
+Create a new vector database configuration to store and query high-dimensional vectors for semantic search.
+
+### Request Body
+
+<ParamField body="provider" type="string" required>
+  Vector database provider:
+  - `PINECONE` - Pinecone vector database service
+  - `ASTRA_DB` - DataStax Astra DB vector search
+  - `WEAVIATE` - Weaviate vector database
+  - `QDRANT` - Qdrant vector search engine
+  - `SUPABASE` - Supabase with pgvector extension
+</ParamField>
+
+<ParamField body="options" type="object" required>
+  Provider-specific configuration options (see provider sections below for details)
+</ParamField>
+
+### Response
+
+Returns the created vector database configuration.
+
+<ResponseField name="id" type="string">
+  Vector database configuration unique identifier
+</ResponseField>
+
+<ResponseField name="provider" type="string">
+  Vector database provider
+</ResponseField>
+
+<ResponseField name="options" type="string">
+  Encrypted configuration options
+</ResponseField>
+
+<ResponseField name="project_id" type="string">
+  ID of the project this vector database belongs to
+</ResponseField>
+
+<ResponseField name="created_at" type="string">
+  When the configuration was created (ISO 8601 format)
+</ResponseField>
+
+<ResponseField name="updated_at" type="string">
+  When the configuration was last updated (ISO 8601 format)
+</ResponseField>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request POST 'https://api.plaisolutions.com/vector-db' \
+--header 'Authorization: Bearer YOUR_TOKEN' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "provider": "PINECONE",
+  "options": {
+    "api_key": "your-pinecone-api-key",
+    "environment": "us-west1-gcp-free",
+    "index_name": "plai-vectors"
+  }
+}'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.plaisolutions.com/vector-db', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    provider: "PINECONE",
+    options: {
+      api_key: "your-pinecone-api-key",
+      environment: "us-west1-gcp-free",
+      index_name: "plai-vectors"
+    }
+  })
+});
+
+const vectorDb = await response.json();
+console.log(vectorDb);
+```
+
+```python Python
+import requests
+
+url = "https://api.plaisolutions.com/vector-db"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+data = {
+    "provider": "PINECONE",
+    "options": {
+        "api_key": "your-pinecone-api-key",
+        "environment": "us-west1-gcp-free",
+        "index_name": "plai-vectors"
+    }
+}
+
+response = requests.post(url, headers=headers, json=data)
+vector_db = response.json()
+print(vector_db)
+```
+
+</CodeGroup>
+
+---
+
+## List Vector Databases
+
+<api-endpoint method="GET" path="/vector-dbs" />
+
+List all vector database configurations in the current project.
+
+### Response
+
+<ResponseField name="vector_dbs" type="array">
+  Array of vector database configuration objects
+</ResponseField>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request GET 'https://api.plaisolutions.com/vector-dbs' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.plaisolutions.com/vector-dbs', {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+const vectorDbs = await response.json();
+console.log(vectorDbs);
+```
+
+```python Python
+import requests
+
+url = "https://api.plaisolutions.com/vector-dbs"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+
+response = requests.get(url, headers=headers)
+vector_dbs = response.json()
+print(vector_dbs)
+```
+
+</CodeGroup>
+
+---
+
+## Get Vector Database
+
+<api-endpoint method="GET" path="/vector-dbs/{vector_db_id}" />
+
+Get detailed information about a specific vector database configuration.
+
+### Path Parameters
+
+<ParamField path="vector_db_id" type="string" required>
+  The unique identifier of the vector database configuration
+</ParamField>
+
+### Response
+
+Returns the vector database configuration object with all details.
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request GET 'https://api.plaisolutions.com/vector-dbs/vectordb_123' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const vectorDbId = 'vectordb_123';
+const response = await fetch(`https://api.plaisolutions.com/vector-dbs/${vectorDbId}`, {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+const vectorDb = await response.json();
+console.log(vectorDb);
+```
+
+```python Python
+import requests
+
+vector_db_id = "vectordb_123"
+url = f"https://api.plaisolutions.com/vector-dbs/{vector_db_id}"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+
+response = requests.get(url, headers=headers)
+vector_db = response.json()
+print(vector_db)
+```
+
+</CodeGroup>
+
+---
+
+## Update Vector Database
+
+<api-endpoint method="PATCH" path="/vector-dbs/{vector_db_id}" />
+
+Update vector database configuration settings.
+
+### Path Parameters
+
+<ParamField path="vector_db_id" type="string" required>
+  The unique identifier of the vector database configuration
+</ParamField>
+
+### Request Body
+
+<ParamField body="provider" type="string" optional>
+  Updated vector database provider
+</ParamField>
+
+<ParamField body="options" type="object" optional>
+  Updated provider-specific configuration options
+</ParamField>
+
+### Response
+
+Returns the updated vector database configuration object.
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request PATCH 'https://api.plaisolutions.com/vector-dbs/vectordb_123' \
+--header 'Authorization: Bearer YOUR_TOKEN' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "options": {
+    "api_key": "new-pinecone-api-key",
+    "environment": "us-east1-gcp",
+    "index_name": "plai-vectors-prod"
+  }
+}'
+```
+
+```javascript JavaScript
+const vectorDbId = 'vectordb_123';
+const response = await fetch(`https://api.plaisolutions.com/vector-dbs/${vectorDbId}`, {
+  method: 'PATCH',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    options: {
+      api_key: "new-pinecone-api-key",
+      environment: "us-east1-gcp",
+      index_name: "plai-vectors-prod"
+    }
+  })
+});
+
+const vectorDb = await response.json();
+console.log(vectorDb);
+```
+
+```python Python
+import requests
+
+vector_db_id = "vectordb_123"
+url = f"https://api.plaisolutions.com/vector-dbs/{vector_db_id}"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+data = {
+    "options": {
+        "api_key": "new-pinecone-api-key",
+        "environment": "us-east1-gcp",
+        "index_name": "plai-vectors-prod"
+    }
+}
+
+response = requests.patch(url, headers=headers, json=data)
+vector_db = response.json()
+print(vector_db)
+```
+
+</CodeGroup>
+
+---
+
+## Provider Configuration
+
+Each vector database provider requires specific configuration options:
+
+### Pinecone
+
+<AccordionGroup>
+  <Accordion title="Configuration Options">
+    ```json
+    {
+      "api_key": "your-pinecone-api-key",
+      "environment": "us-west1-gcp-free",
+      "index_name": "your-index-name",
+      "namespace": "default"
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="Setup Instructions">
+    1. Create a Pinecone account at [pinecone.io](https://pinecone.io)
+    2. Create a new project and get your API key
+    3. Create an index with the desired dimensions (typically 1536 for OpenAI embeddings)
+    4. Choose the appropriate environment/region
+    5. Optionally specify a namespace for data isolation
+  </Accordion>
+  
+  <Accordion title="Features">
+    - Fully managed vector database
+    - High-performance approximate nearest neighbor search
+    - Real-time updates and deletes
+    - Metadata filtering
+    - Horizontal scaling
+  </Accordion>
+</AccordionGroup>
+
+### DataStax Astra DB
+
+<AccordionGroup>
+  <Accordion title="Configuration Options">
+    ```json
+    {
+      "token": "your-astra-db-token",
+      "api_endpoint": "https://your-database-id-region.apps.astra.datastax.com",
+      "keyspace": "your-keyspace",
+      "collection": "your-collection"
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="Setup Instructions">
+    1. Create an Astra DB account at [astra.datastax.com](https://astra.datastax.com)
+    2. Create a new vector database
+    3. Generate an application token
+    4. Create a keyspace and collection
+    5. Configure the collection for vector search
+  </Accordion>
+  
+  <Accordion title="Features">
+    - Serverless vector database built on Cassandra
+    - Multi-cloud availability
+    - ACID transactions
+    - JSON document model with vector search
+    - Global distribution capabilities
+  </Accordion>
+</AccordionGroup>
+
+### Weaviate
+
+<AccordionGroup>
+  <Accordion title="Configuration Options">
+    ```json
+    {
+      "url": "https://your-cluster.weaviate.network",
+      "api_key": "your-weaviate-api-key",
+      "class_name": "Document",
+      "additional_headers": {
+        "X-OpenAI-Api-Key": "your-openai-key"
+      }
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="Setup Instructions">
+    1. Create a Weaviate cluster (cloud or self-hosted)
+    2. Configure authentication if required
+    3. Create schema classes for your data
+    4. Set up vectorization modules (OpenAI, Cohere, etc.)
+    5. Configure any additional modules needed
+  </Accordion>
+  
+  <Accordion title="Features">
+    - Open-source vector database
+    - GraphQL and REST APIs
+    - Built-in vectorization modules
+    - Semantic search and hybrid search
+    - Multi-modal support (text, images)
+  </Accordion>
+</AccordionGroup>
+
+### Qdrant
+
+<AccordionGroup>
+  <Accordion title="Configuration Options">
+    ```json
+    {
+      "url": "https://your-cluster.qdrant.io",
+      "api_key": "your-qdrant-api-key",
+      "collection_name": "plai_vectors",
+      "vector_size": 1536,
+      "distance": "Cosine"
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="Setup Instructions">
+    1. Set up Qdrant (cloud or self-hosted)
+    2. Create a collection with appropriate vector size
+    3. Configure distance metric (Cosine, Euclidean, Dot product)
+    4. Set up authentication if required
+    5. Optionally configure payload indexing
+  </Accordion>
+  
+  <Accordion title="Features">
+    - High-performance vector similarity search
+    - Rich payload support with filtering
+    - Distributed deployment
+    - Real-time updates
+    - Advanced indexing algorithms (HNSW)
+  </Accordion>
+</AccordionGroup>
+
+### Supabase
+
+<AccordionGroup>
+  <Accordion title="Configuration Options">
+    ```json
+    {
+      "url": "https://your-project.supabase.co",
+      "key": "your-anon-key",
+      "table_name": "documents",
+      "vector_column": "embedding",
+      "content_column": "content",
+      "metadata_column": "metadata"
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="Setup Instructions">
+    1. Create a Supabase project
+    2. Enable the pgvector extension in your database
+    3. Create tables with vector columns
+    4. Set up Row Level Security (RLS) policies
+    5. Configure API keys and authentication
+  </Accordion>
+  
+  <Accordion title="Features">
+    - PostgreSQL with pgvector extension
+    - Full SQL capabilities with vector operations
+    - Row-level security
+    - Real-time subscriptions
+    - Built-in authentication and storage
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Best Practices
+
+<Steps>
+  <Step title="Choose the Right Provider">
+    Select a vector database provider based on your performance, scalability, and budget requirements
+  </Step>
+  <Step title="Dimension Consistency">
+    Ensure all vectors have the same dimensions as configured in your vector database
+  </Step>
+  <Step title="Index Configuration">
+    Configure appropriate index parameters for your expected query patterns and data size
+  </Step>
+  <Step title="Security">
+    Store API keys and credentials securely, never expose them in client-side code
+  </Step>
+  <Step title="Monitoring">
+    Monitor query performance and storage usage to optimize costs and performance
+  </Step>
+</Steps>
+
+### Vector Database Selection Guide
+
+<CardGroup cols={2}>
+  <Card title="High Performance" icon="zap">
+    **Pinecone** or **Qdrant** for maximum query speed and throughput
+  </Card>
+  <Card title="Cost Effective" icon="dollar-sign">
+    **Supabase** with pgvector for budget-conscious projects with SQL needs
+  </Card>
+  <Card title="Enterprise" icon="building">
+    **Astra DB** for enterprise features, global distribution, and ACID compliance
+  </Card>
+  <Card title="Flexibility" icon="settings">
+    **Weaviate** for multi-modal search and complex schema requirements
+  </Card>
+</CardGroup>
+
+### Performance Optimization
+
+<Tip>
+  - Use appropriate vector dimensions (768, 1536, 3072 are common)
+  - Implement efficient batch operations for bulk updates
+  - Consider using namespaces or collections to organize data
+  - Monitor and tune index parameters based on your query patterns
+</Tip>
+
+### Security Considerations
+
+<Warning>
+  Vector databases often contain sensitive information:
+  - Use encrypted connections (HTTPS/TLS)
+  - Implement proper access controls and authentication
+  - Regularly rotate API keys and credentials
+  - Monitor access logs for unusual activity
+  - Consider data residency requirements for compliance
+</Warning>
+
+---
+
+## Common Use Cases
+
+### Semantic Search
+
+Configure your vector database to power semantic search across documents, enabling users to find content based on meaning rather than exact keyword matches.
+
+### Recommendation Systems
+
+Use vector similarity to build recommendation engines that suggest similar products, content, or services based on user behavior and preferences.
+
+### Retrieval-Augmented Generation (RAG)
+
+Combine your vector database with language models to provide contextually relevant information for AI-powered applications.
+
+### Duplicate Detection
+
+Identify duplicate or near-duplicate content by finding vectors with high similarity scores within your dataset.
+
+### Clustering and Classification
+
+Group related items together or classify new content by finding the closest matching vectors in your database.
