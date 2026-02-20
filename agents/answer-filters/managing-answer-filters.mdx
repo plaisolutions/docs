@@ -1,0 +1,758 @@
+---
+title: "Managing Answer Filters"
+description: "Learn how to view, edit, update, and delete Answer Filters effectively"
+---
+
+# Managing Answer Filters
+
+Once you've created Answer Filters, you'll need to maintain them over time. This guide covers how to view, edit, update, and delete filters, as well as best practices for ongoing management.
+
+## Accessing Your Answer Filters
+
+All Answer Filters for an agent are managed from the **Answer Filters** tab in the agent dashboard.
+
+<Steps>
+  <Step title="Navigate to Agent">
+    Go to **Projects** → Select your project → Select your agent
+  </Step>
+  <Step title="Open Answer Filters Tab">
+    Click on the **Answer Filters** tab in the agent navigation
+  </Step>
+  <Step title="View Answer Filters List">
+    You'll see a table listing all Answer Filters for this agent
+  </Step>
+</Steps>
+
+### Answer Filters List View
+
+The filters table displays:
+
+| Column | Description |
+|--------|-------------|
+| **ID** | Unique identifier for the filter |
+| **Queries** | Preview of query examples (truncated if long) |
+| **Created at** | Date and time the filter was created |
+| **Actions** | Dropdown menu with edit and delete options |
+
+<Info>
+**Admin Access Required**: Only project Admins and Owners can view and manage Answer Filters.
+</Info>
+
+---
+
+## Viewing Filter Details
+
+To see the complete details of a filter:
+
+<Steps>
+  <Step title="Locate the Filter">
+    Find the filter in the filters list table
+  </Step>
+  <Step title="Open Actions Menu">
+    Click the **⋮** (three dots) icon in the Actions column
+  </Step>
+  <Step title="Select Edit">
+    Choose **"Edit"** from the dropdown menu
+  </Step>
+  <Step title="Review Details">
+    The filter sheet opens showing all queries, good responses, and bad responses
+  </Step>
+</Steps>
+
+<Note>
+Hover over truncated query text in the table to see the full text in a tooltip.
+</Note>
+
+---
+
+## Editing Answer Filters
+
+### When to Edit a Filter
+
+You should edit a filter when:
+
+<AccordionGroup>
+  <Accordion title="Information Changes" icon="rotate">
+    **Scenario**: Company policy or information has been updated
+    
+    **Example**: 
+    ```
+    Old: "We offer a 14-day return policy"
+    New: "We offer a 30-day return policy"
+    ```
+    
+    **Action**: Update good responses with new information
+  </Accordion>
+  
+  <Accordion title="Filter Not Triggering" icon="bell-slash">
+    **Scenario**: Users ask questions that should trigger the filter but don't
+    
+    **Example**:
+    ```
+    Existing queries:
+    - "What is your return policy?"
+    - "Can I return items?"
+    
+    Users also ask:
+    - "How do I send something back?"
+    - "What's your refund process?"
+    ```
+    
+    **Action**: Add these new query variations
+  </Accordion>
+  
+  <Accordion title="New Mistakes Discovered" icon="triangle-exclamation">
+    **Scenario**: Agent makes a mistake that wasn't anticipated
+    
+    **Example**:
+    ```
+    Agent incorrectly says: "Refunds take 2-3 weeks"
+    Correct information: "Refunds take 5-7 business days"
+    ```
+    
+    **Action**: Add the incorrect response to bad responses
+  </Accordion>
+  
+  <Accordion title="Response Quality Issues" icon="star-half">
+    **Scenario**: Good responses aren't as effective as hoped
+    
+    **Example**:
+    ```
+    Vague: "We have flexible return options"
+    Better: "Returns are accepted within 30 days for full 
+            refund with original packaging and receipt"
+    ```
+    
+    **Action**: Refine good responses to be more specific
+  </Accordion>
+</AccordionGroup>
+
+---
+
+### How to Edit a Filter
+
+<Steps>
+  <Step title="Open Edit Sheet">
+    1. Navigate to the Answer Filters tab
+    2. Click the **⋮** icon next to the filter
+    3. Select **"Edit"** from the dropdown
+    
+    The edit sheet opens with current filter data pre-filled
+  </Step>
+  
+  <Step title="Modify Queries">
+    **Add new queries:**
+    - Type in the query field
+    - Click **"+ Add"** or press Enter
+    
+    **Remove queries:**
+    - Click the **[x]** icon next to any query
+    
+    **Edit existing queries:**
+    - Currently requires removing and re-adding
+    - Or use the text field to modify
+  </Step>
+  
+  <Step title="Update Good Responses">
+    **Add new good responses:**
+    - Type in the good responses field
+    - Click **"+ Add"** or press Enter
+    
+    **Remove responses:**
+    - Click the **[x]** icon next to any response
+    
+    **Tips:**
+    - Be specific and actionable
+    - Include all necessary details
+    - Ensure information is current
+  </Step>
+  
+  <Step title="Update Bad Responses">
+    **Add new bad responses:**
+    - Type responses to avoid
+    - Click **"+ Add"** or press Enter
+    
+    **Remove responses:**
+    - Click the **[x]** icon next to any response
+    
+    **Tips:**
+    - Include newly discovered mistakes
+    - List any outdated information
+    - Note off-brand phrasings
+  </Step>
+  
+  <Step title="Save Changes">
+    1. Review all modifications
+    2. Click **"Update Filter"** button
+    3. Wait for success confirmation
+    
+    <Check>
+    Changes take effect immediately for new conversations
+    </Check>
+  </Step>
+</Steps>
+
+---
+
+## Editing Examples
+
+### Example 1: Adding Query Variations
+
+**Scenario**: Users ask about refunds in ways not covered by current queries.
+
+<Tabs>
+  <Tab title="Before">
+    ```yaml
+    Queries:
+      - "What is your refund policy?"
+      - "Can I get a refund?"
+      - "Do you offer refunds?"
+    ```
+    
+    **Problem**: Filter doesn't trigger for:
+    - "How do I get my money back?"
+    - "Can I return this for a refund?"
+    - "What's your money-back guarantee?"
+  </Tab>
+  
+  <Tab title="After">
+    ```yaml
+    Queries:
+      - "What is your refund policy?"
+      - "Can I get a refund?"
+      - "Do you offer refunds?"
+      - "How do I get my money back?" ← New
+      - "Can I return this for a refund?" ← New
+      - "What's your money-back guarantee?" ← New
+    ```
+    
+    **Result**: Filter now triggers for more query variations
+  </Tab>
+</Tabs>
+
+---
+
+### Example 2: Updating Information
+
+**Scenario**: Return policy changed from 14 to 30 days.
+
+<Tabs>
+  <Tab title="Before">
+    ```yaml
+    Good Responses:
+      - "We offer a 14-day return policy on all items."
+      - "Returns must be requested within 14 days of purchase."
+    ```
+    
+    **Problem**: Information is outdated
+  </Tab>
+  
+  <Tab title="After">
+    ```yaml
+    Good Responses:
+      - "We offer a 30-day return policy on all items." ← Updated
+      - "Returns must be requested within 30 days of purchase." ← Updated
+      - "This extended policy applies to all purchases made after January 1, 2024." ← New
+    ```
+    
+    **Result**: Filter provides current, accurate information
+  </Tab>
+</Tabs>
+
+---
+
+### Example 3: Preventing New Mistakes
+
+**Scenario**: Agent started saying "refunds take 2-3 weeks" when it's actually 5-7 days.
+
+<Tabs>
+  <Tab title="Before">
+    ```yaml
+    Bad Responses:
+      - "We don't offer refunds."
+      - "All sales are final."
+    ```
+    
+    **Problem**: Doesn't prevent the new mistake
+  </Tab>
+  
+  <Tab title="After">
+    ```yaml
+    Bad Responses:
+      - "We don't offer refunds."
+      - "All sales are final."
+      - "Refunds take 2-3 weeks." ← New
+      - "It will take a while to process your refund." ← New
+    ```
+    
+    **Result**: Filter now helps prevent timing misinformation
+  </Tab>
+</Tabs>
+
+---
+
+## Deleting Answer Filters
+
+### When to Delete a Filter
+
+Delete a filter when:
+
+<CardGroup cols={2}>
+  <Card title="Outdated Topic" icon="calendar-xmark">
+    The topic is no longer relevant (e.g., ended promotion, discontinued product)
+  </Card>
+  <Card title="Redundant" icon="copy">
+    Another filter covers the same topic more effectively
+  </Card>
+  <Card title="No Longer Needed" icon="check">
+    The issue resolved itself or policy normalized
+  </Card>
+  <Card title="Causing Issues" icon="triangle-exclamation">
+    Filter is triggering incorrectly or causing problems
+  </Card>
+</CardGroup>
+
+<Warning>
+**Deletion is permanent**: Deleted filters cannot be recovered. Consider editing instead of deleting if you might need the filter again.
+</Warning>
+
+---
+
+### How to Delete a Filter
+
+<Steps>
+  <Step title="Locate the Filter">
+    Navigate to the Answer Filters tab and find the filter to delete
+  </Step>
+  
+  <Step title="Open Delete Dialog">
+    1. Click the **⋮** icon in the Actions column
+    2. Select **"Delete"** from the dropdown menu
+    
+    A confirmation dialog appears
+  </Step>
+  
+  <Step title="Confirm Deletion">
+    1. Review the filter details in the confirmation dialog
+    2. Type confirmation text if required
+    3. Click **"Delete Filter"** or **"Confirm"**
+    
+    <Warning>
+    This action cannot be undone!
+    </Warning>
+  </Step>
+  
+  <Step title="Verify Removal">
+    The filter disappears from the list and a success message appears
+    
+    <Check>
+    Filter is immediately removed and no longer affects responses
+    </Check>
+  </Step>
+</Steps>
+
+---
+
+## Maintenance Best Practices
+
+### Regular Review Schedule
+
+Establish a routine for reviewing and updating your Answer Filters:
+
+<Tabs>
+  <Tab title="Weekly">
+    **If you have high-volume agents:**
+    
+    - ✅ Check agent conversations for new query patterns
+    - ✅ Look for responses that could be improved
+    - ✅ Identify new mistakes to prevent
+    - ✅ Note topics that need new filters
+    
+    **Time needed**: 15-30 minutes
+  </Tab>
+  
+  <Tab title="Monthly">
+    **For most agents:**
+    
+    - ✅ Review all existing filters
+    - ✅ Update outdated information
+    - ✅ Add new query variations
+    - ✅ Remove or consolidate redundant filters
+    - ✅ Check filter effectiveness in analytics
+    
+    **Time needed**: 30-60 minutes
+  </Tab>
+  
+  <Tab title="Quarterly">
+    **Comprehensive review:**
+    
+    - ✅ Audit all filters for relevance
+    - ✅ Update for policy/product changes
+    - ✅ Analyze filter trigger rates
+    - ✅ Gather user feedback on responses
+    - ✅ Plan new filters based on trends
+    
+    **Time needed**: 1-2 hours
+  </Tab>
+</Tabs>
+
+<Info>
+**Pro Tip**: Set calendar reminders for your chosen review schedule to ensure filters stay current.
+</Info>
+
+---
+
+### Documentation
+
+Keep a separate document tracking your filters:
+
+**What to Document:**
+
+```yaml
+Filter Documentation Template
+
+Filter ID: [Auto-generated ID]
+Topic: Return & Refund Policy
+Created: 2024-01-15
+Last Updated: 2024-03-20
+Owner: Customer Support Team
+
+Purpose:
+  Ensure consistent communication of our 30-day return policy
+
+Business Context:
+  - Policy changed from 14 to 30 days on Jan 1, 2024
+  - High-priority topic for customer satisfaction
+  - Legal requirement in some jurisdictions
+
+Update Triggers:
+  - Policy changes (review quarterly)
+  - Customer complaints about clarity
+  - New regional requirements
+
+Related Answer Filters:
+  - Shipping Returns (ID: abc123)
+  - Warranty Policy (ID: def456)
+
+Notes:
+  - Updated on 3/20 to clarify international returns
+  - Consider splitting domestic/international in future
+```
+
+---
+
+## Organizing Answer Filters
+
+As your filter library grows, organization becomes important:
+
+### Naming Conventions
+
+While filters don't have visible names in the UI, use consistent patterns in your documentation:
+
+```yaml
+Good Naming:
+  - "Returns - General Policy"
+  - "Returns - International"
+  - "Returns - Damaged Items"
+  - "Pricing - Basic Plan"
+  - "Pricing - Enterprise"
+
+Bad Naming:
+  - "Filter 1"
+  - "New filter"
+  - "Refunds thing"
+```
+
+---
+
+### Grouping Related Answer Filters
+
+Consider how filters relate to each other:
+
+<Tabs>
+  <Tab title="By Department">
+    ```
+    Customer Support:
+      - Returns & Refunds
+      - Shipping Questions
+      - Account Access
+      - Order Tracking
+    
+    Sales:
+      - Pricing Information
+      - Plan Comparisons
+      - Enterprise Inquiries
+      - Trial Questions
+    
+    Technical:
+      - Password Reset
+      - Integration Help
+      - API Questions
+      - Troubleshooting
+    ```
+  </Tab>
+  
+  <Tab title="By Priority">
+    ```
+    Critical (Legal/Compliance):
+      - Data Privacy
+      - Terms of Service
+      - Refund Policy
+      - Security Information
+    
+    High (Brand/Experience):
+      - Pricing
+      - Product Features
+      - Company Information
+    
+    Medium (Helpful):
+      - Common How-To's
+      - Feature Explanations
+      - General FAQs
+    
+    Low (Nice-to-Have):
+      - Formatting preferences
+      - Stylistic choices
+    ```
+  </Tab>
+  
+  <Tab title="By Topic">
+    ```
+    Account Management:
+      - Login Issues
+      - Password Reset
+      - Account Deletion
+      - Profile Settings
+    
+    Billing:
+      - Payment Methods
+      - Invoices
+      - Refunds
+      - Plan Changes
+    
+    Product:
+      - Features
+      - Limitations
+      - Integrations
+      - Updates
+    ```
+  </Tab>
+</Tabs>
+
+---
+
+## Bulk Management Strategies
+
+### Audit Checklist
+
+Use this checklist when reviewing multiple filters:
+
+```markdown
+## Filter Audit Checklist
+
+For each filter, verify:
+
+### Accuracy
+- [ ] All information is current and correct
+- [ ] Good responses reflect latest policies
+- [ ] Bad responses cover known mistakes
+- [ ] No contradictions with other filters
+
+### Completeness
+- [ ] 3-5 query examples provided
+- [ ] Query examples cover main variations
+- [ ] Good responses are specific and actionable
+- [ ] Bad responses prevent key mistakes
+
+### Relevance
+- [ ] Topic is still applicable
+- [ ] Filter is still triggering
+- [ ] User queries match examples
+- [ ] Responses remain helpful
+
+### Quality
+- [ ] Good responses are clear and specific
+- [ ] Language is brand-aligned
+- [ ] Information is complete
+- [ ] Tone is appropriate
+
+### Technical
+- [ ] Filter triggers at correct threshold
+- [ ] No unintended triggering
+- [ ] Works across languages (if applicable)
+- [ ] Integrates well with other filters
+
+### Actions
+- [ ] Update: [What needs updating]
+- [ ] Monitor: [What to watch]
+- [ ] Delete: [Reason if deleting]
+- [ ] Keep as-is: [Confirmed working well]
+```
+
+---
+
+### Consolidation Strategy
+
+When you have too many filters, consider consolidating:
+
+<Tabs>
+  <Tab title="Before Consolidation">
+    ```yaml
+    Filter 1: "Returns - Within 14 days"
+    Queries:
+      - "Can I return within 14 days?"
+      - "What if it's been less than 2 weeks?"
+    
+    Filter 2: "Returns - Within 30 days"
+    Queries:
+      - "Can I return within 30 days?"
+      - "What if it's been less than a month?"
+    
+    Filter 3: "Returns - General"
+    Queries:
+      - "What's your return policy?"
+      - "Do you accept returns?"
+    ```
+    
+    **Problems**:
+    - Redundant coverage
+    - Potential conflicts
+    - Hard to maintain
+  </Tab>
+  
+  <Tab title="After Consolidation">
+    ```yaml
+    Filter: "Returns - Complete Policy"
+    Queries:
+      - "What's your return policy?"
+      - "Do you accept returns?"
+      - "Can I return within 14 days?"
+      - "Can I return within 30 days?"
+      - "What if it's been less than 2 weeks?"
+      - "What if it's been less than a month?"
+      - "How long do I have to return something?"
+    
+    Good Responses:
+      - "We accept returns within 30 days of purchase."
+      - "Items must be in original condition."
+      - "Refunds processed in 5-7 business days."
+    
+    Bad Responses:
+      - "We only accept returns within 14 days."
+      - "All sales are final."
+    ```
+    
+    **Benefits**:
+    - Single source of truth
+    - Easier to maintain
+    - More comprehensive
+    - No conflicts
+  </Tab>
+</Tabs>
+
+---
+
+## Integration with Other Features
+
+Answer Filters work alongside other PLai Framework features:
+
+### With System Prompts
+
+<Info>
+**Relationship**: System prompts provide general behavior, filters provide specific responses
+</Info>
+
+```yaml
+System Prompt:
+  "You are a helpful customer service agent. Always be polite
+   and professional."
+
+Answer Filter (Refunds):
+  "We offer a 30-day return policy..."
+
+Result:
+  Agent maintains polite tone (from prompt) while giving
+  specific refund information (from filter)
+```
+
+---
+
+### With Datasources
+
+<Info>
+**Relationship**: Answer Filters provide specific answers, datasources provide broader knowledge
+</Info>
+
+**Best practice**:
+- Use filters for FAQs and policies
+- Use datasources for detailed documentation
+- Answer Filters take precedence for specific questions
+- Datasources fill gaps filters don't cover
+
+---
+
+### With Analytics
+
+<Info>
+**Relationship**: Analytics help you improve filters over time
+</Info>
+
+**What to track**:
+- Which filters trigger most often
+- User satisfaction after filtered responses
+- Topics that need new filters
+- Filter performance over time
+
+---
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Overview" icon="book-open" href="/agents/answer-filters/overview">
+    Learn more about Answer Filters concepts
+  </Card>
+  <Card title="Creating Answer Filters" icon="plus" href="/agents/answer-filters/creating-answer-filters">
+    Create your first Answer Filter
+  </Card>
+  <Card title="Agent Settings" icon="sliders" href="/agents/settings">
+    Configure other agent features
+  </Card>
+</CardGroup>
+
+---
+
+## Quick Reference
+
+### Filter Management Checklist
+
+```markdown
+Daily (High-Volume Agents):
+- [ ] Review flagged conversations
+- [ ] Note new query patterns
+
+Weekly:
+- [ ] Check for new mistakes to prevent
+- [ ] Add query variations as needed
+- [ ] Update 1-2 filters based on usage
+
+Monthly:
+- [ ] Complete filter audit
+- [ ] Update all outdated information
+- [ ] Consolidate redundant filters
+- [ ] Create new filters for trends
+
+Quarterly:
+- [ ] Comprehensive filter review
+- [ ] Update documentation
+- [ ] Plan filter strategy for next quarter based on agent analytics
+```
+
+### Common Actions Quick Guide
+
+| Task | Steps |
+|------|-------|
+| **Edit** | Answer Filters tab → ⋮ → Edit → Modify → Update Filter |
+| **Delete** | Answer Filters tab → ⋮ → Delete → Confirm |
+| **View** | Answer Filters tab → Find filter in list |
+| **Test** | Edit filter → Note queries → Test in chat |
+| **Document** | Export filter details → Add to docs |

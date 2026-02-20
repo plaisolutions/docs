@@ -1,0 +1,593 @@
+---
+title: "Live Mode"
+description: "Monitor your agent's conversations and executions in real-time with instant updates and zero delay"
+---
+
+# Live Mode
+
+Live Mode provides real-time monitoring of your agent's activity, streaming conversations and executions as they happen. Toggle the **Live Mode** switch to instantly see new conversations, track active executions, and monitor system health with zero delay.
+
+## What is Live Mode?
+
+Live Mode is a real-time streaming feature in the Analytics dashboard that shows current agent activity:
+
+<CardGroup cols={2}>
+  <Card title="Instant Updates" icon="bolt">
+    See new conversations and executions as they occur
+  </Card>
+  <Card title="Zero Delay" icon="gauge-max">
+    Updates stream continuously with no refresh needed
+  </Card>
+  <Card title="Live Metrics" icon="chart-simple">
+    Real-time execution counts, success rates, and active runs
+  </Card>
+  <Card title="Current State" icon="signal-stream">
+    Monitor what's happening right now in your agent
+  </Card>
+</CardGroup>
+
+---
+
+## How to Enable Live Mode
+
+<Steps>
+  <Step title="Access Analytics Dashboard">
+    Navigate to your agent's **Analytics** section
+  </Step>
+  
+  <Step title="Locate Live Mode Toggle">
+    Find the **Live Mode** toggle switch in the Analysis Filters sidebar (top of the left panel)
+  </Step>
+  
+  <Step title="Toggle ON">
+    Click the toggle to turn **Live Mode ON**
+    
+    <Info>
+    When Live Mode is enabled, the date range filter becomes disabled as you're viewing current activity only.
+    </Info>
+  </Step>
+  
+  <Step title="Monitor Activity">
+    Watch as conversations and executions appear in real-time
+  </Step>
+  
+  <Step title="Toggle OFF to Exit">
+    Turn Live Mode OFF to return to historical analysis mode
+  </Step>
+</Steps>
+
+---
+
+## Live Mode Interface
+
+### What Changes When Live Mode is ON
+
+<Tabs>
+  <Tab title="Sidebar Filters">
+    **Filter behavior changes**
+    
+    - ✅ **Live Mode Toggle**: ON (active)
+    - ❌ **Date Range Selector**: Disabled (grayed out)
+    - ✅ **User Filter**: Still available
+    - ✅ **Filter/Clear Buttons**: Active
+    
+    <Info>
+    You can still filter by user in Live Mode to focus on specific users' real-time activity.
+    </Info>
+  </Tab>
+  
+  <Tab title="Activity Chart">
+    **Real-time updates**
+    
+    The chart continuously updates showing:
+    - Current conversation activity
+    - Live execution counts  
+    - Real-time data points
+    - Flowing timeline
+    
+    <Tip>
+    Watch the chart to identify activity spikes, usage patterns, and traffic trends as they happen.
+    </Tip>
+  </Tab>
+  
+  <Tab title="Conversations Tab">
+    **Live conversation stream**
+    
+    - New conversations appear automatically
+    - List updates without refresh
+    - Most recent on top
+    - Click to view messages in real-time
+    
+    **Perfect for:**
+    - Monitoring user engagement
+    - Watching launch events
+    - Testing new features
+    - Support monitoring
+  </Tab>
+  
+  <Tab title="Executions Tab">
+    **Live execution monitoring**
+    
+    Metrics update in real-time:
+    - **Total Executions**: Increments as executions complete
+    - **Success Rate**: Recalculates automatically
+    - **Active Executions**: Shows currently running count
+    - **Execution List**: Updates with new entries
+    
+    **Perfect for:**
+    - Performance monitoring
+    - Load testing validation
+    - Issue detection
+    - System health checks
+  </Tab>
+</Tabs>
+
+---
+
+## Real-Time Conversations
+
+Watch conversations as users interact with your agent:
+
+### Conversation List
+
+<AccordionGroup>
+  <Accordion title="Auto-Updating List" icon="list">
+    **New conversations appear automatically**
+    
+    When Live Mode is ON:
+    - New conversations stream in
+    - Timestamps show "just now", "1 minute ago"
+    - No refresh button needed
+    - List auto-scrolls or shows notification
+    
+    **Visual indicators:**
+    - Most recent conversations at the top
+    - Fresh conversations highlighted briefly
+    - Active status indicators
+  </Accordion>
+  
+  <Accordion title="Live Message Viewing" icon="messages">
+    **Watch conversations unfold**
+    
+    Click a conversation to see:
+    - Messages appearing in real-time
+    - User inputs as they're sent
+    - Agent responses as they're generated
+    - Live conversation state
+    
+    **Use cases:**
+    - Customer support monitoring
+    - Quality assurance
+    - Live demonstrations
+    - User testing observation
+  </Accordion>
+  
+  <Accordion title="User Filtering" icon="filter">
+    **Focus on specific users**
+    
+    Even in Live Mode, you can filter by:
+    - Specific user ID
+    - All users (default)
+    - User groups
+    
+    **Example:**
+    Monitor a VIP customer's real-time interactions or watch a specific beta tester's experience.
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Real-Time Executions
+
+Monitor agent execution performance as it happens:
+
+### Execution Metrics (Live)
+
+<CardGroup cols={3}>
+  <Card title="Total Executions" icon="list-check">
+    **Running counter**
+    
+    - Increments with each completion
+    - Shows completed count
+    - Shows failed count
+    - Updates instantly
+  </Card>
+  
+  <Card title="Success Rate" icon="percent">
+    **Live percentage**
+    
+    - Recalculates automatically
+    - Reflects current performance
+    - Shows quality trends
+    - Updates with each execution
+  </Card>
+  
+  <Card title="Active Executions" icon="spinner">
+    **Currently running**
+    
+    - Shows count of active runs
+    - Updates as executions start/finish
+    - Indicates system load
+    - Real-time capacity view
+  </Card>
+</CardGroup>
+
+---
+
+### Execution List (Live)
+
+The execution list streams new entries in real-time:
+
+**Each execution shows:**
+
+| Field | Description |
+|-------|-------------|
+| **Status** | RUNNING → COMPLETED/FAILED (updates live) |
+| **Type** | AGENT_RUN, TOOL_CALL, etc. |
+| **Time** | "just now", "1 minute ago" (updates continuously) |
+| **Logs Button** | Click to view detailed execution logs |
+
+<Info>
+**Live Status Updates:**
+Watch executions transition from RUNNING to COMPLETED in real-time, with status badges updating automatically.
+</Info>
+
+---
+
+### Execution Logs
+
+Click **"Logs"** on any execution (even active ones) to view:
+
+<CardGroup cols={2}>
+  <Card title="Live Execution Trace" icon="list-timeline">
+    - Steps completing in real-time
+    - Current execution phase
+    - Progress indicators
+    - Time elapsed
+  </Card>
+  
+  <Card title="Tool Call Details" icon="wrench">
+    - Tools being called
+    - Parameters used
+    - Results returned
+    - Timing information
+  </Card>
+  
+  <Card title="Performance Metrics" icon="gauge">
+    - Processing time (live)
+    - Token usage (updating)
+    - API calls count
+    - Resource consumption
+  </Card>
+  
+  <Card title="Error Detection" icon="triangle-exclamation">
+    - Errors as they occur
+    - Failure points
+    - Stack traces
+    - Recovery attempts
+  </Card>
+</CardGroup>
+
+<Tip>
+**Pro Tip:** Keep execution logs open while monitoring to watch the detailed execution flow in real-time, perfect for debugging or understanding agent behavior.
+</Tip>
+
+---
+
+## Use Cases for Live Mode
+
+### 1. Production Monitoring
+
+<CardGroup cols={2}>
+  <Card title="System Health" icon="heart-pulse">
+    **Monitor live system status**
+    - Detect issues immediately
+    - Track performance in real-time
+    - Monitor capacity usage
+    - Identify anomalies early
+  </Card>
+  
+  <Card title="Uptime Assurance" icon="shield-check">
+    **Ensure availability**
+    - Confirm agent is responding
+    - Track response times
+    - Monitor error rates
+    - Validate functionality
+  </Card>
+</CardGroup>
+
+---
+
+### 2. Launch Events
+
+**Monitor during critical releases:**
+
+<Tabs>
+  <Tab title="Feature Launch">
+    **Track new feature adoption**
+    
+    ✅ **Real-time monitoring of:**
+    - Initial user reactions
+    - Feature usage rate
+    - Immediate issues
+    - User feedback
+    - Performance impact
+    
+    **Benefits:**
+    - Quick issue detection
+    - Immediate rollback if needed
+    - User satisfaction tracking
+    - Instant optimization
+  </Tab>
+  
+  <Tab title="Product Launch">
+    **Monitor launch day**
+    
+    ✅ **Track:**
+    - Traffic spikes
+    - User engagement
+    - System performance
+    - Error rates
+    - Conversation quality
+    
+    **Benefits:**
+    - Confidence in stability
+    - Fast issue response
+    - Real-time adjustments
+    - Team coordination
+  </Tab>
+  
+  <Tab title="Marketing Campaign">
+    **Campaign performance**
+    
+    ✅ **Monitor:**
+    - Incoming conversation volume
+    - User questions and needs
+    - Agent response quality
+    - Conversion indicators
+    - System capacity
+    
+    **Benefits:**
+    - Optimize messaging
+    - Adjust resources
+    - Track ROI signals
+    - Quick pivots
+  </Tab>
+</Tabs>
+
+---
+
+### 3. Testing & Validation
+
+**Verify changes and performance:**
+
+<AccordionGroup>
+  <Accordion title="Load Testing" icon="weight-hanging">
+    **Validate performance under load**
+    
+    Watch in real-time:
+    - Response times under load
+    - Success rates at scale
+    - System behavior under stress
+    - Bottleneck identification
+    - Capacity limits
+    
+    **Process:**
+    1. Enable Live Mode
+    2. Generate test traffic
+    3. Monitor execution metrics
+    4. Watch for degradation
+    5. Identify breaking points
+  </Accordion>
+  
+  <Accordion title="A/B Testing" icon="flask">
+    **Compare variants live**
+    
+    Monitor both variants:
+    - User engagement differences
+    - Performance comparisons
+    - Success rate variations
+    - User satisfaction signals
+    - Real-time winner identification
+  </Accordion>
+  
+  <Accordion title="Configuration Changes" icon="gears">
+    **Validate configuration updates**
+    
+    After making changes:
+    - Confirm expected behavior
+    - Detect unintended effects
+    - Monitor performance impact
+    - Verify improvements
+    - Quick rollback if issues
+  </Accordion>
+</AccordionGroup>
+
+---
+
+### 4. Support & Debugging
+
+**Real-time issue investigation:**
+
+- Watch problematic conversations unfold
+- See exactly what users experience
+- Monitor specific user sessions
+- Debug issues as they happen
+- Validate fixes immediately
+
+---
+
+## Live Mode vs. Historical Mode
+
+Understanding when to use each mode:
+
+| Aspect | **Live Mode (ON)** | **Historical Mode (OFF)** |
+|--------|-------------------|---------------------------|
+| **Purpose** | Real-time monitoring | Analysis and insights |
+| **Data Shown** | Current activity only | Past data in date range |
+| **Updates** | Continuous streaming | Static dataset |
+| **Date Filter** | Disabled | Enabled |
+| **AI Analysis** | Not available | Available |
+| **Best For** | Monitoring, testing | Analysis, reporting |
+| **Use When** | Launch, production watch | Reviews, investigations |
+
+<Info>
+**Best Practice:** Use Live Mode for awareness and immediate response, then switch to Historical Mode for deep analysis and AI-powered insights.
+</Info>
+
+---
+
+## Performance Considerations
+
+### Streaming Efficiency
+
+<CardGroup cols={2}>
+  <Card title="Agent Performance" icon="gauge">
+    **No impact on agent**
+    
+    Live Mode monitoring runs independently and doesn't affect your agent's response times or performance.
+  </Card>
+  
+  <Card title="Browser Performance" icon="window">
+    **Optimized streaming**
+    
+    Uses efficient WebSocket connections for real-time updates with minimal bandwidth and CPU usage.
+  </Card>
+</CardGroup>
+
+---
+
+### Best Practices
+
+<Check>
+**Optimize your Live Mode experience:**
+
+- Use a dedicated browser tab for monitoring
+- Close unnecessary tabs to free resources
+- Apply user filters to reduce data volume
+- Toggle OFF when not actively monitoring
+- Use on stable internet connection
+- Keep the tab visible for best performance
+</Check>
+
+---
+
+## Monitoring Multiple Agents
+
+<Tabs>
+  <Tab title="Single Agent">
+    **Focus on one agent**
+    
+    One browser tab with Live Mode ON provides complete visibility into that agent's activity.
+  </Tab>
+  
+  <Tab title="Multiple Agents">
+    **Monitor several agents**
+    
+    Open multiple browser tabs or windows:
+    - One tab per agent
+    - Each with its own Live Mode
+    - Side-by-side monitoring
+    - Independent filtering per agent
+    
+    <Tip>
+    Use browser window tiling to monitor multiple agents simultaneously on larger screens.
+    </Tip>
+  </Tab>
+</Tabs>
+
+---
+
+## Troubleshooting Live Mode
+
+<AccordionGroup>
+  <Accordion title="Live Mode isn't updating" icon="circle-pause">
+    **Connection issues**
+    
+    If updates stop:
+    1. Check internet connection
+    2. Refresh the page
+    3. Toggle Live Mode OFF then ON
+    4. Clear browser cache
+    5. Try a different browser
+  </Accordion>
+  
+  <Accordion title="High resource usage" icon="memory">
+    **Browser performance impact**
+    
+    If browser slows down:
+    - Close other tabs
+    - Apply user filters to reduce data
+    - Toggle Live Mode OFF when not watching
+    - Use a lighter-weight browser
+    - Increase available system memory
+  </Accordion>
+  
+  <Accordion title="Missing conversations" icon="question">
+    **Filter or timing issues**
+    
+    If expected conversations don't appear:
+    - Check user filter settings
+    - Verify agent is actually active
+    - Confirm Live Mode is ON
+    - Check if conversations match filters
+    - Refresh to resync
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Conversation Analysis" icon="sparkles" href="/agents/analytics/conversation-analysis">
+    Learn how to generate AI-powered insights from conversations
+  </Card>
+  <Card title="Analytics Overview" icon="chart-mixed" href="/agents/analytics/overview">
+    Return to Analytics dashboard overview
+  </Card>
+  <Card title="Agent Settings" icon="gear" href="/agents/settings">
+    Configure your agent for optimal performance
+  </Card>
+  <Card title="API Reference" icon="code" href="/api-reference/analytics">
+    Explore the Analytics API for programmatic monitoring
+  </Card>
+</CardGroup>
+
+---
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="Does Live Mode consume more resources?">
+    Live Mode uses WebSocket streaming which is efficient. It has minimal impact on browser performance, but keeping multiple Live Mode tabs open may use more resources.
+  </Accordion>
+  
+  <Accordion title="Can I run AI analysis in Live Mode?">
+    No, conversation analysis requires Live Mode to be OFF. AI analysis works on historical data, not streaming live data.
+  </Accordion>
+  
+  <Accordion title="What happens if my internet connection drops?">
+    The interface will show a disconnection indicator and attempt to reconnect automatically. Once reconnected, streaming resumes from the current point.
+  </Accordion>
+  
+  <Accordion title="Can I export data from Live Mode?">
+    Live Mode is for real-time observation. To export data, toggle Live Mode OFF, set your date range, and generate an analysis or report for export.
+  </Accordion>
+  
+  <Accordion title="How many people can monitor simultaneously?">
+    Multiple team members can enable Live Mode on the same agent simultaneously. Each user sees their own independent stream with their own filter settings.
+  </Accordion>
+  
+  <Accordion title="Does Live Mode show historical conversations?">
+    No, Live Mode only shows activity from the moment you enable it forward. To view historical conversations, toggle Live Mode OFF and use the date range filter.
+  </Accordion>
+  
+  <Accordion title="Why is the date range filter disabled?">
+    When Live Mode is ON, you're viewing current activity as it happens. Date range filtering only applies to historical data when Live Mode is OFF.
+  </Accordion>
+  
+  <Accordion title="Can I pause Live Mode streaming?">
+    Yes, simply toggle Live Mode OFF to stop streaming. The interface will show the last state before you turned it off. Toggle back ON to resume.
+  </Accordion>
+</AccordionGroup>

@@ -20,14 +20,14 @@
     "plai-framework",
     "ai-agents",
     "documentation",
-    "mintlify",
     "multi-agent",
     "artificial-intelligence"
   ],
   "author": "PLai Solutions",
   "license": "MIT",
   "dependencies": {
-    "@mintlify/cli": "^4.0.0"
+    "@mintlify/cli": "^4.0.0",
+    "mintlify": "^4.2.358"
   },
   "devDependencies": {
     "typescript": "^5.0.0"

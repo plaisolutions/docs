@@ -21,9 +21,8 @@ Understanding these core concepts will help you get the most out of PLai Framewo
 ### Organization Structure
 Organizations provide:
 - **Team Management**: Invite and manage team members
-- **Billing**: Centralized billing and usage tracking
-- **Access Control**: Organization-level permissions
-- **Resource Sharing**: Share resources across projects
+- **Billing**: Centralized billing and usage tracking <Badge color="orange">IN PROGRESS</Badge>
+- **Access Control**: Organization-level permissions <Badge color="orange">IN PROGRESS</Badge>
 
 ### Projects
 Projects are isolated workspaces where you:
@@ -43,7 +42,7 @@ Agents are the core AI entities in PLai Framework. Each agent is a specialized A
     - **System Instructions**: Base personality and behavior
     - **Tools**: Available capabilities and integrations
     - **Datasources**: Access to knowledge bases
-    - **Guardrails**: Safety and compliance controls
+    - **Answer Filters & Guardrails**: Safety and compliance controls
   </Tab>
   <Tab title="Agent Types">
     - **Customer Support**: Handle inquiries and tickets
@@ -67,7 +66,6 @@ Tools extend agent capabilities by connecting them to external systems and servi
     - **Browser**: Web scraping and automation
   </Accordion>
   <Accordion title="Processing Tools">
-    - **Code Interpreter**: Execute code securely
     - **MCP Servers**: Model Context Protocol integrations
     - **External Datasources**: Database connections
   </Accordion>
@@ -85,7 +83,7 @@ Datasources provide agents with access to knowledge bases, documents, and struct
 ### Supported Datasource Types
 - **File Uploads**: PDFs, text files, documents
 - **Web Scraping**: Extract data from websites
-- **Database Connections**: SQL and NoSQL databases
+- **Database Connections**: Google BigQuery databases
 - **API Integrations**: Real-time data from external services
 
 ## Analytics & Monitoring
@@ -134,10 +132,10 @@ graph LR
 ### Data Protection
 - **Encryption**: Data encrypted in transit and at rest
 - **Audit Logs**: Complete activity tracking
-- **Data Retention**: Configurable data lifecycle policies
+- **Data Retention**: Configurable data lifecycle policies <Badge color="orange">IN PROGRESS</Badge>
 
-### Guardrails
-Guardrails ensure agents operate safely and within defined boundaries:
+### Answer Filters & Guardrails
+Answer Filters and Guardrails ensure agents operate safely and within defined boundaries:
 - **Content Filtering**: Prevent inappropriate responses
 - **Rate Limiting**: Control usage and costs
 - **Safety Checks**: Validate inputs and outputs

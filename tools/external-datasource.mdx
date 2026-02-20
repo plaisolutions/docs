@@ -1,689 +1,1014 @@
 ---
-title: "External Data Source"
-description: "Connect to external databases and data sources"
-icon: "database"
+title: "BigQuery Data Source"
+description: "Connect your agents to Google BigQuery for natural language data warehouse queries"
 ---
 
-# External Data Source
+# BigQuery Data Source
 
-The External Data Source tool enables your agents to connect to external databases, APIs, and data repositories, providing seamless access to structured and unstructured data from various sources.
-
-<Frame>
-  <img src="/images/hero-light.png" alt="External Data Source Tool" />
-</Frame>
+The BigQuery Data Source tool enables your agents to query Google BigQuery data warehouses using natural language. Your agents can ask questions in plain English, and the tool automatically converts them to BigQuery SQL, executes the query, and returns structured results.
 
 <Note>
-This tool has **Pro** status, meaning it requires a professional subscription and provides advanced features for premium users.
+**Currently Supported**: This tool currently supports **Google BigQuery only**. Other data sources may be added in future releases.
 </Note>
+
+<Warning>
+This tool has **Pro** status and requires a professional subscription to access advanced features.
+</Warning>
 
 ## Overview
 
-The External Data Source tool transforms your agents into data-driven powerhouses capable of:
+The BigQuery Data Source tool combines the power of Google BigQuery's analytics capabilities with GPT-4's natural language understanding to create a seamless data access experience for your agents.
 
 <CardGroup cols={2}>
-  <Card title="Database Connectivity" icon="server">
-    Connect to SQL and NoSQL databases securely
+  <Card title="Natural Language Queries" icon="comment">
+    Ask questions in plain English - no SQL knowledge required
   </Card>
-  <Card title="Real-Time Data Access" icon="refresh">
-    Query live data sources for up-to-date information
+  <Card title="GPT-4 Powered" icon="brain">
+    Automatic conversion to BigQuery SQL using advanced AI
   </Card>
-  <Card title="Multi-Source Integration" icon="network">
-    Aggregate data from multiple external sources
+  <Card title="Real-Time Data" icon="refresh">
+    Query live data directly from your BigQuery datasets
   </Card>
-  <Card title="Secure Connections" icon="shield">
-    Enterprise-grade security for sensitive data access
+  <Card title="Secure Access" icon="shield">
+    Enterprise-grade security with Google Cloud authentication
   </Card>
 </CardGroup>
 
-## Supported Data Sources
+### Key Features
 
-### SQL Databases
+- **Natural Language to SQL**: Converts plain English questions to BigQuery Standard SQL
+- **Automatic Schema Detection**: Understands your table structures automatically
+- **Token Usage Tracking**: Monitors OpenAI API costs for each query
+- **Result Limiting**: Controls query size and response volume
+- **Usage Analytics**: Tracks query performance and usage patterns
 
-<Tabs>
-  <Tab title="PostgreSQL">
-    **Features**:
-    - Full SQL query support
-    - JSON/JSONB data types
-    - Advanced indexing and performance
-    - ACID compliance
-    
-    **Use Cases**:
-    - Enterprise data warehouses
-    - Analytics and reporting
-    - Transactional applications
-    - Complex relational data
-    
-    **Connection Example**:
-    ```
-    postgresql://username:password@host:5432/database
-    ```
-  </Tab>
-  <Tab title="MySQL">
-    **Features**:
-    - Wide compatibility
-    - High performance
-    - Replication support
-    - Full-text search
-    
-    **Use Cases**:
-    - Web applications
-    - E-commerce platforms
-    - Content management systems
-    - Legacy system integration
-    
-    **Connection Example**:
-    ```
-    mysql://username:password@host:3306/database
-    ```
-  </Tab>
-  <Tab title="SQL Server">
-    **Features**:
-    - Enterprise integration
-    - Advanced analytics
-    - Business intelligence
-    - Azure cloud integration
-    
-    **Use Cases**:
-    - Microsoft ecosystems
-    - Enterprise applications
-    - Business intelligence
-    - Financial systems
-    
-    **Connection Example**:
-    ```
-    mssql://username:password@host:1433/database
-    ```
-  </Tab>
-</Tabs>
+### How It Works
 
-### NoSQL Databases
+```mermaid
+graph LR
+    A[Natural Language Query] --> B[GPT-4 Model]
+    B --> C[BigQuery SQL]
+    C --> D[Execute on BigQuery]
+    D --> E[JSON Results]
+    E --> F[Agent Response]
+```
 
-<Tabs>
-  <Tab title="MongoDB">
-    **Features**:
-    - Document-based storage
-    - Flexible schema
-    - Horizontal scaling
-    - Rich query language
-    
-    **Use Cases**:
-    - Content management
-    - Real-time analytics
-    - Mobile applications
-    - IoT data storage
-    
-    **Connection Example**:
-    ```
-    mongodb://username:password@host:27017/database
-    ```
-  </Tab>
-  <Tab title="Redis">
-    **Features**:
-    - In-memory storage
-    - Ultra-fast performance
-    - Data structures
-    - Pub/Sub messaging
-    
-    **Use Cases**:
-    - Caching layers
-    - Session storage
-    - Real-time messaging
-    - Performance optimization
-    
-    **Connection Example**:
-    ```
-    redis://username:password@host:6379/database
-    ```
-  </Tab>
-  <Tab title="Elasticsearch">
-    **Features**:
-    - Full-text search
-    - Analytics engine
-    - Real-time indexing
-    - Distributed architecture
-    
-    **Use Cases**:
-    - Search applications
-    - Log analytics
-    - Monitoring systems
-    - Business intelligence
-    
-    **Connection Example**:
-    ```
-    elasticsearch://username:password@host:9200
-    ```
-  </Tab>
-</Tabs>
+1. Your agent receives a natural language question from a user
+2. The question is sent to GPT-4 (`gpt-4.1-2025-04-14`) along with your BigQuery schema
+3. GPT-4 generates optimized BigQuery Standard SQL
+4. The SQL query is executed on your BigQuery dataset
+5. Results are formatted as JSON and returned to the agent
+6. Token usage is tracked for billing and monitoring
 
-### Cloud Data Sources
+## Prerequisites
 
-<AccordionGroup>
-  <Accordion title="Amazon RDS">
-    **Supported Engines**: PostgreSQL, MySQL, MariaDB, Oracle, SQL Server
-    **Features**: Managed database service, automatic backups, scaling
-    **Authentication**: IAM roles, username/password, SSL certificates
-    **Use Cases**: Scalable web applications, enterprise workloads
-  </Accordion>
-  <Accordion title="Google Cloud SQL">
-    **Supported Engines**: PostgreSQL, MySQL, SQL Server
-    **Features**: Fully managed, high availability, automatic updates
-    **Authentication**: Cloud IAM, SSL certificates, private connectivity
-    **Use Cases**: Google Cloud applications, analytics workloads
-  </Accordion>
-  <Accordion title="Azure SQL Database">
-    **Features**: Serverless computing, intelligent performance, security
-    **Authentication**: Azure Active Directory, SQL authentication
-    **Use Cases**: Enterprise applications, SaaS platforms
-  </Accordion>
-  <Accordion title="Snowflake">
-    **Features**: Cloud data warehouse, elastic scaling, data sharing
-    **Authentication**: Username/password, SSO, key-pair authentication
-    **Use Cases**: Data analytics, business intelligence, data science
-  </Accordion>
-</AccordionGroup>
-
-## Configuration
-
-<Note>
-The External Data Source tool uses a streamlined configuration process through the PLai Framework interface. Specific connection parameters are configured during setup.
-</Note>
-
-### Connection Setup Process
+Before configuring the BigQuery Data Source tool, ensure you have:
 
 <Steps>
-  <Step title="Navigate to Tools">
-    Go to the **Tools** section in your project dashboard
+  <Step title="Google Cloud Platform Account">
+    Active GCP account with billing enabled
   </Step>
-  <Step title="Create External Data Source">
-    Click **Create Tool** and select **External Data Source**
+  <Step title="BigQuery Dataset">
+    One or more BigQuery datasets containing your data
   </Step>
-  <Step title="Select Data Source Type">
-    Choose your database or data source type from supported options
+  <Step title="Service Account">
+    GCP service account with BigQuery Data Viewer permissions
   </Step>
-  <Step title="Configure Connection">
-    Provide connection details including host, credentials, and database name
+  <Step title="Service Account Key">
+    Downloaded JSON credentials file for the service account
   </Step>
-  <Step title="Test Connection">
-    Verify connectivity and authentication with the test button
-  </Step>
-  <Step title="Set Access Permissions">
-    Configure read/write permissions and query limitations
-  </Step>
-  <Step title="Add to Agent">
-    Assign this data source to your agents in agent settings
+  <Step title="Table Access">
+    Service account granted access to specific tables you want to query
   </Step>
 </Steps>
 
-### Security Configuration
+### Setting Up Google Cloud Service Account
 
-<CardGroup cols={2}>
-  <Card title="SSL/TLS Encryption" icon="lock">
-    All connections use encrypted transport for data security
-  </Card>
-  <Card title="Credential Management" icon="key">
-    Secure storage and rotation of database credentials
-  </Card>
-  <Card title="Access Controls" icon="shield">
-    Fine-grained permissions and query restrictions
-  </Card>
-  <Card title="Audit Logging" icon="file-text">
-    Complete logging of all data access activities
-  </Card>
-</CardGroup>
+1. **Create Service Account**:
+   - Go to [GCP Console → IAM & Admin → Service Accounts](https://console.cloud.google.com/iam-admin/serviceaccounts)
+   - Click "Create Service Account"
+   - Name it (e.g., "plai-bigquery-reader")
+   - Click "Create and Continue"
 
-## Usage Examples
+2. **Grant BigQuery Permissions**:
+   - Add role: `BigQuery Data Viewer` (for read-only access)
+   - Optionally add: `BigQuery Job User` (to run queries)
+   - Click "Continue" then "Done"
 
-### Customer Data Integration
+3. **Create and Download Key**:
+   - Click on the created service account
+   - Go to "Keys" tab → "Add Key" → "Create new key"
+   - Select "JSON" format
+   - Download and securely store the JSON file
 
-```sql
--- Query customer information for support agents
-SELECT 
-    c.customer_id,
-    c.name,
-    c.email,
-    c.subscription_tier,
-    c.signup_date,
-    COUNT(t.ticket_id) as total_tickets,
-    MAX(t.created_at) as last_ticket_date
-FROM customers c
-LEFT JOIN support_tickets t ON c.customer_id = t.customer_id
-WHERE c.email = ?
-GROUP BY c.customer_id, c.name, c.email, c.subscription_tier, c.signup_date;
-```
+<Warning>
+**Security**: Never commit service account keys to version control. Store them securely and rotate regularly (recommended: every 90 days).
+</Warning>
 
-**Use Case**: Customer support agents can instantly access customer history, subscription details, and support ticket information to provide personalized assistance.
+## Configuration
 
-### Sales Analytics Integration
+### Configuration Structure
 
-```sql
--- Revenue analysis for business intelligence agents
-SELECT 
-    DATE_TRUNC('month', order_date) as month,
-    SUM(total_amount) as monthly_revenue,
-    COUNT(*) as order_count,
-    AVG(total_amount) as avg_order_value,
-    SUM(total_amount) - LAG(SUM(total_amount)) OVER (ORDER BY DATE_TRUNC('month', order_date)) as revenue_growth
-FROM orders
-WHERE order_date >= CURRENT_DATE - INTERVAL '12 months'
-GROUP BY DATE_TRUNC('month', order_date)
-ORDER BY month;
-```
+The tool requires a specific configuration structure with your Google Cloud credentials and BigQuery dataset information:
 
-**Use Case**: Business intelligence agents can provide real-time revenue insights, growth analysis, and performance metrics.
-
-### Inventory Management Integration
-
-```javascript
-// MongoDB query for inventory tracking
+```json
 {
-  "pipeline": [
-    {
-      "$match": {
-        "product_id": "{{product_id}}",
-        "warehouse": "{{warehouse_location}}"
-      }
-    },
-    {
-      "$group": {
-        "_id": "$product_id",
-        "total_quantity": { "$sum": "$quantity" },
-        "reserved_quantity": { 
-          "$sum": { 
-            "$cond": [{ "$eq": ["$status", "reserved"] }, "$quantity", 0] 
-          }
-        },
-        "available_quantity": {
-          "$sum": { 
-            "$cond": [{ "$eq": ["$status", "available"] }, "$quantity", 0] 
-          }
-        }
-      }
+  "tool_type": "EXTERNAL_DATASOURCE",
+  "name": "Company Data Warehouse",
+  "description": "Query company analytics data using natural language",
+  "config": {
+    "external_datasource_type": "BIG_QUERY",
+    "big_query_config": {
+      "service_account_credentials": {
+        "type": "service_account",
+        "project_id": "my-gcp-project-id",
+        "private_key_id": "abc123def456...",
+        "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQ...\n-----END PRIVATE KEY-----\n",
+        "client_email": "plai-bigquery@my-gcp-project.iam.gserviceaccount.com",
+        "client_id": "123456789012345678901",
+        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+        "token_uri": "https://oauth2.googleapis.com/token",
+        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+        "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/plai-bigquery%40my-gcp-project.iam.gserviceaccount.com"
+      },
+      "dataset_id": "analytics_prod",
+      "table_ids": ["customers", "orders", "products", "transactions"],
+      "system_prompt": null,
+      "query_max_rows": 10000,
+      "output_max_rows": 10
     }
-  ]
+  }
 }
 ```
 
-**Use Case**: Inventory management agents can check stock levels, track reservations, and manage warehouse operations.
+### Configuration Parameters
 
-### User Behavior Analytics
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `external_datasource_type` | string | Yes | - | Must be `"BIG_QUERY"` (only supported type) |
+| `service_account_credentials` | object | Yes | - | Complete Google Cloud service account JSON credentials |
+| `dataset_id` | string | Yes | - | BigQuery dataset ID containing your tables |
+| `table_ids` | string[] | Yes | - | List of table names the agent can access and query |
+| `system_prompt` | string \| null | No | null | Optional custom instructions for SQL generation |
+| `query_max_rows` | integer | No | 10000 | Maximum rows to retrieve from BigQuery |
+| `output_max_rows` | integer | No | 10 | Maximum rows to return to the agent (limits response size) |
 
-```sql
--- User engagement analysis for marketing agents
-WITH user_metrics AS (
-  SELECT 
-    user_id,
-    COUNT(DISTINCT session_id) as total_sessions,
-    AVG(session_duration) as avg_session_duration,
-    COUNT(DISTINCT DATE(event_timestamp)) as active_days,
-    MAX(event_timestamp) as last_activity
-  FROM user_events
-  WHERE event_timestamp >= CURRENT_DATE - INTERVAL '30 days'
-  GROUP BY user_id
-)
-SELECT 
-  um.*,
-  CASE 
-    WHEN active_days >= 20 THEN 'High'
-    WHEN active_days >= 10 THEN 'Medium'
-    ELSE 'Low'
-  END as engagement_level
-FROM user_metrics um
-WHERE last_activity >= CURRENT_DATE - INTERVAL '7 days';
-```
+### Configuration Through PLai Interface
 
-**Use Case**: Marketing agents can segment users by engagement level and create targeted campaigns.
+The tool configuration wizard guides you through a 4-step process:
 
-## Query Capabilities
-
-### Advanced SQL Features
-
-<Tabs>
-  <Tab title="Complex Joins">
-    ```sql
-    SELECT 
-        o.order_id,
-        c.name as customer_name,
-        p.product_name,
-        oi.quantity,
-        oi.price
-    FROM orders o
-    INNER JOIN customers c ON o.customer_id = c.customer_id
-    INNER JOIN order_items oi ON o.order_id = oi.order_id
-    INNER JOIN products p ON oi.product_id = p.product_id
-    WHERE o.order_date >= CURRENT_DATE - INTERVAL '30 days'
-    ORDER BY o.order_date DESC;
-    ```
-  </Tab>
-  <Tab title="Window Functions">
-    ```sql
-    SELECT 
-        sales_rep,
-        sale_amount,
-        sale_date,
-        ROW_NUMBER() OVER (PARTITION BY sales_rep ORDER BY sale_amount DESC) as rank,
-        SUM(sale_amount) OVER (PARTITION BY sales_rep) as total_sales
-    FROM sales
-    WHERE sale_date >= CURRENT_DATE - INTERVAL '90 days';
-    ```
-  </Tab>
-  <Tab title="CTEs and Subqueries">
-    ```sql
-    WITH monthly_sales AS (
-        SELECT 
-            DATE_TRUNC('month', sale_date) as month,
-            SUM(sale_amount) as total_sales
-        FROM sales
-        GROUP BY DATE_TRUNC('month', sale_date)
-    ),
-    sales_growth AS (
-        SELECT 
-            month,
-            total_sales,
-            LAG(total_sales) OVER (ORDER BY month) as prev_month_sales,
-            (total_sales - LAG(total_sales) OVER (ORDER BY month)) / LAG(total_sales) OVER (ORDER BY month) * 100 as growth_rate
-        FROM monthly_sales
-    )
-    SELECT * FROM sales_growth WHERE growth_rate IS NOT NULL;
-    ```
-  </Tab>
-</Tabs>
-
-### NoSQL Query Examples
-
-<Tabs>
-  <Tab title="MongoDB Aggregation">
-    ```javascript
-    // Product performance analysis
-    db.orders.aggregate([
-      {
-        $match: {
-          order_date: { 
-            $gte: ISODate("2024-01-01"),
-            $lte: ISODate("2024-12-31")
-          }
-        }
-      },
-      {
-        $unwind: "$items"
-      },
-      {
-        $group: {
-          _id: "$items.product_id",
-          total_quantity: { $sum: "$items.quantity" },
-          total_revenue: { $sum: { $multiply: ["$items.quantity", "$items.price"] } },
-          order_count: { $sum: 1 }
-        }
-      },
-      {
-        $sort: { total_revenue: -1 }
-      },
-      {
-        $limit: 10
-      }
-    ])
-    ```
-  </Tab>
-  <Tab title="Elasticsearch Search">
+<Steps>
+  <Step title="Step 1: Settings">
+    Configure basic tool settings and query parameters:
+    
+    **Required Fields**:
+    - **Name**: Descriptive name for your BigQuery tool (e.g., "Company Analytics Database")
+    - **Slug**: Auto-generated lowercase identifier with underscores (e.g., "company_analytics_database")
+    - **Description**: Explain what data this tool provides access to
+    
+    **Optional Fields**:
+    - **System Prompt**: Custom instructions for SQL generation (supports Markdown editor for advanced formatting)
+    - **Query Max Rows**: Maximum rows to retrieve from BigQuery (default: 10000)
+    - **Output Max Rows**: Maximum rows to return to agent (default: 10)
+    
+    <Tip>
+    The System Prompt can be used to provide specific SQL generation guidelines, such as preferred date formats, naming conventions, or business rules.
+    </Tip>
+    
+    Click **Next** to continue to Credentials.
+  </Step>
+  
+  <Step title="Step 2: Credentials">
+    Paste your Google Cloud service account credentials:
+    
+    **Google Cloud Service Account Credentials**:
+    - Copy the entire JSON credentials file from your downloaded service account key
+    - Paste into the text area labeled "Paste your Google Cloud service account credentials JSON here"
+    - The JSON must include all required fields: `type`, `project_id`, `private_key`, `client_email`, etc.
+    
+    Example format:
     ```json
     {
-      "query": {
-        "bool": {
-          "must": [
-            {
-              "match": {
-                "title": "{{search_term}}"
-              }
-            },
-            {
-              "range": {
-                "publish_date": {
-                  "gte": "2024-01-01",
-                  "lte": "2024-12-31"
-                }
-              }
-            }
-          ]
-        }
-      },
-      "aggs": {
-        "categories": {
-          "terms": {
-            "field": "category.keyword",
-            "size": 10
-          }
-        }
-      }
+      "type": "service_account",
+      "project_id": "your-project-id",
+      "private_key_id": "key-id",
+      "private_key": "-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n",
+      "client_email": "service-account@project.iam.gserviceaccount.com",
+      ...
     }
+    ```
+    
+    <Warning>
+    These credentials are stored securely and encrypted. Never share or commit credentials to version control.
+    </Warning>
+    
+    Click **Next** to continue to Datasets (the system will validate credentials automatically).
+  </Step>
+  
+  <Step title="Step 3: Datasets">
+    Select the BigQuery dataset to query:
+    
+    **Select Dataset**:
+    - The wizard automatically detects available datasets from your service account credentials
+    - You'll see a list of datasets with radio buttons to select one
+    - Each dataset shows its ID and the associated project name below
+    - Choose the dataset containing the tables you want to make available to your agent
+    
+    <Note>
+    You can only select **one dataset per tool**. To query multiple datasets, create separate tools for each dataset.
+    </Note>
+    
+    Click **Next** to continue to Tables.
+  </Step>
+  
+  <Step title="Step 4: Tables">
+    Select which tables the agent can access:
+    
+    **Select Tables**:
+    - Check the boxes next to tables you want to make available to the agent
+    - All tables display "Type: TABLE" to indicate they are queryable
+    - Multiple tables can be selected
+    - The agent will **only** be able to query the selected tables
+    - Table schemas are automatically detected and used for SQL generation context
+    
+    <Warning>
+    **Security Best Practice**: Only grant access to tables the agent needs. Apply the principle of least privilege.
+    </Warning>
+    
+    Click **Create Tool** to finish setup (or **Update Tool** if editing an existing configuration).
+  </Step>
+  
+  <Step title="Add Tool to Agent">
+    After creating the tool, assign it to your agents:
+    
+    1. Navigate to your **Agent** configuration page
+    2. Go to the **Tools** section
+    3. Click **Add Tool** and select your newly created BigQuery tool
+    4. Save the agent configuration
+    
+    Your agent can now query BigQuery data using natural language questions!
+  </Step>
+</Steps>
+
+## Natural Language Queries
+
+### How Query Conversion Works
+
+The tool uses OpenAI's GPT-4 to convert natural language questions into BigQuery Standard SQL. This happens automatically and transparently:
+
+**Model Details**:
+- Model: `gpt-4.1-2025-04-14`
+- Temperature: `0.1` (low temperature for consistent, deterministic SQL)
+- Context Provided: BigQuery schema, table definitions, example queries, and constraints
+
+**Query Processing Flow**:
+1. User asks a question in natural language
+2. Tool sends question + schema context to GPT-4
+3. GPT-4 generates BigQuery-compatible SQL
+4. SQL is executed against your dataset
+5. Results are formatted and returned
+6. Token usage is recorded for billing
+
+### Example Conversions
+
+<Tabs>
+  <Tab title="Simple Queries">
+    **Natural Language**: "How many orders were placed yesterday?"
+    
+    **Generated SQL**:
+    ```sql
+    SELECT COUNT(*) as order_count
+    FROM `my-project.analytics_prod.orders`
+    WHERE DATE(order_date) = DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY);
+    ```
+    
+    ---
+    
+    **Natural Language**: "Show me the total revenue for last month"
+    
+    **Generated SQL**:
+    ```sql
+    SELECT SUM(total_amount) as total_revenue
+    FROM `my-project.analytics_prod.orders`
+    WHERE DATE_TRUNC(order_date, MONTH) = 
+          DATE_TRUNC(DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH), MONTH);
+    ```
+  </Tab>
+  
+  <Tab title="Customer Analysis">
+    **Natural Language**: "Who are our top 10 customers by revenue this year?"
+    
+    **Generated SQL**:
+    ```sql
+    SELECT 
+      c.customer_id,
+      c.name,
+      c.email,
+      SUM(o.total_amount) as total_revenue,
+      COUNT(o.order_id) as order_count
+    FROM `my-project.analytics_prod.customers` AS c
+    JOIN `my-project.analytics_prod.orders` AS o
+      ON c.customer_id = o.customer_id
+    WHERE EXTRACT(YEAR FROM o.order_date) = EXTRACT(YEAR FROM CURRENT_DATE())
+    GROUP BY c.customer_id, c.name, c.email
+    ORDER BY total_revenue DESC
+    LIMIT 10;
+    ```
+  </Tab>
+  
+  <Tab title="Trend Analysis">
+    **Natural Language**: "Show monthly revenue trends for the past year"
+    
+    **Generated SQL**:
+    ```sql
+    SELECT 
+      DATE_TRUNC(order_date, MONTH) as month,
+      SUM(total_amount) as monthly_revenue,
+      COUNT(*) as order_count,
+      AVG(total_amount) as avg_order_value
+    FROM `my-project.analytics_prod.orders`
+    WHERE order_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 12 MONTH)
+    GROUP BY month
+    ORDER BY month;
+    ```
+  </Tab>
+  
+  <Tab title="Complex Analysis">
+    **Natural Language**: "Find customers who haven't ordered in the last 90 days but were active before that"
+    
+    **Generated SQL**:
+    ```sql
+    SELECT 
+      c.customer_id,
+      c.name,
+      c.email,
+      MAX(o.order_date) as last_order_date,
+      DATE_DIFF(CURRENT_DATE(), MAX(o.order_date), DAY) as days_since_order,
+      COUNT(o.order_id) as total_orders
+    FROM `my-project.analytics_prod.customers` AS c
+    JOIN `my-project.analytics_prod.orders` AS o
+      ON c.customer_id = o.customer_id
+    GROUP BY c.customer_id, c.name, c.email
+    HAVING MAX(o.order_date) < DATE_SUB(CURRENT_DATE(), INTERVAL 90 DAY)
+       AND MAX(o.order_date) >= DATE_SUB(CURRENT_DATE(), INTERVAL 180 DAY)
+    ORDER BY last_order_date DESC;
     ```
   </Tab>
 </Tabs>
 
-## Performance Optimization
-
-### Query Optimization
+### Tips for Effective Queries
 
 <AccordionGroup>
-  <Accordion title="Index Usage">
-    **Best Practices**:
-    - Use appropriate indexes for frequently queried columns
-    - Avoid full table scans with proper WHERE clauses
-    - Use composite indexes for multi-column queries
-    - Monitor query execution plans
+  <Accordion title="Be Specific">
+    **Good**: "Show total revenue by product category for Q4 2024"
     
-    **Example**:
-    ```sql
-    -- Use indexes effectively
-    SELECT * FROM orders 
-    WHERE customer_id = ? AND order_date >= ?
-    -- Ensure index on (customer_id, order_date)
-    ```
+    **Less Good**: "Show me some revenue data"
+    
+    Specific queries help GPT-4 generate more accurate SQL with appropriate filters and groupings.
   </Accordion>
-  <Accordion title="Connection Pooling">
-    **Benefits**:
-    - Reuse database connections
-    - Reduce connection overhead
-    - Better resource utilization
-    - Improved response times
+  
+  <Accordion title="Mention Time Ranges">
+    **Good**: "How many new customers signed up last week?"
     
-    **Configuration**:
-    - Pool size: 10-50 connections
-    - Connection timeout: 30 seconds
-    - Idle timeout: 10 minutes
-    - Max lifetime: 1 hour
+    **Less Good**: "How many new customers?"
+    
+    Including time ranges prevents queries from scanning unnecessary data and improves performance.
   </Accordion>
-  <Accordion title="Query Caching">
-    **Strategies**:
-    - Cache frequently accessed data
-    - Use appropriate TTL values
-    - Implement cache invalidation
-    - Monitor cache hit rates
+  
+  <Accordion title="Use Natural Language">
+    **Good**: "Which products have the highest return rate?"
     
-    **Example**:
-    ```json
-    {
-      "cache_policy": {
-        "enable": true,
-        "ttl": 300,
-        "key_template": "datasource_{{query_hash}}"
-      }
-    }
-    ```
+    **Less Good**: "SELECT product, returns FROM..."
+    
+    Let GPT-4 write the SQL - describe what you want, not how to get it.
+  </Accordion>
+  
+  <Accordion title="Reference Your Tables">
+    **Good**: "Show me top customers from the customers and orders tables"
+    
+    **Less Good**: "Show me top customers"
+    
+    Mentioning table names helps GPT-4 understand which tables to query.
   </Accordion>
 </AccordionGroup>
 
-### Monitoring & Analytics
+## BigQuery SQL Examples
 
-Track data source performance and usage:
+While natural language queries are the primary interface, understanding BigQuery SQL syntax can help you configure custom system prompts and troubleshoot issues.
 
-- **Query Performance**: Response times and execution plans
-- **Connection Health**: Connection pool status and errors
-- **Data Volume**: Amount of data transferred and processed
-- **Error Rates**: Failed queries and connection issues
-- **Usage Patterns**: Most frequent queries and access patterns
+### Basic Queries
 
-## Security & Compliance
+```sql
+-- Select with filtering
+SELECT 
+  customer_id,
+  name,
+  email,
+  signup_date
+FROM `project-id.analytics_prod.customers`
+WHERE DATE(signup_date) >= DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY)
+ORDER BY signup_date DESC;
+```
 
-### Data Protection
+### Aggregations and Grouping
+
+```sql
+-- Revenue by product category
+SELECT 
+  p.category,
+  COUNT(DISTINCT o.order_id) as order_count,
+  SUM(oi.quantity) as total_units_sold,
+  SUM(oi.quantity * oi.price) as total_revenue,
+  AVG(oi.price) as avg_price
+FROM `project-id.analytics_prod.products` AS p
+JOIN `project-id.analytics_prod.order_items` AS oi
+  ON p.product_id = oi.product_id
+JOIN `project-id.analytics_prod.orders` AS o
+  ON oi.order_id = o.order_id
+WHERE o.order_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 90 DAY)
+GROUP BY p.category
+ORDER BY total_revenue DESC;
+```
+
+### Time Series Analysis
+
+```sql
+-- Daily active users trend
+SELECT 
+  DATE(event_timestamp) as date,
+  COUNT(DISTINCT user_id) as daily_active_users,
+  COUNT(*) as total_events,
+  COUNT(*) / COUNT(DISTINCT user_id) as avg_events_per_user
+FROM `project-id.analytics_prod.user_events`
+WHERE event_timestamp >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 30 DAY)
+GROUP BY date
+ORDER BY date;
+```
+
+### Window Functions
+
+```sql
+-- Sales ranking with running totals
+SELECT 
+  sales_rep,
+  sale_date,
+  sale_amount,
+  ROW_NUMBER() OVER (
+    PARTITION BY sales_rep 
+    ORDER BY sale_amount DESC
+  ) as rank_within_rep,
+  SUM(sale_amount) OVER (
+    PARTITION BY sales_rep 
+    ORDER BY sale_date
+    ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+  ) as running_total
+FROM `project-id.analytics_prod.sales`
+WHERE sale_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 90 DAY);
+```
+
+### BigQuery-Specific Features
+
+<Tabs>
+  <Tab title="STRUCT Types">
+    ```sql
+    -- Using STRUCT for nested data
+    SELECT 
+      order_id,
+      customer_id,
+      STRUCT(
+        shipping_address,
+        shipping_city,
+        shipping_state,
+        shipping_zip
+      ) as shipping_info,
+      total_amount
+    FROM `project-id.analytics_prod.orders`
+    WHERE order_date >= CURRENT_DATE();
+    ```
+  </Tab>
+  
+  <Tab title="ARRAY Aggregation">
+    ```sql
+    -- Aggregate order items into arrays
+    SELECT 
+      o.order_id,
+      o.customer_id,
+      o.order_date,
+      ARRAY_AGG(
+        STRUCT(
+          oi.product_id,
+          oi.product_name,
+          oi.quantity,
+          oi.price
+        )
+      ) as items
+    FROM `project-id.analytics_prod.orders` AS o
+    JOIN `project-id.analytics_prod.order_items` AS oi
+      ON o.order_id = oi.order_id
+    GROUP BY o.order_id, o.customer_id, o.order_date;
+    ```
+  </Tab>
+  
+  <Tab title="Date Functions">
+    ```sql
+    -- BigQuery date manipulation
+    SELECT 
+      order_date,
+      DATE_TRUNC(order_date, WEEK) as week_start,
+      DATE_TRUNC(order_date, MONTH) as month_start,
+      DATE_TRUNC(order_date, QUARTER) as quarter_start,
+      DATE_DIFF(CURRENT_DATE(), order_date, DAY) as days_ago,
+      EXTRACT(DAYOFWEEK FROM order_date) as day_of_week,
+      FORMAT_DATE('%B %Y', order_date) as month_name
+    FROM `project-id.analytics_prod.orders`
+    LIMIT 100;
+    ```
+  </Tab>
+</Tabs>
+
+## Usage & Best Practices
+
+### Query Optimization
 
 <CardGroup cols={2}>
-  <Card title="Encryption in Transit" icon="shield">
-    All data transfers use TLS 1.3 encryption
+  <Card title="Use Time Filters" icon="calendar">
+    Always include date filters to limit data scanned and reduce costs
   </Card>
-  <Card title="Encryption at Rest" icon="lock">
-    Database credentials encrypted in secure storage
+  <Card title="Limit Result Sets" icon="filter">
+    Use LIMIT clauses and configure appropriate `query_max_rows`
   </Card>
-  <Card title="Access Auditing" icon="eye">
-    Complete audit trail of all data access
+  <Card title="Select Specific Columns" icon="columns">
+    Avoid SELECT * - only query columns you need
   </Card>
-  <Card title="Role-Based Access" icon="users">
-    Fine-grained permissions per user and agent
+  <Card title="Partition Filtering" icon="layer-group">
+    Filter on partitioned columns (usually date fields) first
   </Card>
 </CardGroup>
 
-### Compliance Features
+### Cost Management
 
-- **GDPR Compliance**: Data minimization and user rights support
-- **SOC 2 Type II**: Security and availability controls
-- **HIPAA Support**: Healthcare data protection capabilities
-- **PCI DSS**: Payment card industry security standards
-- **ISO 27001**: Information security management
+**OpenAI Costs**:
+- ~$0.005-0.030 per query for GPT-4 token usage
+- Varies based on query complexity and schema size
+- Token usage is tracked and returned in results
 
-### Best Practices
-
-<Warning>
-**Sensitive Data**: Never store sensitive credentials in query strings or logs. Use parameterized queries and secure credential management.
-</Warning>
+**BigQuery Costs**:
+- Charged based on data scanned (per TB)
+- Typical query: $0.001-0.050 depending on data volume
+- Use partitioned tables and clustering to reduce costs
+- Preview queries in BigQuery Console to estimate costs
 
 <Tip>
-**Least Privilege**: Grant minimum necessary permissions to database users for security and compliance.
+**Cost Optimization**: Set conservative `query_max_rows` limits and use time-range filters in your natural language queries to minimize data scanned.
 </Tip>
 
-- **Use Read-Only Accounts**: For data retrieval operations
-- **Parameterize Queries**: Prevent SQL injection attacks
-- **Monitor Access**: Log and monitor all database access
-- **Regular Audits**: Perform security and compliance audits
-- **Data Classification**: Classify data by sensitivity level
+### Security Best Practices
+
+<AccordionGroup>
+  <Accordion title="Service Account Permissions">
+    **Recommended Roles**:
+    - `roles/bigquery.dataViewer` - Read-only access to data
+    - `roles/bigquery.jobUser` - Ability to run queries
+    
+    **Avoid**:
+    - `roles/bigquery.admin` - Too broad for agent use
+    - Write permissions - Unless specifically required
+    
+    **Grant Access**:
+    ```bash
+    # Grant BigQuery Data Viewer role
+    gcloud projects add-iam-policy-binding PROJECT_ID \
+      --member="serviceAccount:SERVICE_ACCOUNT_EMAIL" \
+      --role="roles/bigquery.dataViewer"
+    
+    # Grant BigQuery Job User role
+    gcloud projects add-iam-policy-binding PROJECT_ID \
+      --member="serviceAccount:SERVICE_ACCOUNT_EMAIL" \
+      --role="roles/bigquery.jobUser"
+    ```
+  </Accordion>
+  
+  <Accordion title="Credential Management">
+    **DO**:
+    - Store credentials encrypted in PLai's secure storage
+    - Rotate service account keys every 90 days
+    - Use separate service accounts per environment (dev/staging/prod)
+    - Monitor service account usage in GCP Console
+    
+    **DON'T**:
+    - Commit credentials to version control
+    - Share service account keys via email/chat
+    - Use personal GCP accounts for service accounts
+    - Grant excessive permissions "just in case"
+  </Accordion>
+  
+  <Accordion title="Data Access Controls">
+    **Table-Level Security**:
+    - Only include necessary tables in `table_ids` configuration
+    - Use BigQuery authorized views for sensitive data
+    - Implement row-level security in BigQuery if needed
+    
+    **Dataset Security**:
+    - Create separate datasets for different security levels
+    - Use different service accounts for different datasets
+    - Enable BigQuery audit logging to track access
+  </Accordion>
+  
+  <Accordion title="Query Monitoring">
+    **Track Usage**:
+    - Monitor query patterns in agent analytics
+    - Review token usage for cost anomalies
+    - Check BigQuery job history regularly
+    - Set up alerts for unusual query patterns
+    
+    **Audit Logs**:
+    - All queries are logged with timestamps
+    - Token usage is recorded per query
+    - SQL statements are stored for review
+    - Failed queries are tracked with error details
+  </Accordion>
+</AccordionGroup>
+
+## Tool Response Structure
+
+### Response Format
+
+When a query is executed, the tool returns a structured response containing:
+
+```typescript
+{
+  sql_query: string,           // Generated BigQuery SQL
+  prompt_tokens: number,        // Tokens used for GPT-4 request
+  completion_tokens: number,    // Tokens used in GPT-4 response
+  json_table: {
+    columns: string[],          // Column names
+    rows: any[][]               // Data rows (up to output_max_rows)
+  } | null
+}
+```
+
+### Example Response
+
+```json
+{
+  "sql_query": "SELECT customer_id, name, email, SUM(total_amount) as revenue FROM `project.dataset.orders` JOIN `project.dataset.customers` USING(customer_id) WHERE order_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY) GROUP BY customer_id, name, email ORDER BY revenue DESC LIMIT 10",
+  "prompt_tokens": 1247,
+  "completion_tokens": 156,
+  "json_table": {
+    "columns": ["customer_id", "name", "email", "revenue"],
+    "rows": [
+      ["CUST-001", "Acme Corp", "contact@acme.com", 125000.50],
+      ["CUST-002", "TechStart Inc", "hello@techstart.io", 98750.25],
+      ["CUST-003", "Global Industries", "info@global.com", 87500.00]
+    ]
+  }
+}
+```
+
+## Limitations
+
+<Warning>
+Be aware of these limitations when using the BigQuery Data Source tool:
+</Warning>
+
+### Current Limitations
+
+**Database Support**:
+- ✅ Google BigQuery - Fully supported
+- ❌ PostgreSQL - Not available
+- ❌ MySQL - Not available
+- ❌ MongoDB - Not available
+- ❌ Other databases - Not available
+
+**Query Constraints**:
+- Maximum query result: 10,000 rows (default, configurable via `query_max_rows`)
+- Maximum agent output: 10 rows (default, configurable via `output_max_rows`)
+- Query timeout: Depends on BigQuery job limits (typically 6 hours max)
+- No support for DML operations (INSERT, UPDATE, DELETE)
+- No support for DDL operations (CREATE, ALTER, DROP)
+
+**Cost Considerations**:
+- OpenAI API costs: ~$0.005-0.030 per query
+- BigQuery costs: Based on data scanned (varies by query)
+- No built-in cost limits or budgets
+- Must monitor usage actively
+
+**Query Generation**:
+- GPT-4 may occasionally generate suboptimal SQL
+- Complex multi-table joins may require query refinement
+- Schema context limited to configured tables only
+- No support for dynamic table discovery
+
+**Performance**:
+- Query latency: 2-10 seconds typical (GPT-4 + BigQuery execution)
+- Not suitable for sub-second real-time responses
+- Large result sets may impact performance
+- Concurrent query limits apply
 
 ## Troubleshooting
 
 ### Common Issues
 
 <AccordionGroup>
-  <Accordion title="Connection Failures">
-    **Symptoms**: Cannot connect to database
+  <Accordion title="403 Forbidden: Access Denied">
+    **Symptoms**: Permission errors when querying BigQuery
+    
+    **Possible Causes**:
+    - Service account lacks required BigQuery permissions
+    - Table not included in `table_ids` configuration
+    - Dataset doesn't exist or is in different project
+    - Service account doesn't have access to specific tables
+    
     **Solutions**:
-    - Verify network connectivity and firewall rules
-    - Check database server status and availability
-    - Validate connection string and credentials
-    - Ensure SSL/TLS configuration is correct
-    - Test connection from PLai infrastructure
+    1. Verify service account has `roles/bigquery.dataViewer` role:
+       ```bash
+       gcloud projects get-iam-policy PROJECT_ID \
+         --flatten="bindings[].members" \
+         --filter="bindings.members:serviceAccount:YOUR_SERVICE_ACCOUNT"
+       ```
+    
+    2. Add missing tables to `table_ids` array in configuration
+    
+    3. Check dataset exists and project ID matches credentials:
+       ```bash
+       bq ls --project_id=PROJECT_ID
+       ```
+    
+    4. Grant table-level access if using authorized views
   </Accordion>
-  <Accordion title="Query Timeouts">
-    **Symptoms**: Queries taking too long or timing out
+  
+  <Accordion title="Invalid SQL Syntax Errors">
+    **Symptoms**: Query fails with "Invalid SQL syntax" or "Unrecognized name"
+    
+    **Possible Causes**:
+    - GPT-4 generated BigQuery-incompatible SQL
+    - Table references missing backticks
+    - Using functions from other SQL dialects
+    - Column names don't exist in schema
+    
     **Solutions**:
-    - Optimize query performance with proper indexes
-    - Reduce result set size with appropriate filters
-    - Increase query timeout limits if needed
-    - Break complex queries into smaller parts
-    - Monitor database performance metrics
+    1. Rephrase natural language query more clearly and specifically
+    
+    2. Mention specific table names in your question
+    
+    3. Check the generated SQL in the response and validate manually in BigQuery Console
+    
+    4. Use custom `system_prompt` to guide SQL generation:
+       ```json
+       {
+         "system_prompt": "Always use DATE_TRUNC for date truncation. Table references must use backticks. Follow BigQuery Standard SQL syntax strictly."
+       }
+       ```
+    
+    5. Review BigQuery Standard SQL documentation for correct syntax
   </Accordion>
-  <Accordion title="Permission Errors">
-    **Symptoms**: Access denied or insufficient privileges
+  
+  <Accordion title="Quota Exceeded Errors">
+    **Symptoms**: "Quota exceeded" or "Rate limit exceeded" errors
+    
+    **Possible Causes**:
+    - BigQuery daily query quota reached
+    - Too many concurrent queries
+    - Exceeded slots or bytes scanned limits
+    
     **Solutions**:
-    - Verify database user permissions
-    - Check table and schema access rights
-    - Ensure proper role assignments
-    - Review database security policies
-    - Contact database administrator if needed
+    1. Check BigQuery quotas in GCP Console:
+       - Go to IAM & Admin → Quotas
+       - Filter for "BigQuery API"
+       - Review usage and limits
+    
+    2. Request quota increase from Google Cloud Support
+    
+    3. Implement query result caching to reduce repeated queries
+    
+    4. Reduce query frequency or batch queries together
+    
+    5. Consider upgrading to BigQuery flat-rate pricing for predictable costs
   </Accordion>
-  <Accordion title="Data Format Issues">
-    **Symptoms**: Unexpected data types or formats
+  
+  <Accordion title="Invalid Service Account Credentials">
+    **Symptoms**: Authentication failures or "Invalid credentials" errors
+    
+    **Possible Causes**:
+    - Malformed JSON credentials
+    - Expired or revoked service account key
+    - Missing required credential fields
+    - Service account deleted from GCP
+    
     **Solutions**:
-    - Check data type mappings between systems
-    - Handle NULL values appropriately
-    - Validate date and time formats
-    - Test with sample data first
-    - Implement proper error handling
+    1. Download fresh service account key from GCP Console
+    
+    2. Validate JSON syntax using a JSON validator
+    
+    3. Ensure all required fields are present:
+       - `type`, `project_id`, `private_key_id`, `private_key`
+       - `client_email`, `client_id`, `auth_uri`, `token_uri`
+    
+    4. Verify service account still exists:
+       ```bash
+       gcloud iam service-accounts describe SERVICE_ACCOUNT_EMAIL
+       ```
+    
+    5. Create new service account if the old one was deleted
+  </Accordion>
+  
+  <Accordion title="Empty or No Results">
+    **Symptoms**: Query succeeds but returns no data or empty results
+    
+    **Possible Causes**:
+    - Query filters too restrictive (no matching data)
+    - `output_max_rows` set too low
+    - Data doesn't exist in specified tables
+    - WHERE clause conditions exclude all rows
+    
+    **Solutions**:
+    1. Test the generated SQL directly in BigQuery Console
+    
+    2. Remove filters temporarily to check if data exists
+    
+    3. Increase `output_max_rows` if expecting more results
+    
+    4. Verify data exists in specified tables:
+       ```sql
+       SELECT COUNT(*) FROM `project.dataset.table`;
+       ```
+    
+    5. Check date filters aren't excluding all data
+    
+    6. Review WHERE clause conditions in generated SQL
+  </Accordion>
+  
+  <Accordion title="Slow Query Performance">
+    **Symptoms**: Queries taking longer than expected (>10 seconds)
+    
+    **Possible Causes**:
+    - Large data scan (non-partitioned queries)
+    - Complex joins across multiple tables
+    - Missing indexes or clustering
+    - Inefficient SQL generated by GPT-4
+    
+    **Solutions**:
+    1. Add time-range filters to limit data scanned
+    
+    2. Use partitioned columns in WHERE clauses
+    
+    3. Review query execution plan in BigQuery Console
+    
+    4. Optimize table structure with partitioning and clustering
+    
+    5. Rephrase question to generate simpler SQL
+    
+    6. Consider materializing complex views for frequently-accessed data
   </Accordion>
 </AccordionGroup>
 
-## Integration Examples
+### Getting Help
 
-### CRM Data Integration
+If you continue to experience issues:
 
-Connect to Salesforce, HubSpot, or custom CRM systems:
+1. **Check BigQuery Logs**: Review query history in BigQuery Console
+2. **Review Token Usage**: High token usage may indicate schema issues
+3. **Test Manually**: Run generated SQL directly in BigQuery to isolate issues
+4. **Check Service Account**: Verify permissions and access in GCP IAM
+5. **Contact Support**: Provide query details, error messages, and service account setup
 
-```sql
--- Customer 360 view combining multiple sources
-SELECT 
-    c.customer_id,
-    c.name,
-    c.email,
-    s.subscription_status,
-    s.mrr,
-    t.total_tickets,
-    t.avg_response_time,
-    m.last_marketing_touch
-FROM crm.customers c
-LEFT JOIN billing.subscriptions s ON c.customer_id = s.customer_id
-LEFT JOIN support.ticket_summary t ON c.customer_id = t.customer_id
-LEFT JOIN marketing.customer_touches m ON c.customer_id = m.customer_id
-WHERE c.customer_id = ?;
+## Security & Compliance
+
+### Data Protection
+
+<CardGroup cols={2}>
+  <Card title="Google Cloud Security" icon="shield">
+    Inherits all Google Cloud Platform security features including encryption at rest and in transit
+  </Card>
+  <Card title="Service Account Auth" icon="key">
+    Uses OAuth 2.0 service account authentication with secure credential storage
+  </Card>
+  <Card title="Query Auditing" icon="file-text">
+    All queries logged with timestamps, SQL statements, and token usage
+  </Card>
+  <Card title="Access Controls" icon="lock">
+    BigQuery IAM permissions control data access at project, dataset, and table levels
+  </Card>
+</CardGroup>
+
+### Compliance Considerations
+
+<Note>
+Compliance certifications depend on your Google Cloud Platform configuration and PLai infrastructure setup. Consult with your security and compliance teams to ensure requirements are met.
+</Note>
+
+**Key Compliance Areas**:
+
+- **GDPR**: Ensure BigQuery data processing agreements are in place with Google Cloud
+- **HIPAA**: Use HIPAA-compliant GCP projects if handling protected health information
+- **SOC 2**: Verify both PLai and Google Cloud Platform SOC 2 compliance status
+- **Data Residency**: Configure BigQuery datasets in appropriate geographic regions
+- **Audit Trails**: Enable BigQuery audit logging for compliance reporting
+
+### Encryption
+
+- **In Transit**: All data transfers use TLS 1.3 encryption
+- **At Rest**: BigQuery data encrypted at rest by default using Google-managed keys
+- **Credentials**: Service account private keys encrypted in PLai secure storage
+- **Query Results**: Temporary query results encrypted in BigQuery
+
+## Use Cases
+
+### Customer Support
+
+Enable support agents to access customer data instantly:
+
+```
+Agent Query: "Show me the last 5 orders for customer john@example.com"
+
+Generated SQL:
+SELECT order_id, order_date, total_amount, status
+FROM `project.dataset.orders`
+WHERE customer_email = 'john@example.com'
+ORDER BY order_date DESC
+LIMIT 5;
 ```
 
-### E-commerce Analytics
+### Business Intelligence
 
-Connect to e-commerce platforms for sales intelligence:
+Provide real-time analytics to business users:
 
-```sql
--- Product performance across channels
+```
+Agent Query: "What was our total revenue by product category last quarter?"
+
+Generated SQL:
 SELECT 
-    p.product_name,
-    p.category,
-    SUM(oi.quantity) as total_sold,
-    SUM(oi.quantity * oi.price) as total_revenue,
-    AVG(r.rating) as avg_rating,
-    COUNT(DISTINCT o.customer_id) as unique_customers
-FROM products p
-JOIN order_items oi ON p.product_id = oi.product_id
-JOIN orders o ON oi.order_id = o.order_id
-LEFT JOIN reviews r ON p.product_id = r.product_id
-WHERE o.order_date >= ?
-GROUP BY p.product_id, p.product_name, p.category
+  p.category,
+  SUM(oi.quantity * oi.price) as total_revenue
+FROM `project.dataset.order_items` oi
+JOIN `project.dataset.products` p ON oi.product_id = p.product_id
+JOIN `project.dataset.orders` o ON oi.order_id = o.order_id
+WHERE DATE_TRUNC(o.order_date, QUARTER) = 
+      DATE_TRUNC(DATE_SUB(CURRENT_DATE(), INTERVAL 1 QUARTER), QUARTER)
+GROUP BY p.category
 ORDER BY total_revenue DESC;
 ```
 
-### Financial Data Integration
+### Operations & Monitoring
 
-Connect to financial systems for business intelligence:
+Monitor system health and operational metrics:
 
-```sql
--- Monthly financial summary
+```
+Agent Query: "Show me any failed transactions in the last hour"
+
+Generated SQL:
 SELECT 
-    DATE_TRUNC('month', transaction_date) as month,
-    account_type,
-    SUM(CASE WHEN transaction_type = 'credit' THEN amount ELSE 0 END) as total_credits,
-    SUM(CASE WHEN transaction_type = 'debit' THEN amount ELSE 0 END) as total_debits,
-    SUM(CASE WHEN transaction_type = 'credit' THEN amount ELSE -amount END) as net_amount
-FROM financial_transactions
-WHERE transaction_date >= CURRENT_DATE - INTERVAL '12 months'
-GROUP BY DATE_TRUNC('month', transaction_date), account_type
-ORDER BY month, account_type;
+  transaction_id,
+  customer_id,
+  amount,
+  error_message,
+  timestamp
+FROM `project.dataset.transactions`
+WHERE status = 'FAILED'
+  AND timestamp >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 1 HOUR)
+ORDER BY timestamp DESC;
+```
+
+### Sales Analytics
+
+Track sales performance and trends:
+
+```
+Agent Query: "Which sales reps exceeded their quota this month?"
+
+Generated SQL:
+WITH monthly_sales AS (
+  SELECT 
+    sales_rep_id,
+    SUM(sale_amount) as total_sales
+  FROM `project.dataset.sales`
+  WHERE DATE_TRUNC(sale_date, MONTH) = DATE_TRUNC(CURRENT_DATE(), MONTH)
+  GROUP BY sales_rep_id
+)
+SELECT 
+  sr.name,
+  sr.quota,
+  ms.total_sales,
+  ms.total_sales - sr.quota as over_quota
+FROM monthly_sales ms
+JOIN `project.dataset.sales_reps` sr ON ms.sales_rep_id = sr.sales_rep_id
+WHERE ms.total_sales > sr.quota
+ORDER BY over_quota DESC;
 ```
 
 ## Next Steps
 
 <CardGroup cols={2}>
-  <Card title="Set Up Data Connection" icon="play" href="/guides/first-agent">
-    Connect your first external data source
+  <Card title="Set Up BigQuery" icon="play" href="https://cloud.google.com/bigquery/docs/quickstarts">
+    Get started with Google BigQuery
   </Card>
-  <Card title="Query Optimization Guide" icon="graduation-cap" href="/guides/best-practices">
-    Learn advanced query techniques
+  <Card title="Create Service Account" icon="key" href="https://cloud.google.com/iam/docs/service-accounts-create">
+    Set up GCP service account credentials
+  </Card>
+  <Card title="Configure Tool" icon="wrench" href="/guides/first-agent">
+    Add BigQuery tool to your agent
   </Card>
   <Card title="Other Tools" icon="grid" href="/tools/overview">
     Explore other available tools
-  </Card>
-  <Card title="API Reference" icon="code" href="/api-reference/tools">
-    View the tools API documentation
   </Card>
 </CardGroup>

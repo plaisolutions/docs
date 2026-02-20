@@ -1,0 +1,529 @@
+---
+title: "Analytics Overview"
+description: "Monitor, analyze and understand your agent's conversations and executions in real-time"
+---
+
+# Analytics Overview
+
+Analytics provides comprehensive monitoring and analysis capabilities for your AI agents in a unified dashboard. Track conversations and executions, analyze agent performance with AI-generated insights, and monitor activity in real-time with advanced filtering—all from a single interface.
+
+## What is Analytics?
+
+Analytics is an integrated dashboard that combines real-time monitoring with AI-powered conversation analysis:
+
+<CardGroup cols={2}>
+  <Card title="Unified Dashboard" icon="chart-mixed">
+    Single interface with conversations and executions in one view
+  </Card>
+  <Card title="Live Mode" icon="signal-stream">
+    Toggle real-time monitoring to watch activity as it happens
+  </Card>
+  <Card title="AI-Powered Analysis" icon="sparkles">
+    Generate conversation insights with AI (up to 250 conversations)
+  </Card>
+  <Card title="Execution Metrics" icon="gauge-high">
+    Track total executions, success rate, and active runs
+  </Card>
+</CardGroup>
+
+---
+
+## The Analytics Interface
+
+Analytics provides a unified dashboard with integrated filtering and visualization:
+
+### Sidebar Filters
+
+<AccordionGroup>
+  <Accordion title="Live Mode Toggle" icon="signal-stream">
+    **Switch between historical and real-time monitoring**
+    
+    - **OFF**: View historical data with date range filters
+    - **ON**: Stream live conversations and executions as they happen
+    
+    <Tip>
+    Enable Live Mode when monitoring production, testing new features, or during launch events.
+    </Tip>
+  </Accordion>
+  
+  <Accordion title="Date Range Selector" icon="calendar">
+    **Filter by time period**
+    
+    Select any date range to analyze:
+    - Custom date ranges
+    - View historical patterns
+    - Compare different periods
+    - Focus on specific timeframes
+    
+    <Info>
+    Date range filtering is disabled when Live Mode is active, as live data shows current activity only.
+    </Info>
+  </Accordion>
+  
+  <Accordion title="User Filter" icon="user">
+    **Filter by specific users**
+    
+    - **All Users**: View all activity (default)
+    - **Specific User**: Track individual user interactions
+    - **User Groups**: Analyze cohort behavior
+    
+    **Use cases:**
+    - VIP customer tracking
+    - User journey analysis
+    - Issue investigation
+    - Support requests
+  </Accordion>
+</AccordionGroup>
+
+---
+
+### Activity Timeline
+
+Visual chart showing conversations and executions over time:
+
+<CardGroup cols={2}>
+  <Card title="Conversations" icon="comments">
+    Black bars showing conversation volume per day
+  </Card>
+  <Card title="Executions" icon="gears">
+    Teal bars showing execution count per day
+  </Card>
+</CardGroup>
+
+**Key insights:**
+- Identify peak activity periods
+- Spot usage patterns
+- Compare conversations vs executions
+- Detect anomalies or trends
+
+---
+
+## Key Capabilities
+
+### 1. Conversations Tab
+
+View and analyze conversation data:
+
+<Tabs>
+  <Tab title="Conversation List">
+    **Browse conversations**
+    
+    Left sidebar shows:
+    - Conversation titles (AI-generated)
+    - User identification
+    - Timestamps
+    - Click to view messages
+    
+    **Features:**
+    - Scroll through filtered conversations
+    - Quick conversation access
+    - Contextual previews
+  </Tab>
+  
+  <Tab title="AI-Powered Analysis">
+    **Generate insights from conversations**
+    
+    <Warning>
+    **Important**: Conversation analysis results are AI-generated estimates and may vary between different analysis runs. Maximum 250 conversations per analysis.
+    </Warning>
+    
+    - Click **"Run New Analysis"** to generate insights
+    - **Advanced Settings**: Configure analysis parameters
+    - View AI-generated conversation insights
+    - Identify trends and patterns
+    - Detect common issues
+    
+    **Perfect for:**
+    - Quality assurance reviews
+    - Performance optimization
+    - User behavior analysis
+    - Issue identification
+  </Tab>
+  
+  <Tab title="Message Inspection">
+    **View conversation details**
+    
+    - Complete message history
+    - User inputs and agent responses
+    - Conversation flow
+    - Context and metadata
+    - Timestamps for each message
+  </Tab>
+</Tabs>
+
+---
+
+### 2. Executions Tab
+
+Monitor agent execution performance:
+
+<CardGroup cols={3}>
+  <Card title="Total Executions" icon="list-check">
+    **Overall execution count**
+    
+    Shows:
+    - Total executions
+    - Completed count
+    - Failed count
+  </Card>
+  
+  <Card title="Success Rate" icon="circle-check">
+    **Execution success percentage**
+    
+    Tracks:
+    - Success percentage
+    - Performance trends
+    - Quality metrics
+  </Card>
+  
+  <Card title="Active Executions" icon="spinner">
+    **Current running executions**
+    
+    Displays:
+    - Currently running
+    - Real-time status
+    - Active count
+  </Card>
+</CardGroup>
+
+**Execution List:**
+- Each execution shows:
+  - Status badge (COMPLETED, FAILED, RUNNING)
+  - Execution type (AGENT_RUN)
+  - Timestamp
+  - **"Logs"** button for detailed inspection
+
+---
+
+### 3. Execution Logs
+
+Click any execution's **"Logs"** button to view:
+
+<CardGroup cols={2}>
+  <Card title="Execution Details" icon="file-lines">
+    - Step-by-step execution trace
+    - Processing timeline
+    - Status transitions
+    - Error messages (if any)
+  </Card>
+  
+  <Card title="Tool Interactions" icon="wrench">
+    - Tools called during execution
+    - Tool parameters
+    - Tool results
+    - Execution timing
+  </Card>
+  
+  <Card title="Performance Data" icon="gauge">
+    - Processing time
+    - Token usage
+    - API calls
+    - Resource consumption
+  </Card>
+  
+  <Card title="Debug Information" icon="bug">
+    - Error details
+    - Stack traces
+    - Context information
+    - Debugging aids
+  </Card>
+</CardGroup>
+
+---
+
+### 4. Secure Report Storage
+
+Conversation analyses are automatically stored securely:
+
+<Steps>
+  <Step title="Run Analysis">
+    Generate AI-powered insights from your filtered conversations
+  </Step>
+  <Step title="Automatic Storage">
+    Analysis results are saved to secure file storage
+  </Step>
+  <Step title="Retrieve Anytime">
+    Access previous analyses from your conversation list
+  </Step>
+  <Step title="Long-Term Access">
+    Reports remain available for historical reference
+  </Step>
+</Steps>
+
+<Info>
+**Security & Privacy:**
+All conversation data and analyses are stored with enterprise-grade security, ensuring data protection and regulatory compliance.
+</Info>
+
+---
+
+## Use Cases
+
+### 1. Quality Assurance
+
+<CardGroup cols={2}>
+  <Card title="Response Quality" icon="star">
+    - Review agent responses
+    - Identify improvement areas
+    - Track quality metrics
+    - Ensure consistency
+  </Card>
+  
+  <Card title="Compliance Monitoring" icon="scale-balanced">
+    - Audit conversations
+    - Verify guardrail effectiveness
+    - Check policy adherence
+    - Generate compliance reports
+  </Card>
+</CardGroup>
+
+---
+
+### 2. Performance Optimization
+
+**Identify and resolve performance issues:**
+
+- Analyze slow conversations
+- Find bottlenecks in execution
+- Optimize tool usage
+- Reduce response times
+- Monitor resource consumption
+
+---
+
+### 3. User Behavior Analysis
+
+**Understand how users interact with your agent:**
+
+- Common question patterns
+- Conversation flow analysis
+- User satisfaction indicators
+- Feature usage tracking
+- Drop-off point identification
+
+---
+
+### 4. Debugging & Troubleshooting
+
+**Quickly diagnose and fix issues:**
+
+- Reproduce error scenarios
+- Analyze failed executions
+- Track error patterns
+- Identify edge cases
+- Test fixes with historical data
+
+---
+
+## How to Use Analytics
+
+<Steps>
+  <Step title="Access Analytics Dashboard">
+    Navigate to your agent's **Analytics** section from the dashboard
+  </Step>
+  
+  <Step title="Configure Filters">
+    Use the sidebar to set:
+    - **Live Mode**: Toggle ON for real-time, OFF for historical
+    - **Date Range**: Select period to analyze (disabled in Live Mode)
+    - **User Filter**: Choose "All Users" or specific user
+    
+    Click **Filter** to apply, **Clear** to reset
+  </Step>
+  
+  <Step title="View Activity Timeline">
+    Review the chart showing conversations (black) and executions (teal) over time
+  </Step>
+  
+  <Step title="Switch Between Tabs">
+    - **Conversations**: View conversations and run AI analysis
+    - **Executions**: Monitor execution metrics and logs
+  </Step>
+  
+  <Step title="Generate AI Insights (Conversations Tab)">
+    Click **"Run New Analysis"** to generate AI-powered conversation insights
+    
+    <Info>
+    Analysis processes up to 250 conversations from your filtered dataset.
+    </Info>
+  </Step>
+  
+  <Step title="Inspect Execution Logs (Executions Tab)">
+    Click **"Logs"** on any execution to view detailed execution information
+  </Step>
+</Steps>
+
+---
+
+## Important Limitations
+
+<Warning>
+**Conversation Analysis Limit: 250 Conversations**
+
+AI-powered conversation analysis can process up to **250 conversations** maximum per analysis run. This ensures:
+- Fast AI processing
+- Optimal performance
+- Reliable insights
+- Quick results
+
+**Important**: Analysis results are AI-generated estimates and may vary between different analysis runs.
+</Warning>
+
+<Tip>
+For datasets exceeding 250 conversations, narrow your date range or use user filters to focus the analysis on the most relevant data.
+</Tip>
+
+---
+
+## Benefits
+
+<CardGroup cols={3}>
+  <Card title="Visibility" icon="eye">
+    **Complete transparency**
+    - Full conversation history
+    - Execution details
+    - Real-time updates
+    - Historical data access
+  </Card>
+  
+  <Card title="Insights" icon="lightbulb">
+    **Actionable intelligence**
+    - Usage patterns
+    - Performance metrics
+    - User behavior
+    - Improvement opportunities
+  </Card>
+  
+  <Card title="Optimization" icon="rocket">
+    **Continuous improvement**
+    - Identify bottlenecks
+    - Improve responses
+    - Optimize costs
+    - Enhance user experience
+  </Card>
+  
+  <Card title="Compliance" icon="shield-check">
+    **Regulatory adherence**
+    - Audit trails
+    - Data retention
+    - Access logs
+    - Compliance reports
+  </Card>
+  
+  <Card title="Debugging" icon="bug">
+    **Faster problem resolution**
+    - Error tracking
+    - Root cause analysis
+    - Reproduction scenarios
+    - Fix validation
+  </Card>
+  
+  <Card title="Security" icon="lock">
+    **Protected data**
+    - Secure storage
+    - Encrypted reports
+    - Access control
+    - Privacy compliance
+  </Card>
+</CardGroup>
+
+---
+
+## Live Mode vs. Historical Mode
+
+Toggle between two modes using the **Live Mode** switch:
+
+<Tabs>
+  <Tab title="Live Mode (ON)">
+    **Real-time activity monitoring**
+    
+    ✅ **Best for:**
+    - Production monitoring
+    - Launch events
+    - Testing new features
+    - Immediate issue detection
+    - Current system health
+    
+    ⚡ **How it works:**
+    - Streams live updates automatically
+    - Shows current conversations and executions
+    - Date range filter is disabled
+    - Updates appear instantly
+    - No refresh needed
+  </Tab>
+  
+  <Tab title="Historical Mode (OFF)">
+    **Past data analysis**
+    
+    ✅ **Best for:**
+    - Trend analysis
+    - Performance reviews
+    - Period comparisons
+    - AI-powered insights
+    - In-depth investigation
+    
+    📊 **How it works:**
+    - Select custom date ranges
+    - Filter by users
+    - Generate AI analysis
+    - View execution logs
+    - Export data
+  </Tab>
+</Tabs>
+
+---
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Conversation Analysis" icon="sparkles" href="/agents/analytics/conversation-analysis">
+    Learn how to generate AI-powered conversation insights
+  </Card>
+  <Card title="Live Mode" icon="signal-stream" href="/agents/analytics/live-mode">
+    Discover real-time monitoring with Live Mode
+  </Card>
+  <Card title="Agent Settings" icon="gear" href="/agents/settings">
+    Configure your agent for optimal analytics
+  </Card>
+  <Card title="API Reference" icon="code" href="/api-reference/analytics">
+    Explore the Analytics API
+  </Card>
+</CardGroup>
+
+---
+
+## Frequently Asked Questions
+
+<AccordionGroup>
+  <Accordion title="Why is there a 250 conversation limit for AI analysis?">
+    The 250 conversation limit ensures fast AI processing and optimal performance. For larger datasets, narrow your date range or use user filters to focus on the most relevant conversations.
+  </Accordion>
+  
+  <Accordion title="What's the difference between Live Mode ON and OFF?">
+    **Live Mode ON**: Streams real-time activity as it happens, perfect for monitoring production. **Live Mode OFF**: Enables historical analysis with date range filtering and AI-powered conversation insights.
+  </Accordion>
+  
+  <Accordion title="Can I filter by multiple criteria?">
+    Yes, you can combine date range AND user filters to create highly targeted analysis. For example, track a specific user's activity during a particular time period.
+  </Accordion>
+  
+  <Accordion title="Are AI analysis results always the same?">
+    No, the conversation analysis note states: "Analysis results are estimates generated by AI and may vary between different analysis runs." This is because AI models can produce different insights on each run.
+  </Accordion>
+  
+  <Accordion title="How do I view execution details?">
+    Switch to the **Executions** tab and click the **"Logs"** button next to any execution to view detailed information including execution traces, tool calls, and performance metrics.
+  </Accordion>
+  
+  <Accordion title="Can I see individual conversation messages?">
+    Yes, in the **Conversations** tab, click on any conversation in the left sidebar to view the complete message history with all user inputs and agent responses.
+  </Accordion>
+  
+  <Accordion title="What metrics are shown in the Executions tab?">
+    The Executions tab displays three key metrics: **Total Executions** (completed and failed count), **Success Rate** (percentage), and **Active Executions** (currently running).
+  </Accordion>
+  
+  <Accordion title="Are conversations and analyses stored securely?">
+    Yes, all conversation data and AI-generated analyses are stored with enterprise-grade security and encryption to ensure data protection and regulatory compliance.
+  </Accordion>
+</AccordionGroup>

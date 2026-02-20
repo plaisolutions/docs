@@ -1,0 +1,443 @@
+---
+title: "Guardrails Configuration"
+description: "Step-by-step guide to configuring and applying Guardrails to your agents"
+---
+
+# Guardrails Configuration
+
+Learn how to configure and apply Guardrails to protect your agents with intelligent content filtering. This guide covers everything from understanding the default guardrail to creating and managing custom guardrails.
+
+## Prerequisites
+
+Before configuring Guardrails, ensure you have:
+
+<Check>**Agent Created**: You need an existing agent to apply guardrails to</Check>
+<Check>**Admin Access**: Only project Admins and Owners can configure guardrails</Check>
+<Check>**Requirements Identified**: Know what content needs protection</Check>
+
+<Info>
+Guardrails are managed in the **Guardrails** section of the agent dashboard.
+</Info>
+
+---
+
+## Understanding the Default Guardrail
+
+Every agent in PLai Framework comes with a **default INPUT guardrail** automatically active:
+
+### Default Guardrail Coverage
+
+<CardGroup cols={2}>
+  <Card title="Sexual Content" icon="ban" color="red">
+    Blocks explicit sexual material, inappropriate content, or sexual advances
+  </Card>
+  <Card title="Hate Speech" icon="ban" color="red">
+    Blocks discrimination, prejudice, hateful content, or targeted harassment
+  </Card>
+  <Card title="Insults & Abuse" icon="ban" color="red">
+    Blocks personal attacks, abusive language, or aggressive insults
+  </Card>
+  <Card title="Politics & Religion" icon="ban" color="red">
+    Blocks political debates, partisan content, religious disputes, or divisive topics
+  </Card>
+</CardGroup>
+
+<Note>
+**Important**: Default guardrail is optional enabled. It provides baseline protection for all agents without requiring any configuration.
+</Note>
+
+---
+
+## Guardrail Types
+
+Guardrails can be configured with different directions and actions:
+
+### 1. Direction: INPUT vs OUTPUT
+
+<Tabs>
+  <Tab title="INPUT Guardrails">
+    **Applied to user messages before AI processing**
+    
+    **Purpose:**
+    - Protect AI model from harmful inputs
+    - Filter malicious prompts
+    - Mask sensitive user data
+    - Block prohibited topics
+    
+    **Use Cases:**
+    - User-facing chatbots
+    - Public interfaces
+    - Customer service applications
+    - Community platforms
+    
+    **Processing Flow:**
+    ```
+    User Message → INPUT Guardrail → AI Model → Response
+    ```
+    
+    <Info>
+    INPUT guardrails run before the AI model sees the content, providing first-line defense against inappropriate inputs.
+    </Info>
+  </Tab>
+  
+  <Tab title="OUTPUT Guardrails">
+    **Applied to AI-generated responses before delivery**
+    
+    **Purpose:**
+    - Ensure safe AI outputs
+    - Prevent harmful responses
+    - Mask PII in responses
+    - Maintain brand compliance
+    
+    **Use Cases:**
+    - Content generation
+    - Public communications
+    - Regulated industries
+    - Brand-sensitive applications
+    
+    **Processing Flow:**
+    ```
+    User Message → AI Model → AI Response → OUTPUT Guardrail → User
+    ```
+    
+    <Info>
+    OUTPUT guardrails validate AI-generated content before users see it, ensuring safe and compliant responses.
+    </Info>
+  </Tab>
+  
+  <Tab title="Both (INPUT + OUTPUT)">
+    **Comprehensive protection on both sides**
+    
+    **Purpose:**
+    - Maximum safety coverage
+    - End-to-end protection
+    - Full compliance assurance
+    - Complete audit trail
+    
+    **Use Cases:**
+    - Highly regulated industries
+    - High-risk applications
+    - Maximum security requirements
+    - Sensitive domains
+    
+    **Processing Flow:**
+    ```
+    User Message → INPUT Guardrail → AI Model → 
+    AI Response → OUTPUT Guardrail → User
+    ```
+    
+    <Warning>
+    Using both INPUT and OUTPUT guardrails provides maximum protection but adds latency to each interaction. Balance security needs with performance requirements.
+    </Warning>
+  </Tab>
+</Tabs>
+
+---
+
+### 2. Action: Block vs Mask
+
+<Tabs>
+  <Tab title="Block">
+    **Completely prevent content from passing**
+    
+    **When to use:**
+    - Harmful content (hate speech, violence)
+    - Prohibited topics (politics, religion)
+    - Policy violations
+    - Security threats
+    - Inappropriate requests
+    
+    **Behavior:**
+    ```
+    Content Detected → BLOCKED → Safety Message Displayed
+    ```
+    
+    **Example Configuration:**
+    ```json
+    {
+      "type": "INPUT",
+      "action": "BLOCK",
+      "categories": [
+        "hate_speech",
+        "violence",
+        "sexual_content"
+      ]
+    }
+    ```
+    
+    **User Experience:**
+    - Request is not processed
+    - Polite safety message displayed
+    - User prompted to rephrase
+    - Interaction logged for monitoring
+  </Tab>
+  
+  <Tab title="Mask (Anonymize)">
+    **Redact sensitive information while allowing flow**
+    
+    **When to use:**
+    - PII protection (emails, phones, SSN)
+    - Financial data (credit cards, accounts)
+    - Personal identifiers (names, addresses)
+    - Health information (PHI)
+    - Confidential data
+    
+    **Behavior:**
+    ```
+    Content Detected → PII MASKED → Processing Continues
+    ```
+    
+    **Example Configuration:**
+    ```json
+    {
+      "type": "INPUT",
+      "action": "MASK",
+      "pii_types": [
+        "email",
+        "phone",
+        "credit_card",
+        "ssn",
+        "name",
+        "address"
+      ]
+    }
+    ```
+    
+    **Masking Examples:**
+    ```
+    Original: "My email is john.doe@example.com"
+    Masked:   "My email is [EMAIL_REDACTED]"
+    
+    Original: "Call me at 555-123-4567"
+    Masked:   "Call me at [PHONE_REDACTED]"
+    
+    Original: "My credit card is 4532-1234-5678-9012"
+    Masked:   "My credit card is [CREDIT_CARD_REDACTED]"
+    
+    Original: "I'm John Smith from 123 Main St"
+    Masked:   "I'm [NAME_REDACTED] from [ADDRESS_REDACTED]"
+    ```
+    
+    <Info>
+    Masking allows conversations to continue while protecting sensitive information from being processed, stored, or included in responses.
+    </Info>
+  </Tab>
+</Tabs>
+
+---
+
+## Creating Custom Guardrails
+
+Custom guardrails are created **on-demand** through Amazon Bedrock Guardrails service to meet your specific requirements.
+
+### When to Create Custom Guardrails
+
+<AccordionGroup>
+  <Accordion title="Industry-Specific Compliance" icon="building">
+    **Healthcare (HIPAA):**
+    - Mask protected health information (PHI)
+    - Block medical advice outside scope
+    - Prevent patient data disclosure
+    
+    **Financial Services (PCI-DSS):**
+    - Mask financial account details
+    - Block unauthorized financial advice
+    - Protect transaction information
+    
+    **Legal:**
+    - Prevent unauthorized legal advice
+    - Protect privileged information
+    - Maintain confidentiality
+  </Accordion>
+  
+  <Accordion title="Organization-Specific Policies" icon="shield-halved">
+    - Custom prohibited topics
+    - Brand-specific content rules
+    - Internal data protection
+    - Proprietary information safeguards
+    - Employee information protection
+  </Accordion>
+  
+  <Accordion title="Advanced PII Protection" icon="user-shield">
+    - Custom PII types (employee IDs, patient numbers)
+    - Industry-specific identifiers
+    - Regional data protection (EU vs US)
+    - Multi-language PII detection
+  </Accordion>
+  
+  <Accordion title="Special Use Cases" icon="sparkles">
+    - Content generation safety
+    - Academic integrity
+    - Child safety protections
+    - Community guidelines enforcement
+    - Custom safety categories
+  </Accordion>
+</AccordionGroup>
+
+---
+
+### Custom Guardrail Creation Process
+
+<Steps>
+  <Step title="Define Requirements">
+    Document your specific needs:
+    
+    **Required Information:**
+    - **Purpose**: What should this guardrail protect?
+    - **Direction**: INPUT, OUTPUT, or both?
+    - **Action**: Block or Mask?
+    - **Content Categories**: What to filter?
+    - **PII Types**: What to mask (if applicable)?
+    - **Scope**: General or organization-only?
+  </Step>
+  
+  <Step title="Request Creation">
+    Contact your PLai Framework administrator or account manager:
+    
+    **Provide:**
+    - Requirements document
+    - Use case description
+    - Compliance regulations
+    - Timeline needs
+    - Testing requirements
+    
+    **Methods:**
+    - Support ticket
+    - Account manager email
+    - Admin dashboard request
+    - API (for enterprise customers)
+    
+    <Info>
+    Guardrail creation typically takes 2-5 business days depending on complexity and testing requirements.
+    </Info>
+  </Step>
+  
+  <Step title="Review and Testing">
+    Once created, thoroughly test the guardrail:
+    
+    **Test Scenarios:**
+    - Positive cases (should trigger)
+    - Negative cases (should not trigger)
+    - Edge cases
+    - Performance impact
+    - False positives
+    - False negatives
+    
+    **Testing Checklist:**
+    ```
+    ✅ Blocks/masks intended content
+    ✅ Allows safe content through
+    ✅ No excessive false positives
+    ✅ Acceptable latency impact
+    ✅ Works across different phrasings
+    ✅ Handles edge cases appropriately
+    ✅ Logs triggers correctly
+    ```
+  </Step>
+  
+  <Step title="Apply to Agents">
+    Add the guardrail to your agents through:
+    - Agent dashboard UI
+    - API endpoint
+    - Bulk application (multiple agents)
+    
+    See "Applying Guardrails" section below for details.
+  </Step>
+  
+  <Step title="Monitor and Refine">
+    After deployment:
+    - Monitor trigger rates
+    - Review blocked content
+    - Check for false positives
+    - Adjust configuration as needed
+    - Collect user feedback
+  </Step>
+</Steps>
+
+---
+
+## Applying Guardrails to Agents
+
+### Via Dashboard UI
+
+<Steps>
+  <Step title="Navigate to Guardrails Section">
+    1. Open your **Agent Dashboard**
+    2. Select the **Guardrails** tab
+    3. Select the guardrail(s) you want to apply.
+  </Step>
+  
+  <Step title="Configure Settings">
+    For each selected guardrail:
+    
+    **Direction:**
+    - ◉ INPUT only
+    - ◯ OUTPUT only  
+    - ◯ Both INPUT and OUTPUT
+    
+    **Priority** (if multiple guardrails):
+    - Higher priority guardrails run first
+    - Range: 1 (highest) to 10 (lowest)
+
+  </Step>
+  
+</Steps>
+
+---
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Best Practices" icon="star" href="/agents/guardrails/best-practices">
+    Learn expert tips for optimal guardrail implementation
+  </Card>
+  <Card title="API Reference" icon="code" href="/api-reference/guardrails">
+    Explore the complete Guardrails API documentation
+  </Card>
+  <Card title="Overview" icon="book-open" href="/agents/guardrails/overview">
+    Review Guardrails concepts and capabilities
+  </Card>
+  <Card title="Analytics" icon="chart-line" href="/agents/analytics/overview">
+    Monitor guardrail effectiveness and performance
+  </Card>
+</CardGroup>
+
+---
+
+## Additional Resources
+
+<AccordionGroup>
+  <Accordion title="Amazon Bedrock Guardrails Documentation">
+    Guardrails in PLai Framework are powered by Amazon Bedrock Guardrails. For technical details on the underlying service:
+    
+    - [AWS Bedrock Guardrails Overview](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html)
+    - Detection capabilities and models
+    - PII types supported
+    - Language support
+    - Technical specifications
+  </Accordion>
+  
+  <Accordion title="Compliance Resources">
+    **GDPR Compliance:**
+    - PII masking for EU users
+    - Data protection requirements
+    - Right to be forgotten
+    
+    **HIPAA Compliance:**
+    - PHI protection requirements
+    - HIPAA Security Rule
+    - HIPAA Privacy Rule
+    
+    **PCI-DSS Compliance:**
+    - Payment card data protection
+    - Cardholder data environment
+    - Security assessment procedures
+  </Accordion>
+  
+  <Accordion title="Support and Assistance">
+    **For custom guardrail creation:**
+    - Contact your account manager
+    - Submit detailed requirements document
+    - Expected turnaround: 2-5 business days
+  </Accordion>
+</AccordionGroup>

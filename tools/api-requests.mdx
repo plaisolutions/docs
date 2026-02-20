@@ -1,16 +1,11 @@
 ---
 title: "API Request Tool"
 description: "Connect to any REST API with full configuration control"
-icon: "cloud"
 ---
 
 # API Request Tool
 
 The API Request tool allows your agents to interact with any REST API endpoint. It provides complete control over HTTP methods, headers, request bodies, and response handling.
-
-<Frame>
-  <img src="/images/hero-light.png" alt="API Request Tool Configuration" />
-</Frame>
 
 <Note>
 This tool has **Default** status, meaning it's production-ready and available on all subscription plans.
@@ -28,7 +23,7 @@ The API Request tool is one of the most versatile tools in PLai Framework, enabl
     Configure authentication, content types, and custom headers
   </Card>
   <Card title="Flexible Methods" icon="arrows-alt">
-    Support for GET, POST, PUT, DELETE, and other HTTP methods
+    Support for GET, POST, PATCH, DELETE, and LIST HTTP methods
   </Card>
   <Card title="Template System" icon="code">
     Dynamic URL and body templating with variable substitution
@@ -39,34 +34,37 @@ The API Request tool is one of the most versatile tools in PLai Framework, enabl
 
 <ParamField path="url_template" type="input" required>
   The API endpoint URL with optional template variables
-  <br />**Example**: `https://api.example.com/users/{{user_id}}/profile`
-  <br />**Variables**: Use `{{variable_name}}` for dynamic substitution
+  <br />**Example**: `https://api.example.com/users/{{user_id: str}}/profile`
+  <br />**Variables**: Use `{{variable_name: type}}` syntax (types: str, int, float, bool)
 </ParamField>
 
 <ParamField path="method" type="input" required>
   HTTP method for the request
-  <br />**Common values**: `GET`, `POST`, `PUT`, `DELETE`, `PATCH`
-  <br />**Default**: `GET`
+  <br />**Supported methods**: `GET`, `POST`, `PATCH`, `DELETE`, `LIST`
+  <br />**Note**: This parameter is required (no default value)
 </ParamField>
 
-<ParamField path="headers_template" type="json" required>
-  HTTP headers as a JSON object
-  <br />**Example**: `{"Authorization": "Bearer {{api_token}}", "User-Agent": "PLai-Agent/1.0"}`
-  <br />**Default**: `{}`
+<ParamField path="headers_template" type="string" required>
+  HTTP headers as a JSON string with optional template variables
+  <br />**Example**: `"{\"Authorization\": \"Bearer {{api_token: str}}\", \"User-Agent\": \"PLai-Agent/1.0\"}"`
+  <br />**Default**: `"{}"`
+  <br />**Note**: Must be a JSON string, not an object
 </ParamField>
 
-<ParamField path="content_type" type="select" required>
+<ParamField path="content_type" type="select">
   Content type for request body
   <br />**Options**:
-  - `application/json` - For JSON payloads
+  - `application/json` - For JSON payloads (default)
   - `application/x-www-form-urlencoded` - For form data
+  <br />**Default**: `application/json`
 </ParamField>
 
-<ParamField path="body_template" type="json" required>
-  Request body as JSON template
-  <br />**Example**: `{"name": "{{user_name}}", "email": "{{user_email}}"}`
-  <br />**Default**: `{}`
-  <br />**Note**: Only used for POST, PUT, PATCH methods
+<ParamField path="body_template" type="string" required>
+  Request body as a JSON string or form-encoded string with template variables
+  <br />**Example (JSON)**: `"{\"name\": {{user_name: str}}, \"email\": {{user_email: str}}}"`
+  <br />**Example (Form)**: `"username={{username: str}}&password={{password: str}}"`
+  <br />**Default**: `"{}"`
+  <br />**Note**: Must be a string. For JSON, system adds quotes automatically for str types
 </ParamField>
 
 ## Setup Instructions
@@ -76,22 +74,22 @@ The API Request tool is one of the most versatile tools in PLai Framework, enabl
     Go to the **Tools** section in your project dashboard
   </Step>
   <Step title="Create API Request Tool">
-    Click **Create Tool** and select **API Request**
+    Click **Create Tool** and select **API Request** (type: `HTTP`)
   </Step>
   <Step title="Configure URL">
     Enter the API endpoint URL in the **URL Template** field
   </Step>
   <Step title="Set HTTP Method">
-    Specify the HTTP method (GET, POST, etc.) in the **Method** field
+    Specify the HTTP method (`GET`, `POST`, `PATCH`, `DELETE`, or `LIST`) in the **Method** field
   </Step>
   <Step title="Configure Headers">
-    Add required headers including authentication in **Headers Template**
+    Add required headers including authentication in **Headers Template** (default: `"{}"`)
   </Step>
-  <Step title="Set Content Type">
-    Choose the appropriate content type for your API
+  <Step title="Set Content Type (Optional)">
+    Choose the appropriate content type for your API (default: `application/json`)
   </Step>
-  <Step title="Configure Body (if needed)">
-    For POST/PUT requests, configure the **Body Template**
+  <Step title="Configure Body">
+    Configure the **Body Template** (default: `"{}"`)
   </Step>
   <Step title="Test Configuration">
     Use the test button to verify your configuration works
@@ -101,20 +99,23 @@ The API Request tool is one of the most versatile tools in PLai Framework, enabl
   </Step>
 </Steps>
 
+<Note>
+**Required Parameters**: `name`, `description`, `method`, `url_template`, `body_template`, `headers_template`
+
+**Optional Parameters**: `content_type` (defaults to `application/json`)
+</Note>
+
 ## Usage Examples
 
 ### Basic GET Request
 
 ```json
 {
-  "url_template": "https://jsonplaceholder.typicode.com/posts/{{post_id}}",
+  "url_template": "https://jsonplaceholder.typicode.com/posts/{{post_id: str}}",
   "method": "GET",
-  "headers_template": {
-    "Accept": "application/json",
-    "User-Agent": "PLai-Agent/1.0"
-  },
+  "headers_template": "{\"Accept\": \"application/json\", \"User-Agent\": \"PLai-Agent/1.0\"}",
   "content_type": "application/json",
-  "body_template": {}
+  "body_template": "{}"
 }
 ```
 
@@ -124,12 +125,9 @@ The API Request tool is one of the most versatile tools in PLai Framework, enabl
 {
   "url_template": "https://api.github.com/user/repos",
   "method": "GET",
-  "headers_template": {
-    "Authorization": "Bearer {{github_token}}",
-    "Accept": "application/vnd.github.v3+json"
-  },
+  "headers_template": "{\"Authorization\": \"Bearer {{github_token: str}}\", \"Accept\": \"application/vnd.github.v3+json\"}",
   "content_type": "application/json",
-  "body_template": {}
+  "body_template": "{}"
 }
 ```
 
@@ -139,16 +137,9 @@ The API Request tool is one of the most versatile tools in PLai Framework, enabl
 {
   "url_template": "https://api.example.com/users",
   "method": "POST",
-  "headers_template": {
-    "Authorization": "Bearer {{api_token}}",
-    "Content-Type": "application/json"
-  },
+  "headers_template": "{\"Authorization\": \"Bearer {{api_token: str}}\", \"Content-Type\": \"application/json\"}",
   "content_type": "application/json",
-  "body_template": {
-    "name": "{{user_name}}",
-    "email": "{{user_email}}",
-    "role": "user"
-  }
+  "body_template": "{\"name\": {{user_name: str}}, \"email\": {{user_email: str}}, \"role\": \"user\"}"
 }
 ```
 
@@ -156,19 +147,11 @@ The API Request tool is one of the most versatile tools in PLai Framework, enabl
 
 ```json
 {
-  "url_template": "https://{{instance}}.salesforce.com/services/data/v57.0/sobjects/Contact",
+  "url_template": "https://{{instance: str}}.salesforce.com/services/data/v57.0/sobjects/Contact",
   "method": "POST",
-  "headers_template": {
-    "Authorization": "Bearer {{sf_access_token}}",
-    "Content-Type": "application/json"
-  },
+  "headers_template": "{\"Authorization\": \"Bearer {{sf_access_token: str}}\", \"Content-Type\": \"application/json\"}",
   "content_type": "application/json",
-  "body_template": {
-    "FirstName": "{{first_name}}",
-    "LastName": "{{last_name}}",
-    "Email": "{{email}}",
-    "Phone": "{{phone}}"
-  }
+  "body_template": "{\"FirstName\": {{first_name: str}}, \"LastName\": {{last_name: str}}, \"Email\": {{email: str}}, \"Phone\": {{phone: str}}}"
 }
 ```
 
@@ -229,16 +212,44 @@ The API Request tool is one of the most versatile tools in PLai Framework, enabl
 
 ### Variable Substitution
 
-The API Request tool supports dynamic variable substitution in URLs and request bodies:
+The API Request tool uses a typed variable system with the format `{{variable_name: type}}`:
 
 ```json
 {
-  "url_template": "https://api.example.com/users/{{user_id}}/orders/{{order_id}}",
-  "body_template": {
-    "status": "{{new_status}}",
-    "updated_by": "{{agent_name}}",
-    "timestamp": "{{current_time}}"
-  }
+  "url_template": "https://api.example.com/users/{{user_id: str}}/orders/{{order_id: str}}",
+  "body_template": "{\"status\": {{new_status: str}}, \"updated_by\": {{agent_name: str}}, \"timestamp\": {{current_time: str}}}"
+}
+```
+
+### Supported Variable Types
+
+<CardGroup cols={2}>
+  <Card title="str" icon="font">
+    String values - text, IDs, names, etc.
+  </Card>
+  <Card title="int" icon="hashtag">
+    Integer numbers - counts, IDs, quantities
+  </Card>
+  <Card title="float" icon="decimal">
+    Decimal numbers - prices, percentages, measurements
+  </Card>
+  <Card title="bool" icon="toggle-on">
+    Boolean values - true/false flags
+  </Card>
+</CardGroup>
+
+**Important Rules:**
+- ✅ Always include the type: `{{variable: str}}`
+- ✅ Templates must be JSON strings, not objects
+- ✅ For `str` types in JSON, quotes are added automatically
+- ✅ All templates are required: `url_template`, `body_template`, `headers_template`
+
+### Variable Type Examples
+
+```json
+{
+  "url_template": "https://api.example.com/users/{{user_id: int}}/posts/{{post_id: str}}",
+  "body_template": "{\"active\": {{is_active: bool}}, \"score\": {{rating: float}}, \"name\": {{username: str}}}"
 }
 ```
 
@@ -251,57 +262,102 @@ Variables are provided by the agent during execution:
 - **Previous responses**: Data from earlier tool calls in the conversation
 - **Context variables**: Information from the current conversation
 
-### Conditional Logic
+### Real-World Examples
 
-Use conditional templating for dynamic behavior:
+#### GET Request with URL Parameters
 
 ```json
 {
-  "body_template": {
-    "action": "{{action_type}}",
-    "data": "{{#if user_premium}}{{premium_data}}{{else}}{{basic_data}}{{/if}}"
-  }
+  "method": "GET",
+  "url_template": "https://timeapi.io/api/time/current/zone?timeZone=Europe/{{city: str}}",
+  "headers_template": "{}",
+  "body_template": "{}",
+  "content_type": "application/json"
 }
 ```
+
+**Use Case**: Query time zone information for different European cities dynamically.
+
+#### POST Request with JSON Body
+
+```json
+{
+  "method": "POST",
+  "url_template": "https://api.example.com/data",
+  "headers_template": "{\"Content-Type\": \"application/json\", \"Authorization\": \"Bearer {{token: str}}\"}",
+  "body_template": "{\"key\": {{value: str}}, \"count\": {{count: int}}, \"active\": {{active: bool}}}",
+  "content_type": "application/json"
+}
+```
+
+**Use Case**: Send structured data to an API with mixed data types.
+
+#### POST Request with Form-Encoded Data
+
+```json
+{
+  "method": "POST",
+  "url_template": "https://api.example.com/login",
+  "headers_template": "{\"X-API-Key\": \"test-key\"}",
+  "body_template": "username={{username: str}}&password={{password: str}}&remember={{remember: bool}}",
+  "content_type": "application/x-www-form-urlencoded"
+}
+```
+
+**Use Case**: Submit traditional HTML form data with authentication.
 
 ## Response Handling
 
 ### Response Processing
 
-The API Request tool automatically processes responses:
+The API Request tool processes API responses and returns them as strings:
 
-1. **Status Code Validation**: Checks for successful HTTP status codes
-2. **Content Parsing**: Automatically parses JSON, XML, or text responses
-3. **Error Handling**: Provides meaningful error messages for failures
-4. **Data Extraction**: Makes response data available to the agent
+1. **Status Code Validation**: Automatically validates HTTP status codes using `raise_for_status()`
+2. **JSON Parsing**: Attempts to parse JSON responses
+3. **String Conversion**: Returns response data as a string representation
+4. **Error Handling**: Returns error messages as strings when requests fail
 
 ### Response Format
 
-Successful responses are returned in this format:
+<Warning>
+Responses are returned as **strings**, not structured objects.
+</Warning>
 
-```json
-{
-  "status": 200,
-  "headers": {
-    "content-type": "application/json",
-    "x-rate-limit-remaining": "99"
-  },
-  "data": {
-    "id": 123,
-    "name": "John Doe",
-    "email": "john@example.com"
-  },
-  "success": true
-}
+**Successful JSON Response**:
+```
+"{'id': 123, 'name': 'John Doe', 'email': 'john@example.com'}"
 ```
 
+**Successful Non-JSON Response**:
+```
+"Request successful"
+```
+
+**Error Response**:
+```
+"Error message describing what went wrong"
+```
+
+<Note>
+The agent will receive the response as a string and can extract information from it. The response includes the actual API data when JSON parsing is successful, or a success message when the response body cannot be parsed as JSON.
+</Note>
+
 ## Error Handling
+
+### Error Response Behavior
+
+When an API request fails, the tool returns an error message as a string. All errors are caught and returned as descriptive text messages.
 
 ### Common Error Scenarios
 
 <AccordionGroup>
   <Accordion title="Authentication Errors (401/403)">
     **Cause**: Invalid or expired API keys, insufficient permissions
+    
+    **Error Message Example**:
+    ```
+    "401 Client Error: Unauthorized for url: https://api.example.com/users"
+    ```
     
     **Solutions**:
     - Verify API key is correct and active
@@ -312,14 +368,23 @@ Successful responses are returned in this format:
   <Accordion title="Rate Limiting (429)">
     **Cause**: Exceeded API rate limits
     
+    **Error Message Example**:
+    ```
+    "429 Client Error: Too Many Requests for url: https://api.example.com/users"
+    ```
+    
     **Solutions**:
-    - Implement retry logic with exponential backoff
     - Reduce request frequency
+    - Wait before retrying the request
     - Upgrade API plan if available
-    - Use caching to reduce redundant requests
   </Accordion>
   <Accordion title="Bad Request (400)">
     **Cause**: Invalid request format or missing required fields
+    
+    **Error Message Example**:
+    ```
+    "400 Client Error: Bad Request for url: https://api.example.com/users"
+    ```
     
     **Solutions**:
     - Validate request body against API documentation
@@ -327,16 +392,25 @@ Successful responses are returned in this format:
     - Verify data types match API expectations
     - Test with API documentation examples
   </Accordion>
-  <Accordion title="Network Timeouts">
-    **Cause**: Slow API responses or network issues
+  <Accordion title="Network Errors">
+    **Cause**: Connection issues, DNS failures, or timeout
+    
+    **Error Message Example**:
+    ```
+    "ConnectionError: Failed to establish a new connection"
+    ```
     
     **Solutions**:
-    - Increase timeout values
-    - Implement retry logic
-    - Check API status and performance
-    - Use alternative endpoints if available
+    - Check network connectivity
+    - Verify the API endpoint URL is correct
+    - Check if the API service is operational
+    - Ensure firewall rules allow the connection
   </Accordion>
 </AccordionGroup>
+
+<Note>
+All errors are logged and returned as string messages. The tool uses basic error handling provided by the requests library, with automatic status code validation via `raise_for_status()`.
+</Note>
 
 ## Security Best Practices
 
@@ -348,65 +422,67 @@ Successful responses are returned in this format:
 
 ```json
 {
-  "headers_template": {
-    "Authorization": "Bearer {{secure_api_token}}",
-    "X-API-Key": "{{api_key}}"
-  }
+  "headers_template": "{\"Authorization\": \"Bearer {{secure_api_token: str}}\", \"X-API-Key\": \"{{api_key: str}}\"}"
 }
 ```
+
+<Note>
+Remember that `headers_template` must be a JSON **string**, not an object.
+</Note>
+
+### Security Features
+
+The API Request tool provides basic security through the underlying HTTP libraries:
+
+- **HTTPS Support**: ✅ Fully supported for secure connections
+- **SSL Certificate Validation**: ✅ Enabled by default via the requests library
+- **Secure Headers**: ✅ Support for Authorization headers and API keys via templates
 
 ### Security Checklist
 
 - **Use HTTPS**: Always use secure HTTPS endpoints
-- **Validate Certificates**: Ensure SSL certificate validation
-- **Rotate Keys**: Regular API key rotation
+- **Variable Substitution**: Use template variables for sensitive data like API keys
 - **Minimal Permissions**: Use API keys with minimal required permissions
-- **Monitor Usage**: Track API usage for unusual activity
-- **Rate Limiting**: Implement client-side rate limiting
-
-## Performance Optimization
-
-### Caching Strategies
-
-```json
-{
-  "cache_policy": {
-    "enable": true,
-    "ttl": 300,
-    "key_template": "api_{{endpoint}}_{{user_id}}"
-  }
-}
-```
-
-### Optimization Tips
-
-- **Batch Requests**: Combine multiple operations when possible
-- **Conditional Requests**: Use ETags and If-Modified-Since headers
-- **Compression**: Enable gzip compression for large responses
-- **Connection Pooling**: Reuse connections for better performance
+- **Rotate Keys**: Regularly rotate API keys and tokens
+- **Monitor Usage**: Track API usage patterns in your application
 
 ## Troubleshooting
 
-### Debug Mode
+### Testing Your Configuration
 
-Enable detailed logging to troubleshoot issues:
+Use these approaches to test your API Request tool configuration:
 
-```json
-{
-  "debug": true,
-  "log_requests": true,
-  "log_responses": true
-}
-```
+1. **API Testing Tools**: Test your endpoint with Postman, Insomnia, or curl first
+2. **Verify JSON Format**: Ensure `headers_template` and `body_template` are valid JSON strings
+3. **Check Variable Types**: Verify all template variables have correct type annotations
+4. **Test Incrementally**: Start with simple GET requests before adding complex bodies
+5. **Review Responses**: Check the string response returned by the tool for debugging
 
-### Testing Tools
+### Common Issues
 
-Use these approaches to test your configuration:
-
-1. **API Testing Tools**: Postman, Insomnia, or curl
-2. **Mock Servers**: Test with mock API responses
-3. **Staging Environments**: Test against non-production APIs
-4. **Request Logs**: Review detailed request/response logs
+<AccordionGroup>
+  <Accordion title="Template Parsing Errors">
+    **Cause**: Invalid JSON in `headers_template` or `body_template`
+    
+    **Solution**: Ensure templates are valid JSON strings with proper escaping:
+    ```json
+    "{\"key\": \"value\"}"  // Correct
+    {"key": "value"}         // Incorrect (object, not string)
+    ```
+  </Accordion>
+  <Accordion title="Missing Variable Values">
+    **Cause**: Template variable not provided during execution
+    
+    **Solution**: Ensure all variables in templates are available from the agent context
+  </Accordion>
+  <Accordion title="Type Conversion Errors">
+    **Cause**: Variable value cannot be converted to specified type
+    
+    **Solution**: Verify the data type matches the template variable type:
+    - `{{count: int}}` requires integer value
+    - `{{active: bool}}` requires boolean value
+  </Accordion>
+</AccordionGroup>
 
 ## Next Steps
 

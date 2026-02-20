@@ -1,0 +1,766 @@
+---
+title: "Creating Answer Filters"
+description: "Step-by-step guide to creating effective Answer Filters for your agents"
+---
+
+# Creating Answer Filters
+
+Learn how to create Answer Filters that guide your agent's responses for specific queries. This guide will walk you through the entire process, from planning to implementation and testing.
+
+## Prerequisites
+
+Before creating Answer Filters, ensure you have:
+
+<Check>**Agent Created**: You need an existing agent to add filters to</Check>
+<Check>**Admin Access**: Only project Admins and Owners can create filters</Check>
+<Check>**Clear Objectives**: Know what topics need filtered responses</Check>
+
+<Info>
+Answer Filters are configured per agent in the **Answer Filters** tab of the agent dashboard.
+</Info>
+
+---
+
+## Planning Your Filter
+
+Before creating a filter, take time to plan its structure. A well-planned filter is more effective and easier to maintain.
+
+### Step 1: Identify the Topic
+
+What specific topic or question type needs consistent responses?
+
+<Tabs>
+  <Tab title="Examples">
+    **Good Topics for Answer Filters:**
+    - Return policy questions
+    - Pricing inquiries
+    - Contact information requests
+    - Specific product features
+    - Account troubleshooting steps
+    
+    **Too Broad:**
+    - "Customer questions" (too vague)
+    - "Product information" (too general)
+    - "Help requests" (too open-ended)
+  </Tab>
+  <Tab title="Checklist">
+    Ask yourself:
+    - ✅ Is this a frequently asked question?
+    - ✅ Does it require a consistent answer?
+    - ✅ Is the information stable (not changing often)?
+    - ✅ Are there specific phrases I want to avoid?
+    - ✅ Do I have approved responses ready?
+  </Tab>
+</Tabs>
+
+---
+
+### Step 2: Collect Query Examples
+
+Gather 3-5 different ways users might ask about this topic.
+
+<CodeGroup>
+```text Example: Refund Policy
+"What is your refund policy?"
+"Can I get a refund?"
+"How do I return something for a refund?"
+"Do you offer money back guarantees?"
+"What's your return and refund process?"
+```
+
+```text Example: Account Login
+"I can't log in to my account"
+"My password doesn't work"
+"How do I reset my password?"
+"I forgot my login credentials"
+"Can't access my account"
+```
+
+```text Example: Shipping Times
+"How long does shipping take?"
+"When will my order arrive?"
+"What are your delivery times?"
+"How fast is shipping?"
+"Do you offer expedited delivery?"
+```
+</CodeGroup>
+
+<Note>
+**Pro Tip**: Include variations in phrasing, formality, and wording. The more diverse your examples, the better the filter will match real user queries.
+</Note>
+
+---
+
+### Step 3: Define Good Responses
+
+Write 2-4 approved responses that you want the agent to use or incorporate.
+
+**Characteristics of Good Responses:**
+- ✅ Accurate and up-to-date
+- ✅ Clear and specific
+- ✅ Helpful and actionable
+- ✅ Brand-aligned
+- ✅ Complete (answers the full question)
+
+<Tabs>
+  <Tab title="Example 1">
+    **Topic**: Refund Policy
+    
+    **Good Responses**:
+    ```
+    1. "We offer a 30-day money-back guarantee on all products."
+    
+    2. "To request a refund, log in to your account and go to 
+       'Orders' > 'Request Return' for the item you want to return."
+    
+    3. "Refunds are processed within 5-7 business days after we 
+       receive your returned item."
+    
+    4. "Items must be in original condition with tags attached 
+       to qualify for a full refund."
+    ```
+  </Tab>
+  <Tab title="Example 2">
+    **Topic**: Technical Support
+    
+    **Good Responses**:
+    ```
+    1. "Click 'Forgot Password' on the login page to reset your 
+       password via email."
+    
+    2. "Password reset emails arrive within 5 minutes. Check your 
+       spam folder if you don't see it."
+    
+    3. "For security, password reset links expire after 24 hours. 
+       Request a new one if yours has expired."
+    ```
+  </Tab>
+  <Tab title="Example 3">
+    **Topic**: Pricing
+    
+    **Good Responses**:
+    ```
+    1. "Our Basic plan starts at $29/month and includes up to 
+       10 users and 5GB storage."
+    
+    2. "We offer three tiers: Basic ($29/mo), Professional ($79/mo), 
+       and Enterprise (custom pricing)."
+    
+    3. "All plans include a 14-day free trial with no credit card 
+       required."
+    
+    4. "Annual billing saves you 20% compared to monthly billing."
+    ```
+  </Tab>
+</Tabs>
+
+---
+
+### Step 4: Identify Bad Responses
+
+List 2-3 responses that should be avoided.
+
+**Types of Bad Responses:**
+- ❌ Incorrect information
+- ❌ Vague or unhelpful answers
+- ❌ Off-brand language
+- ❌ Deflecting or dismissive responses
+- ❌ Outdated information
+
+<Tabs>
+  <Tab title="Example 1">
+    **Topic**: Refund Policy
+    
+    **Bad Responses**:
+    ```
+    1. "We don't offer refunds." 
+       ❌ Incorrect if you do offer refunds
+    
+    2. "Just contact customer service."
+       ❌ Too vague, not helpful
+    
+    3. "I don't know our refund policy."
+       ❌ Unhelpful and unprofessional
+    
+    4. "All sales are final."
+       ❌ Incorrect and creates poor experience
+    ```
+  </Tab>
+  <Tab title="Example 2">
+    **Topic**: Pricing
+    
+    **Bad Responses**:
+    ```
+    1. "It's free!"
+       ❌ Misleading if not actually free
+    
+    2. "Prices vary depending on many factors."
+       ❌ Too vague when specific info exists
+    
+    3. "Our pricing is complicated."
+       ❌ Discouraging and unhelpful
+    
+    4. "I can't discuss pricing."
+       ❌ Deflecting when pricing is public
+    ```
+  </Tab>
+  <Tab title="Example 3">
+    **Topic**: Data Privacy
+    
+    **Bad Responses**:
+    ```
+    1. "We might sell some of your data."
+       ❌ Concerning and likely incorrect
+    
+    2. "Don't worry about it."
+       ❌ Dismissive of legitimate concern
+    
+    3. "Your data is probably safe."
+       ❌ "Probably" undermines confidence
+    
+    4. "I can't answer privacy questions."
+       ❌ Evasive on important topic
+    ```
+  </Tab>
+</Tabs>
+
+---
+
+## Creating the Filter
+
+Now that you've planned your filter, let's create it in the platform.
+
+### Step-by-Step Process
+
+<Steps>
+  <Step title="Navigate to Answer Filters Tab">
+    1. Go to your **Project Dashboard**
+    2. Select your **Agent**
+    3. Click on the **Answer Filters** tab
+    
+    <Info>
+    You should see a table listing any existing Answer Filters for this agent.
+    </Info>
+  </Step>
+  
+  <Step title="Open Create Filter Dialog">
+    Click the **"+ Create Filter"** or **"Add Filter"** button.
+    
+    A dialog or sheet will open with the Answer Filter creation form.
+  </Step>
+  
+  <Step title="Add Queries">
+    In the **Queries** section:
+    
+    1. Enter your first query example
+    2. Click **"+ Add"** or press Enter to add more
+    3. Add 3-5 query variations
+    
+    **Tips:**
+    - Include different phrasings
+    - Vary the formality level
+    - Consider typos or common misspellings
+    - Think about how real users actually ask
+    
+    <Frame>
+      ```
+      Example Queries:
+      [1] What is your refund policy?          [x]
+      [2] Can I get my money back?             [x]
+      [3] How do returns work?                 [x]
+      [4] Do you offer refunds?                [x]
+      [+] Add another query...
+      ```
+    </Frame>
+  </Step>
+  
+  <Step title="Add Good Responses">
+    In the **Good Responses** section:
+    
+    1. Enter your first approved response
+    2. Click **"+ Add"** to add more
+    3. Add 2-4 good responses
+    
+    **Tips:**
+    - Be specific and actionable
+    - Include all necessary details
+    - Use your brand voice
+    - Ensure accuracy
+    
+    <Frame>
+      ```
+      Good Responses:
+      [1] We offer a 30-day money-back guarantee...  [x]
+      [2] Refunds are processed within 5-7 days...   [x]
+      [3] Items must be in original condition...     [x]
+      [+] Add another response...
+      ```
+    </Frame>
+  </Step>
+  
+  <Step title="Add Bad Responses">
+    In the **Bad Responses** section:
+    
+    1. Enter responses to avoid
+    2. Click **"+ Add"** to add more
+    3. Add 2-3 bad responses
+    
+    **Tips:**
+    - Include common mistakes
+    - List any outdated information
+    - Note off-brand phrasings
+    - Add deflecting responses
+    
+    <Frame>
+      ```
+      Bad Responses:
+      [1] We don't offer refunds.                    [x]
+      [2] Just contact support.                      [x]
+      [3] I don't know our refund policy.            [x]
+      [+] Add another response...
+      ```
+    </Frame>
+  </Step>
+  
+  <Step title="Review and Create">
+    1. **Review all fields** for accuracy
+    2. **Check for typos** in all text
+    3. Click **"Create Filter"** button
+    4. Wait for confirmation message
+    
+    <Check>
+    You should see a success message and the filter will appear in your filters list.
+    </Check>
+  </Step>
+</Steps>
+
+---
+
+## Complete Examples
+
+### Example 1: E-commerce Returns
+
+<CodeGroup>
+```yaml Complete Filter
+Filter Name: Returns & Refunds
+
+Queries:
+  - "What is your return policy?"
+  - "Can I return this product?"
+  - "How do I get a refund?"
+  - "Do you accept returns?"
+  - "What's your refund process?"
+
+Good Responses:
+  - "We accept returns within 30 days of purchase for a full refund."
+  - "Items must be unused and in original packaging with all tags attached."
+  - "To start a return, log in to your account and select 'Request Return' from your order history."
+  - "Refunds are processed within 5-7 business days after we receive and inspect your return."
+  - "Return shipping is free for defective items or our mistakes. For other returns, a $5.99 shipping fee applies."
+
+Bad Responses:
+  - "All sales are final."
+  - "We don't accept returns."
+  - "Just contact customer service."
+  - "I don't know the return policy."
+```
+</CodeGroup>
+
+---
+
+### Example 2: SaaS Pricing
+
+<CodeGroup>
+```yaml Complete Filter
+Filter Name: Pricing & Plans
+
+Queries:
+  - "How much does it cost?"
+  - "What are your pricing plans?"
+  - "Do you have a free plan?"
+  - "How much is the subscription?"
+  - "What's included in each plan?"
+
+Good Responses:
+  - "We offer three plans: Starter ($29/month), Professional ($79/month), and Enterprise (custom pricing)."
+  - "The Starter plan includes 10 users, 5GB storage, and basic features."
+  - "Professional adds unlimited users, 50GB storage, advanced analytics, and priority support."
+  - "All plans come with a 14-day free trial, no credit card required."
+  - "Annual billing saves you 20% compared to monthly billing."
+
+Bad Responses:
+  - "It's completely free."
+  - "Pricing is complex and varies."
+  - "I can't discuss pricing details."
+  - "You'll have to contact sales for pricing."
+```
+</CodeGroup>
+
+---
+
+### Example 3: Technical Support
+
+<CodeGroup>
+```yaml Complete Filter
+Filter Name: Password Reset
+
+Queries:
+  - "I forgot my password"
+  - "How do I reset my password?"
+  - "Can't log in"
+  - "My password doesn't work"
+  - "Need to change my password"
+
+Good Responses:
+  - "Click 'Forgot Password' on the login page to receive a reset link via email."
+  - "The password reset email arrives within 5 minutes. Check your spam folder if you don't see it."
+  - "For security, reset links expire after 24 hours. Request a new one if yours expired."
+  - "After resetting, your password must be at least 8 characters with a mix of letters and numbers."
+
+Bad Responses:
+  - "Your account is probably locked."
+  - "Just try again later."
+  - "Contact IT support."
+  - "I can't help with password issues."
+```
+</CodeGroup>
+
+---
+
+## Testing Your Filter
+
+After creating a filter, thorough testing is crucial.
+
+### Testing Checklist
+
+<AccordionGroup>
+  <Accordion title="1. Test Exact Matches">
+    Try the exact queries you defined:
+    
+    ```
+    User: "What is your return policy?"
+    
+    Expected: Agent should incorporate your good responses
+    Verify: ✅ Mentions 30-day policy
+            ✅ Explains process
+            ✅ Avoids bad responses
+    ```
+  </Accordion>
+  
+  <Accordion title="2. Test Variations">
+    Try similar but different phrasings:
+    
+    ```
+    User: "Can I send something back for a refund?"
+    User: "What if I want to return an item?"
+    User: "Tell me about your refund policy"
+    
+    Expected: Filter should still trigger
+    Verify: ✅ Consistent information
+            ✅ Good responses used
+    ```
+  </Accordion>
+  
+  <Accordion title="3. Test Edge Cases">
+    Try queries that are somewhat related but different:
+    
+    ```
+    User: "What if the product is damaged?"
+    User: "Can I exchange instead of refund?"
+    User: "Do you have a warranty?"
+    
+    Expected: May or may not trigger depending on similarity
+    Verify: ✅ Response is still helpful
+            ✅ If triggered, info is relevant
+    ```
+  </Accordion>
+  
+  <Accordion title="4. Test Negative Cases">
+    Verify bad responses are avoided:
+    
+    ```
+    Review several responses to the filtered queries.
+    
+    Verify: ❌ None of the bad responses appear
+            ❌ No deflecting or vague answers
+            ❌ No incorrect information
+    ```
+  </Accordion>
+</AccordionGroup>
+
+### Testing in Chat
+
+<Steps>
+  <Step title="Open Chat Interface">
+    Navigate to your agent's chat interface or test environment
+  </Step>
+  <Step title="Ask Test Questions">
+    Type each query variation and review responses
+  </Step>
+  <Step title="Document Results">
+    Note which queries trigger the filter and response quality
+  </Step>
+  <Step title="Refine if Needed">
+    If responses aren't as expected, edit the filter (see Managing Answer Filters guide)
+  </Step>
+</Steps>
+
+---
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Quality over Quantity" icon="badge-check">
+    **Start with 5-10 critical filters**
+    
+    Focus on topics that:
+    - Are asked frequently
+    - Need consistent answers
+    - Have compliance requirements
+    - Protect brand reputation
+  </Card>
+  
+  <Card title="Be Specific" icon="bullseye">
+    **Detailed is better than vague**
+    
+    Instead of:
+    ❌ "Our return policy is flexible"
+    
+    Use:
+    ✅ "We accept returns within 30 days with original packaging for a full refund"
+  </Card>
+  
+  <Card title="Include Context" icon="book-open">
+    **Provide complete information**
+    
+    Good responses should:
+    - Answer the full question
+    - Include next steps
+    - Provide relevant details
+    - Link to more info if needed
+  </Card>
+  
+  <Card title="Plan for Maintenance" icon="wrench">
+    **Keep filters current**
+    
+    - Review monthly
+    - Update when policies change
+    - Remove outdated filters
+    - Add new ones based on user questions
+  </Card>
+</CardGroup>
+
+---
+
+## Common Mistakes to Avoid
+
+<Warning>
+Watch out for these common pitfalls:
+</Warning>
+
+<AccordionGroup>
+  <Accordion title="❌ Too Few Query Examples">
+    **Problem**: Only 1-2 query examples
+    
+    **Impact**: Filter won't trigger for many similar questions
+    
+    **Solution**: Add 3-5 diverse query variations
+  </Accordion>
+  
+  <Accordion title="❌ Vague Good Responses">
+    **Problem**: "We have a good return policy"
+    
+    **Impact**: Agent can't provide specific, helpful information
+    
+    **Solution**: Include specific details, numbers, timeframes
+  </Accordion>
+  
+  <Accordion title="❌ No Bad Responses">
+    **Problem**: Only defining what to say, not what to avoid
+    
+    **Impact**: Agent might still make known mistakes
+    
+    **Solution**: List 2-3 common mistakes or outdated info
+  </Accordion>
+  
+  <Accordion title="❌ Overlapping Answer Filters">
+    **Problem**: Multiple filters cover similar topics
+    
+    **Impact**: Inconsistent responses, confusion
+    
+    **Solution**: Keep filters distinct or combine related ones
+  </Accordion>
+  
+  <Accordion title="❌ Outdated Information">
+    **Problem**: Filter contains old policy or pricing
+    
+    **Impact**: Agent gives wrong information
+    
+    **Solution**: Set calendar reminders to review filters
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Trigger Threshold (Advanced)
+
+<Note>
+**Default Setting**: 0.5 (50% similarity)
+
+Most users should stick with the default. Adjust only if you're experiencing issues with filter triggering.
+</Note>
+
+The trigger threshold determines how similar a user's query must be to your examples for the filter to activate.
+
+### When to Adjust
+
+<Tabs>
+  <Tab title="Lower Threshold (0.3-0.4)">
+    **Use when:**
+    - Filter isn't triggering often enough
+    - Topic is commonly asked in many different ways
+    - You want broad matching
+    
+    **Example**:
+    ```
+    Filter: Pricing Information
+    Threshold: 0.4
+    
+    Will trigger for:
+    ✅ "How much?"
+    ✅ "What's the cost?"
+    ✅ "Is it expensive?"
+    ✅ "Price?"
+    ```
+    
+    <Warning>
+    Risk of over-triggering (false positives)
+    </Warning>
+  </Tab>
+  
+  <Tab title="Higher Threshold (0.6-0.7)">
+    **Use when:**
+    - Filter triggers too often
+    - You need precise matching
+    - Topic is very specific
+    
+    **Example**:
+    ```
+    Filter: Enterprise Pricing
+    Threshold: 0.7
+    
+    Will trigger for:
+    ✅ "Enterprise pricing information"
+    ✅ "How much for enterprise plan?"
+    ❌ "How much?" (too general)
+    ❌ "Tell me about plans" (too broad)
+    ```
+    
+    <Warning>
+    Risk of under-triggering (false negatives)
+    </Warning>
+  </Tab>
+  <Tab title="Default (0.5)">
+    **Recommended for most cases**
+    
+    Balanced approach that works well for:
+    - Standard FAQ topics
+    - Clear, distinct topics
+    - General use cases
+    
+    **Behavior**:
+    - Triggers for reasonably similar queries
+    - Low false positive rate
+    - Low false negative rate
+  </Tab>
+</Tabs>
+
+---
+
+## Next Steps
+
+<Steps>
+  <Step title="Create Your First Filter">
+    Follow this guide to create 1-2 filters for your most critical topics
+  </Step>
+  <Step title="Test Thoroughly">
+    Spend time testing with various query types
+  </Step>
+  <Step title="Monitor Usage">
+    Check analytics to see how often filters trigger
+  </Step>
+  <Step title="Iterate">
+    Refine based on real user interactions
+  </Step>
+  <Step title="Scale Up">
+    Add more filters for additional topics
+  </Step>
+</Steps>
+
+<CardGroup cols={2}>
+  <Card title="Managing Answer Filters" icon="list-check" href="/agents/answer-filters/managing-answer-filters">
+    Learn to edit, update, and delete filters
+  </Card>
+  <Card title="Overview" icon="book-open" href="/agents/answer-filters/overview">
+    Learn more about Answer Filters concepts
+  </Card>
+  <Card title="Analytics" icon="chart-line" href="/agents/analytics/overview">
+    Monitor filter effectiveness
+  </Card>
+  <Card title="Agent Settings" icon="sliders" href="/agents/settings">
+    Configure other agent features
+  </Card>
+</CardGroup>
+
+---
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Filter isn't triggering">
+    **Possible causes:**
+    - Query examples are too different from user queries
+    - Threshold is too high
+    - Not enough query examples
+    
+    **Solutions:**
+    - Add more diverse query examples
+    - Lower the threshold slightly (0.4)
+    - Test with actual user phrasings
+  </Accordion>
+  
+  <Accordion title="Filter triggers too often">
+    **Possible causes:**
+    - Query examples are too generic
+    - Threshold is too low
+    - Filter topic overlaps with others
+    
+    **Solutions:**
+    - Make query examples more specific
+    - Raise the threshold (0.6-0.7)
+    - Review and consolidate overlapping filters
+  </Accordion>
+  
+  <Accordion title="Agent ignores good responses">
+    **Possible causes:**
+    - Good responses are too vague
+    - Agent's system prompt overrides filter
+    - Model doesn't support filters well
+    
+    **Solutions:**
+    - Make good responses more specific and directive
+    - Review system prompt for conflicts
+    - Ensure filter is actually triggering (test with exact queries)
+  </Accordion>
+  
+  <Accordion title="Can't create filter (permission error)">
+    **Possible causes:**
+    - Insufficient permissions
+    - Not an Admin or Owner
+    
+    **Solutions:**
+    - Contact project Admin or Owner
+    - Request elevated permissions
+    - Check project membership role
+  </Accordion>
+</AccordionGroup>

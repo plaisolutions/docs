@@ -1,16 +1,11 @@
 ---
 title: "Perplexity AI Tool"
 description: "Web search and research capabilities powered by Perplexity AI"
-icon: "magnifying-glass"
 ---
 
 # Perplexity AI Tool
 
 The Perplexity AI tool provides your agents with powerful web search and research capabilities. It leverages Perplexity's advanced AI models to search the web, analyze information, and provide comprehensive, citation-backed responses.
-
-<Frame>
-  <img src="/images/hero-light.png" alt="Perplexity AI Tool Configuration" />
-</Frame>
 
 <Note>
 This tool has **Pro** status, meaning it requires a professional subscription and provides advanced features for premium users.
@@ -55,10 +50,8 @@ The Perplexity AI tool transforms your agents into research assistants capable o
 
 <ParamField path="search_domain_filter" type="input">
   Optional domain filter to restrict or focus searches
-  <br />**Example**: `"site:news.com OR site:reuters.com"` (include only these domains)
-  <br />**Example**: `"-site:reddit.com -site:forum.com"` (exclude these domains)
-  <br />**Format**: Use Google search operators for domain filtering
-  <br />**Default**: No filtering (searches entire web)
+  <br />**Example**: `"news.com, reuters.com"` (include only these domains)
+  <br />**Example**: `"-news.com, -reuters.com"` (exclude these domains)
 </ParamField>
 
 ## Setup Instructions
@@ -81,9 +74,6 @@ The Perplexity AI tool transforms your agents into research assistants capable o
   </Step>
   <Step title="Set Domain Filter (Optional)">
     Configure domain restrictions if needed for your use case
-  </Step>
-  <Step title="Test Search">
-    Use the test button to verify search functionality
   </Step>
   <Step title="Add to Agent">
     Assign this tool to your agents in agent settings
@@ -175,7 +165,7 @@ The Perplexity AI tool transforms your agents into research assistants capable o
 {
   "model": "sonar",
   "system_message": "Search for the latest news and developments. Prioritize recent articles from reputable news sources. Provide a summary of key points with publication dates and source links.",
-  "search_domain_filter": "site:reuters.com OR site:ap.org OR site:bbc.com OR site:cnn.com"
+  "search_domain_filter": "reuters.com,ap.org,bbc.com,cnn.com"
 }
 ```
 
@@ -185,7 +175,7 @@ The Perplexity AI tool transforms your agents into research assistants capable o
 {
   "model": "sonar-reasoning-pro",
   "system_message": "Search for technical and scientific information with emphasis on peer-reviewed sources, official documentation, and expert analysis. Provide detailed explanations with proper citations.",
-  "search_domain_filter": "site:arxiv.org OR site:nature.com OR site:science.org OR site:ieee.org"
+  "search_domain_filter": "arxiv.org,nature.com,science.org,ieee.org"
 }
 ```
 
@@ -195,157 +185,9 @@ The Perplexity AI tool transforms your agents into research assistants capable o
 {
   "model": "sonar-reasoning",
   "system_message": "Search for business and market information including trends, company news, financial data, and industry analysis. Focus on authoritative business sources and recent developments.",
-  "search_domain_filter": "site:bloomberg.com OR site:reuters.com OR site:wsj.com OR site:ft.com -site:reddit.com"
+  "search_domain_filter": "bloomberg.com,reuters.com,wsj.com,ft.com"
 }
 ```
-
-### Academic Research
-
-```json
-{
-  "model": "sonar-reasoning-pro",
-  "system_message": "Search for academic and scholarly information. Prioritize peer-reviewed papers, educational institutions, and authoritative academic sources. Provide comprehensive analysis with proper academic citations.",
-  "search_domain_filter": "site:edu OR site:scholar.google.com OR site:jstor.org OR site:pubmed.ncbi.nlm.nih.gov"
-}
-```
-
-## Domain Filtering
-
-### Include Specific Domains
-
-Focus searches on trusted sources:
-
-```
-site:reuters.com OR site:bbc.com OR site:ap.org
-```
-
-### Exclude Unreliable Sources
-
-Remove low-quality or irrelevant sources:
-
-```
--site:reddit.com -site:yahoo.com -site:answers.com
-```
-
-### Combine Include and Exclude
-
-```
-site:edu OR site:gov -site:reddit.com -site:forum.com
-```
-
-### Domain Categories
-
-<AccordionGroup>
-  <Accordion title="News Sources">
-    **Reputable News**: `site:reuters.com OR site:ap.org OR site:bbc.com OR site:npr.org`
-    **Business News**: `site:bloomberg.com OR site:wsj.com OR site:ft.com`
-    **Tech News**: `site:techcrunch.com OR site:ars-technica.com OR site:wired.com`
-  </Accordion>
-  <Accordion title="Academic Sources">
-    **Educational**: `site:edu` (all .edu domains)
-    **Research**: `site:arxiv.org OR site:pubmed.ncbi.nlm.nih.gov`
-    **Journals**: `site:nature.com OR site:science.org OR site:ieee.org`
-  </Accordion>
-  <Accordion title="Official Sources">
-    **Government**: `site:gov` (all .gov domains)
-    **Organizations**: `site:who.int OR site:un.org OR site:worldbank.org`
-    **Standards**: `site:iso.org OR site:ietf.org OR site:w3.org`
-  </Accordion>
-</AccordionGroup>
-
-## Use Cases & Applications
-
-### Customer Support Enhancement
-
-```yaml
-Purpose: Provide agents with real-time information lookup capabilities
-Configuration:
-  Model: sonar-pro
-  System Message: "Search for product information, troubleshooting guides, and support documentation. Provide clear, actionable answers with source links."
-  Domain Filter: "site:company-docs.com OR site:support.product.com"
-Benefits:
-  - Up-to-date product information
-  - Real-time troubleshooting guidance
-  - Access to latest documentation
-```
-
-### Content Creation Assistant
-
-```yaml
-Purpose: Research topics and gather information for content creation
-Configuration:
-  Model: sonar-reasoning
-  System Message: "Search for comprehensive information on the topic. Include multiple perspectives, recent developments, and authoritative sources for content creation."
-  Domain Filter: "-site:wikipedia.org -site:reddit.com" (exclude for originality)
-Benefits:
-  - Fresh, current information
-  - Multiple source perspectives
-  - Citation-ready research
-```
-
-### Investment Research
-
-```yaml
-Purpose: Gather financial and market intelligence
-Configuration:
-  Model: sonar-reasoning-pro
-  System Message: "Search for financial data, market analysis, company news, and investment insights. Focus on recent developments and authoritative financial sources."
-  Domain Filter: "site:bloomberg.com OR site:reuters.com OR site:sec.gov OR site:marketwatch.com"
-Benefits:
-  - Real-time market data
-  - Company financial information
-  - Regulatory filings access
-```
-
-### Competitive Intelligence
-
-```yaml
-Purpose: Monitor competitors and industry trends
-Configuration:
-  Model: sonar-pro
-  System Message: "Search for competitor information, industry trends, product launches, and market developments. Provide analysis of competitive landscape."
-  Domain Filter: "site:techcrunch.com OR site:venturebeat.com OR site:crunchbase.com"
-Benefits:
-  - Competitor monitoring
-  - Industry trend analysis
-  - Market intelligence gathering
-```
-
-## Response Format
-
-### Structured Responses
-
-Perplexity AI provides structured responses with:
-
-```json
-{
-  "search_results": [
-    {
-      "title": "Article Title",
-      "url": "https://source.com/article",
-      "snippet": "Relevant excerpt from the source",
-      "published_date": "2024-01-15",
-      "domain": "source.com"
-    }
-  ],
-  "synthesized_response": "AI-generated synthesis of the search results",
-  "citations": [
-    "[1] Source Title - https://source.com/article",
-    "[2] Another Source - https://another-source.com/page"
-  ],
-  "confidence_score": 0.85,
-  "search_query": "reformulated search query used"
-}
-```
-
-### Citation Format
-
-All responses include proper citations:
-
-- **In-line Citations**: Information is marked with [1], [2], etc.
-- **Reference List**: Complete source list with URLs
-- **Source Metadata**: Publication dates, domains, and titles
-- **Confidence Indicators**: Quality and reliability scores
 
 ## Best Practices
 
@@ -380,20 +222,6 @@ Less Effective:
 - **Time Sensitivity**: Use recent sources for current events
 - **Source Type**: Match source type to information need
 - **Exclude Noise**: Remove forums and user-generated content when needed
-
-## Performance Optimization
-
-### Caching Strategies
-
-```json
-{
-  "cache_policy": {
-    "enable": true,
-    "ttl": 1800,
-    "key_template": "perplexity_{{query_hash}}_{{domain_filter}}"
-  }
-}
-```
 
 ### Cost Management
 

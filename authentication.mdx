@@ -13,10 +13,10 @@ PLai Framework uses multiple authentication methods depending on the context. Th
 
 <Steps>
   <Step title="Create Account">
-    Visit the [PLai Framework dashboard](https://framework.plaisolutions.com) and click "Sign Up"
+    Visit the [PLai Framework dashboard](https://framework.plaisolutions.com) and click "Register"
   </Step>
   <Step title="Email Verification">
-    Check your email and click the verification link
+    Check your email and click the verification link 
   </Step>
   <Step title="Organization Setup">
     Create your first organization or accept an invitation
@@ -32,7 +32,6 @@ PLai Framework uses secure session cookies for dashboard authentication:
 
 - **Session Duration**: Sessions last 30 days by default
 - **Auto-Renewal**: Sessions renew automatically with activity
-- **Multi-Device**: You can be logged in on multiple devices
 - **Secure Cookies**: All cookies are httpOnly and secure
 
 ## API Authentication
@@ -78,31 +77,6 @@ curl -X POST https://api.plaisolutions.com/auth/login \
   -d '{"email": "user@example.com", "password": "password"}'
 ```
 
-## Agent Chat Authentication
-
-### Share URLs
-
-Agents can be shared publicly or with specific users using secure share URLs:
-
-```
-https://framework.plaisolutions.com/share/{agentId}/{shareId}
-```
-
-<Tabs>
-  <Tab title="Public Shares">
-    - No authentication required
-    - Time-limited access
-    - Rate limiting applied
-    - Limited functionality
-  </Tab>
-  <Tab title="Private Shares">
-    - Authentication required
-    - Full agent capabilities
-    - Usage tracked to organization
-    - Full analytics available
-  </Tab>
-</Tabs>
-
 ## Organization & Project Access
 
 ### Role-Based Access Control (RBAC)
@@ -114,11 +88,12 @@ PLai Framework implements fine-grained RBAC:
     - **Owner**: Full organization control
     - **Admin**: Manage users and projects
     - **Member**: Access assigned projects
+    - **Viewer**: No access
   </Accordion>
   <Accordion title="Project Roles">
     - **Owner**: Full project control
     - **Admin**: Manage project resources
-    - **Member**: Use agents and tools
+    - **Member**: Use agents, datasources and tools as project member
     - **Viewer**: Read-only access
   </Accordion>
 </AccordionGroup>
@@ -128,23 +103,18 @@ PLai Framework implements fine-grained RBAC:
 | Action | Viewer | Member | Admin | Owner |
 |--------|---------|---------|--------|-------|
 | View Agents | ✅ | ✅ | ✅ | ✅ |
-| Chat with Agents | ❌ | ✅ | ✅ | ✅ |
-| Create Agents | ❌ | ❌ | ✅ | ✅ |
-| Manage Tools | ❌ | ❌ | ✅ | ✅ |
-| View Analytics | ✅ | ✅ | ✅ | ✅ |
-| Manage Batches | ❌ | ❌ | ✅ | ✅ |
+| Chat with Agents | ✅ | ✅ | ✅ | ✅ |
+| Create Agents | ❌ | ✅ | ✅ | ✅ |
+| Manage Tools & Datasources | ❌ | ✅ | ✅ | ✅ |
+| View Analytics | ❌ | ✅ | ✅ | ✅ |
+| Manage Batches | ❌ | ✅ | ✅ | ✅ |
 | Billing Access | ❌ | ❌ | ❌ | ✅ |
 
 ## API Security
 
 ### Rate Limiting
 
-API endpoints have rate limits to prevent abuse:
-
-- **Authentication**: 10 requests/minute
-- **Agent Chat**: 60 requests/minute
-- **Management APIs**: 300 requests/minute
-- **Analytics**: 100 requests/minute
+We're working on it.
 
 ### Request Headers
 
@@ -164,9 +134,8 @@ const headers = {
 ### Development Environment
 ```typescript
 const config = {
-  apiUrl: 'https://api-dev.plaisolutions.com',
-  authUrl: 'https://auth-dev.plaisolutions.com',
-  dashboardUrl: 'https://app-dev.plaisolutions.com'
+  apiUrl: 'https://staging.api.plaisolutions.com',
+  dashboardUrl: 'https://staging.framework.plaisolutions.com'
 };
 ```
 
@@ -174,7 +143,6 @@ const config = {
 ```typescript
 const config = {
   apiUrl: 'https://api.plaisolutions.com',
-  authUrl: 'https://auth.plaisolutions.com',
   dashboardUrl: 'https://framework.plaisolutions.com'
 };
 ```
@@ -264,50 +232,6 @@ async function handleApiRequest(url: string, options: RequestInit) {
     - Log authentication events for audit
   </Tab>
 </Tabs>
-
-## Integration Examples
-
-### React Application
-```typescript
-import { useAuth } from '@/hooks/useAuth';
-
-function MyComponent() {
-  const { user, project, isAuthenticated, login, logout } = useAuth();
-  
-  if (!isAuthenticated) {
-    return <LoginForm onLogin={login} />;
-  }
-  
-  return (
-    <div>
-      <h1>Welcome, {user.name}</h1>
-      <p>Current project: {project.name}</p>
-      <button onClick={logout}>Logout</button>
-    </div>
-  );
-}
-```
-
-### Node.js Application
-```typescript
-import jwt from 'jsonwebtoken';
-
-async function authenticateRequest(req: Request, res: Response, next: NextFunction) {
-  const token = req.headers.authorization?.replace('Bearer ', '');
-  
-  if (!token) {
-    return res.status(401).json({ error: 'No token provided' });
-  }
-  
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
-    next();
-  } catch (error) {
-    return res.status(401).json({ error: 'Invalid token' });
-  }
-}
-```
 
 ## Next Steps
 

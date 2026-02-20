@@ -15,43 +15,35 @@
         "groups": [
           {
             "group": "Getting Started",
-            "pages": [
-              "index",
-              "quickstart",
-              "concepts",
-              "authentication"
-            ]
+            "pages": ["index", "concepts", "authentication"]
           },
           {
             "group": "🤖 Agents",
             "pages": [
               "agents/overview",
-              "agents/creating-agents",
-              "agents/agent-settings",
+              "agents/settings",
+
               {
-                "group": "Analytics",
+                "group": "Answer Filters",
                 "pages": [
-                  "agents/analytics/overview",
-                  "agents/analytics/progress-tracking",
-                  "agents/analytics/filters",
-                  "agents/analytics/reports",
-                  "agents/analytics/settings-panel"
-                ]
-              },
-              {
-                "group": "Filters",
-                "pages": [
-                  "agents/filters/answer-filters",
-                  "agents/filters/creating-filters",
-                  "agents/filters/managing-filters"
+                  "agents/answer-filters/overview",
+                  "agents/answer-filters/creating-answer-filters",
+                  "agents/answer-filters/managing-answer-filters"
                 ]
               },
               {
                 "group": "Guardrails",
                 "pages": [
                   "agents/guardrails/overview",
-                  "agents/guardrails/configuration",
-                  "agents/guardrails/best-practices"
+                  "agents/guardrails/configuration"
+                ]
+              },
+              {
+                "group": "Analytics",
+                "pages": [
+                  "agents/analytics/overview",
+                  "agents/analytics/conversation-analysis",
+                  "agents/analytics/live-mode"
                 ]
               }
             ]
@@ -60,12 +52,12 @@
             "group": "🔧 Tools",
             "pages": [
               "tools/overview",
+              "tools/agents",
               "tools/api-requests",
               "tools/perplexity-ai",
               "tools/mcp-servers",
-              "tools/browser-tools",
-              "tools/code-interpreter",
-              "tools/external-datasource"
+              "tools/external-datasource",
+              "tools/browser-tool"
             ]
           },
           {
@@ -83,6 +75,14 @@
               "batches/creating-batches",
               "batches/monitoring-status",
               "batches/downloading-results"
+            ]
+          },
+          {
+            "group": "📋 Experiments",
+            "pages": [
+              "experiments/overview",
+              "experiments/creating-experiments",
+              "experiments/experiments-results"
             ]
           },
           {
@@ -135,13 +135,12 @@
             "group": "User & Organization Management",
             "pages": [
               "api-reference/me",
-              "api-reference/organizations",
               "api-reference/invitations",
               "api-reference/users"
             ]
           },
           {
-            "group": "Projects & Agents",
+            "group": "Projects",
             "pages": [
               "api-reference/projects",
               "api-reference/agents",
@@ -149,7 +148,15 @@
             ]
           },
           {
-            "group": "Data Management",
+            "group": "Agents",
+            "pages": [
+              "api-reference/agents",
+              "api-reference/answer-filters",
+              "api-reference/llms"
+            ]
+          },
+          {
+            "group": "Datasources",
             "pages": [
               "api-reference/datasources",
               "api-reference/folders",
@@ -157,27 +164,28 @@
             ]
           },
           {
-            "group": "Tools & Models",
-            "pages": [
-              "api-reference/tools",
-              "api-reference/llms",
-              "api-reference/vector-databases"
-            ]
+            "group": "Tools",
+            "pages": ["api-reference/tools"]
           },
           {
-            "group": "Processing & Analytics",
-            "pages": [
-              "api-reference/batches",
-              "api-reference/threads",
-              "api-reference/usage"
-            ]
+            "group": "Threads",
+            "pages": ["api-reference/threads"]
+          },
+          {
+            "group": "Chat Sessions",
+            "pages": ["api-reference/chat-sessions"]
+          },
+          {
+            "group": "Batches",
+            "pages": ["api-reference/batches", "api-reference/usage"]
+          },
+          {
+            "group": "Usage",
+            "pages": ["api-reference/usage", "api-reference/executions"]
           },
           {
             "group": "Advanced Features",
-            "pages": [
-              "api-reference/guardrails",
-              "api-reference/vectors"
-            ]
+            "pages": ["api-reference/guardrails"]
           }
         ]
       }
@@ -188,21 +196,6 @@
           "anchor": "PLai Solutions",
           "href": "https://plaisolutions.com",
           "icon": "house"
-        },
-        {
-          "anchor": "Support",
-          "href": "mailto:support@plaisolutions.com",
-          "icon": "life-ring"
-        },
-        {
-          "anchor": "Community",
-          "href": "https://discord.gg/plaisolutions",
-          "icon": "discord"
-        },
-        {
-          "anchor": "GitHub",
-          "href": "https://github.com/plaisolutions",
-          "icon": "github"
         }
       ]
     }
@@ -214,15 +207,9 @@
     "text": "PLai Framework"
   },
   "navbar": {
-    "links": [
-      {
-        "label": "Dashboard",
-        "href": "https://framework.plaisolutions.com/"
-      }
-    ],
     "primary": {
       "type": "button",
-      "label": "Get Started",
+      "label": "Dashboard",
       "href": "https://framework.plaisolutions.com/"
     }
   },

@@ -1,16 +1,11 @@
 ---
 title: "MCP Server Tool"
 description: "Connect to Model Context Protocol servers for extended functionality"
-icon: "server"
 ---
 
 # MCP Server Tool
 
 The MCP Server tool enables agents to connect to remote Model Context Protocol (MCP) servers, extending their capabilities with external services, tools, and data sources through a standardized protocol.
-
-<Frame>
-  <img src="/images/hero-light.png" alt="MCP Server Tool Configuration" />
-</Frame>
 
 <Note>
 This tool has **Preview** status, meaning it's nearly ready for production with potential minor adjustments based on user feedback.
@@ -50,8 +45,8 @@ The Model Context Protocol provides:
 <ParamField path="server_url" type="input" required>
   The URL of the MCP server
   <br />**Example**: `https://api.example.com/mcp`
-  <br />**Format**: Must be a valid HTTPS URL
-  <br />**Note**: HTTP URLs are not supported for security reasons
+  <br />**Format**: Must be a valid URL
+  <br />**Note**: HTTPS is strongly recommended for production environments
 </ParamField>
 
 <ParamField path="auth_type" type="select" required>
@@ -80,7 +75,7 @@ The Model Context Protocol provides:
 
 ### Token Authentication Parameters
 
-<ParamField path="api_token" type="password">
+<ParamField path="token" type="password">
   API token for authentication
   <br />**Example**: `mcp_token_abc123xyz789`
   <br />**Condition**: Only required when `auth_type` is set to `token`
@@ -97,9 +92,9 @@ The Model Context Protocol provides:
 <ParamField path="token_prefix" type="input">
   Token prefix for the authorization header
   <br />**Example**: `Bearer`, `Token`, `MCP`
-  <br />**Default**: `Bearer`
+  <br />**Default**: (empty string - no prefix)
   <br />**Condition**: Only shown when `auth_type` is set to `token`
-  <br />**Result**: Header will be formatted as `{prefix} {token}`
+  <br />**Result**: If provided, header will be formatted as `{prefix} {token}`, otherwise just `{token}`
 </ParamField>
 
 ## Setup Instructions
@@ -143,15 +138,17 @@ OAuth provides secure, token-based authentication with automatic refresh capabil
     {
       "server_url": "https://api.example.com/mcp",
       "auth_type": "oauth",
-      "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...",
-      "token_expiry": "2024-12-31T23:59:59Z"
+      "auth_config": {
+        "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...",
+        "token_expiry": "2024-12-31T23:59:59Z"
+      }
     }
     ```
   </Tab>
   <Tab title="Features">
-    - **Automatic Refresh**: Tokens are refreshed automatically
+    - **Token Validation**: Tokens are validated before use
     - **Secure Storage**: Tokens stored in encrypted format
-    - **Expiration Handling**: Automatic token renewal before expiry
+    - **Expiration Handling**: Tokens are checked for expiration (manual renewal required)
     - **Scope Management**: Support for OAuth scopes and permissions
   </Tab>
   <Tab title="Use Cases">
@@ -172,24 +169,26 @@ Simple token-based authentication for straightforward API access:
     {
       "server_url": "https://api.example.com/mcp",
       "auth_type": "token",
-      "api_token": "mcp_token_abc123xyz789",
-      "header_name": "X-API-Token",
-      "token_prefix": "Bearer"
+      "auth_config": {
+        "token": "mcp_token_abc123xyz789",
+        "header_name": "X-API-Token",
+        "token_prefix": "Bearer"
+      }
     }
     ```
   </Tab>
   <Tab title="Header Formats">
-    **Bearer Token**:
+    **Bearer Token** (with prefix):
     ```
     Authorization: Bearer mcp_token_abc123xyz789
     ```
     
-    **Custom Header**:
+    **Custom Header** (no prefix, default):
     ```
     X-API-Token: mcp_token_abc123xyz789
     ```
     
-    **API Key Style**:
+    **API Key Style** (with custom prefix):
     ```
     X-MCP-Key: Token mcp_token_abc123xyz789
     ```
@@ -212,8 +211,10 @@ Connect to a database through an MCP server:
 {
   "server_url": "https://db-mcp.company.com/mcp",
   "auth_type": "oauth",
-  "access_token": "{{oauth_token}}",
-  "token_expiry": "2024-12-31T23:59:59Z"
+  "auth_config": {
+    "access_token": "{{oauth_token}}",
+    "token_expiry": "2024-12-31T23:59:59Z"
+  }
 }
 ```
 
@@ -231,9 +232,11 @@ Process documents and files through MCP:
 {
   "server_url": "https://files-mcp.company.com/mcp",
   "auth_type": "token",
-  "api_token": "{{file_processor_token}}",
-  "header_name": "Authorization",
-  "token_prefix": "Bearer"
+  "auth_config": {
+    "token": "{{file_processor_token}}",
+    "header_name": "Authorization",
+    "token_prefix": "Bearer"
+  }
 }
 ```
 
@@ -251,9 +254,11 @@ Access custom business logic and calculations:
 {
   "server_url": "https://business-logic.company.com/mcp",
   "auth_type": "token",
-  "api_token": "{{business_token}}",
-  "header_name": "X-Business-Token",
-  "token_prefix": "BL"
+  "auth_config": {
+    "token": "{{business_token}}",
+    "header_name": "X-Business-Token",
+    "token_prefix": "BL"
+  }
 }
 ```
 
@@ -315,7 +320,7 @@ MCP protocol includes comprehensive error handling:
 **Token Security**: Never expose MCP tokens in logs or debug output. Always use secure storage for credentials.
 </Warning>
 
-- **HTTPS Only**: Always use HTTPS for MCP server connections
+- **HTTPS Recommended**: Always use HTTPS for MCP server connections in production
 - **Token Rotation**: Regularly rotate authentication tokens
 - **Least Privilege**: Grant minimum necessary permissions
 - **Audit Logging**: Monitor MCP server access and usage

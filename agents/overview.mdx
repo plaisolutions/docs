@@ -1,16 +1,11 @@
 ---
 title: "Agents Overview"
 description: "Learn how to create and manage AI agents in PLai Framework"
-icon: "robot"
 ---
 
 # Agents Overview
 
 Agents are the core AI entities in PLai Framework. Each agent is a specialized AI assistant that can chat with users, use tools, access datasources, and execute complex workflows.
-
-<Frame>
-  <img src="/images/hero-light.png" alt="Agents Dashboard" />
-</Frame>
 
 ## What are Agents?
 
@@ -52,7 +47,7 @@ Every agent in PLai Framework includes:
     - Custom reporting and filtering
     - Progress tracking for batch operations
   </Tab>
-  <Tab title="Filters">
+  <Tab title="Answer Filters">
     - Answer filtering and validation
     - Content moderation controls
     - Response customization rules
@@ -76,15 +71,18 @@ Each agent has fundamental configuration options:
   <Accordion title="Identity & Behavior">
     - **Name**: Human-readable agent identifier
     - **Description**: Purpose and capabilities summary
-    - **System Instructions**: Core personality and behavior guidelines
+    - **System Instructions (Prompt)**: Core personality and behavior guidelines
     - **Avatar**: Visual representation for chat interfaces
   </Accordion>
   <Accordion title="Model Configuration">
-    - **LLM Provider**: OpenAI, Anthropic, Together AI, Azure, etc.
-    - **Model Selection**: GPT-4, Claude, Llama, and other models
+    - **LLM Provider**: OpenAI, Anthropic, Google, Groq, Together AI, OpenRouter, etc.
+    - **Model Selection**: GPT-4, Claude, Gemini, Llama, and other models
     - **Temperature**: Response creativity and randomness
     - **Max Tokens**: Response length limitations
-    - **RouteLL**: Smart model routing for cost optimization
+    - **RouteLLM**: Smart model routing for cost optimization
+    - **Streaming**: Enable real-time response streaming for interactive conversations
+    - **Language Detection**: Automatically detect and respond in the user's language from the first question
+    - **Structured Output**: Define JSON schemas for consistent, structured responses
   </Accordion>
   <Accordion title="Capabilities">
     - **Tools**: Available actions and integrations
@@ -94,32 +92,182 @@ Each agent has fundamental configuration options:
   </Accordion>
 </AccordionGroup>
 
-## Agent Status & Management
+### Advanced Model Configuration
 
-### Agent States
+#### Response Streaming
 
-<CardGroup cols={3}>
-  <Card title="Active" icon="check-circle" color="#10b981">
-    Agent is running and can handle requests
-  </Card>
-  <Card title="Inactive" icon="x-circle" color="#ef4444">
-    Agent is paused and won't respond to requests
-  </Card>
-  <Card title="Processing" icon="clock" color="#f59e0b">
-    Agent is busy processing batch operations
-  </Card>
-</CardGroup>
+Enable real-time response streaming to provide progressive, interactive conversations with your users.
 
-### Management Operations
+<Tabs>
+  <Tab title="Overview">
+    **What is Streaming?**
+    
+    Streaming allows the agent to send responses progressively as they're generated, rather than waiting for the complete response. This creates a more interactive and responsive user experience.
 
-Common agent management tasks:
+    **Benefits:**
+    - Improved user experience with instant feedback
+    - Reduced perceived latency
+    - Better for long-form responses
+    - Real-time interaction feeling
+  </Tab>
+  <Tab title="Use Cases">
+    **Ideal for:**
+    - Interactive chatbots
+    - Customer support agents
+    - Real-time conversational interfaces
+    - Applications where user experience is critical
+    
+    **Not recommended for:**
+    - API integrations requiring complete responses
+    - Batch processing operations
+    - Scenarios requiring structured data output
+  </Tab>
+  <Tab title="Compatibility">
+    **Model Support:**
+    - ✅ Most modern LLMs support streaming (GPT-4, Claude, Gemini, etc.)
+    - ❌ Some older or specialized models may not support it
+    
+    <Warning>
+    **Important**: Streaming and Structured Output are mutually exclusive. Enabling one will automatically disable the other.
+    </Warning>
+  </Tab>
+</Tabs>
 
-- **Create**: Set up new agents with configuration
-- **Update**: Modify settings, tools, and behavior
-- **Clone**: Duplicate agents for testing or variants
-- **Share**: Generate public or private sharing links
-- **Delete**: Remove agents and associated data
-- **Export**: Backup agent configurations
+#### Language Detection
+
+Automatically detect and adapt to your user's language based on their first question.
+
+<Tabs>
+  <Tab title="Overview">
+    **How it Works:**
+    
+    When enabled, the agent analyzes the user's first message to detect the language being used. The agent then automatically responds in the same language throughout the conversation.
+
+    **Benefits:**
+    - Seamless multi-language support
+    - No manual language configuration needed
+    - Improved global user experience
+    - Automatic language consistency
+  </Tab>
+  <Tab title="Use Cases">
+    **Perfect for:**
+    - International applications
+    - Multi-region customer support
+    - Public-facing chatbots
+    - Global e-commerce platforms
+    
+    **Example Behavior:**
+    - User asks "¿Cómo puedo ayudarte?" → Agent responds in Spanish
+    - User asks "How can I help you?" → Agent responds in English
+    - User asks "Comment puis-je vous aider?" → Agent responds in French
+  </Tab>
+  <Tab title="Compatibility">
+    **Model Support:**
+    - ✅ Works with all models
+    - ✅ Independent of other features
+    - ✅ Can be combined with Streaming or Structured Output
+    
+    <Info>
+    **Best Practice**: Enable this feature for public-facing agents that may interact with users from different regions.
+    </Info>
+  </Tab>
+</Tabs>
+
+#### Structured Output
+
+Define JSON schemas to enforce consistent, parseable response formats.
+
+<Tabs>
+  <Tab title="Overview">
+    **What is Structured Output?**
+    
+    Structured Output allows you to define a JSON schema that the agent must follow in its responses. This ensures consistent, predictable, and easily parseable outputs.
+
+    **Benefits:**
+    - Guaranteed response format
+    - Easy integration with external systems
+    - Automatic validation
+    - Consistent data extraction
+  </Tab>
+  <Tab title="Requirements">
+    **Prerequisites:**
+    - Model must support structured outputs (GPT-4, Gemini Pro, etc.)
+    - JSON Schema must be defined
+    - Cannot be used with RouteLL
+    - Cannot be used with Streaming
+    
+    <Warning>
+    **Limitations**:
+    - Not available with RouteLLM routing
+    - Streaming must be disabled
+    - Requires compatible model
+    </Warning>
+  </Tab>
+  <Tab title="Use Cases">
+    **Ideal for:**
+    - Data extraction tasks
+    - Form filling automation
+    - API integrations
+    - Structured data processing
+    - Database population
+    
+    **Example Scenarios:**
+    - Extract contact information from text
+    - Parse product details from descriptions
+    - Generate structured reports
+    - Classify and categorize content
+  </Tab>
+  <Tab title="Examples">
+    **Contact Information Extraction:**
+    ```json
+    {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Full name of the person"
+        },
+        "email": {
+          "type": "string",
+          "format": "email"
+        },
+        "phone": {
+          "type": "string"
+        }
+      },
+      "required": ["name", "email"],
+      "additionalProperties": false
+    }
+    ```
+
+    **Product Analysis:**
+    ```json
+    {
+      "type": "object",
+      "properties": {
+        "product_name": { "type": "string" },
+        "sentiment": {
+          "type": "string",
+          "enum": ["positive", "negative", "neutral"]
+        },
+        "key_features": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "price_range": {
+          "type": "object",
+          "properties": {
+            "min": { "type": "number" },
+            "max": { "type": "number" },
+            "currency": { "type": "string" }
+          }
+        }
+      },
+      "required": ["product_name", "sentiment"]
+    }
+    ```
+  </Tab>
+</Tabs>
 
 ## Agent Types & Use Cases
 
@@ -175,50 +323,11 @@ Features:
   - Summary generation
 ```
 
-## Model Providers & Selection
+## RouteLLM Integration
 
-PLai Framework supports multiple LLM providers:
+RouteLLM automatically routes requests to the most appropriate model based on complexity and cost.
 
-<Tabs>
-  <Tab title="OpenAI">
-    - **GPT-4 Turbo**: Latest and most capable model
-    - **GPT-4**: Balanced performance and cost
-    - **GPT-3.5 Turbo**: Fast and cost-effective
-    - **Usage**: Excellent for general chat and reasoning
-  </Tab>
-  <Tab title="Anthropic">
-    - **Claude 3.5 Sonnet**: Advanced reasoning and analysis
-    - **Claude 3 Haiku**: Fast responses, good for simple tasks
-    - **Usage**: Great for complex analysis and safety
-  </Tab>
-  <Tab title="Together AI">
-    - **Llama 3.1**: Open-source alternative
-    - **Mixtral**: Mixture of experts architecture
-    - **Usage**: Cost-effective for specialized tasks
-  </Tab>
-  <Tab title="Azure OpenAI">
-    - **Enterprise Features**: Enhanced security and compliance
-    - **Regional Deployment**: Data residency options
-    - **Usage**: Enterprise and regulated environments
-  </Tab>
-</Tabs>
-
-## RouteLL Integration
-
-RouteLL automatically routes requests to the most appropriate model based on complexity and cost:
-
-```mermaid
-graph TD
-    A[User Request] --> B{RouteLL Analysis}
-    B -->|Simple Query| C[Weak Model - GPT-3.5]
-    B -->|Complex Task| D[Strong Model - GPT-4]
-    C --> E[Fast Response]
-    D --> F[Detailed Response]
-    E --> G[Cost Optimized]
-    F --> G
-```
-
-### RouteLL Benefits
+### RouteLLM Benefits
 - **Cost Optimization**: Use cheaper models for simple tasks
 - **Performance**: Route complex queries to advanced models
 - **Automatic**: No manual configuration required
