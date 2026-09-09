@@ -212,12 +212,12 @@ The API Request tool is one of the most versatile tools in PLai Framework, enabl
 
 ### Variable Substitution
 
-The API Request tool uses a typed variable system with the format `{{variable_name: type}}`:
+The API Request tool uses a typed variable system with the format `{{variable_name: type}}`. Variables can include both user-provided variables and system variables.
 
 ```json
 {
-  "url_template": "https://api.example.com/users/{{user_id: str}}/orders/{{order_id: str}}",
-  "body_template": "{\"status\": {{new_status: str}}, \"updated_by\": {{agent_name: str}}, \"timestamp\": {{current_time: str}}}"
+  "url_template": "https://api.example.com/agents/{{system__agent_id: str}}/orders/{{order_id: str}}",
+  "body_template": "{\"status\": {{new_status: str}}, \"created_by\": {{system__agent_slug: str}}, \"timestamp\": \"{{system__time_utc: str}}\"}"
 }
 ```
 
@@ -241,15 +241,27 @@ The API Request tool uses a typed variable system with the format `{{variable_na
 **Important Rules:**
 - ✅ Always include the type: `{{variable: str}}`
 - ✅ Templates must be JSON strings, not objects
-- ✅ For `str` types in JSON, quotes are added automatically
+- ✅ For `str` types in JSON body and headers, quotes are added automatically
+- ✅ For `str` types in URL, NO quotes are added (URLs don't use JSON format)
 - ✅ All templates are required: `url_template`, `body_template`, `headers_template`
+
+<Warning>
+**Critical: Automatic Quotes Behavior**
+
+String variables behave differently depending on location:
+
+- **In URL**: `https://api.example.com/users/{{user_id: str}}` → `https://api.example.com/users/john-123` (no quotes)
+- **In Headers/Body JSON**: `{"name": {{name: str}}}` → `{"name": "john"}` (quotes added automatically)
+
+Never add manual quotes around string variables in any location!
+</Warning>
 
 ### Variable Type Examples
 
 ```json
 {
-  "url_template": "https://api.example.com/users/{{user_id: int}}/posts/{{post_id: str}}",
-  "body_template": "{\"active\": {{is_active: bool}}, \"score\": {{rating: float}}, \"name\": {{username: str}}}"
+  "url_template": "https://api.example.com/agents/{{system__agent_id: str}}/users/{{user_id: int}}/posts/{{post_id: str}}",
+  "body_template": "{\"active\": {{is_active: bool}}, \"score\": {{rating: float}}, \"name\": {{username: str}}, \"thread\": \"{{system__current_thread_id: str}}\", \"timestamp\": \"{{system__time_utc: str}}\"}"
 }
 ```
 
@@ -257,40 +269,48 @@ The API Request tool uses a typed variable system with the format `{{variable_na
 
 Variables are provided by the agent during execution:
 
-- **User-provided**: Variables from chat context or form inputs
-- **System variables**: Current time, agent name, user ID, etc.
-- **Previous responses**: Data from earlier tool calls in the conversation
-- **Context variables**: Information from the current conversation
+**System Variables** (automatically available):
+- `system__agent_id` - Unique identifier of the executing agent
+- `system__agent_slug` - URL-friendly name of the agent
+- `system__current_thread_id` - ID of the current conversation/thread
+- `system__time_utc` - Current timestamp in ISO 8601 UTC format
+- `system__time` - Current time formatted in local timezone
+- `system__timezone` - Current timezone identifier
+
+**User-Provided Variables**:
+- Variables from chat context or form inputs
+- Previous responses from earlier tool calls in the conversation
+- Context variables passed during agent invocation
 
 ### Real-World Examples
 
-#### GET Request with URL Parameters
+#### GET Request with Agent Context
 
 ```json
 {
   "method": "GET",
-  "url_template": "https://timeapi.io/api/time/current/zone?timeZone=Europe/{{city: str}}",
-  "headers_template": "{}",
+  "url_template": "https://api.example.com/agents/{{system__agent_id: str}}/events?thread={{system__current_thread_id: str}}&city={{city: str}}",
+  "headers_template": "{\"X-Agent\": \"{{system__agent_slug: str}}\"}",
   "body_template": "{}",
   "content_type": "application/json"
 }
 ```
 
-**Use Case**: Query time zone information for different European cities dynamically.
+**Use Case**: Query data specific to the current agent and conversation thread.
 
-#### POST Request with JSON Body
+#### POST Request with JSON Body and Timestamps
 
 ```json
 {
   "method": "POST",
-  "url_template": "https://api.example.com/data",
-  "headers_template": "{\"Content-Type\": \"application/json\", \"Authorization\": \"Bearer {{token: str}}\"}",
-  "body_template": "{\"key\": {{value: str}}, \"count\": {{count: int}}, \"active\": {{active: bool}}}",
+  "url_template": "https://api.example.com/events",
+  "headers_template": "{\"Content-Type\": \"application/json\", \"Authorization\": \"Bearer {{token: str}}\", \"X-Agent-ID\": \"{{system__agent_id: str}}\"}",
+  "body_template": "{\"key\": {{value: str}}, \"count\": {{count: int}}, \"active\": {{active: bool}}, \"created_at\": \"{{system__time_utc: str}}\", \"thread_id\": \"{{system__current_thread_id: str}}\"}",
   "content_type": "application/json"
 }
 ```
 
-**Use Case**: Send structured data to an API with mixed data types.
+**Use Case**: Send structured data with automatic timestamps and agent/thread context.
 
 #### POST Request with Form-Encoded Data
 

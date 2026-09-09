@@ -189,6 +189,55 @@ The Perplexity AI tool transforms your agents into research assistants capable o
 }
 ```
 
+## System Message Variables
+
+<Warning>
+**Current Limitation**: The Perplexity Tool currently **does NOT support variables** in the `system_message` field. This is a planned feature for a future release.
+
+While the tool receives propagated variables from the agent runtime, these are not substituted in the system message. The message is treated as a static string.
+</Warning>
+
+### Planned Variable Support
+
+In a future implementation, the following system variables will be available:
+
+<CardGroup cols={2}>
+  <Card title="Agent ID" icon="tag">
+    `{{system__agent_id}}` - Unique identifier of the executing agent
+  </Card>
+  <Card title="Agent Slug" icon="robot">
+    `{{system__agent_slug}}` - URL-friendly name of the agent
+  </Card>
+  <Card title="Thread ID" icon="message">
+    `{{system__current_thread_id}}` - ID of the current conversation
+  </Card>
+  <Card title="Time (UTC)" icon="clock">
+    `{{system__time_utc}}` - Current timestamp in ISO 8601 format
+  </Card>
+  <Card title="Time (Local)" icon="clock">
+    `{{system__time}}` - Current time formatted in local timezone
+  </Card>
+  <Card title="Timezone" icon="globe">
+    `{{system__timezone}}` - Current timezone identifier
+  </Card>
+</CardGroup>
+
+### Future Example
+
+Once implemented, you'll be able to use:
+
+```json
+{
+  "model": "sonar-pro",
+  "system_message": "You are the research assistant for agent {{system__agent_slug}}. Current time: {{system__time}}. Search for the most recent and authoritative information. Provide analysis tailored to professional research needs.",
+  "search_domain_filter": ""
+}
+```
+
+<Note>
+**Currently**: Use the static `system_message` without variables. This limitation will be addressed in an upcoming release.
+</Note>
+
 ## Best Practices
 
 ### Search Query Optimization

@@ -15,177 +15,96 @@
         "groups": [
           {
             "group": "Getting Started",
-            "pages": ["index", "concepts", "authentication"]
+            "pages": ["index", "getting-started/signin-signup"]
+          },
+          {
+            "group": "Concepts",
+            "pages": [
+              "concepts/overview",
+              "concepts/organizations-and-projects",
+              "concepts/agents-datasources-and-tools",
+              "concepts/workflows-jobs-and-triggers",
+              "concepts/security-and-compliance",
+              "concepts/monitoring"
+            ]
           },
           {
             "group": "🤖 Agents",
             "pages": [
-              "agents/overview",
-              "agents/settings",
-
-              {
-                "group": "Answer Filters",
-                "pages": [
-                  "agents/answer-filters/overview",
-                  "agents/answer-filters/creating-answer-filters",
-                  "agents/answer-filters/managing-answer-filters"
-                ]
-              },
-              {
-                "group": "Guardrails",
-                "pages": [
-                  "agents/guardrails/overview",
-                  "agents/guardrails/configuration"
-                ]
-              },
-              {
-                "group": "Analytics",
-                "pages": [
-                  "agents/analytics/overview",
-                  "agents/analytics/conversation-analysis",
-                  "agents/analytics/live-mode"
-                ]
-              }
+              "agents/what-is-an-agent",
+              "agents/configuration",
+              "agents/conversational-chat",
+              "agents/structured-output",
+              "agents/analytics"
             ]
           },
           {
             "group": "🔧 Tools",
             "pages": [
-              "tools/overview",
+              "tools/what-is-a-tool",
               "tools/agents",
+              "tools/workflow",
+              "tools/email",
               "tools/api-requests",
               "tools/perplexity-ai",
-              "tools/mcp-servers",
+              "tools/browser-tool",
+              "tools/office-documents",
               "tools/external-datasource",
-              "tools/browser-tool"
+              "tools/mcp-servers"
             ]
           },
           {
             "group": "🗄️ Datasources",
             "pages": [
-              "datasources/overview",
-              "datasources/external-sources",
-              "datasources/management"
+              "datasources/what-is-a-datasource",
+              "datasources/datasource-types",
+              "datasources/datasource-metadata",
+              "datasources/shared-datasources",
+              "datasources/resource-types",
+              "datasources/resource-metadata",
+              "datasources/bulk-import"
             ]
           },
           {
-            "group": "📋 Batches",
+            "group": "🔄 Workflows",
             "pages": [
-              "batches/overview",
-              "batches/creating-batches",
-              "batches/monitoring-status",
-              "batches/downloading-results"
+              "workflows/what-is-a-workflow",
+              "workflows/execution-engine",
+              "workflows/node-types",
+              "workflows/dependencies",
+              "workflows/execution-variables",
+              "workflows/input-variables"
             ]
           },
           {
-            "group": "📋 Experiments",
-            "pages": [
-              "experiments/overview",
-              "experiments/creating-experiments",
-              "experiments/experiments-results"
-            ]
+            "group": "📋 Jobs",
+            "pages": []
+          },
+          {
+            "group": "⚡ Triggers",
+            "pages": []
           },
           {
             "group": "📊 Monitor",
-            "pages": [
-              "monitoring/overview",
-              "monitoring/usage-analytics",
-              "monitoring/billing-summary",
-              "monitoring/performance-metrics",
-              "monitoring/charts-and-reports"
-            ]
-          },
-          {
-            "group": "Advanced",
-            "pages": [
-              "advanced/project-management",
-              "advanced/team-collaboration",
-              "advanced/rbac",
-              "advanced/billing-management"
-            ]
+            "pages": []
           }
         ]
       },
       {
-        "tab": "Guides & Tutorials",
+        "tab": "Guides",
         "groups": [
           {
-            "group": "Step-by-Step Guides",
-            "pages": [
-              "guides/first-agent",
-              "guides/multi-tool-setup",
-              "guides/production-deployment",
-              "guides/troubleshooting",
-              "guides/best-practices"
-            ]
+            "group": "Tutorials",
+            "pages": ["guides/first-agent"]
           }
         ]
       },
       {
-        "tab": "API Reference",
+        "tab": "API",
         "groups": [
           {
-            "group": "API Documentation",
-            "pages": [
-              "api-reference/introduction",
-              "api-reference/authentication"
-            ]
-          },
-          {
-            "group": "User & Organization Management",
-            "pages": [
-              "api-reference/me",
-              "api-reference/invitations",
-              "api-reference/users"
-            ]
-          },
-          {
-            "group": "Projects",
-            "pages": [
-              "api-reference/projects",
-              "api-reference/agents",
-              "api-reference/answer-filters"
-            ]
-          },
-          {
-            "group": "Agents",
-            "pages": [
-              "api-reference/agents",
-              "api-reference/answer-filters",
-              "api-reference/llms"
-            ]
-          },
-          {
-            "group": "Datasources",
-            "pages": [
-              "api-reference/datasources",
-              "api-reference/folders",
-              "api-reference/resources"
-            ]
-          },
-          {
-            "group": "Tools",
-            "pages": ["api-reference/tools"]
-          },
-          {
-            "group": "Threads",
-            "pages": ["api-reference/threads"]
-          },
-          {
-            "group": "Chat Sessions",
-            "pages": ["api-reference/chat-sessions"]
-          },
-          {
-            "group": "Batches",
-            "pages": ["api-reference/batches", "api-reference/usage"]
-          },
-          {
-            "group": "Usage",
-            "pages": ["api-reference/usage", "api-reference/executions"]
-          },
-          {
-            "group": "Advanced Features",
-            "pages": ["api-reference/guardrails"]
+            "group": "Reference",
+            "pages": []
           }
         ]
       }

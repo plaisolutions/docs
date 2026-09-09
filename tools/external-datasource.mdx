@@ -269,6 +269,67 @@ The tool uses OpenAI's GPT-4 to convert natural language questions into BigQuery
 5. Results are formatted and returned
 6. Token usage is recorded for billing
 
+## System Prompt Variables
+
+<Warning>
+**Current Limitation**: The External Datasource (BigQuery) Tool currently **does NOT support dynamic system variables** in the `system_prompt` field. 
+
+The only variables that are substituted are pre-defined at tool creation time:
+- `{bigquery_project_id}` - Your GCP project ID
+- `{dataset_id}` - The BigQuery dataset ID
+- `{schema}` - Auto-detected table schemas
+- `{example_queries}` - Generated example queries
+- `{query_max_rows}` - Max rows to retrieve
+
+Agent runtime variables like `system__agent_id` or `system__time` are **not available** in the custom system prompt.
+</Warning>
+
+### Pre-defined Variables
+
+These variables are substituted at tool creation and cannot be changed per invocation:
+
+<CardGroup cols={2}>
+  <Card title="BigQuery Project ID" icon="folder">
+    `{bigquery_project_id}` - Your GCP project identifier
+  </Card>
+  <Card title="Dataset ID" icon="database">
+    `{dataset_id}` - The BigQuery dataset containing your tables
+  </Card>
+  <Card title="Schema" icon="columns">
+    `{schema}` - Auto-detected table structure
+  </Card>
+  <Card title="Example Queries" icon="code">
+    `{example_queries}` - Reference SQL patterns
+  </Card>
+  <Card title="Query Max Rows" icon="list">
+    `{query_max_rows}` - Row limit configuration
+  </Card>
+</CardGroup>
+
+### Current Example
+
+```json
+{
+  "system_prompt": "You are a SQL assistant for the {dataset_id} dataset in project {bigquery_project_id}. Generate BigQuery Standard SQL following these patterns:\n\n{example_queries}\n\nAlways use DATE_TRUNC for date operations. Retrieve maximum {query_max_rows} rows. Optimize for efficiency.",
+  "query_max_rows": 10000,
+  "output_max_rows": 50
+}
+```
+
+### Planned Feature
+
+In a future release, these system variables will be available:
+
+- `{{system__agent_id}}` - Unique identifier of the executing agent
+- `{{system__agent_slug}}` - URL-friendly name of the agent
+- `{{system__time_utc}}` - Current timestamp in ISO 8601 format
+- `{{system__time}}` - Current time formatted in local timezone
+- `{{system__current_thread_id}}` - ID of the current conversation
+
+<Note>
+**Currently**: Use only the pre-defined variables shown above (with curly braces: `{variable}`). Dynamic system variables will be supported in an upcoming release.
+</Note>
+
 ### Example Conversions
 
 <Tabs>

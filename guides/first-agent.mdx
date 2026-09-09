@@ -126,23 +126,41 @@ Now let's enhance your agent with the Perplexity AI tool for real-time informati
 
 ## Step 4: Configure Agent Settings
 
+Now let's configure the agent's advanced settings to optimize its behavior.
+
 <Steps>
   <Step title="Set Agent Avatar (Optional)">
-    Upload a professional avatar image or use the default
+    1. Go to the agent settings
+    2. In the **Agent** tab, upload a professional avatar image (JPG, PNG)
+    3. Or keep the default avatar
   </Step>
-  <Step title="Enable Features">
-    Turn on these recommended features:
-    - **File Upload**: Allow customers to share screenshots or documents
-    - **Voice Input**: Enable voice conversations (if supported)
+  <Step title="Configure Model Settings">
+    In the **Model** tab:
+    
+    1. **Select Language Model**: Keep OpenAI as provider
+    2. **Enable Streaming** (toggle): For real-time response streaming
+    3. **Enable Language Detection** (toggle): Automatically detect user language
+    4. **Set Temperature**: 0.3 for focused responses
+    5. **Set Max Output Tokens**: 1000 tokens (sufficient for support responses)
   </Step>
-  <Step title="Configure Guardrails">
-    Set up basic safety measures:
-    - Enable **Content Filtering**
-    - Set **Rate Limiting** to 10 messages per minute
-    - Enable **Inappropriate Content Detection**
+  <Step title="Configure Tool Behavior">
+    In the **Tools** tab:
+    
+    1. **Tool Max Steps**: Set to 5 (allows up to 5 tool calls per message)
+    2. Verify your Perplexity tool is selected
   </Step>
-  <Step title="Activate Agent">
-    Toggle the agent status to **Active**
+  <Step title="Configure Datasources (Optional)">
+    In the **Datasources** tab:
+    
+    1. **Vector Top K**: Set to 5 (retrieve top 5 relevant docs)
+    2. Enable **Rerank** if you want better relevance scoring
+    3. Select any knowledge base datasources for the agent
+  </Step>
+  <Step title="Set Initial Message (Optional)">
+    In the **Agent** tab:
+    
+    1. Set an **Intro message** that greets users
+    2. Example: "Hi! I'm your support assistant. How can I help you today?"
   </Step>
 </Steps>
 
