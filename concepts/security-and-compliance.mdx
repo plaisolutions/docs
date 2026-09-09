@@ -1,0 +1,429 @@
+---
+title: "Security & Compliance"
+description: "Protect your data, control access, and ensure safety in PLai Framework"
+icon: "shield"
+---
+
+# Security & Compliance
+
+Security is built into PLai Framework at every level. This guide covers access control, credential management, safety guardrails, and compliance features.
+
+---
+
+## Role-Based Access Control (RBAC)
+
+RBAC determines who can do what in your organization and projects.
+
+### How RBAC Works
+
+```
+ORGANIZATION LEVEL
+├─ OWNER: Full access
+├─ ADMIN: Full access (except billing)
+└─ VIEWER: Read-only
+
+         ↓ (members join projects)
+
+PROJECT LEVEL (within each project)
+├─ EDITOR: Create and edit resources
+└─ VIEWER: Read-only access
+```
+
+### Access Matrix
+
+| Resource | OWNER | ADMIN | MEMBER | VIEWER |
+|----------|-------|-------|----------------|--------|
+| View org/projects | ✅ | ✅ | ✅ (their project) | ✅ (their project) |
+| Create agents | ✅ | ✅ | ✅ (in project) | ❌ |
+| Edit agents | ✅ | ✅ | ✅ (in project) | ❌ |
+| Delete agents | ✅ | ✅ | ✅ (in project) | ❌ |
+| Create workflows | ✅ | ✅ | ✅ (in project) | ❌ |
+| Invite members | ✅ | ✅ | ❌ | ❌ |
+| Manage org settings | ✅ | ✅ | ❌ | ❌ |
+| View billing | ✅ | ❌ | ❌ | ❌ |
+
+### Best Practices for Access Control
+
+<CardGroup cols={2}>
+  <Card title="Least Privilege" icon="minimize">
+    Grant only the minimum access needed. Default to VIEWER, grant EDITOR when necessary.
+  </Card>
+  <Card title="Regular Audits" icon="audit">
+    Periodically review who has access and remove unnecessary members
+  </Card>
+  <Card title="Segregate Projects" icon="lock">
+    Use different projects for different teams/use cases for better isolation
+  </Card>
+  <Card title="Admin Reviews" icon="check">
+    Have OWNER/ADMIN regularly review who has access to sensitive projects
+  </Card>
+</CardGroup>
+
+---
+
+## Credentials: Secure Secret Storage
+
+**Credentials** are securely stored API keys, tokens, passwords, and other secrets that tools and agents need.
+
+### What Can Be Stored as Credentials
+
+- 🔑 **API Keys** - For external services (SendGrid, Stripe, etc.)
+- 🎫 **Tokens** - OAuth tokens, bearer tokens
+- 🔐 **Passwords** - Database passwords, service accounts
+- 📝 **Connection Strings** - Database URLs, connection info
+- 🪑 **Certificates** - SSL certificates, authentication certs
+
+### Credential Security
+
+PLai Framework keeps credentials safe:
+
+✅ **Encryption** - All credentials encrypted at rest  
+✅ **Access Control** - Only assigned agents can use them  
+✅ **Audit Logging** - Every access logged and tracked  
+✅ **Rotation** - Easily update without recreating tools  
+✅ **Scope** - Credentials scoped to specific projects/agents  
+
+### Using Credentials
+
+<Steps>
+  <Step title="Create Credential">
+    Go to Project Settings → Credentials → Add credential
+  </Step>
+  <Step title="Enter Secret">
+    Provide the API key, token, or password
+  </Step>
+  <Step title="Name It">
+    Give it a descriptive name (e.g., "SendGrid API Key")
+  </Step>
+  <Step title="Assign to Tools">
+    When creating a tool, select which credential to use
+  </Step>
+  <Step title="Verify">
+    Test the tool to ensure credential works
+  </Step>
+</Steps>
+
+### Credential Best Practices
+
+<Tip>
+Never put credentials directly in agent instructions or datasources. Always use the Credentials system.
+</Tip>
+
+- ✅ Use descriptive names ("SendGrid API", not "key1")
+- ✅ Rotate credentials periodically
+- ✅ Use service accounts instead of personal credentials
+- ✅ Limit credential scope to only what's needed
+- ✅ Audit who accessed credentials
+
+---
+
+## Guardrails: Safety Constraints
+
+**Guardrails** are safety rules that constrain what agents can do.
+
+### Types of Guardrails
+
+<AccordionGroup>
+  <Accordion title="Content Filtering">
+    Prevent agents from outputting certain types of content:
+    - No sensitive data (PII, passwords, etc.)
+    - No hate speech or offensive content
+    - No instructions for illegal activities
+    - Custom filters based on keywords
+  </Accordion>
+
+  <Accordion title="Rate Limiting">
+    Control how much an agent can do:
+    - Max calls per hour/day
+    - Max processing time per request
+    - Throttle requests during high load
+    - Prevent accidental runaway costs
+  </Accordion>
+
+  <Accordion title="Input Validation">
+    Ensure inputs meet safety requirements:
+    - Max input length
+    - Required fields
+    - Allowed patterns/formats
+    - Block suspicious inputs
+  </Accordion>
+
+  <Accordion title="Output Validation">
+    Verify outputs before sending:
+    - Check response quality
+    - Validate format
+    - Ensure no sensitive data leaked
+    - Scan for malicious content
+  </Accordion>
+
+  <Accordion title="Capability Restrictions">
+    Limit which tools agents can use:
+    - Only specific APIs allowed
+    - No code execution
+    - No external datasources
+    - Restricted tool parameters
+  </Accordion>
+</AccordionGroup>
+
+### Answer Filters
+
+**Answer Filters** are specific guardrails for agent responses.
+
+```
+AGENT generates response
+         ↓
+┌─────────────────────────┐
+│   Answer Filters Apply  │
+├─────────────────────────┤
+│ ✓ Check length         │
+│ ✓ Check tone           │
+│ ✓ Scan for PII         │
+│ ✓ Validate accuracy    │
+│ ✓ Check confidence     │
+└─────────────────────────┘
+         ↓
+Response sent or blocked
+```
+
+### Configuring Guardrails
+
+<Steps>
+  <Step title="Go to Agent Settings">
+    Open your agent configuration
+  </Step>
+  <Step title="Find Guardrails Section">
+    Look for Safety, Constraints, or Guardrails settings
+  </Step>
+  <Step title="Define Rules">
+    Set specific constraints:
+    - Max tokens: 2000
+    - Rate limit: 100/hour
+    - Disallowed terms: [list]
+  </Step>
+  <Step title="Test">
+    Test agent with guardrails enabled
+  </Step>
+  <Step title="Monitor">
+    Track how often guardrails trigger
+  </Step>
+</Steps>
+
+---
+
+## Encryption & Data Protection
+
+### Data Security at Rest
+
+- 🔒 All data encrypted in database (AES-256)
+- 🗄️ Backups encrypted
+- 📝 Credentials double-encrypted
+- 🔑 Encryption keys rotated regularly
+
+### Data Security in Transit
+
+- 🔐 All communication via HTTPS/TLS
+- 🤝 Certificate pinning for APIs
+- 📊 Secure WebSocket connections
+- 🛡️ DDoS protection
+
+### Data Retention
+
+- 📅 Configurable retention policies
+- 🗑️ Automatic deletion after X days
+- 📋 Audit logs retained longer
+- 🔄 Backups kept for recovery
+
+---
+
+## Activity Audit Logs
+
+Audit logs track everything that happens in your organization and projects.
+
+### What Gets Logged
+
+| Action | Logged Details |
+|--------|----------------|
+| Agent created | Who, when, configuration |
+| Agent modified | What changed, by whom |
+| Tool used | Which agent, which tool, inputs/outputs |
+| Credential accessed | Which credential, when, by which agent |
+| Member added | Who, role, when |
+| Settings changed | What changed, by whom |
+| Export data | What, when, by whom |
+
+### Accessing Audit Logs
+
+```
+Organization Settings → Audit Logs
+or
+Project Settings → Activity Log
+
+Filter by:
+- Date range
+- User
+- Action type
+- Resource affected
+```
+
+### Audit Log Fields
+
+```
+Timestamp: 2024-01-15 14:23:45 UTC
+User: alice@company.com
+Action: agent.create
+Resource: "Support Bot"
+Organization: Acme Corp
+Project: Customer Support
+Details: "Created agent with Claude 3.5 Sonnet model"
+IP Address: 203.0.113.45
+```
+
+---
+
+## Compliance Features
+
+### Data Governance
+
+- ✅ Data classification (public, internal, confidential)
+- ✅ Access controls based on classification
+- ✅ Automatic masking of sensitive data
+- ✅ Compliance reporting
+
+### Privacy
+
+- ✅ No data used for model training (data stays yours)
+- ✅ GDPR compliance (right to be forgotten)
+- ✅ Data residency options (EU, US, etc.)
+- ✅ Privacy-preserving analytics
+
+### Monitoring & Alerts
+
+- 🚨 Alerts for unusual activity
+- 📊 Compliance dashboards
+- 🔍 Threat detection
+- 📋 Regular compliance reports
+
+---
+
+## Security Best Practices
+
+### For Organizations
+
+<CardGroup cols={2}>
+  <Card title="Limit OWNER Role" icon="lock">
+    Keep OWNER role to 2-3 trusted people. Most people should be ADMIN or VIEWER.
+  </Card>
+  <Card title="MFA" icon="shield">
+    Require multi-factor authentication for OWNER/ADMIN accounts
+  </Card>
+  <Card title="Regular Reviews" icon="audit">
+    Monthly review of member access and audit logs
+  </Card>
+  <Card title="Incident Plan" icon="alert">
+    Have a plan for security incidents. Know who to contact.
+  </Card>
+</CardGroup>
+
+### For Agents & Tools
+
+<CardGroup cols={2}>
+  <Card title="Minimize Permissions" icon="lock">
+    Only give agents the tools and datasources they actually need
+  </Card>
+  <Card title="Use Service Accounts" icon="user-secret">
+    Use service account credentials, not personal credentials
+  </Card>
+  <Card title="Enable Guardrails" icon="shield">
+    Always enable guardrails, especially for production agents
+  </Card>
+  <Card title="Rate Limit" icon="speedometer">
+    Set reasonable rate limits to prevent runaway costs or abuse
+  </Card>
+</CardGroup>
+
+### For Data
+
+<CardGroup cols={2}>
+  <Card title="Encrypt Credentials" icon="key">
+    Always use the Credentials system, never hardcode secrets
+  </Card>
+  <Card title="Mask PII" icon="eye-slash">
+    Use answer filters to prevent PII leakage
+  </Card>
+  <Card title="Audit Access" icon="book">
+    Regularly review audit logs for unauthorized access
+  </Card>
+  <Card title="Clean Logs" icon="trash">
+    Archive old logs and delete sensitive test data
+  </Card>
+</CardGroup>
+
+---
+
+## Troubleshooting Security Issues
+
+<AccordionGroup>
+  <Accordion title="Agent getting 'access denied' error">
+    **Solutions:**
+    - Check if agent has permission for the tool
+    - Verify credential is valid and assigned
+    - Check rate limits not exceeded
+    - Ensure guardrails aren't blocking legitimate requests
+  </Accordion>
+
+  <Accordion title="Credential not working">
+    **Solutions:**
+    - Verify credential value is correct
+    - Check credential hasn't expired
+    - Test credential outside PLai
+    - Recreate credential if needed
+  </Accordion>
+
+  <Accordion title="Concerned about data safety">
+    **Check:**
+    - Audit logs show who accessed what
+    - All credentials encrypted
+    - All communication HTTPS
+    - Retention policies set appropriately
+    - Guardrails enabled on production agents
+  </Accordion>
+
+  <Accordion title="Need to remove someone's access">
+    **Steps:**
+    - Go to Organization or Project Settings
+    - Find the member
+    - Click "Remove" (OWNER/ADMIN only)
+    - They lose access immediately
+    - Check audit log confirms removal
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Compliance & Regulations
+
+PLai Framework supports compliance with:
+
+- 🇪🇺 **GDPR** - General Data Protection Regulation (EU)
+- 🇪🇺 **EU AI Act** - The world's first comprehensive legal framework regulating artificial intelligence across the European Union (EU)
+- 📋 **ISO 27001** - Information security management (certification in prgoress)
+
+For compliance requirements, contact your account manager.
+
+---
+
+## Key Takeaways
+
+✅ **RBAC** - Control who can access what  
+✅ **Credentials** - Safely store and manage secrets  
+✅ **Guardrails** - Enforce safety constraints on agents  
+✅ **Encryption** - All data protected in transit and at rest  
+✅ **Audit Logs** - Track everything for accountability  
+
+---
+
+## Next Steps
+
+- **[Organizations & Projects](./organizations-and-projects.mdx)** - Learn about roles and invitations
+- **[Monitoring](./monitoring.mdx)** - Track security metrics
+- **Contact Security Team** - For enterprise compliance requirements

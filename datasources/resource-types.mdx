@@ -1,0 +1,538 @@
+---
+title: "Resource Types"
+description: "Files, URLs, and manual content in datasources"
+icon: "layers"
+---
+
+# Resource Types
+
+A **Datasource** is composed of multiple **Resources**. Each resource is a unit of content that agents can search and retrieve. PLai Framework supports three types of resources: Files, URLs/Sitemaps, and Manual Content.
+
+---
+
+## Resource Types Overview
+
+```
+Datasource
+├── Files
+│  ├── PDF Documents
+│  ├── Word Documents
+│  ├── Text Files
+│  └── Spreadsheets
+├── URLs & Sitemaps
+│  ├── Single Pages
+│  ├── Website Crawls
+│  └── Sitemap Indexing
+└── Manual Content
+   └── Direct Text Entry
+```
+
+---
+
+## Files
+
+### Supported File Formats
+
+<CardGroup cols={2}>
+  <Card title="PDF" icon="file-pdf">
+    `.pdf` - Full text extraction, images preserved
+  </Card>
+  <Card title="Word Documents" icon="file-word">
+    `.docx` - Microsoft Word format with formatting
+  </Card>
+  <Card title="Text Files" icon="file-text">
+    `.txt`, `.md` - Plain and markdown text
+  </Card>
+  <Card title="Spreadsheets" icon="table">
+    `.xlsx`, `.csv` - Tabular data and calculations
+  </Card>
+</CardGroup>
+
+### File Upload
+
+#### Single File Upload
+
+<Steps>
+  <Step title="Go to Datasource">
+    Navigate to the datasource you want to add to
+  </Step>
+  <Step title="Click Add Resource">
+    Select **Add Resource** → **Upload File**
+  </Step>
+  <Step title="Select File">
+    Choose file from your computer
+  </Step>
+  <Step title="Verify Upload">
+    Wait for file to be processed and indexed
+  </Step>
+  <Step title="Confirm">
+    File appears in resource list
+  </Step>
+</Steps>
+
+#### Bulk Upload
+
+Upload multiple files at once:
+
+```
+Bulk Upload:
+1. Select **Add Multiple Files**
+2. Choose up to 10 files simultaneously
+3. System processes in parallel
+4. Monitor progress bar
+5. All files indexed and ready
+```
+
+### File Processing
+
+When you upload a file:
+
+```
+Upload File
+     ↓
+Extract Text
+     ↓
+Split into Chunks
+     ↓
+Generate Embeddings
+     ↓
+Index for Search
+     ↓
+Ready for Queries
+```
+
+**Processing Time:**
+- Text extraction: Depends on file size (typically 1-5 seconds)
+- Chunking: Split into retrievable segments
+- Embedding: Convert to vector representations
+- Indexing: Make searchable
+
+### File Management
+
+**View Files:**
+- See all uploaded files in resource list
+- File size and upload date
+- Processing status
+- Number of indexed chunks
+
+**Remove Files:**
+- Delete individual files
+- Update datasource immediately
+- Changes available to agents
+
+**Organize Files:**
+- Add metadata/tags to files
+- Group by topic or category
+- Document file contents
+- Track versions
+
+### Best Practices for Files
+
+- **Use Clear Names**: Descriptive filenames help agents understand content
+- **Well-Structured**: Use headings, sections, and clear formatting
+- **Compression**: Large PDFs may take longer to process
+- **Clean Text**: Remove unnecessary formatting or corrupted text
+- **Complete Content**: Include all relevant information
+- **Versioning**: Archive old versions, keep current ones
+
+---
+
+## URLs & Sitemaps
+
+### Adding URLs
+
+#### Single URL
+
+<Steps>
+  <Step title="Go to Datasource">
+    Navigate to the datasource
+  </Step>
+  <Step title="Add Resource">
+    Select **Add Resource** → **Add URL**
+  </Step>
+  <Step title="Enter URL">
+    Paste the web page URL
+  </Step>
+  <Step title="Crawl Option">
+    Choose whether to crawl linked pages
+  </Step>
+  <Step title="Submit">
+    System fetches and indexes the page
+  </Step>
+</Steps>
+
+#### Sitemaps
+
+Add an entire website using its sitemap:
+
+<Steps>
+  <Step title="Get Sitemap URL">
+    Find website's sitemap (usually `/sitemap.xml`)
+  </Step>
+  <Step title="Add Sitemap">
+    Select **Add Resource** → **Add Sitemap**
+  </Step>
+  <Step title="Paste Sitemap URL">
+    Enter the sitemap XML URL
+  </Step>
+  <Step title="Configure Crawling">
+    Set crawl depth and exclusions
+  </Step>
+  <Step title="Submit">
+    System indexes all pages in sitemap
+  </Step>
+</Steps>
+
+### Web Crawling Options
+
+| Option | Description | Use Case |
+|--------|-------------|----------|
+| **Single Page** | Index only the provided URL | FAQ page, single article |
+| **Follow Links** | Crawl pages linked from URL | Company docs, knowledge base |
+| **Crawl Depth 1** | Follow first-level links | Product section documentation |
+| **Crawl Depth 2** | Follow up to 2 levels | Entire website section |
+| **Sitemap** | Index all URLs in sitemap | Large website, complete docs |
+
+### URL Processing
+
+When you add a URL:
+
+```
+URL Request
+     ↓
+Fetch Web Content
+     ↓
+Extract Main Text
+     ↓
+Remove HTML/Styling
+     ↓
+Split into Chunks
+     ↓
+Generate Embeddings
+     ↓
+Index for Search
+```
+
+**Processing Considerations:**
+- Dynamic content: May need JavaScript rendering
+- Authentication: Public pages only
+- Rate limiting: Respectful crawling speed
+- Robots.txt: Honors site restrictions
+
+### URL Re-scraping (WEBPAGE Only)
+
+**IMPORTANT:** Re-scraping is only available for **WEBPAGE** resources, not individual URL resources.
+
+#### Automatic Re-scraping
+
+WEBPAGE resources can be configured for automatic re-scraping:
+
+<Steps>
+  <Step title="Enable Scheduling">
+    Set `config.scheduled: true` when creating the resource
+  </Step>
+  <Step title="Set Interval">
+    Configure `schedule_interval_hours` (minimum 1 hour)
+  </Step>
+  <Step title="System Re-scrapes">
+    Automatically re-scrapes on schedule
+  </Step>
+  <Step title="New URLs Detected">
+    New links are extracted and created as resources
+  </Step>
+</Steps>
+
+**Configuration Example:**
+```json
+{
+  "name": "Blog Homepage",
+  "type": "WEBPAGE",
+  "url": "https://myblog.com",
+  "config": {
+    "scheduled": true,
+    "schedule_interval_hours": 24
+  }
+}
+```
+
+#### Manual Re-scraping
+
+Force immediate re-scraping without waiting for the schedule:
+
+```
+POST /resources/{resource_id}/scheduler/run?force=true
+```
+
+Response shows:
+- New URLs found
+- Jobs created for new URLs
+- Processing status
+
+#### URL Management
+
+**View URLs:**
+- See all indexed URLs
+- Crawl date and re-scrape status
+- Link extraction results
+- Last indexed date
+
+**Limitations:**
+- ❌ Not available for URL (type: URL) resources
+- ❌ Sitemaps not auto-discovered
+- ❌ Only one initial URL per WEBPAGE
+- ✅ Extracts links from scraped page
+- ✅ Creates resources for new links
+
+**Crawling Strategies:**
+
+- **Specific Pages**: Target exact content
+- **Section Crawling**: Crawl product docs section
+- **Sitemap**: Complete website indexing
+- **Scheduled**: Regular updates for dynamic sites
+
+### Best Practices for URLs
+
+- **Public Accessibility**: Ensure pages are publicly accessible
+- **Clean URLs**: Avoid login-required pages
+- **Stable URLs**: Use permanent URLs, not temporary redirects
+- **Site Structure**: Organize content logically for crawling
+- **Freshness**: Recrawl periodically for updates
+- **Respect robots.txt**: Honor site crawling rules
+
+---
+
+## Manual Content
+
+### Direct Text Entry
+
+Add knowledge directly without files:
+
+<Steps>
+  <Step title="Go to Datasource">
+    Navigate to the datasource
+  </Step>
+  <Step title="Add Resource">
+    Select **Add Resource** → **Add Text**
+  </Step>
+  <Step title="Enter Title">
+    Give the content a descriptive title
+  </Step>
+  <Step title="Enter Content">
+    Paste or type the text content
+  </Step>
+  <Step title="Add Metadata">
+    Optional tags and descriptions
+  </Step>
+  <Step title="Save">
+    Content is indexed and searchable
+  </Step>
+</Steps>
+
+### Content Format
+
+**Supported Formats:**
+- Plain text
+- Markdown with formatting
+- Structured lists and tables
+- Code snippets (syntax highlighting)
+- Multi-paragraph content
+
+**Example Manual Content:**
+
+```markdown
+# Company Return Policy
+
+## Overview
+Our 30-day return policy allows customers to return...
+
+## Eligibility
+- Items must be unused and in original condition
+- Purchase receipt required
+- Applies to purchases within 30 days
+
+## How to Return
+1. Visit our returns portal
+2. Enter your order number
+3. Select items to return
+4. Print shipping label
+5. Ship items back to us
+
+## Timeline
+- Processing: 5-7 business days
+- Refund: 3-5 business days after processing
+```
+
+### Text Entry Workflows
+
+**Workflow 1: Policy Documentation**
+```
+Manual Content:
+├── Policy Statement
+├── Eligibility Rules
+├── Process Steps
+└── Contact Information
+```
+
+**Workflow 2: Procedures**
+```
+Manual Content:
+├── Overview
+├── Prerequisites
+├── Step-by-step Instructions
+├── Troubleshooting
+└── Escalation Path
+```
+
+**Workflow 3: FAQ Entries**
+```
+Manual Content:
+├── Question
+├── Answer
+├── Related Topics
+└── See Also Links
+```
+
+### Content Management
+
+**Edit Content:**
+- Update text directly
+- Changes indexed immediately
+- Available to agents right away
+- No additional upload needed
+
+**Organize Content:**
+- Group related entries
+- Add meaningful titles
+- Use consistent formatting
+- Tag for categorization
+
+**Version Control:**
+- Keep change history
+- Document updates
+- Track who edited
+- Revert if needed
+
+### Best Practices for Manual Content
+
+- **Clear Structure**: Use headings and sections
+- **Completeness**: Include all necessary details
+- **Formatting**: Use markdown for readability
+- **Specificity**: Be detailed, not vague
+- **Examples**: Include concrete examples
+- **Updates**: Keep current and accurate
+
+---
+
+## Resource Metadata
+
+Each resource has associated metadata:
+
+| Metadata | Type | Use |
+|----------|------|-----|
+| **Title** | Text | Display name and search result |
+| **Description** | Text | Summary of content |
+| **Tags** | Multiple | Categorization and filtering |
+| **Source** | Text | Where content came from |
+| **Created Date** | Date | Resource creation time |
+| **Updated Date** | Date | Last modification time |
+| **Status** | Status | Active, archived, deprecated |
+
+### Adding Metadata
+
+<Steps>
+  <Step title="Go to Resource">
+    Find the resource in datasource
+  </Step>
+  <Step title="Edit Details">
+    Click **Edit Metadata**
+  </Step>
+  <Step title="Update Fields">
+    Modify title, description, tags
+  </Step>
+  <Step title="Save">
+    Changes apply immediately
+  </Step>
+</Steps>
+
+---
+
+## Resource Search & Retrieval
+
+### How Agents Use Resources
+
+When an agent searches a datasource:
+
+```
+Agent Query: "How do I reset my password?"
+        ↓
+Search all resources:
+├── PDF: User Guide
+├── URL: FAQ Page
+├── Text: Reset Procedure
+        ↓
+Find similar content
+        ↓
+Return top results
+        ↓
+Agent uses for response
+```
+
+### Search Configuration
+
+Each datasource can configure:
+
+- **Top K**: Number of resources to return (default: 10)
+- **Similarity Threshold**: Minimum relevance score
+- **Reranking**: AI-powered result refinement
+- **Multi-Query**: Generate query variations
+
+### Quality Metrics
+
+Monitor resource quality:
+
+- **Retrieval Rate**: How often resources are used
+- **Relevance**: Quality of returned results
+- **Coverage**: Percentage of queries with results
+- **Performance**: Speed of retrieval
+
+---
+
+## Resource Organization Strategy
+
+### By Content Type
+
+```
+Datasource Structure:
+├── Files/
+│  ├── Product Guides
+│  ├── API Documentation
+│  └── Policies
+├── URLs/
+│  ├── Blog Articles
+│  ├── Knowledge Base
+│  └── Help Center
+└── Manual/
+   ├── Quick Answers
+   ├── FAQs
+   └── Common Issues
+```
+
+### By Topic
+
+```
+Datasource Structure:
+├── Getting Started/
+├── Product Features/
+├── Troubleshooting/
+├── Billing/
+└── Policies/
+```
+
+---
+
+## Next Steps
+
+- **[Resource Metadata](./resource-metadata.mdx)** - Configure resource properties
+- **[Datasource Metadata](./datasource-metadata.mdx)** - Organize and manage datasources
+- **[Datasource Types](./datasource-types.mdx)** - Learn about Manual vs Google Drive
+- **[Agent Configuration](../agents/configuration.mdx)** - Connect datasources to agents

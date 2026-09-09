@@ -1,0 +1,517 @@
+---
+title: "Resource Metadata"
+description: "Configure properties and metadata for datasource resources"
+icon: "info"
+---
+
+# Resource Metadata
+
+**Resource Metadata** provides information about each resource in your datasource, helping organize, categorize, and track content.
+
+---
+
+## Metadata Fields
+
+Each resource has metadata that can be viewed and edited:
+
+### Core Metadata
+
+<CardGroup cols={2}>
+  <Card title="Title" icon="heading">
+    Display name of the resource
+  </Card>
+  <Card title="Description" icon="file-text">
+    Summary of resource contents
+  </Card>
+  <Card title="Type" icon="tag">
+    File, URL, or Manual Content
+  </Card>
+  <Card title="Status" icon="traffic-light">
+    Active, Archived, or Deprecated
+  </Card>
+</CardGroup>
+
+### System Metadata
+
+<CardGroup cols={2}>
+  <Card title="Created Date" icon="calendar">
+    When the resource was added
+  </Card>
+  <Card title="Updated Date" icon="clock">
+    Last modification timestamp
+  </Card>
+  <Card title="Resource ID" icon="code">
+    Unique identifier
+  </Card>
+  <Card title="Source" icon="link">
+    Origin (URL, filename, etc.)
+  </Card>
+</CardGroup>
+
+### Custom Metadata
+
+<CardGroup cols={2}>
+  <Card title="Tags" icon="label">
+    Categorization labels
+  </Card>
+  <Card title="Author" icon="user">
+    Who created or maintains
+  </Card>
+  <Card title="Version" icon="layers">
+    Content version number
+  </Card>
+  <Card title="Custom Fields" icon="sliders">
+    User-defined properties
+  </Card>
+</CardGroup>
+
+---
+
+## Managing Metadata
+
+### View Resource Details
+
+<Steps>
+  <Step title="Go to Datasource">
+    Navigate to the datasource containing the resource
+  </Step>
+  <Step title="Find Resource">
+    Locate the resource in the list
+  </Step>
+  <Step title="View Details">
+    Click the resource to see metadata panel
+  </Step>
+  <Step title="Review Information">
+    See all associated metadata
+  </Step>
+</Steps>
+
+### Edit Metadata
+
+<Steps>
+  <Step title="Go to Resource">
+    Find the resource you want to edit
+  </Step>
+  <Step title="Click Edit">
+    Click **Edit Metadata** or pencil icon
+  </Step>
+  <Step title="Update Fields">
+    Modify title, description, tags, status, etc.
+  </Step>
+  <Step title="Save Changes">
+    Click **Save** to apply updates
+  </Step>
+  <Step title="Verify">
+    Changes appear immediately
+  </Step>
+</Steps>
+
+---
+
+## Metadata Fields Explained
+
+### Title
+
+The display name for the resource.
+
+**Best Practices:**
+- Clear and descriptive
+- Indicates content topic
+- Under 100 characters
+- Searchable and meaningful
+
+**Examples:**
+```
+✅ "Product Setup Guide - Version 2.1"
+✅ "API Reference - Authentication"
+✅ "Company Return Policy - Updated Sept 2024"
+❌ "doc1"
+❌ "file.pdf"
+```
+
+### Description
+
+A summary of what the resource contains.
+
+**Purpose:**
+- Help understand content at a glance
+- Appear in search results
+- Guide agent selection
+- Document contents
+
+**Example:**
+```
+"Step-by-step guide for setting up the product,
+including installation, configuration, and 
+initial setup. Updated for version 2.1."
+```
+
+### Type
+
+Indicates the resource category:
+
+| Type | Format | Example |
+|------|--------|---------|
+| **File** | PDF, DOCX, TXT, etc. | "Product Guide.pdf" |
+| **URL** | Web page or website | "https://example.com/docs" |
+| **Manual** | Typed/Pasted text | "Return Policy" |
+| **Sitemap** | Website index | "sitemap.xml" |
+
+### Status
+
+Track the content state:
+
+<Tabs>
+  <Tab title="Active">
+    Content is current and in use
+    - Default for new resources
+    - Used by agents
+    - Searchable
+  </Tab>
+  <Tab title="Archived">
+    Content kept for reference but not active
+    - No longer used by agents
+    - Still searchable if needed
+    - Can be reactivated
+  </Tab>
+  <Tab title="Deprecated">
+    Content is outdated or no longer accurate
+    - Marked as deprecated
+    - Agents avoid using it
+    - Candidate for deletion
+  </Tab>
+</Tabs>
+
+### Created & Updated Dates
+
+**Created Date:**
+- When resource was added to datasource
+- Cannot be changed
+- Reference for age of content
+
+**Updated Date:**
+- Last time metadata or content changed
+- Auto-updated on edits
+- Helps identify recent changes
+
+### Tags
+
+Categorize and organize resources.
+
+**Creating Tags:**
+- Enter one or more tags
+- Separated by commas
+- Case-insensitive
+- Can include numbers and hyphens
+
+**Tag Examples:**
+```
+✅ "customer-support, faq, product"
+✅ "billing, payment, pricing"
+✅ "internal, confidential, hr"
+✅ "v2.0, draft, review-needed"
+```
+
+**Tag Benefits:**
+- Quick filtering and search
+- Organize by department
+- Mark priority (urgent, important)
+- Indicate version or status
+- Track content type
+
+### Author
+
+Who created or maintains the resource.
+
+**Information:**
+- Original creator name
+- Can be updated for current maintainer
+- Useful for knowledge ownership
+- Appears in audit logs
+
+### Version
+
+Track content versions.
+
+**Versioning Scheme:**
+```
+Simple: 1, 2, 3...
+Semantic: 1.0, 1.1, 2.0...
+Date-based: 2024-09, 2024-10...
+Named: Draft, Review, Final, v2.1...
+```
+
+**Usage:**
+- Indicate which version is current
+- Track updates over time
+- Reference in search results
+- Archive old versions
+
+### Source
+
+Origin or reference for the resource.
+
+**Examples:**
+```
+Files:    "product_guide_v2.pdf"
+URLs:     "https://help.example.com/setup"
+Manual:   "Internal Policy Document"
+Google Drive: "Shared Drive > HR > Handbook"
+```
+
+---
+
+## Custom Metadata Fields
+
+### Creating Custom Fields
+
+Some PLai plans allow custom metadata:
+
+<Steps>
+  <Step title="Go to Datasource Settings">
+    Navigate to datasource configuration
+  </Step>
+  <Step title="Custom Fields">
+    Find **Custom Metadata Fields** section
+  </Step>
+  <Step title="Add Field">
+    Click **Add Custom Field**
+  </Step>
+  <Step title="Define Field">
+    Enter name, type, and options
+  </Step>
+  <Step title="Save">
+    Field available for all resources
+  </Step>
+</Steps>
+
+### Field Types
+
+| Type | Example | Use |
+|------|---------|-----|
+| **Text** | Department, Category | Free text entry |
+| **Dropdown** | Status levels | Predefined options |
+| **Date** | Review date, sunset | Time-based tracking |
+| **Checkbox** | Verified, Confidential | Boolean flags |
+| **Number** | Priority score, rating | Numeric values |
+
+### Example Custom Fields
+
+```
+E-commerce:
+├── Product Category (dropdown)
+├── Price Range (text)
+├── In Stock (checkbox)
+└── Last Updated (date)
+
+HR Documents:
+├── Department (dropdown)
+├── Sensitive (checkbox)
+├── Approval Status (dropdown)
+└── Reviewed Date (date)
+
+Support Documentation:
+├── Priority Level (number 1-5)
+├── Affected Product (dropdown)
+├── Verified (checkbox)
+└── Last Tested (date)
+```
+
+---
+
+## Using Metadata Effectively
+
+### Organization Strategy
+
+**By Type:**
+```
+Tags: "guide", "tutorial", "reference"
+Status: Active, Archived
+```
+
+**By Department:**
+```
+Tags: "sales", "marketing", "support", "engineering"
+Author: Department owner
+```
+
+**By Status:**
+```
+Status: Active (current)
+Status: Archived (old but keep)
+Version: v1.0, v2.0
+```
+
+**By Confidentiality:**
+```
+Tags: "public", "internal", "confidential"
+Custom Field: Sensitivity Level
+```
+
+### Search & Filter
+
+Use metadata to find resources:
+
+```
+Filter by Tag:
+- Show all "customer-support" tagged resources
+- Find all "urgent" items
+- Search by "v2.0" version
+
+Filter by Status:
+- Show only "Active" content
+- Find "Deprecated" for cleanup
+- View "Archived" for reference
+
+Sort by Date:
+- Newest first
+- Oldest first
+- Recently updated
+```
+
+### Quality Management
+
+**Track with Metadata:**
+
+- **Version**: Know which version is current
+- **Author**: Know who maintains content
+- **Updated Date**: See if content is fresh
+- **Status**: Identify outdated content
+- **Tags**: Mark items needing review
+
+**Example Quality Workflow:**
+```
+1. Add tag "needs-review" to content
+2. Set status to "draft"
+3. Author field shows reviewer needed
+4. Mark updated date
+5. Change tag to "reviewed" when done
+6. Set status to "active"
+```
+
+---
+
+## Metadata Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Consistent Naming" icon="align-left">
+    Use consistent titles and tag names
+  </Card>
+  <Card title="Complete Information" icon="circle-check">
+    Fill all relevant metadata fields
+  </Card>
+  <Card title="Regular Updates" icon="refresh">
+    Keep metadata current as content changes
+  </Card>
+  <Card title="Clear Descriptions" icon="file-text">
+    Write clear summaries of content
+  </Card>
+</CardGroup>
+
+### Title Conventions
+
+```
+Pattern: [Type] - [Topic] - [Version/Date]
+
+Examples:
+✅ "Guide - Getting Started - v2.0"
+✅ "FAQ - Account Management - Sept 2024"
+✅ "Policy - Data Privacy - 2024"
+✅ "Tutorial - API Integration - Final"
+```
+
+### Tag Conventions
+
+```
+Guidelines:
+- Use lowercase or kebab-case
+- Keep list to 5-10 tags per resource
+- Be specific, not generic
+- Reuse existing tags for consistency
+
+Examples:
+✅ "customer-support, faq, frequently-asked-questions"
+✅ "internal, confidential, team-only"
+✅ "api, integration, developer"
+```
+
+### Description Guidelines
+
+```
+Structure:
+1. One-line summary
+2. Key topics covered
+3. Who should use this
+4. Last relevant update
+
+Example:
+"Complete guide to product installation and setup.
+Covers hardware requirements, software installation,
+configuration, and troubleshooting. For new users
+and IT administrators. Updated Sept 2024."
+```
+
+---
+
+## Metadata & Agent Search
+
+### Impact on Agent Queries
+
+Metadata affects how agents find resources:
+
+1. **Title**: Appears in search results
+2. **Description**: Provides context
+3. **Tags**: Help categorize for filtering
+4. **Status**: Active resources prioritized
+5. **Content Quality**: Affects relevance ranking
+
+### Search Result Example
+
+```
+Query: "How do I set up the product?"
+
+Results:
+1. Title: Guide - Getting Started - v2.0
+   Description: Step-by-step setup instructions...
+   Tags: guide, setup, tutorial
+   Status: Active
+   
+2. Title: FAQ - Installation - v1.5
+   Description: Frequently asked installation...
+   Tags: faq, setup, archived
+   Status: Archived
+```
+
+---
+
+## Auditing & Compliance
+
+### Metadata for Audits
+
+Track content for compliance:
+
+- **Created/Updated Dates**: Audit trail
+- **Author**: Responsibility tracking
+- **Version**: Change tracking
+- **Status**: Deprecation timeline
+- **Custom Fields**: Approval status, reviewed by
+
+### Example Audit Checklist
+
+```
+Content Verification:
+□ Is content up-to-date? (Check Updated date)
+□ Who maintains this? (Check Author)
+□ Is this approved? (Check custom approval field)
+□ What version are we using? (Check Version)
+□ Should we archive old versions? (Check Status)
+```
+
+---
+
+## Next Steps
+
+- **[Resource Types](./resource-types.mdx)** - Learn about files, URLs, and content
+- **[Datasource Metadata](./datasource-metadata.mdx)** - Configure datasource properties
+- **[Shared Datasources](./shared-datasources.mdx)** - Collaborate with your team
+- **[Agent Configuration](../agents/configuration.mdx)** - Connect datasources to agents

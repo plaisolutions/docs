@@ -1,0 +1,585 @@
+---
+title: "Dependencies"
+description: "Define execution order with depends_on"
+icon: "link"
+---
+
+# Workflow Dependencies
+
+Dependencies determine the execution order in workflows. They define which nodes must complete before a node can start, creating the structure of your directed acyclic graph (DAG).
+
+---
+
+## Basic Concept
+
+A **dependency** is a requirement that one or more nodes must complete before another node can start.
+
+```json
+{
+  "id": "analyze",
+  "depends_on": ["scrape", "search"]
+  // Node "analyze" waits for both "scrape" and "search" to complete
+}
+```
+
+**Execution Flow:**
+```
+scrape    search
+   ↓        ↓
+    ╲      ╱
+      analyze
+```
+
+---
+
+## Dependency Types
+
+### No Dependencies (Root Nodes)
+
+Nodes with no `depends_on` execute immediately:
+
+```json
+{
+  "id": "fetch_data",
+  "type": "firecrawl",
+  "parameters": {
+    "url": "https://example.com"
+  }
+  // No depends_on → runs in first tick
+}
+```
+
+### Single Dependency
+
+A node depending on one other node:
+
+```json
+{
+  "id": "analyze",
+  "type": "plai_agent",
+  "depends_on": ["fetch_data"],
+  "parameters": {
+    "input": "Analyze: {{$nodes.fetch_data.markdown}}"
+  }
+  // Waits for "fetch_data" to complete
+}
+```
+
+### Multiple Dependencies
+
+A node waiting for several nodes:
+
+```json
+{
+  "id": "synthesize",
+  "type": "plai_agent",
+  "depends_on": ["analyze_a", "analyze_b", "analyze_c"],
+  "parameters": {
+    "input": "Combine results: {{$nodes.analyze_a.output}} {{$nodes.analyze_b.output}} {{$nodes.analyze_c.output}}"
+  }
+  // Waits for ALL three nodes to complete before starting
+}
+```
+
+---
+
+## Implicit Dependencies
+
+**Sequential containers** create automatic dependencies between siblings:
+
+### Sequential Container Example
+
+```json
+{
+  "id": "pipeline",
+  "type": "sequential",
+  "nodes": [
+    {
+      "id": "step_1",
+      "type": "plai_agent",
+      "parameters": {"agent_name_slug": "agent1", "input": "..."}
+    },
+    {
+      "id": "step_2",
+      "type": "plai_agent",
+      "parameters": {"agent_name_slug": "agent2", "input": "{{$nodes.step_1.output}}"}
+    },
+    {
+      "id": "step_3",
+      "type": "plai_agent",
+      "parameters": {"agent_name_slug": "agent3", "input": "{{$nodes.step_2.output}}"}
+    }
+  ]
+}
+```
+
+**Implicit dependencies created:**
+- `step_1`: No dependencies → runs first
+- `step_2`: Implicitly depends on `step_1`
+- `step_3`: Implicitly depends on `step_2`
+
+**Equivalent explicit form:**
+```json
+{
+  "id": "step_2",
+  "depends_on": ["step_1"]
+}
+```
+
+### Parallel Container (No Implicit Dependencies)
+
+```json
+{
+  "id": "parallel_analysis",
+  "type": "parallel",
+  "nodes": [
+    {
+      "id": "analyze_a",
+      "type": "plai_agent",
+      "parameters": {"agent_name_slug": "analyzer", "input": "Analyze A"}
+    },
+    {
+      "id": "analyze_b",
+      "type": "plai_agent",
+      "parameters": {"agent_name_slug": "analyzer", "input": "Analyze B"}
+    },
+    {
+      "id": "analyze_c",
+      "type": "plai_agent",
+      "parameters": {"agent_name_slug": "analyzer", "input": "Analyze C"}
+    }
+  ]
+}
+```
+
+**No implicit dependencies:**
+- `analyze_a`, `analyze_b`, `analyze_c` all run **in parallel**
+- Each only depends on what's explicitly stated
+
+---
+
+## Complex Dependency Patterns
+
+### Diamond Pattern
+
+```
+      fetch_data
+         ↙  ↘
+    analyze  search
+         ↖  ↙
+     synthesize
+```
+
+**Implementation:**
+```json
+{
+  "id": "fetch_data",
+  "type": "firecrawl",
+  "parameters": {"action": "scrape", "url": "..."}
+},
+{
+  "id": "analyze",
+  "type": "plai_agent",
+  "depends_on": ["fetch_data"],
+  "parameters": {"input": "Analyze: {{$nodes.fetch_data.markdown}}"}
+},
+{
+  "id": "search",
+  "type": "plai_agent",
+  "depends_on": ["fetch_data"],
+  "parameters": {"input": "Search related to: {{$nodes.fetch_data.markdown}}"}
+},
+{
+  "id": "synthesize",
+  "type": "plai_agent",
+  "depends_on": ["analyze", "search"],
+  "parameters": {"input": "Combine: {{$nodes.analyze.output}} and {{$nodes.search.output}}"}
+}
+```
+
+**Execution:**
+- Tick 1: `fetch_data` runs
+- Tick 2: `analyze` and `search` run in parallel
+- Tick 3: `synthesize` runs (after both complete)
+
+### Tree Pattern
+
+```
+        root
+         ↙ ↓ ↘
+      node_a node_b node_c
+       ↓      ↓      ↓
+    result_a result_b result_c
+         ↖   ↓   ↙
+        final_report
+```
+
+**Implementation:**
+```json
+{
+  "id": "root",
+  "type": "http",
+  "parameters": {"method": "GET", "url": "..."}
+},
+{
+  "id": "node_a",
+  "depends_on": ["root"],
+  "type": "plai_agent",
+  "parameters": {"input": "..."}
+},
+{
+  "id": "node_b",
+  "depends_on": ["root"],
+  "type": "plai_agent",
+  "parameters": {"input": "..."}
+},
+{
+  "id": "node_c",
+  "depends_on": ["root"],
+  "type": "plai_agent",
+  "parameters": {"input": "..."}
+},
+{
+  "id": "result_a",
+  "depends_on": ["node_a"],
+  "type": "plai_agent",
+  "parameters": {"input": "{{$nodes.node_a.output}}"}
+},
+{
+  "id": "result_b",
+  "depends_on": ["node_b"],
+  "type": "plai_agent",
+  "parameters": {"input": "{{$nodes.node_b.output}}"}
+},
+{
+  "id": "result_c",
+  "depends_on": ["node_c"],
+  "type": "plai_agent",
+  "parameters": {"input": "{{$nodes.node_c.output}}"}
+},
+{
+  "id": "final_report",
+  "depends_on": ["result_a", "result_b", "result_c"],
+  "type": "markdown_report",
+  "parameters": {
+    "title": "Final Report",
+    "sections": [...]
+  }
+}
+```
+
+### Loop Dependencies
+
+Loop nodes wait for their dependencies and create iteration outputs:
+
+```json
+{
+  "id": "fetch_urls",
+  "type": "loop",
+  "parameters": {
+    "items": "{{$input.urls}}",
+    "mode": "parallel"
+  },
+  "nodes": [
+    {
+      "id": "fetch",
+      "type": "firecrawl",
+      "parameters": {"action": "scrape", "url": "{{loop.item}}"}
+    },
+    {
+      "id": "analyze",
+      "type": "plai_agent",
+      "depends_on": ["fetch"],
+      "parameters": {"input": "Analyze: {{$nodes.fetch.markdown}}"}
+    }
+  ]
+},
+{
+  "id": "aggregate",
+  "depends_on": ["fetch_urls"],
+  "type": "plai_agent",
+  "parameters": {"input": "Aggregate results: {{$nodes.fetch_urls}}"}
+}
+```
+
+**Execution:**
+- Loop runs for each URL item in parallel
+- Each iteration: `fetch` → `analyze`
+- After all iterations: `aggregate` node runs
+
+---
+
+## Execution Order Rules
+
+### Rule 1: All Dependencies Must Be Satisfied
+
+A node only starts when **all** its dependencies have completed successfully.
+
+```json
+{
+  "id": "node_c",
+  "depends_on": ["node_a", "node_b"]
+}
+```
+
+- ✅ If both `node_a` and `node_b` complete → `node_c` can start
+- ❌ If only `node_a` completes → `node_c` waits for `node_b`
+- ❌ If `node_a` fails → `node_c` is skipped (blocked)
+
+### Rule 2: No Circular Dependencies
+
+Workflows are directed acyclic graphs (DAGs). Circular dependencies are invalid.
+
+```json
+// INVALID - creates a circle
+{
+  "id": "node_a",
+  "depends_on": ["node_b"]
+},
+{
+  "id": "node_b",
+  "depends_on": ["node_c"]
+},
+{
+  "id": "node_c",
+  "depends_on": ["node_a"]  // ← Circle!
+}
+```
+
+**Error:** Workflow validation will reject this.
+
+### Rule 3: Parent Waits for Children
+
+Container nodes (parallel, sequential, loop) wait for all their child nodes to complete.
+
+```json
+{
+  "id": "parent",
+  "type": "parallel",
+  "nodes": [
+    {"id": "child_1", ...},
+    {"id": "child_2", ...}
+  ]
+},
+{
+  "id": "after_parent",
+  "depends_on": ["parent"],  // Waits for both children
+  "type": "plai_agent"
+}
+```
+
+- `after_parent` doesn't start until `child_1` AND `child_2` complete
+
+---
+
+## Dependency Patterns by Use Case
+
+### Sequential Processing
+
+Use case: Each step uses output of previous step
+
+```json
+[
+  {"id": "step_1", "type": "plai_agent"},
+  {"id": "step_2", "depends_on": ["step_1"], "type": "plai_agent"},
+  {"id": "step_3", "depends_on": ["step_2"], "type": "plai_agent"}
+]
+```
+
+Or use `sequential` container:
+```json
+{
+  "type": "sequential",
+  "nodes": [...]  // Implicit dependencies
+}
+```
+
+### Parallel Processing
+
+Use case: Multiple independent analyses
+
+```json
+{
+  "type": "parallel",
+  "nodes": [
+    {"id": "analyze_a", "type": "plai_agent"},
+    {"id": "analyze_b", "type": "plai_agent"},
+    {"id": "analyze_c", "type": "plai_agent"}
+  ]
+}
+```
+
+All run simultaneously (no explicit `depends_on`).
+
+### Fan-Out / Fan-In
+
+Use case: One source → multiple analyses → one result
+
+```json
+{
+  "id": "source",
+  "type": "firecrawl"
+},
+{
+  "id": "analyze_a",
+  "depends_on": ["source"],
+  "type": "plai_agent"
+},
+{
+  "id": "analyze_b",
+  "depends_on": ["source"],
+  "type": "plai_agent"
+},
+{
+  "id": "combine",
+  "depends_on": ["analyze_a", "analyze_b"],
+  "type": "plai_agent"
+}
+```
+
+### Conditional Execution with Loops
+
+Use case: Process array items, aggregate results
+
+```json
+{
+  "id": "items_loop",
+  "type": "loop",
+  "parameters": {"items": "{{$input.items}}", "mode": "parallel"},
+  "nodes": [...]
+},
+{
+  "id": "final_step",
+  "depends_on": ["items_loop"],
+  "type": "plai_agent"
+}
+```
+
+---
+
+## Debugging Dependencies
+
+### Check Execution Order
+
+Get execution logs to see dependency satisfaction:
+
+```bash
+GET /usage/executions/{execution_id}/logs
+```
+
+Each log shows:
+- `status`: COMPLETED, RUNNING, PENDING, FAILED, SKIPPED
+- `started_at`: When the node started
+- `completed_at`: When it finished
+
+**PENDING nodes** are waiting for dependencies.
+
+### Visualize Dependencies
+
+For complex workflows, list your nodes:
+```json
+{
+  "nodes": [
+    {"id": "a"},
+    {"id": "b", "depends_on": ["a"]},
+    {"id": "c", "depends_on": ["a"]},
+    {"id": "d", "depends_on": ["b", "c"]}
+  ]
+}
+```
+
+**Dependency graph:**
+```
+  a
+ / \
+b   c
+ \ /
+  d
+```
+
+---
+
+## Common Mistakes
+
+### Mistake 1: Forgotten Dependency
+
+```json
+// WRONG - analyze_c uses output of analyze_b but doesn't depend on it
+{
+  "id": "analyze_b",
+  "type": "plai_agent",
+  "parameters": {"input": "..."}
+},
+{
+  "id": "analyze_c",
+  "type": "plai_agent",
+  "parameters": {"input": "Use: {{$nodes.analyze_b.output}}"}  // Missing depends_on!
+}
+```
+
+**Fix:** Add explicit dependency
+```json
+{
+  "id": "analyze_c",
+  "depends_on": ["analyze_b"],  // ← Add this
+  "type": "plai_agent"
+}
+```
+
+### Mistake 2: Circular Dependencies
+
+```json
+// WRONG - creates a circle
+{
+  "id": "process_a",
+  "depends_on": ["process_b"]
+},
+{
+  "id": "process_b",
+  "depends_on": ["process_a"]  // ← Circle!
+}
+```
+
+**Fix:** Remove circular reference and use proper DAG structure.
+
+### Mistake 3: Depending on Container Output Before Completion
+
+```json
+// WRONG - depends_on parent but parent's children may still be running
+{
+  "id": "parallel_work",
+  "type": "parallel",
+  "nodes": [...]
+},
+{
+  "id": "next_step",
+  "depends_on": ["parallel_work"]  // ← Correct! Waits for all children
+}
+```
+
+Actually this is **correct** - container nodes automatically wait for all children.
+
+---
+
+## Best Practices
+
+✅ **DO:**
+- Use explicit `depends_on` for clarity
+- Use `sequential` container for linear workflows
+- Use `parallel` container for independent tasks
+- Document complex dependency patterns
+- Validate workflows before execution
+
+❌ **DON'T:**
+- Create circular dependencies
+- Forget dependencies (causing race conditions)
+- Over-specify dependencies (limiting parallelism)
+- Assume nodes run in definition order
+
+---
+
+## Next Steps
+
+- **[Execution Variables](./execution-variables.mdx)** - Access node outputs in dependencies
+- **[Node Types](./node-types.mdx)** - Learn about parallel/sequential containers
+- **[What is a Workflow](./what-is-a-workflow.mdx)** - See workflow examples

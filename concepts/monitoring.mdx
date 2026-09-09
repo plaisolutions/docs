@@ -1,0 +1,481 @@
+---
+title: "Monitoring"
+description: "Track token consumption, resource usage, and costs in your PLai projects"
+icon: "chart-line"
+---
+
+# Monitoring
+
+Monitoring shows you resource consumption and costs across your project. It provides visibility into how many tokens are being used, which services are consuming resources, and what everything costs.
+
+---
+
+## What Monitoring Shows
+
+Monitoring is a **project-level dashboard** that tracks:
+
+- 📊 **Token Consumption** - Input and output tokens by LLM model
+- 💰 **Cost Breakdown** - Costs by provider (Claude, GPT-4, Perplexity, etc.)
+- 🔧 **Service Usage** - Resource consumption by tool type
+- 📈 **Trends** - Usage patterns over time
+- ⚠️ **Budget Tracking** - Spending vs budget limits
+
+<Tip>
+Monitor shows CONSUMPTION and COSTS. For detailed analytics about agent performance, conversations, and execution logs, see [Agent Analytics](../agents/analytics.mdx).
+</Tip>
+
+---
+
+## Understanding Consumption
+
+### Token Usage
+
+Different providers charge differently based on tokens:
+
+```
+TOKENS = Input Tokens + Output Tokens
+
+Example:
+├─ Your input: "Answer this question..." (45 tokens)
+├─ Agent's response: "The answer is..." (156 tokens)
+└─ Total: 201 tokens charged
+```
+
+### Cost Calculation
+
+```
+COST = (Input Tokens × Input Price) + (Output Tokens × Output Price)
+
+Example - Claude 3.5 Sonnet:
+├─ Input: $3 per 1M tokens
+├─ Output: $15 per 1M tokens
+
+For the example above (201 tokens):
+├─ Input cost: 45 tokens × ($3/1M) = $0.000135
+├─ Output cost: 156 tokens × ($15/1M) = $0.00234
+└─ Total: $0.002475
+```
+
+---
+
+## Consumption Metrics
+
+### By Model/Provider
+
+Track which models are consuming resources:
+
+```
+Model Consumption This Week:
+
+Claude 3.5 Sonnet:  1,245,000 tokens (55%)
+├─ Input: 450,000 tokens
+└─ Output: 795,000 tokens
+
+Claude 3 Opus:      567,000 tokens (25%)
+├─ Input: 200,000 tokens
+└─ Output: 367,000 tokens
+
+GPT-4:              312,000 tokens (14%)
+├─ Input: 120,000 tokens
+└─ Output: 192,000 tokens
+
+Other:              76,000 tokens (3%)
+```
+
+### By Service
+
+Track consumption across all services:
+
+```
+Service Consumption This Week:
+
+LLM Calls:
+├─ Token consumption: 2.2M tokens
+└─ Cost: $32.45
+
+Web Search (Perplexity):
+├─ Search count: 1,245
+└─ Cost: $24.90
+
+Code Interpreter:
+├─ Execution count: 89
+└─ Cost: $8.90
+
+API Requests:
+├─ Call count: 12,450
+└─ Cost: $0 (depends on external API)
+
+Total Project Cost: $66.25
+```
+
+---
+
+## Monitoring Dashboard
+
+### Overview Tab
+
+```
+PROJECT: Customer Support
+Week of Sept 1-7
+
+Total Cost This Week: $234.56
+vs Last Week: $156.78 (↑ 49.5%)
+vs Budget: $500/week (✅ 47% used)
+
+Breakdown:
+├─ LLM Calls: $156.78 (67%)
+├─ Web Search: $54.30 (23%)
+├─ Code Execution: $12.40 (5%)
+└─ Other Services: $11.08 (5%)
+
+Top Models:
+1. Claude 3.5 Sonnet - $98.45
+2. Claude 3 Opus - $45.23
+3. GPT-4 - $13.10
+```
+
+### Tokens Tab
+
+View detailed token consumption:
+
+```
+Token Usage By Model
+
+Claude 3.5 Sonnet
+├─ Input: 450,000 (@ $3/1M)
+├─ Output: 795,000 (@ $15/1M)
+├─ Total Tokens: 1,245,000
+└─ Cost: $12.44
+
+Claude 3 Opus
+├─ Input: 200,000 (@ $3/1M)
+├─ Output: 367,000 (@ $15/1M)
+├─ Total Tokens: 567,000
+└─ Cost: $5.78
+```
+
+### Services Tab
+
+```
+Service Consumption
+
+Web Search:
+├─ Searches: 1,245
+├─ Cost per search: $0.02
+└─ Total: $24.90
+
+Code Interpreter:
+├─ Executions: 89
+├─ Avg cost: $0.10 per execution
+└─ Total: $8.90
+
+API Requests:
+├─ Calls: 12,450
+└─ Cost: $0 (external API billing)
+```
+
+### Costs Tab
+
+```
+Daily Cost Breakdown
+
+Sep 1: $28.50
+Sep 2: $31.20
+Sep 3: $42.10 (↑ High usage day)
+Sep 4: $24.80
+Sep 5: $35.20
+Sep 6: $37.10
+Sep 7: $35.66
+
+Weekly Total: $234.56
+Daily Average: $33.51
+```
+
+---
+
+## Cost Tracking
+
+### Understanding Your Costs
+
+```
+COST STRUCTURE:
+
+LLM Services (Claude, GPT-4, etc.)
+├─ Based on tokens consumed
+├─ Different rates for input vs output
+└─ Rates vary by model
+
+Tool Services (Web Search, Code Execution, etc.)
+├─ Based on usage (searches, executions, calls)
+├─ Per-unit pricing or flat fees
+└─ Varies by service
+
+External Services (via API tools)
+├─ Billing by external provider
+├─ PLai may charge platform fee
+└─ Check service docs for pricing
+```
+
+### Cost Per Agent/Workflow
+
+Track which agents or workflows are most expensive:
+
+```
+Estimated Cost Breakdown:
+
+Support Bot Agent:
+├─ Daily cost: $8.50
+├─ Avg cost per request: $0.15
+└─ Weekly cost: $59.50
+
+Data Processing Workflow:
+├─ Daily cost: $12.30
+├─ Avg cost per execution: $2.50
+└─ Weekly cost: $86.10
+
+Lead Scoring Agent:
+├─ Daily cost: $3.20
+├─ Avg cost per lead: $0.32
+└─ Weekly cost: $22.40
+```
+
+<Tip>
+These are estimated breakdowns. For exact per-agent costs and usage details, check [Agent Analytics](../agents/analytics.mdx).
+</Tip>
+
+---
+
+## Budget Management
+
+### Setting Budget Limits
+
+<Steps>
+  <Step title="Go to Project Settings">
+    Navigate to your project monitoring settings
+  </Step>
+  <Step title="Set Budget">
+    Enter your monthly or weekly budget limit
+  </Step>
+  <Step title="Configure Alerts">
+    Set alert thresholds (75%, 90%, 100%)
+  </Step>
+  <Step title="Enable Notifications">
+    Choose how to be notified (email, webhook, etc.)
+  </Step>
+</Steps>
+
+### Budget Alerts
+
+Get notified when spending reaches thresholds:
+
+```
+Budget: $500/month
+├─ ✅ Spend: $125 (25%) - No alert
+├─ ✅ Spend: $375 (75%) - Alert triggered
+├─ 🟠 Spend: $450 (90%) - Warning alert
+└─ 🔴 Spend: $500+ (100%) - Critical alert
+```
+
+### Preventing Runaway Costs
+
+<CardGroup cols={2}>
+  <Card title="Rate Limits" icon="speedometer">
+    Set max requests/tokens per agent per hour
+  </Card>
+  <Card title="Model Selection" icon="cpu">
+    Use cheaper models when possible (Claude vs GPT-4)
+  </Card>
+  <Card title="Input Optimization" icon="minimize">
+    Reduce context size, shorter prompts = fewer tokens
+  </Card>
+  <Card title="Caching" icon="hard-drive">
+    Cache results to avoid re-processing
+  </Card>
+</CardGroup>
+
+---
+
+## Reducing Consumption
+
+### Optimize Token Usage
+
+```
+BEFORE (Expensive):
+├─ System prompt: 1,000 tokens (verbose)
+├─ Full datasource context: 2,000 tokens
+├─ User input: 100 tokens
+└─ Total input: 3,100 tokens → Cost: $0.0093
+
+AFTER (Optimized):
+├─ System prompt: 200 tokens (concise)
+├─ Relevant excerpts only: 400 tokens
+├─ User input: 100 tokens
+└─ Total input: 700 tokens → Cost: $0.0021
+Savings: 77% reduction
+```
+
+### Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Concise Prompts" icon="edit">
+    Every token costs. Be brief and specific.
+  </Card>
+  <Card title="Smart Context" icon="brain">
+    Include only relevant information, not full datasets.
+  </Card>
+  <Card title="Cheaper Models" icon="trending-down">
+    Use Haiku for simple tasks, Sonnet for complex.
+  </Card>
+  <Card title="Batch Processing" icon="stack">
+    Process multiple requests together when possible.
+  </Card>
+</CardGroup>
+
+### Example Optimization
+
+```
+Email Support Bot:
+
+PROBLEM:
+├─ Current: 500 requests/day
+├─ Avg input tokens: 1,500 per request
+├─ Daily token cost: $2.25 (500 × 1,500 × $3/1M)
+
+OPTIMIZATION:
+├─ Reduce context from 1,500 to 500 tokens
+├─ New daily token cost: $0.75 (500 × 500 × $3/1M)
+└─ Monthly savings: $45 (66% reduction)
+```
+
+---
+
+## Viewing Historical Trends
+
+### Cost Trends
+
+```
+Monthly Trend:
+├─ July: $1,234
+├─ August: $1,567 (↑ 27%)
+├─ September: $892 (↓ 43%)
+
+Trend analysis:
+- August spike due to new workflow
+- September decrease after optimization
+```
+
+### Daily Breakdown
+
+```
+Week Sep 1-7:
+│
+│    ╭─────╮
+│    │     │     ╭───╮
+├────┼─────┼─────┼───┼────
+│    │     │     │   │    Cost ($)
+0    10    20    30   40
+     │                 │
+  Normal         High usage day
+```
+
+### Export & Reports
+
+- 📊 Export consumption data (CSV, JSON)
+- 📈 Generate monthly reports
+- 📋 Share reports with stakeholders
+- 🔔 Set up automated report emails
+
+---
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Unexpected cost increase">
+    **Steps:**
+    1. Check which model/service increased
+    2. Look at token consumption
+    3. Review recent agent/workflow changes
+    4. Optimize expensive components
+    5. Set alerts to catch next time
+  </Accordion>
+
+  <Accordion title="Cost not updating">
+    **Check:**
+    - Monitor refreshes every 5-15 minutes
+    - Some costs finalized at end of day/week
+    - Different providers have different billing cycles
+    - Wait a few hours for full update
+  </Accordion>
+
+  <Accordion title="Budget alert not working">
+    **Verify:**
+    - Budget is set in project settings
+    - Alert threshold configured correctly
+    - Notifications enabled
+    - Check spam folder for alert emails
+  </Accordion>
+
+  <Accordion title="Need detailed usage breakdown">
+    **Use:**
+    - Agent Analytics for per-agent data
+    - API endpoints for programmatic access
+    - Export data for custom analysis
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Monitoring Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Review Weekly" icon="calendar-week">
+    Spend 5 minutes weekly checking consumption
+  </Card>
+  <Card title="Set Budgets" icon="wallet">
+    Know your spending limits before issues arise
+  </Card>
+  <Card title="Enable Alerts" icon="bell">
+    Get notified of cost spikes immediately
+  </Card>
+  <Card title="Optimize Early" icon="target">
+    Don't wait for problems. Optimize as you build.
+  </Card>
+</CardGroup>
+
+### Monitoring Checklist
+
+- ✅ Check project monitoring dashboard daily
+- ✅ Review cost trends weekly
+- ✅ Set realistic budget limits
+- ✅ Configure alert thresholds
+- ✅ Identify expensive agents/workflows
+- ✅ Optimize high-consumption components
+- ✅ Export reports for stakeholders
+- ✅ Archive data per retention policy
+
+---
+
+## Key Takeaways
+
+✅ **Monitor tracks consumption** - Tokens and service usage  
+✅ **Understand costs** - Different models and services cost differently  
+✅ **Set budgets & alerts** - Avoid surprise bills  
+✅ **Optimize early** - Reduce consumption before it becomes expensive  
+✅ **Track trends** - Understand patterns and plan capacity  
+
+---
+
+## Related Topics
+
+- **[Agent Analytics](../agents/analytics.mdx)** - Conversations, executions, performance per agent
+- **[Security & Compliance](./security-and-compliance.mdx)** - Audit logs and access tracking
+- **[Organizations & Projects](./organizations-and-projects.mdx)** - Project-level management
+- **API** - Programmatic access to detailed metrics and analytics
+
+---
+
+## Next Steps
+
+- **[Check Your Project Monitoring](../../)** - Start tracking consumption
+- **[View Agent Analytics](../agents/analytics.mdx)** - Detailed per-agent performance
+- **[Optimize Agents](../agents/agents-datasources-and-tools.mdx)** - Reduce token usage

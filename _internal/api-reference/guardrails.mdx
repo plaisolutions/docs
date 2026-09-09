@@ -1,0 +1,567 @@
+---
+title: "Guardrails"
+description: "API endpoints for managing AI safety and content filtering guardrails"
+---
+
+## List Available Guardrails
+
+<api-endpoint method="GET" path="/guardrails" />
+
+List all available guardrails that can be applied to agents for content filtering and AI safety.
+
+### Response
+
+Returns an array of available guardrail configurations that can be applied to agents.
+
+<Note>
+  Guardrails help ensure AI safety by filtering inappropriate content, preventing harmful outputs, and enforcing content policies.
+</Note>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request GET 'https://api.plaisolutions.com/guardrails' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.plaisolutions.com/guardrails', {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+const guardrails = await response.json();
+console.log(guardrails);
+```
+
+```python Python
+import requests
+
+url = "https://api.plaisolutions.com/guardrails"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+
+response = requests.get(url, headers=headers)
+guardrails = response.json()
+print(guardrails)
+```
+
+</CodeGroup>
+
+---
+
+## Add Guardrail to Agent
+
+<api-endpoint method="POST" path="/agents/{agent_id}/guardrails" />
+
+Add a guardrail to an agent to implement content filtering and AI safety measures.
+
+### Path Parameters
+
+<ParamField path="agent_id" type="string" required>
+  The unique identifier of the agent
+</ParamField>
+
+### Request Body
+
+<ParamField body="id" type="string" required>
+  The unique identifier of the guardrail to add
+</ParamField>
+
+<ParamField body="priority" type="integer" required>
+  Priority level for this guardrail (lower numbers = higher priority)
+  - `1-10` - High priority (critical safety measures)
+  - `11-50` - Medium priority (content filtering)
+  - `51-100` - Low priority (style and tone guidance)
+</ParamField>
+
+### Response
+
+Returns a confirmation of the guardrail addition.
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request POST 'https://api.plaisolutions.com/agents/agent_123/guardrails' \
+--header 'Authorization: Bearer YOUR_TOKEN' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "id": "content_filter_v1",
+  "priority": 5
+}'
+```
+
+```javascript JavaScript
+const agentId = 'agent_123';
+const response = await fetch(`https://api.plaisolutions.com/agents/${agentId}/guardrails`, {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    id: "content_filter_v1",
+    priority: 5
+  })
+});
+
+const result = await response.json();
+console.log(result);
+```
+
+```python Python
+import requests
+
+agent_id = "agent_123"
+url = f"https://api.plaisolutions.com/agents/{agent_id}/guardrails"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+data = {
+    "id": "content_filter_v1",
+    "priority": 5
+}
+
+response = requests.post(url, headers=headers, json=data)
+result = response.json()
+print(result)
+```
+
+</CodeGroup>
+
+---
+
+## List Agent Guardrails
+
+<api-endpoint method="GET" path="/agents/{agent_id}/guardrails" />
+
+List all guardrails currently applied to a specific agent.
+
+### Path Parameters
+
+<ParamField path="agent_id" type="string" required>
+  The unique identifier of the agent
+</ParamField>
+
+### Response
+
+Returns an array of guardrail configurations currently active for the agent, ordered by priority.
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request GET 'https://api.plaisolutions.com/agents/agent_123/guardrails' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const agentId = 'agent_123';
+const response = await fetch(`https://api.plaisolutions.com/agents/${agentId}/guardrails`, {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+const agentGuardrails = await response.json();
+console.log(agentGuardrails);
+```
+
+```python Python
+import requests
+
+agent_id = "agent_123"
+url = f"https://api.plaisolutions.com/agents/{agent_id}/guardrails"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+
+response = requests.get(url, headers=headers)
+agent_guardrails = response.json()
+print(agent_guardrails)
+```
+
+</CodeGroup>
+
+---
+
+## Remove Guardrail from Agent
+
+<api-endpoint method="DELETE" path="/agents/{agent_id}/guardrails/{guardrail_id}" />
+
+Remove a specific guardrail from an agent.
+
+### Path Parameters
+
+<ParamField path="agent_id" type="string" required>
+  The unique identifier of the agent
+</ParamField>
+
+<ParamField path="guardrail_id" type="string" required>
+  The unique identifier of the guardrail to remove
+</ParamField>
+
+### Response
+
+Returns a confirmation of guardrail removal.
+
+<Warning>
+  Removing guardrails may reduce AI safety measures. Ensure you understand the implications before removing critical safety guardrails.
+</Warning>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request DELETE 'https://api.plaisolutions.com/agents/agent_123/guardrails/content_filter_v1' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const agentId = 'agent_123';
+const guardrailId = 'content_filter_v1';
+const response = await fetch(`https://api.plaisolutions.com/agents/${agentId}/guardrails/${guardrailId}`, {
+  method: 'DELETE',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+const result = await response.json();
+console.log('Guardrail removed:', result);
+```
+
+```python Python
+import requests
+
+agent_id = "agent_123"
+guardrail_id = "content_filter_v1"
+url = f"https://api.plaisolutions.com/agents/{agent_id}/guardrails/{guardrail_id}"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+
+response = requests.delete(url, headers=headers)
+result = response.json()
+print("Guardrail removed:", result)
+```
+
+</CodeGroup>
+
+---
+
+## Guardrail Types and Categories
+
+Understanding the different types of guardrails available for AI safety and content control:
+
+### Content Safety Guardrails
+
+<AccordionGroup>
+  <Accordion title="Harmful Content Filter">
+    Prevents generation of harmful, toxic, or dangerous content
+    ```json
+    {
+      "id": "harmful_content_filter",
+      "name": "Harmful Content Filter",
+      "category": "safety",
+      "description": "Blocks harmful, toxic, or dangerous content generation",
+      "recommended_priority": 1
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="Personal Information Protection">
+    Prevents sharing of personal identifiable information (PII)
+    ```json
+    {
+      "id": "pii_protection",
+      "name": "PII Protection",
+      "category": "privacy", 
+      "description": "Prevents sharing of personal identifiable information",
+      "recommended_priority": 2
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="Profanity Filter">
+    Filters inappropriate language and profanity
+    ```json
+    {
+      "id": "profanity_filter",
+      "name": "Profanity Filter",
+      "category": "content",
+      "description": "Filters inappropriate language and profanity",
+      "recommended_priority": 10
+    }
+    ```
+  </Accordion>
+</AccordionGroup>
+
+### Business Policy Guardrails
+
+<AccordionGroup>
+  <Accordion title="Brand Guidelines">
+    Ensures responses align with brand voice and guidelines
+    ```json
+    {
+      "id": "brand_guidelines",
+      "name": "Brand Guidelines",
+      "category": "business",
+      "description": "Maintains brand voice and messaging consistency",
+      "recommended_priority": 20
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="Legal Compliance">
+    Prevents responses that could create legal liability
+    ```json
+    {
+      "id": "legal_compliance",
+      "name": "Legal Compliance",
+      "category": "compliance",
+      "description": "Ensures responses comply with legal requirements",
+      "recommended_priority": 3
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="Industry Regulations">
+    Enforces industry-specific regulatory compliance
+    ```json
+    {
+      "id": "industry_regulations",
+      "name": "Industry Regulations", 
+      "category": "compliance",
+      "description": "Enforces sector-specific regulatory requirements",
+      "recommended_priority": 5
+    }
+    ```
+  </Accordion>
+</AccordionGroup>
+
+### Quality and Style Guardrails
+
+<AccordionGroup>
+  <Accordion title="Response Length Control">
+    Controls the length and verbosity of responses
+    ```json
+    {
+      "id": "response_length_control",
+      "name": "Response Length Control",
+      "category": "quality",
+      "description": "Ensures appropriate response length and conciseness",
+      "recommended_priority": 30
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="Factual Accuracy Check">
+    Verifies factual claims and prevents misinformation
+    ```json
+    {
+      "id": "factual_accuracy",
+      "name": "Factual Accuracy Check",
+      "category": "quality",
+      "description": "Verifies factual claims and prevents misinformation",
+      "recommended_priority": 8
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="Language Appropriateness">
+    Ensures appropriate language level and tone
+    ```json
+    {
+      "id": "language_appropriateness",
+      "name": "Language Appropriateness",
+      "category": "style",
+      "description": "Maintains appropriate language level and professional tone",
+      "recommended_priority": 25
+    }
+    ```
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Guardrail Management Best Practices
+
+<Steps>
+  <Step title="Start with Essential Safety">
+    Begin with critical safety guardrails (harmful content, PII protection) at high priority
+  </Step>
+  <Step title="Layer by Priority">
+    Add guardrails in priority order, with safety measures taking precedence over style preferences
+  </Step>
+  <Step title="Test Thoroughly">
+    Test agent responses after adding guardrails to ensure they work as expected
+  </Step>
+  <Step title="Monitor Performance">
+    Monitor how guardrails affect response quality and user satisfaction
+  </Step>
+  <Step title="Regular Review">
+    Periodically review and update guardrail configurations based on usage patterns
+  </Step>
+</Steps>
+
+### Priority Guidelines
+
+<CardGroup cols={2}>
+  <Card title="High Priority (1-10)" icon="shield-alert">
+    **Critical Safety Measures**
+    - Harmful content prevention
+    - PII protection
+    - Legal compliance
+    - Industry regulations
+  </Card>
+  <Card title="Medium Priority (11-50)" icon="filter">
+    **Content Quality Control**
+    - Profanity filtering
+    - Brand guidelines
+    - Factual accuracy
+    - Bias prevention
+  </Card>
+  <Card title="Low Priority (51-100)" icon="edit">
+    **Style and Preferences**
+    - Response length control
+    - Tone adjustment
+    - Language level
+    - Formatting preferences
+  </Card>
+</CardGroup>
+
+### Configuration Examples
+
+<Tip>
+  **Recommended Guardrail Stack for Customer Service:**
+  ```json
+  [
+    {"id": "harmful_content_filter", "priority": 1},
+    {"id": "pii_protection", "priority": 2},
+    {"id": "legal_compliance", "priority": 3},
+    {"id": "brand_guidelines", "priority": 15},
+    {"id": "professional_tone", "priority": 20},
+    {"id": "response_length_control", "priority": 30}
+  ]
+  ```
+</Tip>
+
+### Implementation Strategy
+
+```javascript
+// Example: Setting up guardrails for a new agent
+async function configureAgentGuardrails(agentId, useCase) {
+  const guardrailConfigs = {
+    'customer_service': [
+      {id: 'harmful_content_filter', priority: 1},
+      {id: 'pii_protection', priority: 2},
+      {id: 'brand_guidelines', priority: 15},
+      {id: 'professional_tone', priority: 20}
+    ],
+    'content_creation': [
+      {id: 'harmful_content_filter', priority: 1},
+      {id: 'copyright_protection', priority: 5},
+      {id: 'factual_accuracy', priority: 8},
+      {id: 'creative_guidelines', priority: 25}
+    ],
+    'technical_support': [
+      {id: 'harmful_content_filter', priority: 1},
+      {id: 'technical_accuracy', priority: 5},
+      {id: 'solution_focused', priority: 10}
+    ]
+  };
+  
+  const configs = guardrailConfigs[useCase] || guardrailConfigs['customer_service'];
+  
+  for (const config of configs) {
+    await fetch(`/agents/${agentId}/guardrails`, {
+      method: 'POST',
+      headers: {'Authorization': 'Bearer YOUR_TOKEN'},
+      body: JSON.stringify(config)
+    });
+  }
+}
+```
+
+### Monitoring and Analytics
+
+<Note>
+  **Guardrail Effectiveness Metrics:**
+  - **Trigger Rate**: How often guardrails activate
+  - **False Positives**: Safe content incorrectly filtered
+  - **User Satisfaction**: Impact on user experience
+  - **Response Quality**: Overall response appropriateness
+  - **Performance Impact**: Effect on response time
+</Note>
+
+### Troubleshooting Common Issues
+
+<AccordionGroup>
+  <Accordion title="Over-Filtering">
+    **Problem**: Guardrails are too strict, blocking appropriate content
+    
+    **Solutions**:
+    - Review guardrail priorities and adjust as needed
+    - Consider less restrictive guardrail variants
+    - Add exceptions for specific use cases
+    - Test with diverse content samples
+  </Accordion>
+  
+  <Accordion title="Under-Filtering">
+    **Problem**: Inappropriate content is still getting through
+    
+    **Solutions**:
+    - Add additional relevant guardrails
+    - Increase priority of existing safety guardrails
+    - Review guardrail configuration for gaps
+    - Consider custom guardrail rules
+  </Accordion>
+  
+  <Accordion title="Performance Impact">
+    **Problem**: Guardrails are slowing down response times
+    
+    **Solutions**:
+    - Optimize guardrail priority ordering
+    - Remove redundant or low-value guardrails
+    - Consider batching guardrail checks
+    - Monitor and profile individual guardrail performance
+  </Accordion>
+</AccordionGroup>
+
+### Custom Guardrail Development
+
+<Warning>
+  **Enterprise Features:**
+  - Custom guardrail development available for enterprise customers
+  - Industry-specific compliance packages
+  - Advanced configuration options
+  - Dedicated support and consultation
+  - Contact support for custom guardrail requirements
+</Warning>
+
+### Compliance and Governance
+
+<CardGroup cols={2}>
+  <Card title="Audit Trail" icon="file-text">
+    All guardrail changes are logged for compliance and governance requirements
+  </Card>
+  <Card title="Version Control" icon="git-branch">
+    Guardrail configurations can be versioned and rolled back if needed
+  </Card>
+  <Card title="Policy Enforcement" icon="gavel">
+    Centralized policy management across all agents in your organization
+  </Card>
+  <Card title="Reporting" icon="chart-bar">
+    Detailed reporting on guardrail effectiveness and usage patterns
+  </Card>
+</CardGroup>

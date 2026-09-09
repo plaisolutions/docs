@@ -1,0 +1,216 @@
+---
+title: "Types of Datasources"
+description: "Manual and Google Drive datasources"
+icon: "layer-group"
+---
+
+# Types of Datasources
+
+PLai Framework supports two primary datasource types: **Manual** datasources that you manage directly, and **Google Drive** datasources that sync automatically from your Google Drive.
+
+---
+
+## Manual Datasources
+
+A **Manual Datasource** is a self-managed knowledge base where you have full control over the content and structure.
+
+### Characteristics
+
+<CardGroup cols={2}>
+  <Card title="Direct Control" icon="hand">
+    You manage all content and updates
+  </Card>
+  <Card title="Multiple Content Types" icon="layer-group">
+    Files, URLs, and manual text entries
+  </Card>
+  <Card title="Flexible Updates" icon="edit">
+    Add, remove, or modify content anytime
+  </Card>
+  <Card title="Privacy" icon="lock">
+    Complete control over visibility
+  </Card>
+</CardGroup>
+
+### Content Types
+
+Manual datasources can contain:
+
+```
+Manual Datasource
+├── Files
+│  ├── PDF documents
+│  ├── Word documents (.docx)
+│  ├── Text files (.txt)
+│  └── Spreadsheets (.xlsx, .csv)
+├── URLs
+│  ├── Single web pages
+│  ├── Website sitemaps
+└── Manual Content
+   └── Text entered directly
+```
+
+### Creating a Manual Datasource
+
+<Steps>
+  <Step title="Go to Datasources">
+    Navigate to the **Datasources** section in your project
+  </Step>
+  <Step title="Create New">
+    Click **Create Datasource** and select **Manual**
+  </Step>
+  <Step title="Set Details">
+    Enter name, description, and optional tags
+  </Step>
+  <Step title="Add Resources">
+    Upload files, add URLs, or enter text content
+  </Step>
+  <Step title="Configure Metadata">
+    Set visibility and any custom metadata
+  </Step>
+  <Step title="Assign to Agents">
+    Select which agents can access this datasource
+  </Step>
+</Steps>
+
+### Management
+
+**Updating Content:**
+- Add new files or URLs anytime
+- Remove outdated content
+- Edit manual text entries
+- Update metadata
+
+**Monitoring:**
+- Track file size and resource count
+- Monitor indexing status
+- View search performance metrics
+- See which agents are using it
+
+### Best Practices
+
+- **Organize by Topic**: Group related content into separate datasources
+- **Clear Naming**: Use descriptive file and datasource names
+- **Regular Maintenance**: Remove obsolete content
+- **Document Format**: Use well-structured documents with clear sections
+- **Version Control**: Keep track of updates and changes
+
+---
+
+## Google Drive Datasources
+
+A **Google Drive Datasource** connects directly to your Google Drive folders, automatically syncing files and staying up-to-date.
+
+### Characteristics
+
+<CardGroup cols={2}>
+  <Card title="Auto-Sync" icon="refresh">
+    Automatically updates when Drive files change
+  </Card>
+  <Card title="Collaborative" icon="users">
+    Team members can edit docs together
+  </Card>
+  <Card title="Version History" icon="history">
+    Maintains document version tracking
+  </Card>
+  <Card title="Cloud Storage" icon="cloud">
+    No need to manually upload files
+  </Card>
+</CardGroup>
+
+### Supported File Types
+
+Google Drive datasources can index the following file types:
+
+**Documents & Text** ✅
+- **PDF** (.pdf) - Full text extraction
+- **Text Files** (.txt) - Plain text
+- **Markdown** (.md) - Formatted text
+- **HTML** (.html) - Web content
+
+**Data Files** ✅
+- **CSV** (.csv) - Spreadsheet data
+
+**Images** ✅
+- **PNG** (.png) - Image files
+- **JPEG** (.jpg, .jpeg) - Image files
+- **WebP** (.webp) - Modern image format
+
+**Multimedia** ✅
+- **MP4** (.mp4) - Video files
+- **WAV** (.wav) - Audio files
+
+**NOT Supported** ❌
+- **Google Docs** - Requires manual export to PDF
+- **Google Sheets** - Export to CSV first, then upload
+- **Google Slides** - Not supported
+- **Word Documents** (.docx) - Not natively supported
+- **Excel** (.xlsx) - Export to CSV instead
+- **PowerPoint** (.pptx) - Not supported
+
+### Setup Process
+
+<Steps>
+  <Step title="Go to Datasources">
+    Navigate to the **Datasources** section
+  </Step>
+  <Step title="Create Google Drive Datasource">
+    Click **Create Datasource** and select **Google Drive**
+  </Step>
+  <Step title="Authenticate">
+    Click **Connect to Google Drive** and authorize access
+  </Step>
+  <Step title="Select Folders">
+    Choose which folders to index and monitor
+  </Step>
+  <Step title="Configure Sync">
+    Set sync frequency and indexing options
+  </Step>
+  <Step title="Assign to Agents">
+    Select agents that can access this datasource
+  </Step>
+</Steps>
+
+### Synchronization
+
+**Automatic Updates:**
+```
+Google Drive Folder Changes
+        ↓
+Detected by PLai
+        ↓
+Files Re-indexed
+        ↓
+Changes Available to Agents
+```
+
+**Sync Frequency:**
+- Real-time detection for new files
+- Periodic re-indexing (configurable)
+- Manual refresh option available
+- Change notifications and logs
+
+### Permissions
+
+Google Drive datasources respect your Drive permissions:
+
+- **Shared Folders**: Include collaborators' permissions
+- **Private Folders**: Only you have access
+- **Shared Drives**: Team-wide access control
+- **Public Folders**: Open access
+
+### Best Practices
+
+- **Folder Organization**: Structure folders logically before indexing
+- **File Naming**: Use clear, descriptive file names
+- **Shared Drive**: Use for team collaboration
+- **Regular Cleanup**: Archive or delete unused documents
+- **Permissions Review**: Ensure correct access levels
+
+---
+
+## Next Steps
+
+- **[Resource Types](./resource-types.mdx)** - Learn about files, URLs, and content
+- **[Shared Datasources](./shared-datasources.mdx)** - Share knowledge with your team
+- **[Datasource Metadata](./datasource-metadata.mdx)** - Configure metadata and properties
+- **[Agent Configuration](../agents/configuration.mdx)** - Connect datasources to agents

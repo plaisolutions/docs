@@ -1,0 +1,614 @@
+---
+title: "Folders"
+description: "API endpoints for organizing resources within datasources"
+---
+
+## Get Folder
+
+<api-endpoint method="GET" path="/datasources/{datasource_id}/folders/{id}" />
+
+Get a folder with its children (subfolders and resources).
+
+### Path Parameters
+
+<ParamField path="datasource_id" type="string" required>
+  The unique identifier of the datasource
+</ParamField>
+
+<ParamField path="id" type="string" required>
+  The unique identifier of the folder
+</ParamField>
+
+### Response
+
+<ResponseField name="name" type="string">
+  Folder name
+</ResponseField>
+
+<ResponseField name="datasource_id" type="string">
+  ID of the datasource this folder belongs to
+</ResponseField>
+
+<ResponseField name="parent_id" type="string" optional>
+  ID of the parent folder (null for root folders)
+</ResponseField>
+
+<ResponseField name="id" type="string">
+  Folder unique identifier
+</ResponseField>
+
+<ResponseField name="extra_info" type="object">
+  Additional metadata for the folder
+</ResponseField>
+
+<ResponseField name="created_at" type="string">
+  When the folder was created (ISO 8601 format)
+</ResponseField>
+
+<ResponseField name="updated_at" type="string">
+  When the folder was last updated (ISO 8601 format)
+</ResponseField>
+
+<ResponseField name="children" type="array">
+  Array of child folders (recursive structure)
+</ResponseField>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request GET 'https://api.plaisolutions.com/datasources/ds_123/folders/folder_456' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const datasourceId = 'ds_123';
+const folderId = 'folder_456';
+const response = await fetch(`https://api.plaisolutions.com/datasources/${datasourceId}/folders/${folderId}`, {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+const folder = await response.json();
+console.log(folder);
+```
+
+```python Python
+import requests
+
+datasource_id = "ds_123"
+folder_id = "folder_456"
+url = f"https://api.plaisolutions.com/datasources/{datasource_id}/folders/{folder_id}"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+
+response = requests.get(url, headers=headers)
+folder = response.json()
+print(folder)
+```
+
+</CodeGroup>
+
+---
+
+## Update Folder
+
+<api-endpoint method="PATCH" path="/datasources/{datasource_id}/folders/{id}" />
+
+Update folder properties.
+
+### Path Parameters
+
+<ParamField path="datasource_id" type="string" required>
+  The unique identifier of the datasource
+</ParamField>
+
+<ParamField path="id" type="string" required>
+  The unique identifier of the folder
+</ParamField>
+
+### Request Body
+
+<ParamField body="name" type="string" optional>
+  Updated folder name
+</ParamField>
+
+<ParamField body="parent_id" type="string" optional>
+  Updated parent folder ID (use null to move to root level)
+</ParamField>
+
+<ParamField body="extra_info" type="object" optional>
+  Updated additional metadata
+</ParamField>
+
+### Response
+
+Returns the updated folder object.
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request PATCH 'https://api.plaisolutions.com/datasources/ds_123/folders/folder_456' \
+--header 'Authorization: Bearer YOUR_TOKEN' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "name": "Updated Folder Name",
+  "extra_info": {
+    "description": "Updated folder description",
+    "color": "blue"
+  }
+}'
+```
+
+```javascript JavaScript
+const datasourceId = 'ds_123';
+const folderId = 'folder_456';
+const response = await fetch(`https://api.plaisolutions.com/datasources/${datasourceId}/folders/${folderId}`, {
+  method: 'PATCH',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    name: "Updated Folder Name",
+    extra_info: {
+      description: "Updated folder description",
+      color: "blue"
+    }
+  })
+});
+
+const folder = await response.json();
+console.log(folder);
+```
+
+```python Python
+import requests
+
+datasource_id = "ds_123"
+folder_id = "folder_456"
+url = f"https://api.plaisolutions.com/datasources/{datasource_id}/folders/{folder_id}"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+data = {
+    "name": "Updated Folder Name",
+    "extra_info": {
+        "description": "Updated folder description",
+        "color": "blue"
+    }
+}
+
+response = requests.patch(url, headers=headers, json=data)
+folder = response.json()
+print(folder)
+```
+
+</CodeGroup>
+
+---
+
+## Delete Folder
+
+<api-endpoint method="DELETE" path="/datasources/{datasource_id}/folders/{id}" />
+
+Delete a folder and all its contents.
+
+### Path Parameters
+
+<ParamField path="datasource_id" type="string" required>
+  The unique identifier of the datasource
+</ParamField>
+
+<ParamField path="id" type="string" required>
+  The unique identifier of the folder to delete
+</ParamField>
+
+### Response
+
+Returns a 200 status code on successful deletion.
+
+<Warning>
+  Deleting a folder will permanently remove:
+  - The folder itself
+  - All subfolders within it
+  - All resources contained in the folder and its subfolders
+  - All associated vector embeddings and search indexes
+  
+  This action cannot be undone.
+</Warning>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request DELETE 'https://api.plaisolutions.com/datasources/ds_123/folders/folder_456' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const datasourceId = 'ds_123';
+const folderId = 'folder_456';
+const response = await fetch(`https://api.plaisolutions.com/datasources/${datasourceId}/folders/${folderId}`, {
+  method: 'DELETE',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+console.log('Folder deleted:', response.status === 200);
+```
+
+```python Python
+import requests
+
+datasource_id = "ds_123"
+folder_id = "folder_456"
+url = f"https://api.plaisolutions.com/datasources/{datasource_id}/folders/{folder_id}"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+
+response = requests.delete(url, headers=headers)
+print(f"Folder deleted: {response.status_code == 200}")
+```
+
+</CodeGroup>
+
+---
+
+## Create Folder
+
+<api-endpoint method="POST" path="/datasources/{datasource_id}/folders" />
+
+Create a new folder within a datasource.
+
+### Path Parameters
+
+<ParamField path="datasource_id" type="string" required>
+  The unique identifier of the datasource
+</ParamField>
+
+### Request Body
+
+<ParamField body="name" type="string" required>
+  Folder name
+</ParamField>
+
+<ParamField body="parent_id" type="string" optional>
+  ID of the parent folder (omit or use null to create in root)
+</ParamField>
+
+<ParamField body="extra_info" type="object" optional>
+  Additional metadata for the folder
+</ParamField>
+
+### Response
+
+Returns the created folder object.
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request POST 'https://api.plaisolutions.com/datasources/ds_123/folders' \
+--header 'Authorization: Bearer YOUR_TOKEN' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "name": "Documentation",
+  "parent_id": null,
+  "extra_info": {
+    "description": "Product documentation and guides",
+    "color": "green"
+  }
+}'
+```
+
+```javascript JavaScript
+const datasourceId = 'ds_123';
+const response = await fetch(`https://api.plaisolutions.com/datasources/${datasourceId}/folders`, {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    name: "Documentation",
+    parent_id: null,
+    extra_info: {
+      description: "Product documentation and guides",
+      color: "green"
+    }
+  })
+});
+
+const folder = await response.json();
+console.log(folder);
+```
+
+```python Python
+import requests
+
+datasource_id = "ds_123"
+url = f"https://api.plaisolutions.com/datasources/{datasource_id}/folders"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+data = {
+    "name": "Documentation",
+    "parent_id": None,
+    "extra_info": {
+        "description": "Product documentation and guides",
+        "color": "green"
+    }
+}
+
+response = requests.post(url, headers=headers, json=data)
+folder = response.json()
+print(folder)
+```
+
+</CodeGroup>
+
+---
+
+## List Datasource Folders
+
+<api-endpoint method="GET" path="/datasources/{datasource_id}/folders" />
+
+List all folders in a datasource with their hierarchical structure.
+
+### Path Parameters
+
+<ParamField path="datasource_id" type="string" required>
+  The unique identifier of the datasource
+</ParamField>
+
+### Response
+
+<ResponseField name="folders" type="array">
+  Array of root-level folders with nested children
+  <Expandable title="Folder Object">
+    <ResponseField name="name" type="string">
+      Folder name
+    </ResponseField>
+    <ResponseField name="datasource_id" type="string">
+      ID of the datasource this folder belongs to
+    </ResponseField>
+    <ResponseField name="parent_id" type="string" optional>
+      ID of the parent folder (null for root folders)
+    </ResponseField>
+    <ResponseField name="id" type="string">
+      Folder unique identifier
+    </ResponseField>
+    <ResponseField name="extra_info" type="object">
+      Additional metadata for the folder
+    </ResponseField>
+    <ResponseField name="created_at" type="string">
+      When the folder was created
+    </ResponseField>
+    <ResponseField name="updated_at" type="string">
+      When the folder was last updated
+    </ResponseField>
+    <ResponseField name="children" type="array">
+      Array of child folders (recursive structure)
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request GET 'https://api.plaisolutions.com/datasources/ds_123/folders' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const datasourceId = 'ds_123';
+const response = await fetch(`https://api.plaisolutions.com/datasources/${datasourceId}/folders`, {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+const folders = await response.json();
+console.log(folders);
+```
+
+```python Python
+import requests
+
+datasource_id = "ds_123"
+url = f"https://api.plaisolutions.com/datasources/{datasource_id}/folders"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+
+response = requests.get(url, headers=headers)
+folders = response.json()
+print(folders)
+```
+
+</CodeGroup>
+
+---
+
+## Move Resource to Folder
+
+<api-endpoint method="POST" path="/datasources/{datasource_id}/folders/{folder_id}/resources/{resource_id}" />
+
+Move a resource into a specific folder.
+
+### Path Parameters
+
+<ParamField path="datasource_id" type="string" required>
+  The unique identifier of the datasource
+</ParamField>
+
+<ParamField path="folder_id" type="string" required>
+  The unique identifier of the destination folder
+</ParamField>
+
+<ParamField path="resource_id" type="string" required>
+  The unique identifier of the resource to move
+</ParamField>
+
+### Response
+
+Returns a success confirmation.
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request POST 'https://api.plaisolutions.com/datasources/ds_123/folders/folder_456/resources/resource_789' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const datasourceId = 'ds_123';
+const folderId = 'folder_456';
+const resourceId = 'resource_789';
+const response = await fetch(`https://api.plaisolutions.com/datasources/${datasourceId}/folders/${folderId}/resources/${resourceId}`, {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+const result = await response.json();
+console.log(result);
+```
+
+```python Python
+import requests
+
+datasource_id = "ds_123"
+folder_id = "folder_456"
+resource_id = "resource_789"
+url = f"https://api.plaisolutions.com/datasources/{datasource_id}/folders/{folder_id}/resources/{resource_id}"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+
+response = requests.post(url, headers=headers)
+result = response.json()
+print(result)
+```
+
+</CodeGroup>
+
+---
+
+## Folder Organization Best Practices
+
+<Steps>
+  <Step title="Plan Your Structure">
+    Design a logical folder hierarchy before adding resources
+  </Step>
+  <Step title="Use Descriptive Names">
+    Choose clear, descriptive names that indicate the folder's purpose
+  </Step>
+  <Step title="Keep It Shallow">
+    Avoid deeply nested structures (3-4 levels maximum)
+  </Step>
+  <Step title="Group by Function">
+    Organize folders by topic, type, or workflow rather than arbitrary categorization
+  </Step>
+</Steps>
+
+### Common Organization Patterns
+
+<Tabs>
+  <Tab title="By Content Type">
+    ```
+    📁 Documentation
+      📁 User Guides
+      📁 API Reference
+      📁 Tutorials
+    📁 Marketing Materials
+      📁 Brochures
+      📁 Case Studies
+      📁 Press Releases
+    ```
+  </Tab>
+  
+  <Tab title="By Product Area">
+    ```
+    📁 Product A
+      📁 Documentation
+      📁 Support Articles
+    📁 Product B
+      📁 Documentation
+      📁 Support Articles
+    ```
+  </Tab>
+  
+  <Tab title="By Audience">
+    ```
+    📁 Customer-Facing
+      📁 Support
+      📁 Tutorials
+    📁 Internal
+      📁 Policies
+      📁 Procedures
+    ```
+  </Tab>
+</Tabs>
+
+### Extra Info Usage
+
+The `extra_info` field allows you to store additional metadata about folders:
+
+<AccordionGroup>
+  <Accordion title="UI Customization">
+    Store display preferences like colors, icons, or sorting orders
+    ```json
+    {
+      "color": "blue",
+      "icon": "folder-document",
+      "sort_order": "alphabetical"
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="Access Control">
+    Store visibility or access information for your application logic
+    ```json
+    {
+      "visibility": "public",
+      "access_level": "read-write",
+      "owner": "team-docs"
+    }
+    ```
+  </Accordion>
+  
+  <Accordion title="Workflow State">
+    Track folder status or workflow information
+    ```json
+    {
+      "status": "active",
+      "last_reviewed": "2024-01-15",
+      "review_required": false
+    }
+    ```
+  </Accordion>
+</AccordionGroup>
+
+<Note>
+  Folders provide organizational structure but do not affect how agents search or access resources. Use metadata filtering on resources for access control and content filtering.
+</Note>
+
+<Tip>
+  Consider using folder names and structures that align with your users' mental models. This makes content easier to find and manage over time.
+</Tip>

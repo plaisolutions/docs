@@ -1,0 +1,583 @@
+---
+title: "Input Variables"
+description: "Define workflow input schema and validation"
+icon: "list-check"
+---
+
+# Workflow Input Variables
+
+Input variables define what data your workflow accepts when executed. They're specified using **JSON Schema**, providing documentation, validation, and type safety for workflow inputs.
+
+---
+
+## Why Define Input Schema?
+
+```
+Without Schema:
+POST /workflows/{id}/execute
+{
+  "input": { /* anything goes */ }
+}
+↓
+Unclear what's required
+Manual validation
+Type mismatches
+Poor documentation
+
+With Schema:
+Documented inputs
+Type validation
+Required fields enforced
+Clear error messages
+Self-documenting API
+```
+
+---
+
+## Basic Input Schema
+
+### Simple Input
+
+```json
+{
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "topic": {"type": "string"}
+    },
+    "required": ["topic"]
+  }
+}
+```
+
+**Valid execution:**
+```bash
+POST /workflows/{id}/execute
+{
+  "input": {
+    "topic": "Machine Learning"
+  }
+}
+```
+
+**Invalid execution:**
+```bash
+POST /workflows/{id}/execute
+{
+  "input": {}  // ← Error: missing required field "topic"
+}
+```
+
+### Multiple Required Fields
+
+```json
+{
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "company_name": {"type": "string"},
+      "market": {"type": "string"},
+      "year": {"type": "integer"}
+    },
+    "required": ["company_name", "market", "year"]
+  }
+}
+```
+
+**Valid execution:**
+```bash
+POST /workflows/{id}/execute
+{
+  "input": {
+    "company_name": "Acme Corp",
+    "market": "US",
+    "year": 2024
+  }
+}
+```
+
+### Optional Fields
+
+```json
+{
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "query": {"type": "string"},
+      "depth": {"type": "integer"},
+      "include_images": {"type": "boolean"}
+    },
+    "required": ["query"]  // Only "query" is required
+  }
+}
+```
+
+**All valid:**
+```bash
+{"input": {"query": "AI"}}
+{"input": {"query": "AI", "depth": 2}}
+{"input": {"query": "AI", "depth": 2, "include_images": true}}
+```
+
+---
+
+## JSON Schema Types
+
+### Primitive Types
+
+**String:**
+```json
+{
+  "name": {"type": "string"}
+}
+```
+✅ `"John Doe"`
+❌ `123`
+
+**Number:**
+```json
+{
+  "price": {"type": "number"}
+}
+```
+✅ `99.99`, `100`
+❌ `"99.99"`
+
+**Integer:**
+```json
+{
+  "count": {"type": "integer"}
+}
+```
+✅ `5`, `-10`
+❌ `5.5`
+
+**Boolean:**
+```json
+{
+  "active": {"type": "boolean"}
+}
+```
+✅ `true`, `false`
+❌ `"true"`
+
+**Null:**
+```json
+{
+  "optional_field": {"type": ["string", "null"]}
+}
+```
+✅ `"value"`, `null`
+
+---
+
+## Complex Types
+
+### Arrays
+
+```json
+{
+  "urls": {
+    "type": "array",
+    "items": {"type": "string"}
+  }
+}
+```
+
+**Valid:**
+```json
+{"urls": ["https://site1.com", "https://site2.com"]}
+```
+
+**With min/max items:**
+```json
+{
+  "tags": {
+    "type": "array",
+    "items": {"type": "string"},
+    "minItems": 1,
+    "maxItems": 10
+  }
+}
+```
+
+### Nested Objects
+
+```json
+{
+  "company": {
+    "type": "object",
+    "properties": {
+      "name": {"type": "string"},
+      "details": {
+        "type": "object",
+        "properties": {
+          "founded": {"type": "integer"},
+          "headquarters": {"type": "string"}
+        }
+      }
+    },
+    "required": ["name"]
+  }
+}
+```
+
+**Valid execution:**
+```bash
+POST /workflows/{id}/execute
+{
+  "input": {
+    "company": {
+      "name": "Acme Corp",
+      "details": {
+        "founded": 1950,
+        "headquarters": "New York"
+      }
+    }
+  }
+}
+```
+
+**Access in workflow:**
+```text
+{{$input.company.name}}
+{{$input.company.details.founded}}
+```
+
+### Array of Objects
+
+```json
+{
+  "products": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "properties": {
+        "id": {"type": "string"},
+        "price": {"type": "number"},
+        "in_stock": {"type": "boolean"}
+      }
+    }
+  }
+}
+```
+
+**Valid execution:**
+```bash
+POST /workflows/{id}/execute
+{
+  "input": {
+    "products": [
+      {"id": "SKU001", "price": 99.99, "in_stock": true},
+      {"id": "SKU002", "price": 149.99, "in_stock": false}
+    ]
+  }
+}
+```
+
+---
+
+## Validation Options
+
+### String Constraints
+
+```json
+{
+  "email": {
+    "type": "string",
+    "pattern": "^[^@]+@[^@]+\\.[^@]+$"
+  },
+  "description": {
+    "type": "string",
+    "minLength": 10,
+    "maxLength": 500
+  }
+}
+```
+
+### Number Constraints
+
+```json
+{
+  "priority": {
+    "type": "integer",
+    "minimum": 1,
+    "maximum": 10
+  },
+  "discount": {
+    "type": "number",
+    "minimum": 0,
+    "maximum": 1
+  }
+}
+```
+
+### Enums (Restricted Values)
+
+```json
+{
+  "market": {
+    "type": "string",
+    "enum": ["US", "EU", "ASIA", "LATAM"]
+  },
+  "status": {
+    "type": "string",
+    "enum": ["active", "inactive", "pending"]
+  }
+}
+```
+
+**Valid:**
+```bash
+{"input": {"market": "US"}}
+{"input": {"market": "EU"}}
+```
+
+**Invalid:**
+```bash
+{"input": {"market": "CANADA"}}  // ← Not in enum list
+```
+
+---
+
+## Complete Example
+
+### Market Research Workflow
+
+**Workflow definition:**
+```json
+{
+  "id": "market-research",
+  "name": "Market Research Workflow",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "company_name": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 200,
+        "description": "Name of company to research"
+      },
+      "markets": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": ["US", "EU", "ASIA", "LATAM", "AUSTRALIA"]
+        },
+        "minItems": 1,
+        "maxItems": 5,
+        "description": "Target markets for analysis"
+      },
+      "analysis_depth": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 5,
+        "description": "Analysis depth (1-5)"
+      },
+      "include_financial": {
+        "type": "boolean",
+        "description": "Include financial analysis"
+      },
+      "competitors": {
+        "type": "array",
+        "items": {"type": "string"},
+        "description": "Competitor companies to compare"
+      }
+    },
+    "required": ["company_name", "markets"],
+    "description": "Input for comprehensive market research workflow"
+  },
+  "nodes": [
+    {
+      "id": "research_agent",
+      "type": "plai_agent",
+      "parameters": {
+        "agent_name_slug": "researcher",
+        "input": "Research {{$input.company_name}} in markets: {{$input.markets | join(', ')}}\n\nDepth: {{$input.analysis_depth}}\nInclude financial: {{$input.include_financial}}\nCompetitors: {{$input.competitors | join(', ')}}"
+      }
+    }
+  ]
+}
+```
+
+### Valid Execution 1 (Minimal)
+
+```bash
+POST /workflows/market-research/execute
+{
+  "input": {
+    "company_name": "Acme Corp",
+    "markets": ["US", "EU"]
+  }
+}
+```
+
+### Valid Execution 2 (Full)
+
+```bash
+POST /workflows/market-research/execute
+{
+  "input": {
+    "company_name": "Acme Corp",
+    "markets": ["US", "EU", "ASIA"],
+    "analysis_depth": 3,
+    "include_financial": true,
+    "competitors": ["CompetitorA", "CompetitorB"]
+  }
+}
+```
+
+### Invalid Execution 1 (Missing Required Field)
+
+```bash
+POST /workflows/market-research/execute
+{
+  "input": {
+    "company_name": "Acme Corp"
+    // ← Missing "markets" (required)
+  }
+}
+```
+
+**Error:** `"markets" is required`
+
+### Invalid Execution 2 (Wrong Type)
+
+```bash
+POST /workflows/market-research/execute
+{
+  "input": {
+    "company_name": "Acme Corp",
+    "markets": "US"  // ← Should be array
+  }
+}
+```
+
+**Error:** `"markets" must be array`
+
+### Invalid Execution 3 (Enum Value)
+
+```bash
+POST /workflows/market-research/execute
+{
+  "input": {
+    "company_name": "Acme Corp",
+    "markets": ["US", "CANADA"]  // ← CANADA not in enum
+  }
+}
+```
+
+**Error:** `"CANADA" is not an allowed value`
+
+---
+
+## Default Values
+
+Set default values for optional fields:
+
+```json
+{
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "query": {"type": "string"},
+      "depth": {"type": "integer"},
+      "language": {"type": "string"}
+    },
+    "required": ["query"]
+  }
+}
+```
+
+**Note:** PLai Framework currently doesn't support JSON Schema `default` keyword. Use conditional logic in nodes:
+
+```json
+{
+  "id": "process",
+  "type": "plai_agent",
+  "parameters": {
+    "input": "Query: {{$input.query}}\nDepth: {%- if $input.depth %}{{$input.depth}}{% else %}2{% endif %}\nLanguage: {%- if $input.language %}{{$input.language}}{% else %}en{% endif %}"
+  }
+}
+```
+
+---
+
+## Input Schema Best Practices
+
+### ✅ DO:
+
+- **Document your inputs:** Include `description` field
+- **Be specific:** Use constraints (min/max length, patterns)
+- **Use enums:** For restricted value sets
+- **Group related inputs:** Use nested objects
+- **Provide examples:** In documentation
+- **Version your schema:** Track changes
+
+### ❌ DON'T:
+
+- **Use overly permissive schema:** `{"type": "object"}` accepts anything
+- **Skip descriptions:** Make intent clear
+- **Forget validation:** Catch errors early
+- **Use undefined types:** Stick to JSON Schema standards
+- **Create deep nesting:** Keep structure simple
+
+---
+
+## Input Schema Documentation Template
+
+```json
+{
+  "input_schema": {
+    "type": "object",
+    "title": "Workflow Input",
+    "description": "Complete description of what this workflow does and requires",
+    "properties": {
+      "field_name": {
+        "type": "string",
+        "description": "What this field represents",
+        "examples": ["example_value"]
+      }
+    },
+    "required": ["field_name"],
+    "examples": [
+      {
+        "field_name": "example_value"
+      }
+    ]
+  }
+}
+```
+
+---
+
+## Runtime Input Access
+
+Once workflow is executed, input is always available:
+
+```
+In any node:
+{{$input.field_name}}       → Access any input field
+{{$input}}                  → Entire input object
+{{$input | jsonify}}        → Pretty-printed JSON
+```
+
+**Example:**
+```json
+{
+  "id": "log_input",
+  "type": "plai_agent",
+  "parameters": {
+    "agent_name_slug": "logger",
+    "input": "Received input:\n{{$input | jsonify}}"
+  }
+}
+```
+
+---
+
+## Next Steps
+
+- **[Execution Variables](./execution-variables.mdx)** - Use input in workflow nodes
+- **[What is a Workflow](./what-is-a-workflow.mdx)** - See complete workflow examples
+- **[Node Types](./node-types.mdx)** - Learn about available nodes

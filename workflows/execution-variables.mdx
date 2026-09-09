@@ -1,0 +1,586 @@
+---
+title: "Execution Variables"
+description: "Access and share data between workflow nodes"
+icon: "variable"
+---
+
+# Execution Variables
+
+Execution variables allow nodes to access and share data during workflow execution. They're resolved using **Jinja2 templating** before node execution, enabling dynamic data flow throughout your workflow.
+
+---
+
+## Variable Sources
+
+Four main sources of variables are available in any node:
+
+```
+{{$input}}        → Original workflow input
+{{$nodes}}        → Outputs from other nodes
+{{$workflow}}     → Workflow metadata
+{{loop}}          → Loop iteration data
+```
+
+---
+
+## Input Variables
+
+### `{{$input}}`
+
+Access the original input passed to the workflow.
+
+**Workflow Definition:**
+```json
+{
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "company_name": {"type": "string"},
+      "market": {"type": "string"},
+      "depth": {"type": "integer"}
+    }
+  }
+}
+```
+
+**Workflow Execution:**
+```bash
+POST /workflows/{id}/execute
+{
+  "input": {
+    "company_name": "Acme Corp",
+    "market": "US",
+    "depth": 2
+  }
+}
+```
+
+**Usage in Node:**
+```json
+{
+  "id": "research_agent",
+  "type": "plai_agent",
+  "parameters": {
+    "agent_name_slug": "researcher",
+    "input": "Research {{$input.company_name}} in the {{$input.market}} market with depth {{$input.depth}}"
+  }
+}
+```
+
+**Resolved to:**
+```
+Research Acme Corp in the US market with depth 2
+```
+
+### Access Nested Input
+
+```json
+{
+  "input": {
+    "company": {
+      "name": "Acme Corp",
+      "details": {
+        "founded": 1950,
+        "headquarters": "New York"
+      }
+    },
+    "analysis_params": {
+      "depth": 2,
+      "include_financial": true
+    }
+  }
+}
+```
+
+**Usage:**
+```text
+{{$input.company.name}}
+{{$input.company.details.headquarters}}
+{{$input.analysis_params.include_financial}}
+```
+
+### Access Array Elements
+
+```json
+{
+  "input": {
+    "urls": ["https://site1.com", "https://site2.com", "https://site3.com"]
+  }
+}
+```
+
+**Usage:**
+```text
+{{$input.urls[0]}}     → https://site1.com
+{{$input.urls[1]}}     → https://site2.com
+{{$input.urls}}        → All URLs as array
+```
+
+---
+
+## Node Output Variables
+
+### `{{$nodes}}`
+
+Access outputs from any previously executed node.
+
+**General Pattern:**
+```text
+{{$nodes.node_id.field_name}}
+{{$nodes.node_id.nested.field}}
+{{$nodes.node_id[0].field}}
+```
+
+### `plai_agent` Node Output
+
+```json
+{
+  "id": "analysis",
+  "type": "plai_agent",
+  "parameters": {
+    "agent_name_slug": "analyzer",
+    "input": "Analyze..."
+  }
+}
+```
+
+**Output Structure:**
+```json
+{
+  "output": "The agent's text response",
+  "message_id": "msg-12345"
+}
+```
+
+**Access in Downstream Node:**
+```json
+{
+  "id": "next_step",
+  "depends_on": ["analysis"],
+  "parameters": {
+    "input": "Based on this analysis: {{$nodes.analysis.output}}"
+  }
+}
+```
+
+### `firecrawl` Node Output
+
+```json
+{
+  "id": "scrape",
+  "type": "firecrawl",
+  "parameters": {
+    "action": "scrape",
+    "url": "https://example.com",
+    "formats": ["markdown"]
+  }
+}
+```
+
+**Output Structure:**
+```json
+{
+  "markdown": "# Website Content...",
+  "url": "https://example.com",
+  "status_code": 200
+}
+```
+
+**Access:**
+```text
+{{$nodes.scrape.markdown}}        → Website content
+{{$nodes.scrape.url}}             → Original URL
+{{$nodes.scrape.status_code}}     → HTTP status
+```
+
+### `http` Node Output
+
+```json
+{
+  "id": "api_call",
+  "type": "http",
+  "parameters": {
+    "method": "GET",
+    "url": "https://api.example.com/data"
+  }
+}
+```
+
+**Output Structure:**
+```json
+{
+  "status_code": 200,
+  "headers": {...},
+  "body": {...}  // Depends on response_format
+}
+```
+
+**Access:**
+```text
+{{$nodes.api_call.status_code}}
+{{$nodes.api_call.body.price}}
+{{$nodes.api_call.body.items[0].name}}
+```
+
+### `markdown_report` Node Output
+
+```json
+{
+  "id": "report",
+  "type": "markdown_report",
+  "parameters": {
+    "title": "Report"
+  }
+}
+```
+
+**Output Structure:**
+```json
+{
+  "markdown": "# Report\n\n...",
+  "title": "Report"
+}
+```
+
+**Access:**
+```text
+{{$nodes.report.markdown}}
+{{$nodes.report.title}}
+```
+
+### `loop` Node Output
+
+```json
+{
+  "id": "process_urls",
+  "type": "loop",
+  "parameters": {
+    "items": "{{$input.urls}}",
+    "mode": "parallel"
+  },
+  "nodes": [...]
+}
+```
+
+**Output Structure:**
+Array of results from each iteration:
+```json
+[
+  {"fetch": {...}, "analyze": {...}},
+  {"fetch": {...}, "analyze": {...}},
+  {"fetch": {...}, "analyze": {...}}
+]
+```
+
+**Access:**
+```text
+{{$nodes.process_urls}}           → Entire array
+{{$nodes.process_urls[0]}}        → First iteration result
+{{$nodes.process_urls[0].fetch}}  → Fetch output of first iteration
+{{$nodes.process_urls | length}}  → Number of iterations
+```
+
+### `subworkflow` Node Output
+
+```json
+{
+  "id": "child",
+  "type": "subworkflow",
+  "parameters": {
+    "workflow_name_slug": "analysis-workflow"
+  }
+}
+```
+
+**Output Structure:**
+Same as the subworkflow's outputs
+```json
+{
+  "output": "From child workflow"
+}
+```
+
+**Access:**
+```text
+{{$nodes.child.output}}
+```
+
+---
+
+## Workflow Variables
+
+### `{{$workflow}}`
+
+Access workflow metadata.
+
+```text
+{{$workflow.id}}           → Workflow UUID
+{{$workflow.name}}         → Workflow name
+{{$workflow.name_slug}}    → Workflow slug
+{{$workflow.version}}      → Version string
+```
+
+**Example:**
+```json
+{
+  "id": "log_step",
+  "type": "plai_agent",
+  "parameters": {
+    "input": "Running {{$workflow.name}} (v{{$workflow.version}})"
+  }
+}
+```
+
+---
+
+## Loop Variables
+
+### `{{loop}}`
+
+Inside `loop` nodes, access iteration data.
+
+```text
+{{loop.item}}      → Current item value
+{{loop.index}}     → Current iteration (0-based)
+```
+
+**Example Loop:**
+```json
+{
+  "id": "process_items",
+  "type": "loop",
+  "parameters": {
+    "items": "{{$input.items}}",
+    "mode": "parallel"
+  },
+  "nodes": [
+    {
+      "id": "process",
+      "type": "plai_agent",
+      "parameters": {
+        "agent_name_slug": "processor",
+        "input": "Process item {{loop.index}}: {{loop.item}}"
+      }
+    }
+  ]
+}
+```
+
+**If input contains:** `{"items": ["apple", "banana", "cherry"]}`
+
+**Executes three times:**
+- Iteration 0: `Process item 0: apple`
+- Iteration 1: `Process item 1: banana`
+- Iteration 2: `Process item 2: cherry`
+
+---
+
+## Variable Interpolation Syntax
+
+### Jinja2 Expressions
+
+PLai Framework uses Jinja2 templating, supporting various expressions:
+
+**String Interpolation:**
+```text
+{{variable}}
+{{variable.field}}
+{{variable['field']}}
+{{variable[0]}}
+```
+
+**Filters:**
+```text
+{{variable | length}}
+{{variable | upper}}
+{{variable | lower}}
+{{variable | join(', ')}}
+{{variable | first}}
+{{variable | last}}
+```
+
+**Conditionals:**
+```text
+{%- if condition %}yes{% else %}no{% endif %}
+{% for item in items -%}
+  {{ item }}
+{% endfor %}
+```
+
+**Arithmetic:**
+```text
+{{5 + 3}}
+{{variable * 2}}
+{{value - 10}}
+```
+
+---
+
+## Complete Example
+
+### Workflow Definition
+
+```json
+{
+  "nodes": [
+    {
+      "id": "fetch_company",
+      "type": "http",
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.example.com/company/{{$input.company_id}}"
+      }
+    },
+    {
+      "id": "analyze_company",
+      "type": "plai_agent",
+      "depends_on": ["fetch_company"],
+      "parameters": {
+        "agent_name_slug": "analyzer",
+        "input": "Analyze this company data:\n{{$nodes.fetch_company.body | jsonify}}"
+      }
+    },
+    {
+      "id": "scrape_news",
+      "type": "firecrawl",
+      "depends_on": ["fetch_company"],
+      "parameters": {
+        "action": "scrape",
+        "url": "{{$nodes.fetch_company.body.website}}"
+      }
+    },
+    {
+      "id": "combine_insights",
+      "type": "plai_agent",
+      "depends_on": ["analyze_company", "scrape_news"],
+      "parameters": {
+        "agent_name_slug": "synthesizer",
+        "input": "Company: {{$input.company_name}}\n\nAnalysis: {{$nodes.analyze_company.output}}\n\nRecent news: {{$nodes.scrape_news.markdown}}"
+      }
+    },
+    {
+      "id": "final_report",
+      "type": "markdown_report",
+      "depends_on": ["combine_insights"],
+      "parameters": {
+        "title": "Report for {{$input.company_name}}",
+        "sections": [
+          {
+            "title": "Summary",
+            "content_nodes": [
+              {"node_id": "combine_insights"}
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
+```
+
+### Execution Input
+
+```bash
+POST /workflows/{id}/execute
+{
+  "input": {
+    "company_id": "123",
+    "company_name": "Acme Corp"
+  }
+}
+```
+
+### Variable Resolution
+
+```
+Tick 1: fetch_company executes
+  {{$input.company_id}}
+  ↓ resolves to
+  123
+  ↓ URL becomes
+  https://api.example.com/company/123
+
+Tick 2: analyze_company and scrape_news execute
+  analyze_company:
+    {{$input.company_name}} → "Acme Corp"
+    {{$nodes.fetch_company.body}} → API response object
+
+  scrape_news:
+    {{$nodes.fetch_company.body.website}} → URL from API response
+
+Tick 3: combine_insights executes
+  {{$input.company_name}} → "Acme Corp"
+  {{$nodes.analyze_company.output}} → Agent analysis result
+  {{$nodes.scrape_news.markdown}} → Website content
+
+Tick 4: final_report executes
+  {{$input.company_name}} → Used in title
+  {{$nodes.combine_insights.output}} → Included in report
+```
+
+---
+
+## Variable Resolution Timing
+
+Variables are resolved **just before node execution**:
+
+1. Node is selected for execution
+2. All `{{...}}` expressions are evaluated
+3. Variables are replaced with actual values
+4. Node executes with resolved parameters
+
+**Important:** Variables must be available at execution time or node fails.
+
+```json
+{
+  "id": "step_2",
+  "depends_on": ["step_1"],  // ← Ensures step_1 completes first
+  "parameters": {
+    "input": "{{$nodes.step_1.output}}"  // ← Safe: step_1 is guaranteed to exist
+  }
+}
+```
+
+---
+
+## Null/Missing Values
+
+If a variable is missing:
+
+```json
+{
+  "id": "step",
+  "parameters": {
+    "input": "{{$nodes.missing_node.output}}"
+  }
+}
+```
+
+**Result:** Variable is empty/null, which typically causes node failure.
+
+**Solution:** Verify dependencies and variable names.
+
+---
+
+## Best Practices
+
+✅ **DO:**
+- Use explicit node dependencies before accessing outputs
+- Use Jinja2 filters for data transformation
+- Test variable interpolation in simple cases first
+- Document complex variable references
+- Use meaningful node IDs for clarity
+
+❌ **DON'T:**
+- Access node outputs without depending on the node
+- Use undefined variables (causes failures)
+- Over-complicate expressions
+- Depend on variable execution order
+
+---
+
+## Next Steps
+
+- **[Input Variables](./input-variables.mdx)** - Define workflow input schema
+- **[Dependencies](./dependencies.mdx)** - Ensure variables exist before use
+- **[Node Types](./node-types.mdx)** - See available node outputs

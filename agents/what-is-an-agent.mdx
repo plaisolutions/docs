@@ -1,0 +1,277 @@
+---
+title: "What is an Agent?"
+description: "Understand agents and the two ways to use them in PLai Framework"
+icon: "robot"
+---
+
+# What is an Agent?
+
+An **Agent** is an AI assistant you create and configure to perform specific tasks. Agents can chat with users, use tools, access knowledge bases, and integrate into workflows.
+
+---
+
+## Core Concept
+
+```
+AGENT = AI Model + Configuration + Tools + Datasources + Safety Rules
+
+┌──────────────────────────────┐
+│    Your Agent                │
+├──────────────────────────────┤
+│ • LLM Model (Claude, GPT-4)  │
+│ • System Instructions        │
+│ • Tools & Integrations       │
+│ • Knowledge Bases            │
+│ • Safety Guardrails          │
+└──────────────────────────────┘
+```
+
+---
+
+## Agent Capabilities
+
+Every agent can:
+
+<CardGroup cols={2}>
+  <Card title="Understand" icon="brain">
+    Process natural language and context
+  </Card>
+  <Card title="Access Tools" icon="wrench">
+    Call APIs, search web, execute code
+  </Card>
+  <Card title="Reference Knowledge" icon="book">
+    Query datasources and knowledge bases
+  </Card>
+  <Card title="Follow Rules" icon="shield">
+    Apply guardrails and safety filters
+  </Card>
+</CardGroup>
+
+---
+
+## Two Ways to Use Agents
+
+Agents can be used in two fundamentally different ways:
+
+### 1. Streaming Enabled: Conversational Chat
+
+```
+Use case: Chat interface, interactive conversations
+
+┌─────────────────────────────┐
+│   Chat Conversational       │
+├─────────────────────────────┤
+│ • Real-time streaming       │
+│ • Interactive chat UI       │
+│ • Conversation history      │
+│ • Multiple agent tabs       │
+│ • Best for: User interaction│
+└─────────────────────────────┘
+        ↓
+    User Types Question
+        ↓
+    Agent Streams Response
+        ↓
+    User Sees Real-time Answer
+```
+
+**When to use:** Customer support chatbots, conversational assistants, interactive Q&A
+
+🔗 **Read more:** [Conversational Chat](./conversational-chat.mdx)
+
+---
+
+### 2. Streaming Disabled: Structured Output
+
+```
+Use case: Structured responses, integrations, automation
+
+┌─────────────────────────────┐
+│  Structured Output          │
+├─────────────────────────────┤
+│ • Complete JSON response    │
+│ • As tools in other agents  │
+│ • In workflows              │
+│ • Via API calls             │
+│ • Best for: Automation      │
+└─────────────────────────────┘
+        ↓
+    Invoke Agent (tool/workflow/API)
+        ↓
+    Agent Processes
+        ↓
+    Returns Complete Response
+```
+
+**When to use:** Data processing, API integrations, workflow automation, batch processing
+
+🔗 **Read more:** [Structured Output](./structured-output.mdx)
+
+---
+
+## Quick Comparison
+
+| Aspect | Chat Conversational | Structured Output |
+|--------|--------------------|--------------------|
+| **Streaming** | ✅ Enabled | ❌ Disabled |
+| **Interface** | Chat UI in PLai | Programmatic |
+| **Response** | Streamed tokens | Complete JSON |
+| **Use in Chat** | ✅ Direct chat | ❌ Not interactive |
+| **Use as Tool** | ❌ Can't use as tool | ✅ Yes, as tool |
+| **Use in Workflows** | ❌ No | ✅ Yes |
+| **Use via API** | ❌ No (UI only) | ✅ Yes |
+| **Conversation History** | ✅ Stored | ❌ Per-request only |
+| **Multiple Tabs** | ✅ Agent tabs | N/A (not in chat) |
+
+---
+
+## How Agents Work
+
+### Step-by-Step Process
+
+<Steps>
+  <Step title="Configuration">
+    You set up the agent with instructions, model, tools, and datasources
+  </Step>
+  <Step title="Invocation">
+    User or system calls the agent (via chat, API, workflow, or as a tool)
+  </Step>
+  <Step title="Processing">
+    Agent receives input, accesses knowledge, calls tools if needed
+  </Step>
+  <Step title="Response">
+    Agent returns streamed (chat) or structured (output) response
+  </Step>
+</Steps>
+
+### Example: Customer Support Agent
+
+```
+CONFIGURATION:
+├─ Name: "Support Bot"
+├─ Model: Claude 3.5 Sonnet
+├─ System Instructions: "Help customers with product issues"
+├─ Datasources: FAQ database, product docs
+├─ Tools: Help desk API, email
+└─ Guardrails: No sensitive data exposure
+
+INVOCATION (via Chat):
+├─ Customer: "How do I reset my password?"
+├─ Agent: (Searches FAQ) "Found answer..."
+├─ Agent: (Streams response) "You can reset by..."
+└─ Result: Customer sees real-time answer
+
+INVOCATION (as Tool in Workflow):
+├─ Workflow receives customer message
+├─ Calls Support Bot as tool
+├─ Gets complete response (JSON)
+├─ Workflow routes to escalation if needed
+```
+
+---
+
+## Key Concepts
+
+### Agent Versions
+
+Agents can have multiple versions. Switch between versions to:
+- Test new configurations
+- A/B test different prompts
+- Roll back to previous behavior
+- Maintain history
+
+### Agent Slug
+
+A unique, URL-friendly identifier for your agent (e.g., `support_bot`). Used in:
+- API calls: `/agents/{slug}`
+- Workflows: Reference the agent
+- Tools: Invoke agent by slug
+
+### Prompt/System Instructions
+
+The base personality and behavior of your agent. Example:
+
+```
+"You are a friendly customer support specialist. 
+Be concise and helpful. If you don't know something, 
+offer to escalate to a human specialist."
+```
+
+### Datasources & Tools
+
+- **Datasources** - Knowledge the agent can search (FAQs, docs, databases)
+- **Tools** - Actions the agent can take (send email, call API, etc.)
+
+---
+
+## Agent Lifecycle
+
+```
+Create → Configure → Deploy → Monitor → Improve
+
+1. CREATE
+   └─ Set up agent basics (name, description)
+
+2. CONFIGURE
+   ├─ Add system instructions
+   ├─ Select model
+   ├─ Connect datasources
+   ├─ Add tools
+   └─ Set guardrails
+
+3. DEPLOY
+   ├─ If streaming: Enable chat in PLai
+   └─ If non-streaming: Use in workflows/API
+
+4. MONITOR
+   ├─ View conversations (streaming)
+   ├─ Track performance metrics
+   └─ Review analytics
+
+5. IMPROVE
+   ├─ Optimize prompts
+   ├─ Update datasources
+   └─ Adjust configuration
+```
+
+---
+
+## Common Use Cases
+
+<CardGroup cols={2}>
+  <Card title="Customer Support" icon="headset">
+    Streaming chat agent to handle customer inquiries 24/7
+  </Card>
+  <Card title="Data Processing" icon="database">
+    Non-streaming agent in workflow to transform data
+  </Card>
+  <Card title="Content Generation" icon="pen">
+    Streaming agent to generate marketing content interactively
+  </Card>
+  <Card title="API Integration" icon="api">
+    Non-streaming agent to fetch and process external data
+  </Card>
+  <Card title="Code Analysis" icon="code">
+    Streaming agent to explain and review code snippets
+  </Card>
+  <Card title="Batch Processing" icon="stack">
+    Non-streaming agent in workflow to process 1000s of records
+  </Card>
+</CardGroup>
+
+---
+
+## Next Steps
+
+**Ready to create an agent?**
+
+1. **[Configure an Agent](./configuration.mdx)** - Learn all configuration options
+2. **[Understand Chat Mode](./conversational-chat.mdx)** - Interactive conversations
+3. **[Understand Structured Output](./structured-output.mdx)** - Automation & integration
+4. **[View Agent Analytics](./analytics.mdx)** - Monitor performance
+
+Or jump to:
+
+- **[Create Your First Agent](../../guides/first-agent.mdx)** - Step-by-step tutorial
+- **[Agent Analytics](./analytics.mdx)** - Track conversations and performance
+- **[Use Tools & Datasources](../concepts/agents-datasources-and-tools.mdx)** - Extend capabilities

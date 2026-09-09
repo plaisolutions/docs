@@ -1,0 +1,373 @@
+---
+title: "Chat Conversacional"
+description: "Using streaming agents with the PLai chat interface"
+icon: "comments"
+---
+
+# Chat Conversacional
+
+When you enable **streaming** for an agent, you can interact with it through the **Chat Conversacional** interface in PLai. This is the interactive chat experience for users and team members.
+
+---
+
+## What is Chat Conversacional?
+
+**Chat Conversacional** is PLai's built-in chat interface where you can:
+
+- 💬 Have real-time conversations with agents
+- 📋 View conversation history
+- 🗂️ Organize multiple agent chats in tabs
+- 🔍 Search and filter conversations
+- 📊 Access agent analytics
+
+---
+
+## Getting Started with Chat
+
+### Prerequisites
+
+1. Agent created and configured
+2. **Streaming enabled** in agent configuration
+3. Agent visible in agents list
+
+### Accessing Chat
+
+<Steps>
+  <Step title="Go to Agents">
+    Navigate to Agents section in your project
+  </Step>
+  <Step title="Select Agent">
+    Find and click the agent you want to chat with
+  </Step>
+  <Step title="Start Chat">
+    Click "Chat" or "Open Chat" button
+  </Step>
+  <Step title="Type Message">
+    Enter your question or prompt and press Enter
+  </Step>
+</Steps>
+
+---
+
+## Chat Interface
+
+### Main Components
+
+```
+┌─────────────────────────────────────────────┐
+│ Agent Tabs (Multiple agents open)           │
+├─────────────────────────────────────────────┤
+│ Conversation History                        │
+│                                             │
+│ User: "How do I reset my password?"        │
+│                                             │
+│ Agent: "You can reset by going to...       │
+│        (response streams in real-time)     │
+│                                             │
+│ User: "Can I do it via email?"             │
+│                                             │
+│ Agent: "Yes, here's how..."                │
+├─────────────────────────────────────────────┤
+│ Input Field: [Type your message...] [Send] │
+└─────────────────────────────────────────────┘
+```
+
+### Agent Tabs
+
+You can have **multiple agent chats open simultaneously**:
+
+```
+Agents Open:
+├─ [Support Bot]  [Billing Bot]  [FAQ Bot]  [+]
+│                   ↑ (currently viewing)
+│
+├─ Conversation with Billing Bot:
+│
+│  User: "How do I update my payment?"
+│  Agent: "You can update in account settings..."
+│
+└─ Switch tabs to talk to different agents
+```
+
+**Benefits:**
+- ✅ Compare agent responses
+- ✅ Quick switching between agents
+- ✅ Manage multiple conversations
+- ✅ Parallel work with different agents
+
+---
+
+## Conversation History
+
+### What Gets Stored
+
+Each conversation includes:
+
+```
+Conversation Entry:
+├─ Timestamp: When the message was sent
+├─ Sender: User or Agent
+├─ Content: The message text
+├─ Metadata:
+│  ├─ Tokens used
+│  ├─ Response time
+│  ├─ Any errors
+│  └─ Tools called (if any)
+```
+
+### Viewing Conversation History
+
+**Left Panel - Conversation List:**
+```
+Conversations:
+├─ Sep 7, 2:45 PM - "How do I reset?"
+├─ Sep 7, 2:30 PM - "What are your hours?"
+├─ Sep 6, 4:15 PM - "I need help with..."
+└─ Sep 5, 10:00 AM - "Tell me about..."
+```
+
+Click any conversation to view full history.
+
+### Conversation Details
+
+```
+Conversation Details (Sep 7, 2:45 PM):
+
+Input:
+"How do I reset my password?"
+
+Agent Response (Streaming):
+"You can reset your password by..."
+(Real-time streaming of response)
+
+Metadata:
+├─ Duration: 1.2 seconds
+├─ Input tokens: 145
+├─ Output tokens: 67
+├─ Model: Claude 3.5 Sonnet
+└─ Status: Success ✅
+```
+
+---
+
+## Real-Time Streaming
+
+### How Streaming Works
+
+```
+You type:        "Write a poem about AI"
+                 ↓
+Agent processes ↓
+                 ↓
+Response starts immediately...
+"In circuits deep, electric thought flows..."
+"A mind of math, in patterns wrought..."
+"Emerging consciousness, so bright..."
+                 ↓ (tokens arrive continuously)
+                 ↓
+Complete response appears
+```
+
+### Advantages of Streaming
+
+- ✅ **Fast feedback** - See response start immediately
+- ✅ **Real-time interaction** - Watch response build
+- ✅ **Better UX** - Feels responsive and alive
+- ✅ **Perceived speed** - Starts fast even if full response takes time
+
+---
+
+## Features & Controls
+
+### Message Controls
+
+Within the chat interface:
+
+- **Send Message**: Press Enter or click Send button
+- **Clear Chat**: Start fresh conversation (if available)
+- **Copy Response**: Copy agent response to clipboard
+- **Regenerate**: Re-run last request with same input
+- **Stop Generation**: Halt streaming response (if needed)
+
+### Filtering & Search
+
+**Search conversations:**
+- 🔍 Search by text content
+- 📅 Filter by date range
+- 👤 Filter by member (if shared access)
+- ✅ Filter by status (success/error)
+
+### Sharing Conversations
+
+You can optionally share conversation links with:
+- Team members
+- Stakeholders
+- For documentation
+
+---
+
+## Using Agent Tools in Chat
+
+When an agent uses tools during chat:
+
+```
+User: "Fetch the latest sales data"
+      ↓
+Agent: "I'll look that up for you..."
+      ↓
+      [Calling sales API...]
+      ↓
+Agent Response: "Here's the data:
+                 Total sales today: $45,320
+                 ..."
+```
+
+From chat, you see:
+- ✅ Tool calls made
+- ✅ Tool responses used
+- ✅ Final answer from agent
+
+---
+
+## Agent Context
+
+In chat, the agent has access to:
+
+<CardGroup cols={2}>
+  <Card title="Conversation History" icon="history">
+    All previous messages in the conversation (context window)
+  </Card>
+  <Card title="Datasources" icon="database">
+    Knowledge bases configured for the agent
+  </Card>
+  <Card title="Tools" icon="wrench">
+    All tools the agent can call
+  </Card>
+  <Card title="System Instructions" icon="scroll">
+    The prompt that defines agent behavior
+  </Card>
+</CardGroup>
+
+### Conversation Context
+
+The agent remembers your previous questions:
+
+```
+You: "Who is the CEO?"
+Agent: "The CEO is John Smith"
+
+You: "When did they start?"
+Agent: (Knows you're asking about John Smith)
+       "John started in 2020"
+```
+
+Context is maintained throughout the conversation.
+
+---
+
+## Organization Member Access
+
+If your organization has multiple members:
+
+- **Owner/Admin**: Can access all agent chats
+- **Editors**: Can access agents they have permission to use
+- **Viewers**: Can view conversations (read-only)
+
+### Member Filtering
+
+In analytics, you can see:
+- Which member initiated conversations
+- How each member uses the agent
+- Usage patterns by team member
+
+---
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Be Specific" icon="target">
+    Ask clear, detailed questions for better responses
+  </Card>
+  <Card title="Use Context" icon="lightbulb">
+    Reference previous messages to build on responses
+  </Card>
+  <Card title="Provide Feedback" icon="thumbs-up">
+    Rate responses to improve agent over time
+  </Card>
+  <Card title="Check Analytics" icon="chart-line">
+    Monitor how the agent performs in chat
+  </Card>
+</CardGroup>
+
+---
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Agent not responding">
+    **Check:**
+    - Is agent configuration complete?
+    - Is streaming enabled?
+    - Is agent in the agents list?
+    - Check agent analytics for errors
+  </Accordion>
+
+  <Accordion title="Response is slow">
+    **Causes:**
+    - Agent searching large datasources
+    - Tool calls taking time
+    - External API delays
+    
+    **Solution:** Check analytics for which step is slow
+  </Accordion>
+
+  <Accordion title="Response is cut off">
+    **This might be:**
+    - Max tokens limit reached
+    - Connection timeout
+    - Manual stop requested
+    
+    **Try:** Adjust max tokens in agent config
+  </Accordion>
+
+  <Accordion title="Conversation not saving">
+    **Check:**
+    - You have write permissions
+    - Browser connection stable
+    - Storage space available
+    
+    **Try:** Refresh and try again
+  </Accordion>
+
+  <Accordion title="Can't access chat">
+    **Possible reasons:**
+    - You don't have permission for this agent
+    - Agent is in a different project
+    - Streaming not enabled
+    
+    **Solution:** Check agent settings and permissions
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Comparing with Structured Output Mode
+
+| Aspect | Chat (Streaming) | Structured Output |
+|--------|-----------------|-------------------|
+| **Interaction** | Interactive, real-time | Programmatic |
+| **Interface** | PLai Chat UI | API/Tools/Workflows |
+| **History** | Stored conversations | Per-request only |
+| **Response Format** | Text (streamed) | JSON (structured) |
+| **Multiple Agents** | Tabs in chat | Sequential or parallel |
+| **Best For** | User interaction | Automation |
+
+🔗 **Learn about Structured Output:** [Structured Output Mode](./structured-output.mdx)
+
+---
+
+## Next Steps
+
+- **[View Agent Analytics](./analytics.mdx)** - See conversations and performance
+- **[Configure Agent](./configuration.mdx)** - Adjust agent settings
+- **[Create Your First Agent](../../guides/first-agent.mdx)** - Follow tutorial

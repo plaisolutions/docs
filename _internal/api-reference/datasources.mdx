@@ -1,0 +1,589 @@
+---
+title: "Datasources"
+description: "API endpoints for managing datasources and knowledge bases"
+---
+
+## List Datasources
+
+<api-endpoint method="GET" path="/datasources" />
+
+List all datasources in the current project.
+
+### Response
+
+<ResponseField name="datasources" type="array">
+  Array of datasource objects
+  <Expandable title="Datasource Object">
+    <ResponseField name="id" type="string">
+      Datasource unique identifier
+    </ResponseField>
+    <ResponseField name="name" type="string">
+      Datasource name
+    </ResponseField>
+    <ResponseField name="description" type="string">
+      Datasource description
+    </ResponseField>
+    <ResponseField name="summary" type="string" optional>
+      Brief summary of the datasource content
+    </ResponseField>
+    <ResponseField name="type" type="string">
+      Datasource type (STRUCTURED, UNSTRUCTURED)
+    </ResponseField>
+    <ResponseField name="project_id" type="string">
+      ID of the project this datasource belongs to
+    </ResponseField>
+    <ResponseField name="metadata_schema" type="object" optional>
+      Schema definition for metadata fields
+      <Expandable title="Metadata Schema">
+        <ResponseField name="entries" type="array">
+          Array of metadata field definitions
+          <Expandable title="Metadata Entry">
+            <ResponseField name="name" type="string">
+              Field name
+            </ResponseField>
+            <ResponseField name="type" type="string">
+              Field type (str, int, float, bool)
+            </ResponseField>
+            <ResponseField name="optional" type="boolean">
+              Whether the field is optional
+            </ResponseField>
+          </Expandable>
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    <ResponseField name="created_at" type="string">
+      When the datasource was created (ISO 8601 format)
+    </ResponseField>
+    <ResponseField name="updated_at" type="string">
+      When the datasource was last updated (ISO 8601 format)
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request GET 'https://api.plaisolutions.com/datasources' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.plaisolutions.com/datasources', {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+const datasources = await response.json();
+console.log(datasources);
+```
+
+```python Python
+import requests
+
+url = "https://api.plaisolutions.com/datasources"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+
+response = requests.get(url, headers=headers)
+datasources = response.json()
+print(datasources)
+```
+
+</CodeGroup>
+
+---
+
+## Create Datasource
+
+<api-endpoint method="POST" path="/datasources" />
+
+Create a new datasource to store and organize your knowledge base.
+
+### Request Body
+
+<ParamField body="name" type="string" required>
+  Datasource name (1-50 characters)
+</ParamField>
+
+<ParamField body="type" type="string" required>
+  Datasource type:
+  - `STRUCTURED` - For structured data like databases, APIs, or CSV files
+  - `UNSTRUCTURED` - For documents, text files, web pages, and other unstructured content
+</ParamField>
+
+<ParamField body="description" type="string" required>
+  Detailed description of the datasource
+</ParamField>
+
+<ParamField body="summary" type="string" required>
+  Brief summary of what this datasource contains
+</ParamField>
+
+<ParamField body="metadata_schema" type="object" optional>
+  Schema definition for metadata fields that resources in this datasource can have
+  <Expandable title="Metadata Schema">
+    <ParamField body="entries" type="array" required>
+      Array of metadata field definitions
+      <Expandable title="Metadata Entry">
+        <ParamField body="name" type="string" required>
+          Field name (unique within the schema)
+        </ParamField>
+        <ParamField body="type" type="string" required>
+          Field type (str, int, float, bool)
+        </ParamField>
+        <ParamField body="optional" type="boolean" required>
+          Whether the field is optional when adding resources
+        </ParamField>
+      </Expandable>
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+### Response
+
+Returns the created datasource object.
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request POST 'https://api.plaisolutions.com/datasources' \
+--header 'Authorization: Bearer YOUR_TOKEN' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "name": "Product Documentation",
+  "type": "UNSTRUCTURED",
+  "description": "Complete product documentation including user guides, API docs, and tutorials",
+  "summary": "Comprehensive documentation for all product features and APIs",
+  "metadata_schema": {
+    "entries": [
+      {
+        "name": "category",
+        "type": "str",
+        "optional": false
+      },
+      {
+        "name": "version",
+        "type": "str",
+        "optional": true
+      },
+      {
+        "name": "priority",
+        "type": "int",
+        "optional": true
+      }
+    ]
+  }
+}'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.plaisolutions.com/datasources', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    name: "Product Documentation",
+    type: "UNSTRUCTURED",
+    description: "Complete product documentation including user guides, API docs, and tutorials",
+    summary: "Comprehensive documentation for all product features and APIs",
+    metadata_schema: {
+      entries: [
+        {
+          name: "category",
+          type: "str",
+          optional: false
+        },
+        {
+          name: "version", 
+          type: "str",
+          optional: true
+        },
+        {
+          name: "priority",
+          type: "int", 
+          optional: true
+        }
+      ]
+    }
+  })
+});
+
+const datasource = await response.json();
+console.log(datasource);
+```
+
+```python Python
+import requests
+
+url = "https://api.plaisolutions.com/datasources"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+data = {
+    "name": "Product Documentation",
+    "type": "UNSTRUCTURED",
+    "description": "Complete product documentation including user guides, API docs, and tutorials",
+    "summary": "Comprehensive documentation for all product features and APIs",
+    "metadata_schema": {
+        "entries": [
+            {
+                "name": "category",
+                "type": "str", 
+                "optional": False
+            },
+            {
+                "name": "version",
+                "type": "str",
+                "optional": True
+            },
+            {
+                "name": "priority",
+                "type": "int",
+                "optional": True
+            }
+        ]
+    }
+}
+
+response = requests.post(url, headers=headers, json=data)
+datasource = response.json()
+print(datasource)
+```
+
+</CodeGroup>
+
+---
+
+## Get Datasource
+
+<api-endpoint method="GET" path="/datasources/{id}" />
+
+Get detailed information about a specific datasource.
+
+### Path Parameters
+
+<ParamField path="id" type="string" required>
+  The unique identifier of the datasource
+</ParamField>
+
+### Response
+
+Returns the datasource object with all details.
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request GET 'https://api.plaisolutions.com/datasources/ds_123' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const datasourceId = 'ds_123';
+const response = await fetch(`https://api.plaisolutions.com/datasources/${datasourceId}`, {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+const datasource = await response.json();
+console.log(datasource);
+```
+
+```python Python
+import requests
+
+datasource_id = "ds_123"
+url = f"https://api.plaisolutions.com/datasources/{datasource_id}"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+
+response = requests.get(url, headers=headers)
+datasource = response.json()
+print(datasource)
+```
+
+</CodeGroup>
+
+---
+
+## Update Datasource
+
+<api-endpoint method="PATCH" path="/datasources/{id}" />
+
+Update an existing datasource's properties.
+
+### Path Parameters
+
+<ParamField path="id" type="string" required>
+  The unique identifier of the datasource
+</ParamField>
+
+### Request Body
+
+All fields are optional and only provided fields will be updated.
+
+<ParamField body="name" type="string" optional>
+  Updated datasource name
+</ParamField>
+
+<ParamField body="description" type="string" optional>
+  Updated description
+</ParamField>
+
+<ParamField body="summary" type="string" optional>
+  Updated summary
+</ParamField>
+
+<ParamField body="metadata_schema" type="object" optional>
+  Updated metadata schema (this will replace the existing schema)
+</ParamField>
+
+### Response
+
+Returns the updated datasource object.
+
+<Warning>
+  Updating the metadata schema may affect existing resources in the datasource. Ensure compatibility before making changes.
+</Warning>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request PATCH 'https://api.plaisolutions.com/datasources/ds_123' \
+--header 'Authorization: Bearer YOUR_TOKEN' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "name": "Updated Product Documentation",
+  "description": "Enhanced product documentation with new tutorials and examples"
+}'
+```
+
+```javascript JavaScript
+const datasourceId = 'ds_123';
+const response = await fetch(`https://api.plaisolutions.com/datasources/${datasourceId}`, {
+  method: 'PATCH',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    name: "Updated Product Documentation",
+    description: "Enhanced product documentation with new tutorials and examples"
+  })
+});
+
+const datasource = await response.json();
+console.log(datasource);
+```
+
+```python Python
+import requests
+
+datasource_id = "ds_123"
+url = f"https://api.plaisolutions.com/datasources/{datasource_id}"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+data = {
+    "name": "Updated Product Documentation",
+    "description": "Enhanced product documentation with new tutorials and examples"
+}
+
+response = requests.patch(url, headers=headers, json=data)
+datasource = response.json()
+print(datasource)
+```
+
+</CodeGroup>
+
+---
+
+## Delete Datasource
+
+<api-endpoint method="DELETE" path="/datasources/{id}" />
+
+Delete a datasource and all its associated resources.
+
+### Path Parameters
+
+<ParamField path="id" type="string" required>
+  The unique identifier of the datasource to delete
+</ParamField>
+
+### Response
+
+Returns a 200 status code on successful deletion.
+
+<Warning>
+  Deleting a datasource will permanently remove:
+  - All resources and documents in the datasource
+  - All folders and folder structures
+  - All vector embeddings and search indexes
+  - Any agent associations with this datasource
+  
+  This action cannot be undone.
+</Warning>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request DELETE 'https://api.plaisolutions.com/datasources/ds_123' \
+--header 'Authorization: Bearer YOUR_TOKEN'
+```
+
+```javascript JavaScript
+const datasourceId = 'ds_123';
+const response = await fetch(`https://api.plaisolutions.com/datasources/${datasourceId}`, {
+  method: 'DELETE',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  }
+});
+
+console.log('Datasource deleted:', response.status === 200);
+```
+
+```python Python
+import requests
+
+datasource_id = "ds_123"
+url = f"https://api.plaisolutions.com/datasources/{datasource_id}"
+headers = {
+    "Authorization": "Bearer YOUR_TOKEN",
+    "Content-Type": "application/json"
+}
+
+response = requests.delete(url, headers=headers)
+print(f"Datasource deleted: {response.status_code == 200}")
+```
+
+</CodeGroup>
+
+---
+
+## Datasource Types
+
+Understanding the difference between datasource types helps you choose the right approach for your use case:
+
+<Tabs>
+  <Tab title="UNSTRUCTURED">
+    **Best for:** Documents, web pages, text files, PDFs, images
+    
+    **Features:**
+    - Automatic text extraction and processing
+    - Vector embeddings for semantic search
+    - Support for various file formats
+    - Flexible metadata schema
+    
+    **Use Cases:**
+    - Documentation websites
+    - Knowledge bases
+    - Support articles
+    - Research papers
+    - Company policies
+    
+    **Example Content:**
+    - PDF documents
+    - Web pages
+    - Markdown files
+    - Text documents
+    - Images with text
+  </Tab>
+  
+  <Tab title="STRUCTURED">
+    **Best for:** Databases, APIs, CSV files, JSON data
+    
+    **Features:**
+    - Schema-aware processing
+    - Structured query capabilities
+    - Data validation
+    - Relationship mapping
+    
+    **Use Cases:**
+    - Product catalogs
+    - Customer databases
+    - API responses
+    - Spreadsheet data
+    - Configuration files
+    
+    **Example Content:**
+    - CSV files
+    - JSON API responses
+    - Database exports
+    - XML files
+    - Structured logs
+  </Tab>
+</Tabs>
+
+---
+
+## Metadata Schema Design
+
+The metadata schema defines additional fields that can be attached to resources in your datasource:
+
+### Field Types
+
+<AccordionGroup>
+  <Accordion title="String (str)">
+    - **Use for:** Categories, tags, names, descriptions
+    - **Example:** `category: "user-guide"`, `author: "John Doe"`
+    - **Searchable:** Yes, supports exact and partial matching
+  </Accordion>
+  
+  <Accordion title="Integer (int)">
+    - **Use for:** Priorities, counts, ratings, years
+    - **Example:** `priority: 1`, `rating: 5`, `year: 2024`
+    - **Searchable:** Yes, supports range queries
+  </Accordion>
+  
+  <Accordion title="Float (float)">
+    - **Use for:** Scores, percentages, measurements
+    - **Example:** `confidence: 0.95`, `price: 29.99`
+    - **Searchable:** Yes, supports range queries
+  </Accordion>
+  
+  <Accordion title="Boolean (bool)">
+    - **Use for:** Flags, status indicators
+    - **Example:** `published: true`, `featured: false`
+    - **Searchable:** Yes, supports exact matching
+  </Accordion>
+</AccordionGroup>
+
+### Best Practices
+
+<Steps>
+  <Step title="Plan Your Schema">
+    Define metadata fields that will help with filtering and organization
+  </Step>
+  <Step title="Keep It Simple">
+    Start with essential fields and add more as needed
+  </Step>
+  <Step title="Use Consistent Naming">
+    Use lowercase with underscores (e.g., `content_type`, `last_updated`)
+  </Step>
+  <Step title="Consider Searchability">
+    Think about how agents and users will filter and search your content
+  </Step>
+</Steps>
+
+<Note>
+  Metadata schemas can be updated after creation, but changes may affect existing resources and search functionality.
+</Note>
+
+<Tip>
+  Use the metadata schema to create powerful filtering capabilities for your agents. For example, an agent could be configured to only use resources with `category: "public"` and `priority >= 3`.
+</Tip>

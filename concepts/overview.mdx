@@ -1,0 +1,279 @@
+---
+title: "Concepts Overview"
+description: "Understand PLai Framework's architecture and how concepts fit together"
+icon: "map"
+---
+
+# Concepts Overview
+
+PLai Framework is built on a clear hierarchy of concepts that work together to enable you to build, deploy, and manage AI agents. This guide maps how everything connects.
+
+---
+
+## PLai Architecture
+
+```
+ORGANIZATION LEVEL
+├── Organizations (Teams)
+├── Projects (Workspaces)
+├── Members & Roles
+└── Organization Settings
+    ├── Invitations
+    ├── Billing
+    └── Team Management
+
+PROJECT LEVEL (Inside Each Project)
+├── Agents (AI Workers)
+├── Tools (Service Integrations)
+├── Datasources (Knowledge Bases)
+├── Workflows (Multi-step Automation)
+├── Jobs (Scheduled Execution)
+├── Triggers (Event-based Automation)
+└── Monitor (Project Analytics & Metrics)
+
+USER LEVEL (Global)
+└── Profile & Account Settings
+```
+
+---
+
+## The Five Core Concept Groups
+
+<CardGroup cols={2}>
+  <Card title="Organizations & Projects" icon="building" href="./organizations-and-projects.mdx">
+    Structure, team management, and workspace isolation
+  </Card>
+  <Card title="Agents, Datasources & Tools" icon="robot" href="./agents-datasources-and-tools.mdx">
+    The building blocks you create and configure
+  </Card>
+  <Card title="Workflows, Jobs & Triggers" icon="gears" href="./workflows-jobs-and-triggers.mdx">
+    How to automate and schedule your work
+  </Card>
+  <Card title="Security & Compliance" icon="shield" href="./security-and-compliance.mdx">
+    Access control, credentials, and safety guardrails
+  </Card>
+  <Card title="Monitoring" icon="chart-line" href="./monitoring.mdx">
+    Project-level analytics, metrics, and performance tracking
+  </Card>
+</CardGroup>
+
+---
+
+## Understanding the Hierarchy
+
+### Level 1: Organizations & Projects
+**Scope:** Organization-wide structure
+
+Where you live:
+- **Organizations** - Top-level container for your team
+- **Projects** - Isolated workspaces where you do the actual work
+- **Members** - People with roles (OWNER, ADMIN, VIEWER)
+
+Everything else happens inside a Project.
+
+🔗 **Read more:** [Organizations & Projects](./organizations-and-projects.mdx)
+
+---
+
+### Level 2: Building Blocks
+**Scope:** Inside a Project
+
+What you create:
+- **Agents** - AI assistants that perform tasks
+  - Configuration: Model, system instructions, capabilities
+  - Properties: Name, description, role-based settings
+  
+- **Tools** - External services agents can use
+  - Types: API Requests, Web Search, Browser, MCP Servers, Datasources
+  - Purpose: Extend agent capabilities
+  
+- **Datasources** - Knowledge bases for agents
+  - Types: Files, URLs, Websites, Content
+  - Purpose: Provide context and facts to agents
+
+🔗 **Read more:** [Agents, Datasources & Tools](./agents-datasources-and-tools.mdx)
+
+---
+
+### Level 3: Automation
+**Scope:** Inside a Project
+
+How you scale:
+- **Workflows** - Multi-step sequences combining agents and tools
+  - Example: Route customer → Sales Agent → CRM Tool → Response
+  
+- **Jobs** - Scheduled executions
+  - Example: Run data processing every day at 2 AM
+  
+- **Triggers** - Event-based automation
+  - Types: Webhook, Schedule, Manual
+  - Example: Process form submission automatically
+
+🔗 **Read more:** [Workflows, Jobs & Triggers](./workflows-jobs-and-triggers.mdx)
+
+---
+
+### Level 4: Safety & Access
+**Scope:** Spans Organization and Project
+
+How you protect:
+- **Roles & Permissions** - Who can do what (RBAC)
+  - Organization roles control team access
+  - Project roles control resource access
+  
+- **Credentials** - Securely store secrets
+  - API keys, passwords, tokens
+  - Encrypted storage, audit logged
+  
+- **Guardrails & Answer Filters** - Safety constraints
+  - Content filtering
+  - Rate limiting
+  - Compliance rules
+
+🔗 **Read more:** [Security & Compliance](./security-and-compliance.mdx)
+
+---
+
+### Level 5: Observability
+**Scope:** Project-level
+
+How you understand what's happening:
+- **Metrics** - Performance data
+  - Speed, accuracy, success rates, errors
+  
+- **Analytics** - Usage patterns
+  - Agent activity, tool usage, workflow performance
+  
+- **Activity Logs** - Audit trail
+  - Who did what, when, and what changed
+
+🔗 **Read more:** [Monitoring](./monitoring.mdx)
+
+---
+
+## Decision Tree: Which Concept Do I Need?
+
+**I want to organize my team**
+↓
+→ [Organizations & Projects](./organizations-and-projects.mdx)
+
+**I want to create AI agents**
+↓
+→ [Agents, Datasources & Tools](./agents-datasources-and-tools.mdx)
+
+**I want to automate workflows**
+↓
+→ [Workflows, Jobs & Triggers](./workflows-jobs-and-triggers.mdx)
+
+**I want to control access or store secrets**
+↓
+→ [Security & Compliance](./security-and-compliance.mdx)
+
+**I want to track performance and costs**
+↓
+→ [Monitoring](./monitoring.mdx)
+
+---
+
+## Quick Reference: Typical User Journeys
+
+### Journey 1: Getting Started
+1. **Understand structure** → [Organizations & Projects](./organizations-and-projects.mdx)
+2. **Invite your team** → [Organizations & Projects](./organizations-and-projects.mdx) (Roles section)
+3. **Create first agent** → [Agents, Datasources & Tools](./agents-datasources-and-tools.mdx)
+4. **Add knowledge** → [Agents, Datasources & Tools](./agents-datasources-and-tools.mdx) (Datasources section)
+
+### Journey 2: Going to Production
+1. **Set up security** → [Security & Compliance](./security-and-compliance.mdx)
+2. **Configure guardrails** → [Security & Compliance](./security-and-compliance.mdx) (Guardrails section)
+3. **Monitor performance** → [Monitoring](./monitoring.mdx)
+4. **Audit access** → [Monitoring](./monitoring.mdx) (Logs section)
+
+### Journey 3: Scaling Up
+1. **Build workflows** → [Workflows, Jobs & Triggers](./workflows-jobs-and-triggers.mdx)
+2. **Schedule jobs** → [Workflows, Jobs & Triggers](./workflows-jobs-and-triggers.mdx) (Jobs section)
+3. **Set up triggers** → [Workflows, Jobs & Triggers](./workflows-jobs-and-triggers.mdx) (Triggers section)
+4. **Track results** → [Monitoring](./monitoring.mdx)
+
+---
+
+## Key Mental Models
+
+### Model 1: Container Nesting
+```
+Organization
+  └─ Project 1
+      ├─ Agent A
+      ├─ Tool X
+      └─ Datasource D
+  └─ Project 2
+      ├─ Agent B
+      ├─ Agent C
+      └─ Tool Y
+```
+
+**Rule:** Members of Organization see all Projects they're invited to. Members of a Project see only that Project's resources.
+
+### Model 2: Separation of Concerns
+```
+ORG LEVEL (Who + What Access)
+  ├─ Organizations & Projects
+  ├─ Members & Roles
+  └─ Organization Settings
+
+PROJECT LEVEL (What You Build & Run)
+  ├─ Agents, Tools, Datasources
+  ├─ Workflows, Jobs, Triggers
+  └─ Monitor (Performance)
+
+SECURITY (Spans Both)
+  ├─ Credentials
+  ├─ Guardrails
+  └─ Activity Logs
+```
+
+### Model 3: Data Flow
+```
+Datasource (Knowledge) ──┐
+                         ├─→ Agent ──→ Tool ──→ External Service
+User Input ──────────────┤              ↑
+                         └──→ Guardrails (Filter/Validate)
+
+Result ──→ Monitor (Track) ──→ Analytics Dashboard
+```
+
+---
+
+## Important Reminders
+
+<Tip>
+**Start small.** You don't need Workflows, Jobs, and Triggers right away. Begin with Agents and Tools, then add automation as you grow.
+</Tip>
+
+<Tip>
+**Everything is project-scoped.** What happens in Project A stays in Project A. Other projects don't see it.
+</Tip>
+
+<Warning>
+**Security matters early.** Set up guardrails and credentials management before going to production, not after.
+</Warning>
+
+<Note>
+**Monitor from day one.** It's easier to understand costs and performance from the start than to debug problems later.
+</Note>
+
+---
+
+## Next Steps
+
+1. **Understand your structure** → Read [Organizations & Projects](./organizations-and-projects.mdx)
+2. **Create your first agent** → Go to [Agents, Datasources & Tools](./agents-datasources-and-tools.mdx)
+3. **Follow the tutorial** → Check out [Create Your First Agent](../../guides/first-agent.mdx)
+
+Or jump directly to the concept group you need most:
+
+- **[Organizations & Projects](./organizations-and-projects.mdx)** - Team structure, roles, workspace management
+- **[Agents, Datasources & Tools](./agents-datasources-and-tools.mdx)** - Building your AI workers
+- **[Workflows, Jobs & Triggers](./workflows-jobs-and-triggers.mdx)** - Automating at scale
+- **[Security & Compliance](./security-and-compliance.mdx)** - Protecting your data and access
+- **[Monitoring](./monitoring.mdx)** - Tracking performance and costs

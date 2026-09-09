@@ -1,0 +1,309 @@
+---
+title: "What is a Workflow"
+description: "Multi-step automation with AI agents and tools"
+icon: "workflow"
+---
+
+# What is a Workflow?
+
+A **Workflow** is a multi-step automation that orchestrates agents, tools, and data processing tasks in a coordinated sequence. Workflows enable complex, AI-powered processes by connecting independent steps with defined dependencies and variable sharing.
+
+---
+
+## Core Concept
+
+```
+Input
+  ↓
+[Step 1: Agent] → Output
+  ↓
+[Step 2: Scrape] → Output
+  ↓
+[Step 3: Analysis] → Output
+  ↓
+[Step 4: Report] → Output
+  ↓
+Final Result
+```
+
+A workflow is essentially a **directed acyclic graph (DAG)** where:
+- **Nodes** represent discrete work units (agent calls, API requests, data processing)
+- **Edges** represent dependencies between nodes
+- **Variables** flow between nodes via Jinja2 interpolation
+- **Execution** follows a tick-based scheduling model driven by Pub/Sub
+
+---
+
+## Why Use Workflows?
+
+<CardGroup cols={2}>
+  <Card title="Automate Complex Processes" icon="zap">
+    Chain multi-step operations without manual intervention
+  </Card>
+  <Card title="Coordinate Multiple Agents" icon="users">
+    Have different AI agents work together on the same task
+  </Card>
+  <Card title="Handle Async Operations" icon="hourglass">
+    Wait for long-running tasks (web scraping, external APIs)
+  </Card>
+  <Card title="Reuse & Compose" icon="boxes">
+    Build subworkflows and compose them into larger systems
+  </Card>
+  <Card title="Real-time Monitoring" icon="eye">
+    Track execution progress step-by-step with detailed logs
+  </Card>
+  <Card title="Data Transformation" icon="arrows-rotate">
+    Process and enrich data through multiple stages
+  </Card>
+</CardGroup>
+
+---
+
+## Workflow vs Single Agent
+
+### Single Agent Chat
+```
+User Query → Agent → Response
+```
+- Direct response
+- Real-time only
+- No state persistence between calls
+- Linear reasoning
+
+### Workflow
+```
+User Input → [Agent 1] → [Agent 2] → [Agent 3] → Report
+             ↓          ↓          ↓
+          Store    Analyze    Synthesize
+```
+- Multi-step orchestration
+- Handles async operations
+- Persistent state across steps
+- Parallel and sequential execution
+- Detailed monitoring per step
+
+---
+
+## Key Components
+
+### 1. Nodes
+Individual units of work:
+- **Agent Nodes**: Call your agents with specific inputs
+- **Data Nodes**: Process or transform data
+- **Integration Nodes**: Call external APIs or scrape websites
+- **Container Nodes**: Group other nodes (sequential, parallel, loops)
+
+### 2. Dependencies
+Define execution order:
+```json
+{
+  "id": "analyze",
+  "depends_on": ["scrape", "fetch"]
+  // Node "analyze" only runs when both "scrape" and "fetch" complete
+}
+```
+
+### 3. Variables
+Share data between steps:
+```text
+{{$input.topic}}              // From initial input
+{{$nodes.scrape.markdown}}    // From previous node output
+{{$workflow.name}}            // Workflow metadata
+{{loop.item}}                 // Current loop iteration
+```
+
+### 4. Input Schema
+Define what your workflow accepts:
+```json
+{
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "topic": {"type": "string"},
+      "depth": {"type": "integer"}
+    },
+    "required": ["topic"]
+  }
+}
+```
+
+---
+
+## Workflow Lifecycle
+
+### 1. Creation
+Define your workflow with nodes, dependencies, and parameters
+```json
+{
+  "id": "research-workflow",
+  "name": "Research Workflow",
+  "nodes": [...],
+  "input_schema": {...}
+}
+```
+
+### 2. Execution
+Trigger the workflow with input data
+```bash
+POST /workflows/{id}/execute
+{
+  "input": {
+    "topic": "Machine Learning"
+  }
+}
+```
+
+### 3. Tracking
+Monitor progress in real-time
+```bash
+GET /usage/executions/{execution_id}
+```
+Returns current status, progress, and outputs for each step
+
+### 4. Completion
+Workflow either:
+- **Succeeds**: All nodes completed, output available
+- **Fails**: A node failed, workflow halted
+
+---
+
+## Common Use Cases
+
+### Case 1: Market Research
+```
+Input: Company Name
+  ↓
+[Search] Find company info
+  ↓
+[Scrape] Get latest news
+  ↓
+[Analysis] Analyze sentiment
+  ↓
+[Report] Generate summary
+  ↓
+Output: Research Report
+```
+
+### Case 2: Customer Support
+```
+Input: Customer Query
+  ↓
+[Extract] Identify intent & entities
+  ↓
+[Lookup] Search knowledge base
+  ↓
+[Generate] Create personalized response
+  ↓
+[Grade] Check response quality
+  ↓
+Output: Support Reply
+```
+
+### Case 3: Content Creation
+```
+Input: Topic + Guidelines
+  ↓
+[Research] Gather information
+  ↓
+[Outline] Create structure
+  ↓
+[Draft] Write content
+  ↓
+[Review] Check quality
+  ↓
+[Polish] Final formatting
+  ↓
+Output: Article
+```
+
+### Case 4: Data Pipeline
+```
+Input: Raw Data
+  ↓
+[Parse] Extract structured data
+  ↓
+[Validate] Check against schema
+  ↓
+[Enrich] Add computed fields
+  ↓
+[Store] Save to database
+  ↓
+[Notify] Alert completion
+  ↓
+Output: Process Complete
+```
+
+---
+
+## Workflow Structure
+
+```json
+{
+  "id": "workflow-unique-id",
+  "name": "My Workflow",
+  "description": "What this workflow does",
+  "version": "1.0.0",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "query": {"type": "string"}
+    },
+    "required": ["query"]
+  },
+  "nodes": [
+    {
+      "id": "step-1",
+      "name": "Step 1 Name",
+      "type": "plai_agent",
+      "parameters": {
+        "agent_name_slug": "my-agent",
+        "input": "Process this: {{$input.query}}"
+      }
+    },
+    {
+      "id": "step-2",
+      "name": "Step 2 Name",
+      "type": "plai_agent",
+      "depends_on": ["step-1"],
+      "parameters": {
+        "agent_name_slug": "analyzer",
+        "input": "Analyze: {{$nodes.step-1.output}}"
+      }
+    }
+  ],
+  "output_definitions": {
+    "final_output": {
+      "node_id": "step-2",
+      "description": "The final analysis"
+    }
+  }
+}
+```
+
+---
+
+## Execution Model at a Glance
+
+Workflows use **tick-based scheduling**:
+1. Workflow is triggered via API
+2. System publishes execution start message to Pub/Sub
+3. Workflow engine processes one "tick" (up to 5 nodes)
+4. Completed nodes trigger dependent nodes
+5. Process repeats until all nodes complete or a node fails
+6. Real-time monitoring shows progress at each step
+
+This model enables:
+- **Asynchronous execution** - Long operations don't block
+- **Scalability** - Multiple workflows execute concurrently
+- **Observability** - Each step is logged and tracked
+- **Resilience** - Failures are isolated to affected branches
+
+---
+
+## Next Steps
+
+- **[Execution Engine](./execution-engine.mdx)** - Understand how workflows run
+- **[Node Types](./node-types.mdx)** - Learn about available node types
+- **[Dependencies](./dependencies.mdx)** - Define execution order
+- **[Execution Variables](./execution-variables.mdx)** - Share data between steps
+- **[Input Variables](./input-variables.mdx)** - Define workflow inputs

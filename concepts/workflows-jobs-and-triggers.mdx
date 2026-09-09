@@ -1,0 +1,431 @@
+---
+title: "Workflows, Jobs & Triggers"
+description: "Learn how to automate and scale your agents with workflows, scheduled jobs, and event-based triggers"
+icon: "gears"
+---
+
+# Workflows, Jobs & Triggers
+
+Once you have agents, tools, and datasources set up, the next level is **automation**. Workflows let you chain multiple agents together, Jobs let you schedule execution, and Triggers let you respond to events automatically.
+
+---
+
+## Workflows: Chaining Agents
+
+A **Workflow** is a multi-step sequence that combines multiple agents, tools, and logic to solve complex problems.
+
+### What is a Workflow?
+
+Instead of single agent handling everything, workflows let different agents specialize:
+
+```
+SINGLE AGENT (Limited):
+Customer → Support Bot → Answer or Escalate
+
+WORKFLOW (Powerful):
+Customer Input
+     ↓
+┌─────────────────────┐
+│ Agent 1: Classifier │ → Is this a FAQ question?
+└─────────────────────┘
+     ↓ YES / NO
+     │
+  ┌──┴──┐
+  │     │
+  ▼     ▼
+Workflow splits →
+  │     │
+  ▼     ▼
+FAQ Bot   Support Ticket Agent
+  │           │
+  └────┬──────┘
+       ▼
+   RESPONSE
+```
+
+### Workflow Components
+
+| Component | Purpose | Example |
+|-----------|---------|---------|
+| **Agents** | Perform tasks | FAQ Bot, Support Agent, Data Processor |
+| **Tools** | Call external services | Send email, update database, call API |
+| **Datasources** | Provide knowledge | FAQ database, product docs |
+| **Logic/Routes** | Decide flow | If question is FAQ → route to FAQ bot |
+| **Variables** | Pass data between steps | Customer ID, query text, response |
+
+### Common Workflow Patterns
+
+<AccordionGroup>
+  <Accordion title="Sequential Workflow">
+    Steps run one after another:
+    
+    Step 1 → Step 2 → Step 3
+    
+    Example: Extract info → Validate → Save to database
+  </Accordion>
+
+  <Accordion title="Branching Workflow">
+    Route based on conditions:
+    
+    ```
+    Check type?
+      ├─ If Sales → Route to Sales Agent
+      ├─ If Support → Route to Support Agent
+      └─ If Admin → Route to Admin Agent
+    ```
+  </Accordion>
+
+  <Accordion title="Parallel Workflow">
+    Run multiple steps simultaneously:
+    
+    ```
+    Input
+      ├─ Agent A (processes data)
+      ├─ Agent B (checks quality)
+      └─ Agent C (generates report)
+    Combine results
+    ```
+  </Accordion>
+
+  <Accordion title="Error Handling Workflow">
+    Handle failures gracefully:
+    
+    ```
+    Try Step 1
+      ├─ Success → Continue to Step 2
+      └─ Failure → Run Fallback Agent
+                   Log error
+                   Alert team
+    ```
+  </Accordion>
+</AccordionGroup>
+
+### Creating a Workflow
+
+<Steps>
+  <Step title="Define Steps">
+    List what agents/tools will do and in what order
+  </Step>
+  <Step title="Choose Agents">
+    Select which agents participate in the workflow
+  </Step>
+  <Step title="Define Variables">
+    Specify what data flows between steps (input, output)
+  </Step>
+  <Step title="Set Logic">
+    Define routing, conditions, and error handling
+  </Step>
+  <Step title="Test">
+    Run the workflow with test data
+  </Step>
+  <Step title="Deploy">
+    Make it available for Jobs and Triggers
+  </Step>
+</Steps>
+
+---
+
+## Jobs: Scheduled Execution
+
+A **Job** runs a workflow or agent on a schedule.
+
+### Why Use Jobs?
+
+- **Recurring Tasks** - Run daily, weekly, monthly
+- **Batch Processing** - Process 1000s of records automatically
+- **Maintenance** - Clean up data, generate reports
+- **Monitoring** - Check status at regular intervals
+
+### Job Scheduling
+
+```
+Workflow: "Daily Sales Report"
+
+Run: Every day at 2:00 AM
+├─ Process yesterday's sales data
+├─ Generate report
+├─ Email to team
+└─ Log results
+
+Next run: Tomorrow 2:00 AM
+Next run: Day after 2:00 AM
+(continues indefinitely or until disabled)
+```
+
+### Job Configuration
+
+| Setting | What It Controls | Example |
+|---------|-----------------|---------|
+| **Workflow** | What runs | "Daily Sales Processing" |
+| **Schedule** | When it runs | Every day at 2 AM |
+| **Timezone** | Time zone for schedule | America/New_York |
+| **Retry Policy** | What happens on failure | Retry 3 times, then alert |
+| **Notification** | Who gets notified | Send email on failure |
+| **Timeout** | Max execution time | Kill job if not done in 1 hour |
+
+### Schedule Patterns
+
+<Tabs>
+  <Tab title="Recurring">
+    - Every day
+    - Every Monday
+    - Every 2 hours
+    - Every 15 minutes
+  </Tab>
+  <Tab title="Specific Times">
+    - 2:00 AM every day
+    - 9:00 AM on Mondays
+    - Every hour on the hour
+  </Tab>
+  <Tab title="Complex">
+    - Business days only (Mon-Fri)
+    - Except holidays
+    - Multiple times per day
+  </Tab>
+</Tabs>
+
+### Job Status & Monitoring
+
+```
+Job: "Daily Report"
+
+Last Run:
+├─ Status: Success ✅
+├─ Started: 2:00 AM
+├─ Duration: 3 min 42 sec
+└─ Records processed: 1,245
+
+Next Run:
+└─ Scheduled: Tomorrow 2:00 AM
+
+History:
+├─ Yesterday: Success (3m 15s)
+├─ 2 days ago: Success (3m 51s)
+└─ 3 days ago: Failed (timeout)
+```
+
+---
+
+## Triggers: Event-Based Automation
+
+A **Trigger** automatically runs a workflow or agent when something happens.
+
+### Types of Triggers
+
+<CardGroup cols={2}>
+  <Card title="Webhook" icon="webhook">
+    Triggered by HTTP POST to an endpoint. External systems can trigger your workflows.
+  </Card>
+  <Card title="Schedule" icon="clock">
+    Same as Jobs - run on a schedule
+  </Card>
+  <Card title="Manual" icon="hand">
+    User manually clicks a button to run
+  </Card>
+  <Card title="Event" icon="zap">
+    Triggered by events in PLai (agent completion, data arrival, etc.)
+  </Card>
+</CardGroup>
+
+### Webhook Trigger Example
+
+```
+External System         PLai Framework
+    │                       │
+    └─→ HTTP POST           │
+         (new customer) ────→├─ Webhook Trigger
+                            │
+                            ├─ Run Workflow:
+                            │  "Onboard Customer"
+                            │
+                            ├─ Agent: Send welcome email
+                            ├─ Agent: Create account
+                            ├─ Agent: Log to CRM
+                            │
+Response ←───────────────────┘
+(Workflow started)
+```
+
+### Trigger Configuration
+
+| Element | Purpose | Example |
+|---------|---------|---------|
+| **Trigger Type** | What triggers it | Webhook, Schedule, Manual |
+| **Endpoint** | Where to send data (webhooks) | https://api.example.com/webhook/123 |
+| **Payload** | Data format accepted | JSON with customer info |
+| **Workflow** | What runs | "Process Customer Data" |
+| **Error Handling** | What if something fails | Retry 3x, then alert |
+
+### Webhook Security
+
+- ✅ Unique URLs (hard to guess)
+- ✅ Rate limiting (prevent abuse)
+- ✅ Signature verification (validate requests)
+- ✅ Audit logging (track all calls)
+
+---
+
+## Real-World Examples
+
+### Example 1: Lead Scoring Pipeline
+
+```
+TRIGGER: New form submission (webhook)
+
+WORKFLOW: Lead Scoring
+├─ Agent 1: Extract info (name, company, industry)
+├─ Agent 2: Score lead (1-10 based on data)
+├─ Agent 3: Route to sales rep
+├─ Tool: Send email to sales rep
+└─ Tool: Log to CRM
+
+Result: Within seconds, lead scored and routed
+```
+
+### Example 2: Nightly Data Processing
+
+```
+JOB: Daily data ETL
+Schedule: Every day at 2:00 AM
+
+WORKFLOW:
+├─ Agent 1: Extract data from API
+├─ Agent 2: Transform/clean data
+├─ Agent 3: Validate quality
+├─ Tool: Load to data warehouse
+└─ Tool: Generate report and email
+
+Result: Every morning, team has fresh data
+```
+
+### Example 3: Multi-Step Support Process
+
+```
+TRIGGER: Customer submits support ticket (email or form)
+
+WORKFLOW: Support Process
+├─ Agent 1: Classify issue
+│  ├─ If FAQ → Route to FAQ Bot
+│  └─ If urgent → Route to support team
+├─ If FAQ issue:
+│   └─ Agent 2: Answer from FAQ
+└─ If urgent:
+    ├─ Agent 3: Create ticket
+    ├─ Tool: Send to support queue
+    └─ Tool: Notify team
+
+Result: Automated FAQs, urgent issues escalated immediately
+```
+
+---
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Keep Workflows Simple" icon="minimize">
+    Start with 2-3 steps. Add complexity as needed. Complex workflows are harder to debug.
+  </Card>
+  <Card title="Test Before Scheduling" icon="test-tube">
+    Test workflows manually before setting up automatic jobs or triggers
+  </Card>
+  <Card title="Monitor Execution" icon="monitor">
+    Check job/trigger logs regularly. Set up alerts for failures.
+  </Card>
+  <Card title="Document Variables" icon="file-text">
+    Clearly document what data flows between steps to prevent errors
+  </Card>
+</CardGroup>
+
+### Workflow Naming
+
+✅ **Good names:**
+- "Lead Scoring Pipeline"
+- "Daily Sales Report"
+- "Customer Onboarding"
+- "Data Quality Check"
+
+❌ **Poor names:**
+- "Workflow 1"
+- "Process"
+- "Automation"
+- "Run"
+
+---
+
+## Monitoring & Debugging
+
+### Viewing Execution History
+
+```
+Workflow: "Lead Scoring"
+
+Run #1245 (Today 2:45 PM)
+├─ Status: Success ✅
+├─ Completed in: 12 seconds
+├─ Input: Customer form data
+└─ Output: Lead score 8/10, assigned to rep
+
+Run #1244 (Today 2:30 PM)
+├─ Status: Failed ❌
+├─ Error: API timeout on CRM lookup
+├─ Duration: 5 seconds
+└─ Action: Will retry at next trigger
+
+Run #1243 (Today 2:15 PM)
+├─ Status: Success ✅
+├─ Completed in: 8 seconds
+└─ Output: Lead score 5/10, assigned to rep
+```
+
+### Debugging Common Issues
+
+<AccordionGroup>
+  <Accordion title="Workflow runs slowly">
+    **Check:**
+    - Are agents doing unnecessary work?
+    - Can steps run in parallel instead of sequentially?
+    - Are tools timing out?
+    - Is datasource search slow?
+  </Accordion>
+
+  <Accordion title="Workflow fails intermittently">
+    **Check:**
+    - External APIs timing out?
+    - Rate limits being hit?
+    - Data format inconsistencies?
+    - Credentials expiring?
+  </Accordion>
+
+  <Accordion title="Job not running on schedule">
+    **Check:**
+    - Is job enabled?
+    - Is timezone set correctly?
+    - Is workflow available?
+    - Any recent errors?
+  </Accordion>
+
+  <Accordion title="Webhook not triggering">
+    **Check:**
+    - Is endpoint accessible?
+    - Payload format correct?
+    - Rate limit exceeded?
+    - Check webhook logs for requests
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Key Takeaways
+
+✅ **Workflows** - Chain agents together for complex tasks  
+✅ **Jobs** - Schedule workflows to run automatically on a schedule  
+✅ **Triggers** - Run workflows in response to events (webhooks, schedules, etc.)  
+✅ **Automation at Scale** - Handle routine work without manual intervention  
+
+---
+
+## Next Steps
+
+- **[Create Your First Agent](../../guides/first-agent.mdx)** - Start with basic agents
+- **[Security & Compliance](./security-and-compliance.mdx)** - Secure your workflows
+- **[Monitoring](./monitoring.mdx)** - Track workflow performance and costs

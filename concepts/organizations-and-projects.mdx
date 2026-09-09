@@ -1,0 +1,329 @@
+---
+title: "Organizations & Projects"
+description: "Understand team structure, workspace management, and roles in PLai Framework"
+icon: "building"
+---
+
+# Organizations & Projects
+
+Organizations are the top-level containers that hold your team, projects, and settings. Projects are isolated workspaces where you actually build and run your agents. This guide explains how to structure and manage both.
+
+---
+
+## Organizations: Your Team Container
+
+An **Organization** represents your team, company, or group. It's the highest level in PLai Framework.
+
+### What Organizations Contain
+
+- **Projects** - Multiple isolated workspaces
+- **Members** - Team members with assigned roles
+- **Settings** - Organization-wide configuration
+- **Billing** - Usage tracking and payment management
+- **Invitations** - Pending team member invites
+
+### Organization Characteristics
+
+<CardGroup cols={2}>
+  <Card title="Top-Level" icon="layers">
+    Organizations are the highest container. Everything else lives inside them.
+  </Card>
+  <Card title="Team Container" icon="users">
+    All team members belong to an organization, not to individual projects.
+  </Card>
+  <Card title="Isolated" icon="lock">
+    Organizations are completely separate. No data sharing between organizations.
+  </Card>
+  <Card title="One per Entity" icon="building">
+    Typically one organization per company, team, or entity.
+  </Card>
+</CardGroup>
+
+---
+
+## Projects: Your Workspaces
+
+A **Project** is an isolated workspace within an organization where you create and manage:
+- Agents
+- Tools
+- Datasources
+- Workflows
+- Jobs
+- Triggers
+- Monitoring
+
+### What Projects Provide
+
+<Tabs>
+  <Tab title="Isolation">
+    Resources in Project A are completely separate from Project B. No mixing of data or configurations.
+  </Tab>
+  <Tab title="Organization">
+    Group related agents and tools by use case or team. Example: "Customer Support" project, "Data Processing" project.
+  </Tab>
+  <Tab title="Access Control">
+    Control who can access which projects. A team member can have different roles in different projects.
+  </Tab>
+  <Tab title="Billing Tracking">
+    Monitor costs per project to understand usage and budget allocation.
+  </Tab>
+</Tabs>
+
+### Multiple Projects Scenario
+
+```
+ORGANIZATION: Acme Corp
+
+├─ Project: Customer Support
+│   ├─ Agent: Support Bot
+│   ├─ Agent: FAQ Assistant
+│   └─ Tool: Help Desk API
+│
+├─ Project: Data Processing
+│   ├─ Agent: Data Validator
+│   ├─ Agent: CSV Processor
+│   └─ Workflow: Nightly ETL
+│
+└─ Project: Internal Tools
+    ├─ Agent: Document Summarizer
+    └─ Tool: File Storage
+```
+
+---
+
+## Roles & Permissions
+
+Roles define what members can do. They exist at both organization and project levels.
+
+### Organization Roles
+
+Applied at the organization level:
+
+| Role | Access | Can Invite | Can Create Projects | Billing Access | Can Delete Org |
+|------|--------|-----------|-------------------|-----------------|----------------|
+| **OWNER** | Full access to org + all projects | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Yes |
+| **ADMIN** | Full access to org + all projects | ✅ Yes | ✅ Yes | ❌ No | ❌ No |
+| **VIEWER** | Read-only access to org | ❌ No | ❌ No | ❌ No | ❌ No |
+
+### Project Roles
+
+Applied within individual projects:
+
+| Role | Can View | Can Edit | Can Create | Can Delete | Admin Settings |
+|------|----------|----------|-----------|-----------|-----------------|
+| **EDITOR** | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Yes | ❌ No |
+| **VIEWER** | ✅ Yes | ❌ No | ❌ No | ❌ No | ❌ No |
+
+<Tip>
+A member can have different roles in different projects. Example: ADMIN in Project A but only VIEWER in Project B.
+</Tip>
+
+---
+
+## Member Management
+
+### Inviting Team Members
+
+**Only OWNER or ADMIN can send invitations.**
+
+<Steps>
+  <Step title="Go to Organization Settings">
+    Navigate to your organization settings page
+  </Step>
+  <Step title="Select Invitations">
+    Find the Invitations section
+  </Step>
+  <Step title="Create Invitation">
+    Enter the member's email, select organization role, and (optionally) project and project role
+  </Step>
+  <Step title="Send">
+    System sends invitation email to member
+  </Step>
+  <Step title="Member Accepts">
+    Member receives email and accepts invitation to join
+  </Step>
+</Steps>
+
+### How Invitations Work
+
+1. OWNER/ADMIN creates invitation → Email sent
+2. Member receives email with unique link
+3. Member clicks link, signs up (if new) or signs in
+4. Member sees pending invitations in their account
+5. Member accepts or declines
+6. On accept: Member joins organization and project
+
+🔗 **More details:** See [Sign In & Sign Up](../getting-started/signin-signup.mdx)
+
+### Viewing Organization Members
+
+**In Organization Settings:**
+- See all members and their roles
+- Invite new members
+- Remove members (OWNER/ADMIN only)
+- Change member roles (OWNER/ADMIN only)
+
+---
+
+## Project Creation & Management
+
+### Creating a Project
+
+**OWNER or ADMIN can create projects.**
+
+<Steps>
+  <Step title="Go to Projects">
+    Navigate to the Projects section of your organization
+  </Step>
+  <Step title="Create New">
+    Click "Create Project" or "New Project"
+  </Step>
+  <Step title="Enter Details">
+    Provide project name and description
+  </Step>
+  <Step title="Set Permissions">
+    Choose which members can access this project and their roles
+  </Step>
+  <Step title="Create">
+    Project is created and ready to use
+  </Step>
+</Steps>
+
+### Project Settings
+
+Inside each project, you can configure:
+
+- **Project Name & Description** - Basic info
+- **Members & Roles** - Who has access and what they can do
+- **Credentials** - Store API keys and secrets used by agents/tools
+- **Settings** - Project-specific configuration
+
+---
+
+## Understanding Access Control
+
+### Example: Three-Level Permission System
+
+```
+ORGANIZATION LEVEL
+├─ Alice: OWNER
+│   → Can: Manage all, create projects, invite members
+│   → Sees: Everything in the organization
+│
+├─ Bob: ADMIN
+│   → Can: Manage projects, invite members
+│   → Sees: Everything in the organization
+│
+└─ Charlie: VIEWER
+    → Can: View resources only
+    → Sees: Only projects they're invited to
+
+PROJECT "Support" LEVEL
+├─ Alice: (inherited OWNER access)
+│   → Can: Edit, delete, manage project settings
+│
+├─ Bob: (inherited ADMIN access)
+│   → Can: Edit, delete, manage project settings
+│
+├─ Charlie: (inherited VIEWER)
+│   → Can: View agents and results only
+│
+└─ Diana: EDITOR (added at project level)
+    → Can: Create and edit agents, run workflows
+```
+
+### Permission Inheritance
+
+- Organization **OWNER** has full access to all projects
+- Organization **ADMIN** has full access to all projects
+- Organization **VIEWER** has read-only access to projects they're in
+- Project **EDITOR** can create and edit resources in that project
+- Project **VIEWER** can only read resources in that project
+
+---
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card title="One Org Per Entity" icon="organization">
+    Create one organization per company/team/client to keep everything organized
+  </Card>
+  <Card title="Multiple Projects by Use Case" icon="organize">
+    Group related work into separate projects (e.g., Support, Analytics, Automations)
+  </Card>
+  <Card title="Principle of Least Privilege" icon="shield">
+    Grant only the minimum role needed. Use VIEWER as default, EDITOR when needed.
+  </Card>
+  <Card title="Regular Audits" icon="audit">
+    Periodically review who has access to what and remove unused members.
+  </Card>
+</CardGroup>
+
+### Scenario: Sales Team Structure
+
+```
+ORGANIZATION: GlobalSales Inc.
+
+Members:
+- CEO: OWNER
+- Sales Manager: ADMIN  
+- Sales Reps: VIEWER (org level)
+
+Projects:
+- "Lead Scoring"
+  - Sales Reps: EDITOR (can run lead analyzer)
+  - Finance Team: VIEWER (can see results)
+
+- "CRM Integration"
+  - Dev Team: EDITOR (can configure)
+  - Sales Manager: ADMIN (full control)
+  - Sales Reps: VIEWER (read-only)
+
+- "Internal Tools"
+  - Dev Team only: EDITOR
+```
+
+---
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="I can't see some projects">
+    You may not be a member of those projects. Ask an OWNER or ADMIN to invite you.
+  </Accordion>
+
+  <Accordion title="I can't invite members">
+    Only OWNER or ADMIN roles can invite. Ask your organization OWNER or ADMIN.
+  </Accordion>
+
+  <Accordion title="I want to leave a project">
+    Ask an OWNER or ADMIN to remove you from the project. They can do this in Project Settings.
+  </Accordion>
+
+  <Accordion title="How do I change someone's role?">
+    Go to Organization Settings or Project Settings → Members → Select the member → Change role. Only OWNER/ADMIN can do this.
+  </Accordion>
+
+  <Accordion title="What happens when I delete a project?">
+    All agents, tools, datasources, and workflows in that project are permanently deleted. This cannot be undone. Only OWNER can delete projects.
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Key Takeaways
+
+✅ **Organizations** - Team containers (one per company/entity)  
+✅ **Projects** - Isolated workspaces (multiple per organization)  
+✅ **Roles** - Control access (OWNER, ADMIN, VIEWER at org level; EDITOR, VIEWER at project level)  
+✅ **Invitations** - How members join (email-based)  
+✅ **Access Control** - Hierarchical (org roles flow down to projects)  
+
+---
+
+## Next Steps
+
+- **[Create Your First Agent](../../guides/first-agent.mdx)** - Start building in your project
+- **[Agents, Datasources & Tools](./agents-datasources-and-tools.mdx)** - Learn what you can create
+- **[Security & Compliance](./security-and-compliance.mdx)** - Secure your organization
+- **[Sign In & Sign Up](../getting-started/signin-signup.mdx)** - How invitations work

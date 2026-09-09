@@ -1,0 +1,312 @@
+---
+title: "Workflow Tool"
+description: "Trigger workflows from agents"
+icon: "workflow"
+---
+
+# Workflow Tool
+
+The **Workflow Tool** allows agents to trigger and execute predefined workflows with custom input. This enables agents to orchestrate complex multi-step processes and integrate with workflow automation.
+
+---
+
+## What is a Workflow Tool?
+
+A Workflow Tool lets you:
+
+- ✅ Call another workflow from within an agent
+- ✅ Pass custom input to the workflow
+- ✅ Wait for the workflow to complete and get results
+- ✅ Chain multiple workflows together
+- ✅ Reuse workflow logic across agents
+
+```
+Agent Process:
+┌─────────────────────────┐
+│ Agent receives request  │
+├─────────────────────────┤
+│ Calls Workflow Tool     │
+│     ↓                   │
+│ Workflow executes       │
+│ (multiple steps)        │
+│     ↓                   │
+│ Returns result to agent │
+│     ↓                   │
+│ Agent continues         │
+└─────────────────────────┘
+```
+
+---
+
+## Use Cases
+
+### Lead Processing Workflow
+
+An agent receives a new sales lead and needs to process it:
+
+1. Agent calls "Lead Processing" workflow
+2. Workflow validates lead data
+3. Enriches lead with additional info
+4. Creates ticket in CRM
+5. Returns processed lead data to agent
+
+### Document Processing
+
+An agent receives a document for analysis:
+
+1. Agent calls "Document Processing" workflow
+2. Workflow extracts text from document
+3. Classifies document type
+4. Stores in database
+5. Returns classification results
+
+### Multi-Provider API Integration
+
+An agent needs data from multiple APIs:
+
+1. Agent calls "Data Aggregation" workflow
+2. Workflow calls API 1 for customer data
+3. Workflow calls API 2 for order history
+4. Workflow calls API 3 for preferences
+5. Returns aggregated data to agent
+
+---
+
+## Configuration
+
+### Adding a Workflow Tool to an Agent
+
+<Steps>
+  <Step title="Go to Agent Settings">
+    Open the agent where you want to use the Workflow Tool
+  </Step>
+  <Step title="Open Tools Tab">
+    Navigate to the Tools configuration section
+  </Step>
+  <Step title="Add New Tool">
+    Click "Add Tool" and select "Workflow"
+  </Step>
+  <Step title="Configure Tool">
+    - Give the tool a descriptive name
+    - Add a description for the agent
+    - No additional parameters needed
+  </Step>
+  <Step title="Save">
+    The Workflow Tool is now available to the agent
+  </Step>
+</Steps>
+
+### Tool Configuration Options
+
+```
+Name: Process Customer Lead
+Description: Trigger the lead processing workflow
+
+Note: Workflow selection happens at invocation time,
+not during tool configuration. The agent dynamically
+specifies which workflow to call.
+```
+
+---
+
+## How to Use
+
+### In Agent Chat
+
+When the agent needs to run a workflow, it will:
+
+1. Identify the need for a workflow
+2. Call the Workflow Tool with:
+   - Workflow name or ID
+   - Input parameters
+3. Receive the workflow result
+4. Continue with its response
+
+**Example Agent Prompt:**
+
+```
+You are a lead processing agent. When you receive a new lead:
+1. Use the Workflow Tool to call the "Process Lead" workflow
+2. Pass the lead information as input
+3. Review the result and inform the user
+```
+
+### Workflow Input Format
+
+The agent can pass data to the workflow:
+
+```json
+{
+  "workflow_name": "process-customer-lead",
+  "input": {
+    "customer_name": "John Doe",
+    "email": "john@example.com",
+    "phone": "+1-555-0100",
+    "company": "Acme Corp"
+  }
+}
+```
+
+### Workflow Response
+
+The workflow returns results that the agent can use:
+
+```json
+{
+  "status": "success",
+  "lead_id": "lead_12345",
+  "score": 8.5,
+  "category": "hot",
+  "processed_at": "2024-09-08T14:30:00Z",
+  "next_action": "contact_sales"
+}
+```
+
+---
+
+## Workflow Tool vs Agent Tool
+
+| Aspect | Workflow Tool | Agent Tool |
+|--------|---------------|-----------|
+| **Purpose** | Run multi-step workflows | Invoke another agent |
+| **Response** | Workflow final result | Agent structured output |
+| **Use Case** | Complex processes | Agent collaboration |
+| **Execution** | Workflow engine | Agent inference |
+| **Steps** | Multiple nodes | Single invocation |
+
+---
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Clear Naming" icon="tag">
+    Use descriptive workflow names so agents can identify the right one
+  </Card>
+  <Card title="Input Validation" icon="check">
+    Design workflows to validate input before processing
+  </Card>
+  <Card title="Error Handling" icon="alert">
+    Handle workflow failures gracefully in your agent prompt
+  </Card>
+  <Card title="Monitor Usage" icon="chart-line">
+    Track workflow executions in project analytics
+  </Card>
+</CardGroup>
+
+### Example: Agent Calling Workflow
+
+```
+Agent: Customer Support Bot
+Tools: Workflow Tool, Email Tool
+
+Scenario: Customer requests account upgrade
+
+1. Agent receives: "I want to upgrade my plan"
+2. Agent calls: Workflow Tool
+   - Workflow: "Upgrade Account"
+   - Input: { user_id, new_plan, email }
+3. Workflow executes:
+   - Validate account status
+   - Check payment method
+   - Process upgrade
+   - Send confirmation email
+4. Workflow returns: { status: "success", upgrade_id }
+5. Agent responds: "Your upgrade is complete!"
+```
+
+---
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Workflow not found">
+    **Symptoms**: Workflow Tool can't locate the workflow
+    
+    **Solutions:**
+    - Verify workflow name is spelled correctly
+    - Ensure workflow is in the same project
+    - Check workflow is published/active
+    - Review agent prompt for workflow reference
+  </Accordion>
+
+  <Accordion title="Workflow fails during execution">
+    **Symptoms**: Workflow starts but encounters an error
+    
+    **Solutions:**
+    - Check workflow input matches expected schema
+    - Review workflow logs for specific errors
+    - Verify all workflow dependencies are available
+    - Test workflow directly before adding to agent
+  </Accordion>
+
+  <Accordion title="Timeout waiting for workflow">
+    **Symptoms**: Workflow takes too long to complete
+    
+    **Solutions:**
+    - Check workflow step performance
+    - Optimize slow steps or API calls
+    - Increase timeout if appropriate
+    - Consider breaking workflow into smaller steps
+  </Accordion>
+
+  <Accordion title="Agent doesn't call workflow">
+    **Symptoms**: Agent has tool but doesn't use it
+    
+    **Solutions:**
+    - Review agent prompt - it should mention when to use workflow
+    - Check if input clearly triggers workflow usage
+    - Add examples to agent prompt
+    - Test with explicit instruction to use workflow
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Advanced Usage
+
+### Conditional Workflow Execution
+
+```
+Agent Prompt Example:
+
+"You are an order processing agent.
+
+When a customer wants to:
+- Check order status: Use "Check Order" workflow
+- Cancel order: Use "Cancel Order" workflow (requires confirmation)
+- Modify order: Use "Modify Order" workflow
+- Track shipment: Use "Track Shipment" workflow
+
+Always provide clear feedback after workflow execution."
+```
+
+### Chaining Multiple Workflows
+
+```
+Process:
+1. Agent calls Workflow A (data validation)
+2. If result is valid, agent calls Workflow B (processing)
+3. If processing succeeds, agent calls Workflow C (notification)
+4. Agent reports final status to user
+```
+
+### Using Workflow Results in Agent Logic
+
+```
+Agent Prompt:
+
+"After calling a workflow, analyze the result:
+- If status is 'success', proceed with next step
+- If status is 'error', explain the error to user
+- If status is 'pending', inform user and check back later
+- Always pass relevant results to subsequent workflows"
+```
+
+---
+
+## Next Steps
+
+- **[Workflows Documentation](../concepts/workflows-jobs-and-triggers.mdx)** - Understand workflow design
+- **[Agent Tools](./agents.mdx)** - Learn about agent-to-agent communication
+- **[Agent Configuration](../agents/configuration.mdx)** - Add tools to agents
+- **[Create Your First Agent](../../guides/first-agent.mdx)** - Get started with agents

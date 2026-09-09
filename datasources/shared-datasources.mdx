@@ -1,0 +1,414 @@
+---
+title: "Shared Datasources"
+description: "Collaborate and share knowledge across your team"
+icon: "share"
+---
+
+# Cross-Project Datasource Sharing
+
+A **Shared Datasource** is a knowledge base created in one Project that can be shared with other Projects. This enables multiple teams to maintain a single source of truth and ensure consistent information across all agents in different projects.
+
+---
+
+## What Makes a Datasource Shared?
+
+```
+Shared Datasource
+├── Single Knowledge Base
+├── Multiple Agents Access
+├── Centralized Management
+├── Consistent Updates
+└── Team Collaboration
+```
+
+A datasource is "shared" when it's assigned to multiple agents in your project. All assigned agents can:
+- Search the same content
+- Retrieve the same results
+- Benefit from updates
+- Reference consistent information
+
+---
+
+## Benefits of Shared Datasources
+
+<CardGroup cols={2}>
+  <Card title="Single Source of Truth" icon="target">
+    Update knowledge once, all agents benefit
+  </Card>
+  <Card title="Consistency" icon="check">
+    Ensure all agents have the same information
+  </Card>
+  <Card title="Efficiency" icon="zap">
+    Reduce storage by avoiding duplication
+  </Card>
+  <Card title="Maintainability" icon="wrench">
+    Easier to manage and update content
+  </Card>
+</CardGroup>
+
+---
+
+## Sharing Architecture
+
+### Single Agent vs Shared
+
+```
+Single-Use Datasource:
+Agent A --> Datasource X
+Agent B --> Datasource Y (separate copy)
+
+Shared Datasource:
+Agent A ──┐
+Agent B ──├─→ Datasource X (single copy)
+Agent C ──┘
+```
+
+### Benefits of Consolidation
+
+| Metric | Separate | Shared |
+|--------|----------|--------|
+| **Storage** | 3x | 1x |
+| **Updates** | Manual sync | Single update |
+| **Consistency** | Risk of divergence | Always in sync |
+| **Management** | Complex | Simple |
+
+---
+
+## Creating Shared Datasources
+
+### Step 1: Create the Datasource
+
+<Steps>
+  <Step title="Go to Datasources">
+    Navigate to **Datasources** in your project
+  </Step>
+  <Step title="Create New">
+    Click **Create Datasource**
+  </Step>
+  <Step title="Choose Type">
+    Select **Manual** or **Google Drive**
+  </Step>
+  <Step title="Set Details">
+    Enter name, description, and purpose
+  </Step>
+  <Step title="Add Content">
+    Upload files, add URLs, or enter text
+  </Step>
+</Steps>
+
+### Step 2: Assign to Multiple Agents
+
+<Steps>
+  <Step title="Go to Agents">
+    Navigate to **Agents** section
+  </Step>
+  <Step title="Edit Agent">
+    Open an agent's configuration
+  </Step>
+  <Step title="Go to Datasources Tab">
+    Find the Datasources section
+  </Step>
+  <Step title="Add Datasource">
+    Click **Add Datasource** and select the shared datasource
+  </Step>
+  <Step title="Configure Settings">
+    Set Top K, reranking, and other search parameters
+  </Step>
+  <Step title="Repeat for Other Agents">
+    Assign to each agent that needs access
+  </Step>
+</Steps>
+
+### Step 3: Test Across Agents
+
+```
+Testing Shared Datasource:
+
+1. Test Agent A
+   - Search for information
+   - Verify results are relevant
+   
+2. Test Agent B
+   - Use same search queries
+   - Confirm consistent results
+   
+3. Test Agent C
+   - Verify retrieval works
+   - Check response quality
+```
+
+---
+
+## Managing Shared Datasources
+
+### Centralized Updates
+
+When you update a shared datasource:
+
+```
+Update Content
+      ↓
+All Agents Notified
+      ↓
+Changes Available Immediately
+      ↓
+All Responses Use New Content
+```
+
+**Timeline:**
+1. Edit datasource (add/remove files or content)
+2. Changes are indexed
+3. All agents using this datasource see updates
+4. Immediate effect on subsequent queries
+
+### Versioning
+
+Track changes to your shared datasource:
+
+- **Version History**: See what changed and when
+- **Content Timeline**: Track addition/removal of resources
+- **Update Logs**: Monitor who made changes
+- **Rollback**: Revert to previous versions if needed
+
+### Monitoring Usage
+
+Track how agents use your shared datasource:
+
+- **Agent References**: See which agents access it
+- **Query Analytics**: Monitor search patterns
+- **Performance**: Track retrieval speed and accuracy
+- **Coverage**: Ensure all relevant queries find answers
+
+---
+
+## Datasource Ownership & Cross-Project Sharing
+
+### Project Scope Model
+
+Datasources are created in a **Primary Project** and can be shared with other **Secondary Projects**:
+
+```
+Organization
+├── Project A (Primary - creates datasource)
+│   └── Datasource X (owned here)
+│
+├── Project B (Secondary - can use Datasource X)
+│   └── References Datasource X
+│
+└── Project C (Secondary - can use Datasource X)
+    └── References Datasource X
+```
+
+### Access Control
+
+| Scenario | Primary Project | Secondary Project |
+|----------|-----------------|-------------------|
+| **View** | ✅ Full access | ✅ Read-only |
+| **Edit Content** | ✅ Can modify | ❌ Cannot modify |
+| **Edit Schema** | ✅ Can modify | ❌ Cannot modify |
+| **Delete** | ✅ Can delete | ❌ Cannot delete |
+| **Share Again** | ✅ Can reshare | ❌ Cannot reshare |
+
+### Role-Based Access (Within Primary Project)
+
+| Role | Create | Edit | Delete | Share |
+|------|--------|------|--------|-------|
+| **Owner** | ✅ | ✅ | ✅ | ✅ |
+| **Admin** | ✅ | ✅ | ✅ | ✅ |
+| **Editor** | ✅ | ✅ | Own only | Own only |
+| **Viewer** | ❌ | ❌ | ❌ | ❌ |
+
+### Secondary Project Access
+
+All roles in secondary projects have:
+- ✅ Read-only access to datasource
+- ✅ Can assign to agents
+- ✅ Can search and query
+- ❌ Cannot modify content
+- ❌ Cannot modify schema
+
+---
+
+## Real-World Scenarios
+
+### Scenario 1: Support Team
+
+```
+Company FAQ Datasource
+├── Product FAQ
+├── Troubleshooting Guides
+└── Support Procedures
+
+Used by:
+├── Customer Support Agent
+├── Technical Support Agent
+└── Sales Support Agent
+```
+
+**Benefits:**
+- All agents answer from same FAQ
+- Consistent support experience
+- Single update point for policies
+- New team members can access existing knowledge
+
+### Scenario 2: Company Knowledge Base
+
+```
+Company Datasource
+├── Employee Handbook
+├── Policies & Procedures
+├── Benefits Information
+└── Internal Processes
+
+Used by:
+├── HR Assistant Agent
+├── Onboarding Agent
+├── Employee Support Agent
+└── HR Reporting Agent
+```
+
+**Benefits:**
+- Centralized HR information
+- Consistent policy explanations
+- Automatic updates for changes
+- Audit trail of information source
+
+### Scenario 3: Product Documentation
+
+```
+Product Docs Datasource
+├── User Guide
+├── API Documentation
+├── Release Notes
+└── Troubleshooting
+
+Used by:
+├── Customer Support Agent
+├── Product Assistant Agent
+├── Sales Support Agent
+└── Developer Relations Agent
+```
+
+**Benefits:**
+- Keep documentation current
+- Multiple agents reference same docs
+- Quick updates for new releases
+- Consistent technical information
+
+---
+
+## Best Practices for Shared Datasources
+
+<CardGroup cols={2}>
+  <Card title="Clear Naming" icon="tag">
+    Use names that clearly indicate the content and purpose
+  </Card>
+  <Card title="Descriptive Metadata" icon="info">
+    Document what's in the datasource and how to use it
+  </Card>
+  <Card title="Regular Audits" icon="clipboard">
+    Review which agents use each datasource
+  </Card>
+  <Card title="Update Schedule" icon="calendar">
+    Plan and communicate content updates
+  </Card>
+</CardGroup>
+
+### Documentation
+
+For each shared datasource, document:
+
+- **Purpose**: What knowledge does it contain?
+- **Coverage**: What topics are included?
+- **Update Frequency**: How often is it updated?
+- **Owner**: Who maintains it?
+- **Related Agents**: Which agents use it?
+- **Search Tips**: How to find information effectively?
+
+### Content Organization
+
+- **Structure**: Use consistent naming and organization
+- **Metadata**: Add tags for easy categorization
+- **Sections**: Organize by topic or department
+- **Updates**: Version control and change tracking
+- **Cleanup**: Remove outdated content regularly
+
+### Performance Optimization
+
+- **Content Quality**: Well-structured documents retrieve better
+- **File Size**: Optimize large files for faster indexing
+- **Specificity**: Avoid redundant or overlapping content
+- **Reranking**: Enable for improved relevance
+- **Top K**: Tune based on your use case
+
+---
+
+## Challenges & Solutions
+
+### Challenge: Content Divergence
+
+**Problem**: Different teams create duplicate datasources with similar content
+
+**Solution**:
+- Audit existing datasources before creating new ones
+- Consolidate similar content
+- Establish naming conventions
+- Document datasource purposes clearly
+
+### Challenge: Outdated Information
+
+**Problem**: Shared datasource becomes stale, misleading agents
+
+**Solution**:
+- Assign ownership for updates
+- Set update schedule and reminders
+- Monitor usage patterns
+- Archive old content clearly
+- Enable version history
+
+### Challenge: Conflicting Information
+
+**Problem**: Multiple versions of policies or procedures
+
+**Solution**:
+- Single source of truth approach
+- Clear deprecation process
+- Version control
+- Update notifications
+- Audit trail of changes
+
+---
+
+## Migration from Individual to Shared
+
+If you currently have separate datasources for each agent:
+
+<Steps>
+  <Step title="Audit Content">
+    Review all existing datasources for duplication
+  </Step>
+  <Step title="Consolidate">
+    Merge similar content into single datasource
+  </Step>
+  <Step title="Update Agents">
+    Reassign agents to shared datasource
+  </Step>
+  <Step title="Test">
+    Verify all agents work correctly
+  </Step>
+  <Step title="Cleanup">
+    Delete old individual datasources
+  </Step>
+  <Step title="Document">
+    Record the new shared datasource structure
+  </Step>
+</Steps>
+
+---
+
+## Next Steps
+
+- **[Resource Types](./resource-types.mdx)** - Learn about files, URLs, and content
+- **[Datasource Metadata](./datasource-metadata.mdx)** - Configure metadata and properties
+- **[Types of Datasources](./datasource-types.mdx)** - Understand Manual and Google Drive options
+- **[Agent Configuration](../agents/configuration.mdx)** - Assign datasources to agents

@@ -1,0 +1,411 @@
+---
+title: "Execution Engine"
+description: "Tick-based scheduling and asynchronous execution"
+icon: "engine"
+---
+
+# Workflow Execution Engine
+
+The PLai Framework's workflow execution engine is built on a **tick-based scheduling model** driven by Pub/Sub messaging. This design enables asynchronous, scalable execution of complex multi-step workflows.
+
+---
+
+## Execution Model Overview
+
+```
+┌─────────────────────────────────────────────────────────┐
+│  1. Client executes workflow                            │
+│     POST /workflows/{id}/execute                        │
+└──────────────────┬──────────────────────────────────────┘
+                   │
+                   ▼
+┌─────────────────────────────────────────────────────────┐
+│  2. Create TrackedExecution (status: PENDING)          │
+│     Publish message to Pub/Sub                          │
+└──────────────────┬──────────────────────────────────────┘
+                   │
+                   ▼
+┌─────────────────────────────────────────────────────────┐
+│  3. Pub/Sub triggers → ProcessWorkflow                  │
+│     Engine processes "tick" (ready nodes)               │
+└──────────────────┬──────────────────────────────────────┘
+                   │
+        ┌──────────┴──────────┐
+        │                     │
+        ▼                     ▼
+┌──────────────────┐  ┌──────────────────┐
+│ Sync Nodes       │  │ Async Nodes      │
+│ (plai_agent,     │  │ (firecrawl)      │
+│  http,           │  │                  │
+│  markdown_report)│  │ → Mark RUNNING   │
+│                  │  │ → Wait webhook   │
+│ → Complete       │  │ → Webhook →     │
+│   immediately    │  │   complete_node()│
+│                  │  │ → Pub/Sub →     │
+│                  │  │   New tick       │
+└──────────────────┘  └──────────────────┘
+        │                     │
+        └──────────┬──────────┘
+                   │
+                   ▼
+     ┌─────────────────────────┐
+     │ More work?              │
+     ├─────────────────────────┤
+     │ YES: Republish to Pub/Sub│
+     │ NO: Workflow COMPLETED   │
+     └─────────────────────────┘
+```
+
+---
+
+## Key Concepts
+
+### Tick-Based Scheduling
+
+A **tick** is a single execution cycle where the engine:
+1. Loads the current execution context and step states
+2. Determines which nodes are ready to run (dependencies satisfied)
+3. Executes up to **5 nodes in parallel** per tick
+4. Updates step executions and workflow metadata
+5. Republishes a continuation message if work remains
+
+**Why ticks?**
+- Prevents any single tick from consuming too many resources
+- Enables fair scheduling across multiple workflows
+- Allows for monitoring and intervention between steps
+
+### Batch Processing
+
+The engine processes nodes in batches:
+- **Batch size**: 5 nodes per tick
+- **Execution**: Parallel within the batch
+- **Continuation**: Automatic via Pub/Sub when more nodes are ready
+
+### Asynchronous Continuation
+
+For long-running operations:
+
+1. **Synchronous nodes** complete within the same tick
+2. **Asynchronous nodes** (like firecrawl) mark their status as `RUNNING` and wait
+3. External services complete the work and call a webhook
+4. The webhook endpoint completes the node and republishes to Pub/Sub
+5. Next tick processes dependent nodes
+
+---
+
+## Execution Lifecycle
+
+### Step 1: Workflow Trigger
+
+```bash
+POST /workflows/{workflow_id}/execute
+{
+  "input": {
+    "topic": "Artificial Intelligence",
+    "depth": 2
+  }
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "execution_id": "exec-uuid-789"
+}
+```
+
+**What happens:**
+- Workflow definition is resolved
+- TrackedExecution is created with status `PENDING`
+- Initial context stores the input
+- Pub/Sub message published
+
+### Step 2: First Tick Processing
+
+Engine loads the execution and:
+1. Identifies root nodes (no dependencies)
+2. Executes them in parallel
+3. Stores outputs in context
+4. Updates step execution records
+
+**Example first tick:**
+```
+Status after tick 1:
+├── fetch_data: COMPLETED
+├── search_web: COMPLETED
+├── analyze_a: PENDING (waiting for fetch_data)
+├── analyze_b: PENDING (waiting for fetch_data)
+└── analyze_c: PENDING (waiting for search_web)
+```
+
+### Step 3: Subsequent Ticks
+
+Each tick:
+1. Checks which nodes have satisfied dependencies
+2. Executes ready nodes (up to 5 per tick)
+3. Repeats until terminal state
+
+**Example later tick:**
+```
+Status after tick 2:
+├── fetch_data: COMPLETED
+├── search_web: COMPLETED
+├── analyze_a: COMPLETED
+├── analyze_b: COMPLETED
+├── analyze_c: RUNNING (async firecrawl)
+└── report: PENDING (waiting for analyze_a, analyze_b, analyze_c)
+```
+
+### Step 4: Async Completion
+
+For firecrawl nodes:
+```
+1. Node starts firecrawl job
+2. Returns is_waiting=True
+3. Engine marks step as RUNNING
+4. Waits for webhook callback
+
+(External: Firecrawl completes work)
+
+5. Webhook receives completion
+6. Calls complete_node(step_id, result)
+7. Republishes to Pub/Sub
+8. Next tick processes dependents
+```
+
+### Step 5: Workflow Completion
+
+```
+Final state:
+├── All sync nodes: COMPLETED
+├── All async nodes: COMPLETED or FAILED
+└── Workflow status: COMPLETED or FAILED
+
+Terminal conditions:
+- COMPLETED: All nodes succeeded
+- FAILED: At least one node failed
+```
+
+---
+
+## Execution States
+
+Each workflow execution has a status:
+
+| Status | Meaning | What to do |
+|--------|---------|-----------|
+| `PENDING` | Created, waiting to start | Wait for first tick |
+| `RUNNING` | Processing nodes | Monitor via GET request |
+| `COMPLETED` | All nodes succeeded | Retrieve outputs |
+| `FAILED` | At least one node failed | Check error logs |
+
+Each **node execution** has step-level states:
+
+| Status | Meaning |
+|--------|---------|
+| `PENDING` | Dependencies not ready |
+| `RUNNING` | Currently executing |
+| `COMPLETED` | Finished successfully |
+| `FAILED` | Encountered an error |
+| `SKIPPED` | Not executed (e.g., branch not taken) |
+
+---
+
+## Monitoring Execution
+
+### Get Execution Status
+
+```bash
+GET /usage/executions/{execution_id}
+```
+
+**Response:**
+```json
+{
+  "id": "exec-uuid-789",
+  "type": "WORKFLOW_EXECUTION",
+  "status": "RUNNING",
+  "project_id": "proj-456",
+  "meta": {
+    "workflow_id": "workflow-uuid-123",
+    "input": {
+      "topic": "Artificial Intelligence"
+    },
+    "context": {
+      "input": { /* original input */ },
+      "nodes": {
+        "fetch_data": {
+          "markdown": "# AI Overview...",
+          "url": "https://example.com"
+        },
+        "analyze": {
+          "output": "Analysis: ...",
+          "message_id": "msg-123"
+        }
+      },
+      "workflow": {
+        "id": "workflow-uuid-123",
+        "name": "Research Workflow"
+      }
+    }
+  },
+  "created_at": "2026-02-21T10:00:00.000Z",
+  "updated_at": "2026-02-21T10:05:30.000Z"
+}
+```
+
+### Get Detailed Logs
+
+```bash
+GET /usage/executions/{execution_id}/logs
+```
+
+**Response:**
+```json
+[
+  {
+    "id": "log-1",
+    "execution_id": "exec-uuid-789",
+    "node_id": "fetch_data",
+    "status": "COMPLETED",
+    "input": {
+      "url": "https://example.com"
+    },
+    "output": {
+      "markdown": "# Content...",
+      "url": "https://example.com"
+    },
+    "error": null,
+    "started_at": "2026-02-21T10:00:10.000Z",
+    "completed_at": "2026-02-21T10:00:45.000Z"
+  },
+  {
+    "id": "log-2",
+    "execution_id": "exec-uuid-789",
+    "node_id": "analyze",
+    "status": "RUNNING",
+    "input": {
+      "agent_name_slug": "analyzer"
+    },
+    "output": null,
+    "error": null,
+    "started_at": "2026-02-21T10:00:46.000Z",
+    "completed_at": null
+  }
+]
+```
+
+---
+
+## Performance Characteristics
+
+### Execution Speed Factors
+
+1. **Node duration**: How long each step takes
+2. **Parallelization**: Nodes without dependencies run together
+3. **Batch size**: 5 nodes per tick (limits parallelism)
+4. **Async operations**: External APIs determine speed
+
+### Example Timings
+
+**Scenario 1: Sequential Pipeline**
+```
+Node A: 3 seconds
+  ↓
+Node B: 2 seconds
+  ↓
+Node C: 4 seconds
+
+Total: 9 seconds (3 + 2 + 4)
+Ticks: 3 (A, B, C)
+```
+
+**Scenario 2: Parallel Operations**
+```
+Node A: 3 seconds ──┐
+Node B: 2 seconds ─┼─ All in Tick 1
+Node C: 4 seconds ──┘
+
+Total: 4 seconds (max of all)
+Ticks: 1
+```
+
+**Scenario 3: Mixed**
+```
+Tick 1: A (3s), B (2s)
+Tick 2: C (depends on A+B, 4s)
+Tick 3: D (depends on C, 2s)
+
+Total: 9 seconds
+Ticks: 3
+```
+
+---
+
+## Error Handling
+
+### Node Failure
+
+When a node fails:
+1. Step is marked as `FAILED`
+2. Error details are logged
+3. Dependent nodes become `SKIPPED`
+4. Workflow status becomes `FAILED`
+5. Execution stops processing
+
+**Example:**
+```json
+{
+  "node_id": "analyze",
+  "status": "FAILED",
+  "error": "Agent timeout after 60 seconds",
+  "error_code": "TIMEOUT",
+  "started_at": "2026-02-21T10:00:46.000Z",
+  "failed_at": "2026-02-21T10:01:46.000Z"
+}
+```
+
+### Timeout Handling
+
+Each node has configurable timeout:
+- **Default**: 300 seconds (5 minutes)
+- **Configurable**: Per node in parameters
+- **On timeout**: Node marked as FAILED, workflow halted
+
+---
+
+## Advanced Features
+
+### Tick Continuation
+
+When a tick completes with remaining work:
+```json
+{
+  "execution_id": "exec-uuid-789",
+  "next_tick": {
+    "ready_nodes": ["analyze_a", "analyze_b", "parallel_container"],
+    "count": 3
+  }
+}
+```
+
+The engine automatically publishes to Pub/Sub for next tick.
+
+### Context Persistence
+
+Workflow context remains in memory and persistent storage:
+- **input**: Original input data
+- **nodes**: Outputs of all completed nodes
+- **workflow**: Workflow metadata
+- **loop**: Current loop iteration data (for loop nodes)
+
+All variables are available via Jinja2 interpolation in downstream nodes.
+
+---
+
+## Next Steps
+
+- **[Node Types](./node-types.mdx)** - Available node types for workflows
+- **[Dependencies](./dependencies.mdx)** - How to define execution order
+- **[Execution Variables](./execution-variables.mdx)** - Access data between nodes

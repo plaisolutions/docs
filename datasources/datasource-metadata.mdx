@@ -1,0 +1,737 @@
+---
+title: "Datasource Schema & Configuration"
+description: "Define metadata schema and configure datasource properties"
+icon: "cog"
+---
+
+# Datasource Schema & Configuration
+
+**Datasource Metadata Schema** defines the structure of metadata that every resource in your datasource must follow. This ensures consistency and enables powerful filtering capabilities.
+
+---
+
+## Metadata Schema
+
+### What is a Metadata Schema?
+
+A **Metadata Schema** defines a JSON structure that **every resource in your datasource must follow**. It's like a contract:
+
+```
+Datasource with Metadata Schema
+├── Field 1: department (type: str, required)
+├── Field 2: priority (type: int, optional)
+└── Field 3: version (type: str, optional)
+
+Every resource MUST provide:
+✅ department (string)
+✅ priority (number) - optional, can be empty
+✅ version (string) - optional, can be empty
+```
+
+### Schema Field Definition
+
+Each field in a metadata schema has:
+
+| Field | Type | Purpose |
+|-------|------|---------|
+| **name** | string | Field identifier (e.g., "department") |
+| **type** | str\|int\|float\|bool | Data type (only these 4 allowed) |
+| **optional** | boolean | Whether field can be omitted |
+
+### Example Metadata Schema
+
+```json
+{
+  "entries": [
+    {
+      "name": "department",
+      "type": "str",
+      "optional": false
+    },
+    {
+      "name": "priority",
+      "type": "int",
+      "optional": true
+    },
+    {
+      "name": "version",
+      "type": "str",
+      "optional": false
+    }
+  ]
+}
+```
+
+### Creating a Metadata Schema
+
+<Steps>
+  <Step title="Go to Datasource">
+    Navigate to the datasource you want to configure
+  </Step>
+  <Step title="Open Schema Configuration">
+    Find **Metadata Schema** section in datasource settings
+  </Step>
+  <Step title="Define Fields">
+    Add fields with name, type, and whether they're optional
+  </Step>
+  <Step title="Set Required Fields">
+    Mark critical fields as required (optional=false)
+  </Step>
+  <Step title="Save Schema">
+    Schema is now enforced for all resources
+  </Step>
+</Steps>
+
+### Datasource Basic Properties
+
+<CardGroup cols={2}>
+  <Card title="Name" icon="heading">
+    Display name of the datasource
+  </Card>
+  <Card title="Description" icon="file-text">
+    Purpose and contents of the datasource
+  </Card>
+  <Card title="Type" icon="layer-group">
+    Manual or Google Drive
+  </Card>
+  <Card title="Owner" icon="user">
+    Primary maintainer
+  </Card>
+</CardGroup>
+
+### Datasource Scope & Sharing
+
+<CardGroup cols={2}>
+  <Card title="Primary Project" icon="folder">
+    Project where datasource is created
+  </Card>
+  <Card title="Shared With Projects" icon="share">
+    Other projects that can access this datasource
+  </Card>
+  <Card title="Resource Count" icon="list">
+    Number of files, URLs, and content entries
+  </Card>
+  <Card title="Storage Size" icon="database">
+    Total size of all resources
+  </Card>
+</CardGroup>
+
+---
+
+## Creating Datasource Metadata
+
+### Setting Up a New Datasource
+
+<Steps>
+  <Step title="Navigate to Datasources">
+    Go to **Datasources** in your project
+  </Step>
+  <Step title="Create New Datasource">
+    Click **Create Datasource**
+  </Step>
+  <Step title="Choose Type">
+    Select **Manual** or **Google Drive**
+  </Step>
+  <Step title="Enter Basic Info">
+    Fill in name and description
+  </Step>
+  <Step title="Configure Metadata">
+    Set tags, visibility, and owner
+  </Step>
+  <Step title="Save">
+    Datasource is created and ready
+  </Step>
+</Steps>
+
+---
+
+## Metadata Fields Explained
+
+### Name
+
+The display name for your datasource.
+
+**Requirements:**
+- Unique within your project
+- Clear and descriptive
+- 3-100 characters
+- No special characters
+
+**Examples:**
+```
+✅ "Customer Support FAQ"
+✅ "Product Documentation v2"
+✅ "Company Policies and Procedures"
+❌ "DS1"
+❌ "Data"
+```
+
+**Naming Conventions:**
+```
+Pattern: [Topic] - [Type/Version]
+
+Examples:
+"Support Knowledge Base - Public"
+"API Documentation - v3.0"
+"HR Policies - 2024"
+"Sales Materials - Current"
+```
+
+### Description
+
+A summary of what the datasource contains.
+
+**Purpose:**
+- Help team members understand content
+- Guide agent configuration
+- Document coverage
+- Explain use cases
+
+**Example:**
+```
+"Comprehensive knowledge base for customer support
+team. Contains FAQ, troubleshooting guides, product
+documentation, and common issues. Actively maintained
+and updated weekly. Shared across all support agents."
+```
+
+**What to Include:**
+- Main topics covered
+- Update frequency
+- Intended users/agents
+- Maintenance status
+- Key features
+
+### Type
+
+The datasource category:
+
+| Type | Characteristics |
+|------|-----------------|
+| **Manual** | You manage content, upload files, add URLs/text |
+| **Google Drive** | Auto-syncs from Google Drive folders |
+
+### Status
+
+Track the datasource state:
+
+<Tabs>
+  <Tab title="Active">
+    Currently in use
+    - Updated regularly
+    - Used by agents
+    - Primary reference
+  </Tab>
+  <Tab title="Archived">
+    Kept for reference
+    - No longer actively used
+    - Can be restored
+    - Available if needed
+  </Tab>
+  <Tab title="Deprecated">
+    Outdated or replaced
+    - Use newer alternative
+    - Candidate for deletion
+    - Avoid new assignments
+  </Tab>
+</Tabs>
+
+### Tags
+
+Categorize your datasources.
+
+**Tag Examples:**
+```
+By Department:
+"sales", "support", "marketing", "engineering"
+
+By Audience:
+"public", "internal", "client-facing"
+
+By Status:
+"beta", "draft", "review-needed"
+
+By Type:
+"policies", "documentation", "procedures"
+
+By Priority:
+"critical", "important", "reference"
+```
+
+**Tag Management:**
+- Use consistent naming (lowercase, kebab-case)
+- Limit to 5-10 tags per datasource
+- Reuse existing tags for consistency
+- Document tag meanings
+
+### Visibility
+
+Control who can see and use the datasource:
+
+<Tabs>
+  <Tab title="Private">
+    Only you can see and manage
+    - Not visible to others
+    - Full control
+    - Default for new datasources
+  </Tab>
+  <Tab title="Team">
+    Visible to team members
+    - Can be used by team agents
+    - Collaborative maintenance
+    - Internal sharing
+  </Tab>
+  <Tab title="Public">
+    Visible across the project
+    - Used by multiple teams
+    - Central knowledge base
+    - Organization-wide resource
+  </Tab>
+</Tabs>
+
+### Owner
+
+The primary maintainer of the datasource.
+
+**Responsibilities:**
+- Keep content current
+- Add/remove resources
+- Update metadata
+- Monitor quality
+- Plan archival/deprecation
+
+**Changing Owner:**
+```
+Original Owner: John Smith
+Transition to: Sarah Chen
+- Transfer access
+- Document handoff
+- Update metadata
+- Notify team
+```
+
+### Resource Count
+
+Shows how much content is in the datasource:
+
+| Metric | Meaning |
+|--------|---------|
+| **Files** | Uploaded documents (PDFs, DOCs, etc.) |
+| **URLs** | Web pages and crawled sites |
+| **Content** | Manually entered text |
+| **Total** | Sum of all resources |
+
+**Example:**
+```
+Customer Support Datasource:
+├── Files: 12 (Product guides, FAQs)
+├── URLs: 5 (Help center, knowledge base)
+├── Content: 8 (Manual entries, quick answers)
+└── Total: 25 resources
+```
+
+### Storage Size
+
+Total size of all resources in the datasource.
+
+**Considerations:**
+- Impacts retrieval speed
+- Affects storage quota
+- Consider splitting if very large
+- Archive old resources
+
+**Optimization:**
+```
+Large Datasource (500 MB):
+├── Archive old versions
+├── Remove duplicates
+├── Split by topic
+└── Target: Under 200 MB
+```
+
+### Last Updated
+
+When content was last modified.
+
+**Information:**
+- Date of last change
+- Who made the change
+- What was updated
+- Helps identify fresh content
+
+**Using Date:**
+- Verify content is current
+- Plan updates
+- Track maintenance
+- Identify stale datasources
+
+### Agent Count
+
+Number of agents using this datasource.
+
+**Impact:**
+- More agents = more usage
+- Higher importance
+- Wider impact of changes
+- More careful updates needed
+
+**Example:**
+```
+Customer Support FAQ (Used by 8 agents):
+├── Support Bot
+├── Email Agent
+├── Chat Assistant
+├── Knowledge Base Bot
+├── Escalation Agent
+├── FAQ Agent
+├── Billing Support
+└── Technical Support
+```
+
+---
+
+## Editing Datasource Metadata
+
+### Update Information
+
+<Steps>
+  <Step title="Find Datasource">
+    Navigate to the datasource list
+  </Step>
+  <Step title="Open Settings">
+    Click **Edit** or settings icon
+  </Step>
+  <Step title="Modify Fields">
+    Update name, description, tags, status, etc.
+  </Step>
+  <Step title="Save Changes">
+    Click **Save** to apply updates
+  </Step>
+  <Step title="Confirm">
+    Changes are immediately available
+  </Step>
+</Steps>
+
+### What Can Be Changed
+
+**Editable:**
+- Name (with limitations)
+- Description
+- Tags
+- Status
+- Owner
+- Visibility
+
+**Not Editable:**
+- Type (Manual vs Google Drive)
+- Created date (system-generated)
+- Resource count (updated automatically)
+
+---
+
+## Using Metadata for Organization
+
+### Organizational Strategies
+
+**By Department:**
+```
+Tags: marketing, sales, support, engineering
+Owner: Department lead
+Visibility: Team or Public
+```
+
+**By Content Type:**
+```
+Tags: documentation, faq, procedures, policies
+Description: Clearly state content type
+Status: Active if current, Archived if old
+```
+
+**By Audience:**
+```
+Tags: customer-facing, internal, executive
+Visibility: Private/Team based on audience
+Owner: Audience representative
+```
+
+**By Lifecycle:**
+```
+Status: Active (current), Archived (old), Deprecated (replace)
+Last Updated: Recent = actively maintained
+Owner: Clear responsibility
+```
+
+### Naming Convention
+
+Establish consistent naming:
+
+```
+Pattern: [Audience] - [Topic] - [Version]
+
+Examples:
+"Customer Support FAQ - Public"
+"Sales Materials - Current"
+"HR Handbook - 2024"
+"API Docs - v3.0"
+"Internal Procedures - Draft"
+```
+
+---
+
+## Datasource Organization Examples
+
+### Example 1: Support Team Structure
+
+```
+Customer Basics
+├── Name: Basic Product Info
+├── Description: Getting started guides
+├── Tags: support, customer-facing
+├── Visibility: Public
+├── Owner: Support Manager
+└── Status: Active
+
+Customer FAQs
+├── Name: Frequently Asked Questions
+├── Description: Common customer questions
+├── Tags: support, faq, customer-facing
+├── Visibility: Public
+├── Owner: Support Manager
+└── Status: Active
+
+Internal Procedures
+├── Name: Support Team Procedures
+├── Description: Internal team guidelines
+├── Tags: support, internal, procedures
+├── Visibility: Team
+├── Owner: Support Manager
+└── Status: Active
+```
+
+### Example 2: Product Documentation
+
+```
+User Documentation
+├── Name: Product User Guide
+├── Tags: documentation, user, v2.0
+├── Visibility: Public
+├── Owner: Documentation Team
+
+Developer Documentation
+├── Name: API Reference
+├── Tags: documentation, developer, v3.0
+├── Visibility: Public
+├── Owner: Developer Relations
+
+Internal Documentation
+├── Name: Development Guide
+├── Tags: documentation, internal
+├── Visibility: Team
+├── Owner: Engineering Lead
+
+Legacy Documentation
+├── Name: v1.0 Documentation
+├── Tags: documentation, archived, legacy
+├── Visibility: Private
+├── Owner: Documentation Team
+└── Status: Archived
+```
+
+---
+
+## Monitoring Datasource Health
+
+### Key Metrics
+
+Track datasource effectiveness:
+
+| Metric | What to Monitor |
+|--------|-----------------|
+| **Last Updated** | Is content current? |
+| **Agent Usage** | How many agents rely on it? |
+| **Resource Count** | Is it growing or shrinking? |
+| **Storage Size** | Is it too large? |
+| **Relevance** | Are agents getting good results? |
+
+### Health Checklist
+
+```
+Monthly Review:
+□ Content still accurate? (Check Last Updated)
+□ Owner actively maintaining? (Check Author/Status)
+□ Used by agents? (Check Agent Count)
+□ Any resources to archive? (Review old files)
+□ Update metadata as needed?
+```
+
+### Lifecycle Management
+
+```
+Creation:
+├── Set appropriate status (Active)
+├── Clear owner assignment
+└── Document purpose in description
+
+Growth:
+├── Monitor size and resource count
+├── Keep metadata current
+└── Update as content changes
+
+Decline:
+├── Mark as Archived if no longer used
+├── Set Deprecated if replaced
+└── Plan for eventual deletion
+
+Retirement:
+├── Final update to metadata
+├── Archive for compliance
+└── Delete if not needed
+```
+
+---
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Clear Naming" icon="align-left">
+    Use descriptive, consistent names
+  </Card>
+  <Card title="Document Purpose" icon="file-text">
+    Write clear descriptions
+  </Card>
+  <Card title="Organize with Tags" icon="label">
+    Use tags for easy filtering
+  </Card>
+  <Card title="Assign Ownership" icon="user">
+    Clear responsibility for maintenance
+  </Card>
+</CardGroup>
+
+### Documentation
+
+For each datasource, document:
+
+```
+Quick Reference Card:
+- Purpose: What knowledge does it contain?
+- Coverage: What topics are included?
+- Audience: Who should use this?
+- Owner: Who maintains it?
+- Update Frequency: How often is it updated?
+- Related Datasources: What complements it?
+- Agents Using: Which agents reference it?
+```
+
+### Maintenance Schedule
+
+```
+Weekly:
+- Monitor for new submissions
+- Quick quality check
+
+Monthly:
+- Review Last Updated date
+- Check resource count
+- Verify owner active
+
+Quarterly:
+- Full content audit
+- Update metadata
+- Archive old items
+- Plan improvements
+```
+
+---
+
+## Metadata Filtering in Agent Queries
+
+### Using allowed_vectors
+
+When invoking an agent, you can restrict which resources are searched by passing **allowed_vectors** with metadata filters:
+
+```python
+# Only search resources where department="engineering"
+allowed_vectors = {
+    "department": {"values": ["engineering"]}
+}
+
+# Invoke agent with filter
+invoke_agent(
+    agent_id="support_bot",
+    input="How do I deploy?",
+    allowed_vectors=allowed_vectors
+)
+# ↓ Agent only searches resources with department="engineering"
+```
+
+### Filter Multiple Fields
+
+```python
+allowed_vectors = {
+    "department": {"values": ["engineering", "devops"]},
+    "version": {"values": ["2.0"]}
+}
+# ↓ Search only: department IN (engineering, devops) AND version=2.0
+```
+
+### Practical Example
+
+**Datasource Schema:**
+```json
+{
+  "entries": [
+    {"name": "department", "type": "str", "optional": false},
+    {"name": "confidential", "type": "bool", "optional": true}
+  ]
+}
+```
+
+**Resource Metadata:**
+```json
+Resource 1: {"department": "sales", "confidential": false}
+Resource 2: {"department": "engineering", "confidential": false}
+Resource 3: {"department": "sales", "confidential": true}
+```
+
+**Agent Call with Filter:**
+```python
+allowed_vectors = {"department": {"values": ["sales"]}}
+# ↓ Returns: Resource 1 and Resource 3 (both sales department)
+```
+
+**Agent Call with Multiple Filters:**
+```python
+allowed_vectors = {
+    "department": {"values": ["sales"]},
+    "confidential": {"values": [false]}
+}
+# ↓ Returns: Resource 1 only (sales + not confidential)
+```
+
+---
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Define Schema Early" icon="plan">
+    Set metadata schema when creating the datasource
+  </Card>
+  <Card title="Keep It Simple" icon="minimize">
+    3-5 fields is usually enough for filtering
+  </Card>
+  <Card title="Use Boolean Sparingly" icon="toggle-on">
+    Good for flags (confidential, approved, published)
+  </Card>
+  <Card title="Document Fields" icon="file-text">
+    Explain what each metadata field means
+  </Card>
+</CardGroup>
+
+---
+
+## Next Steps
+
+- **[Resource Metadata](./resource-metadata.mdx)** - Configure resource properties
+- **[Resource Types](./resource-types.mdx)** - Learn about files, URLs, and content
+- **[Cross-Project Sharing](./shared-datasources.mdx)** - Share datasources across projects
+- **[Agent Configuration](../agents/configuration.mdx)** - Connect datasources to agents

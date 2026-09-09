@@ -1,0 +1,560 @@
+---
+title: "Node Types"
+description: "Agent, integration, and container nodes"
+icon: "cubes"
+---
+
+# Workflow Node Types
+
+PLai Framework supports **8 node types** for building workflows. Each type handles different kinds of work: calling agents, making API requests, processing data, and organizing execution flow.
+
+---
+
+## Node Types Overview
+
+```
+Workflow Nodes
+├── Agent Nodes
+│  └── plai_agent: Invoke an AI agent
+│
+├── Integration Nodes
+│  ├── firecrawl: Scrape and crawl websites
+│  └── http: Make API requests
+│
+├── Data Nodes
+│  └── markdown_report: Generate formatted reports
+│
+└── Container Nodes
+   ├── parallel: Run nodes concurrently
+   ├── sequential: Run nodes in order
+   ├── loop: Iterate over arrays
+   └── subworkflow: Reuse another workflow
+```
+
+---
+
+## Agent Nodes
+
+### `plai_agent`
+
+Invoke one of your AI agents with specific input.
+
+**Purpose:** Call an agent to process information or make decisions
+
+**Key Parameters:**
+- `agent_name_slug`: Name of the agent to invoke (required)
+- `input`: Prompt text with variable interpolation (required)
+- `config`: Optional model and execution settings
+- `thread`: Optional thread configuration for conversation context
+
+**Example:**
+```json
+{
+  "id": "analyze_content",
+  "name": "Analyze Content",
+  "type": "plai_agent",
+  "depends_on": ["fetch_data"],
+  "parameters": {
+    "agent_name_slug": "content-analyzer",
+    "input": "Analyze this content for key topics:\n\n{{$nodes.fetch_data.markdown}}",
+    "config": {
+      "model": "claude-sonnet-4-5",
+      "temperature": 0.3
+    }
+  }
+}
+```
+
+**Output:**
+```json
+{
+  "output": "Agent's response text",
+  "message_id": "msg-123"
+}
+```
+
+**Use Cases:**
+- Text analysis and classification
+- Information extraction
+- Decision making
+- Content generation
+- Summarization
+
+---
+
+## Integration Nodes
+
+### `firecrawl`
+
+Start web scraping and crawling jobs via Firecrawl.
+
+**Purpose:** Scrape website content and extract structured data
+
+**Key Parameters:**
+- `action`: `"scrape"` or `"crawl"`
+- `url` or `urls`: Website address(es) to process
+- `render`: `true` to execute JavaScript
+- `formats`: Output format like `["markdown"]`
+
+**Example:**
+```json
+{
+  "id": "scrape_website",
+  "name": "Scrape Website",
+  "type": "firecrawl",
+  "parameters": {
+    "action": "scrape",
+    "url": "{{$input.website_url}}",
+    "render": false,
+    "formats": ["markdown"]
+  }
+}
+```
+
+**Output:**
+```json
+{
+  "markdown": "# Website Content...",
+  "url": "https://example.com",
+  "status_code": 200
+}
+```
+
+**Important:** Firecrawl nodes are **asynchronous**
+- Node starts the job and returns immediately
+- Status becomes `RUNNING` and waits for completion
+- Firecrawl sends webhook when done
+- Next tick processes dependent nodes
+
+**Use Cases:**
+- Website content extraction
+- Monitoring web pages
+- Competitive research
+- Data scraping
+
+### `http`
+
+Make outbound HTTP/HTTPS requests directly.
+
+**Purpose:** Call external APIs and retrieve data
+
+**Key Parameters:**
+- `method`: `GET`, `POST`, `PUT`, `DELETE`, `PATCH`
+- `url`: Full URL to request
+- `headers`: Optional headers object
+- `body`: Optional request body
+- `timeout`: Request timeout in seconds
+- `response_format`: `"json"`, `"text"`, or `"auto"`
+
+**Example:**
+```json
+{
+  "id": "fetch_api",
+  "name": "Fetch API Data",
+  "type": "http",
+  "parameters": {
+    "method": "GET",
+    "url": "https://api.example.com/data?q={{$input.query}}",
+    "headers": {
+      "Authorization": "Bearer {{$input.api_key}}"
+    },
+    "response_format": "json"
+  }
+}
+```
+
+**Output:**
+```json
+{
+  "status_code": 200,
+  "headers": { /* response headers */ },
+  "body": { /* parsed JSON */ }
+}
+```
+
+**Error Handling:**
+- Non-2xx status codes fail the node
+- Connection timeouts fail the node
+- Workflow stops on node failure
+
+**Use Cases:**
+- API calls
+- Webhooks
+- Data retrieval from services
+- External system integration
+
+---
+
+## Data Nodes
+
+### `markdown_report`
+
+Generate formatted markdown reports from workflow data.
+
+**Purpose:** Compose structured markdown documents from node outputs
+
+**Key Parameters:**
+- `title`: Report title (supports variable interpolation)
+- `description`: Short description
+- `sections`: Array of report sections
+- `include_metadata`: Include execution metadata
+- `include_timestamp`: Include generation timestamp
+- `include_toc`: Include table of contents
+
+**Example:**
+```json
+{
+  "id": "generate_report",
+  "name": "Generate Report",
+  "type": "markdown_report",
+  "depends_on": ["analyze", "scoring"],
+  "parameters": {
+    "title": "Analysis Report - {{$nodes.analyze.title}}",
+    "description": "Generated analysis report",
+    "include_toc": true,
+    "sections": [
+      {
+        "title": "Summary",
+        "description": "Key findings",
+        "content_nodes": [
+          {
+            "node_id": "analyze",
+            "label": "Main Analysis"
+          }
+        ]
+      },
+      {
+        "title": "Scoring",
+        "description": "Score breakdown",
+        "content_nodes": [
+          {
+            "node_id": "scoring",
+            "label": "Detailed Scores"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+**Output:**
+```json
+{
+  "markdown": "# Analysis Report\n\nGenerated: 2026-02-21\n\n## Summary\n...",
+  "title": "Analysis Report - Topic"
+}
+```
+
+**Use Cases:**
+- Executive summaries
+- Research reports
+- Analysis documentation
+- Audit trails
+- Export to markdown/PDF
+
+---
+
+## Container Nodes
+
+Containers group and organize how child nodes execute.
+
+### `parallel`
+
+Run child nodes **concurrently** based on their dependencies.
+
+**Purpose:** Execute independent tasks simultaneously
+
+**Key Parameters:**
+- `nodes`: Array of child nodes
+
+**Execution Logic:**
+- Each child node depends only on explicit `depends_on`
+- No implicit dependencies between siblings
+- All siblings with satisfied dependencies run in parallel
+
+**Example:**
+```json
+{
+  "id": "parallel_analysis",
+  "name": "Analyze Data Sources",
+  "type": "parallel",
+  "depends_on": ["prepare_data"],
+  "nodes": [
+    {
+      "id": "source_a_analysis",
+      "type": "plai_agent",
+      "parameters": {
+        "agent_name_slug": "analyzer",
+        "input": "Analyze source A: {{$input.data_a}}"
+      }
+    },
+    {
+      "id": "source_b_analysis",
+      "type": "plai_agent",
+      "parameters": {
+        "agent_name_slug": "analyzer",
+        "input": "Analyze source B: {{$input.data_b}}"
+      }
+    },
+    {
+      "id": "source_c_analysis",
+      "type": "plai_agent",
+      "parameters": {
+        "agent_name_slug": "analyzer",
+        "input": "Analyze source C: {{$input.data_c}}"
+      }
+    }
+  ]
+}
+```
+
+**Execution Timeline:**
+```
+prepare_data: ────────●
+                       │
+                       ├─ source_a_analysis: ────────●
+                       ├─ source_b_analysis: ─────●
+                       └─ source_c_analysis: ───────●
+
+Total time: Time of longest child
+```
+
+**Use Cases:**
+- Parallel processing of multiple items
+- Independent analyses
+- Concurrent API calls
+- Multi-source research
+
+### `sequential`
+
+Run child nodes **one after another** in order.
+
+**Purpose:** Chain operations where each depends on the previous
+
+**Key Parameters:**
+- `nodes`: Array of child nodes
+
+**Execution Logic:**
+- Each child automatically depends on the previous sibling
+- Explicit `depends_on` can specify other dependencies
+- Total execution time is the sum of all steps
+
+**Example:**
+```json
+{
+  "id": "research_pipeline",
+  "name": "Research Pipeline",
+  "type": "sequential",
+  "nodes": [
+    {
+      "id": "fetch_data",
+      "type": "firecrawl",
+      "parameters": {
+        "action": "scrape",
+        "url": "{{$input.url}}"
+      }
+    },
+    {
+      "id": "analyze",
+      "type": "plai_agent",
+      "parameters": {
+        "agent_name_slug": "analyzer",
+        "input": "Analyze: {{$nodes.fetch_data.markdown}}"
+      }
+    },
+    {
+      "id": "generate_report",
+      "type": "markdown_report",
+      "parameters": {
+        "title": "Research Report",
+        "sections": [
+          {
+            "title": "Analysis",
+            "content_nodes": [
+              {"node_id": "analyze"}
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
+```
+
+**Execution Timeline:**
+```
+fetch_data: ────────●
+                     │
+                     └─ analyze: ─────●
+                                       │
+                                       └─ generate_report: ───●
+
+Total time: Sum of all steps (3 + 2 + 1 = 6 time units)
+```
+
+**Use Cases:**
+- Data processing pipelines
+- Multi-stage transformations
+- Workflows requiring step-by-step input
+- Data refinement processes
+
+### `loop`
+
+Iterate over array items, running child nodes for each.
+
+**Purpose:** Process multiple items using the same workflow logic
+
+**Key Parameters:**
+- `items`: Jinja2 expression pointing to an array
+- `mode`: `"parallel"` or `"sequential"` execution
+- `nodes`: Child nodes to execute per item
+
+**Example:**
+```json
+{
+  "id": "analyze_urls",
+  "name": "Analyze URLs",
+  "type": "loop",
+  "parameters": {
+    "items": "{{$input.urls}}",
+    "mode": "parallel"
+  },
+  "nodes": [
+    {
+      "id": "fetch",
+      "type": "firecrawl",
+      "parameters": {
+        "action": "scrape",
+        "url": "{{loop.item}}"
+      }
+    },
+    {
+      "id": "analyze",
+      "type": "plai_agent",
+      "depends_on": ["fetch"],
+      "parameters": {
+        "agent_name_slug": "analyzer",
+        "input": "Analyze: {{$nodes.fetch.markdown}}"
+      }
+    }
+  ]
+}
+```
+
+**Loop Variables:**
+- `{{loop.item}}`: Current item value
+- `{{loop.index}}`: Current iteration number (0-based)
+
+**Execution Timeline with Parallel Mode:**
+```
+items: [URL1, URL2, URL3]
+
+Iteration 1: fetch(URL1) → analyze(URL1)
+Iteration 2: fetch(URL2) → analyze(URL2)    } All parallel
+Iteration 3: fetch(URL3) → analyze(URL3)
+
+Total time: Time of longest iteration
+```
+
+**Output:** Array of outputs from all iterations
+```json
+[
+  {"analyze": "Analysis of URL1"},
+  {"analyze": "Analysis of URL2"},
+  {"analyze": "Analysis of URL3"}
+]
+```
+
+**Use Cases:**
+- Batch processing
+- Iterating over search results
+- Processing multiple files
+- Parallel data extraction
+
+### `subworkflow`
+
+Reuse another workflow as a node.
+
+**Purpose:** Compose workflows, enabling reusability and modularity
+
+**Key Parameters:**
+- `workflow_name_slug`: Name of the workflow to execute
+- `input`: Input data for the subworkflow (supports variable interpolation)
+
+**Example:**
+```json
+{
+  "id": "analyze_competitor",
+  "name": "Analyze Competitor",
+  "type": "subworkflow",
+  "depends_on": ["get_competitor_list"],
+  "parameters": {
+    "workflow_name_slug": "market-analysis-workflow",
+    "input": {
+      "company_name": "{{loop.item}}",
+      "market": "{{$input.market}}"
+    }
+  }
+}
+```
+
+**How It Works:**
+1. Subworkflow is looked up by slug
+2. Child nodes are expanded into parent graph
+3. Nodes are prefixed with subworkflow ID (e.g., `analyze_competitor[fetch]`)
+4. Output is aggregated onto the subworkflow node
+5. Parent nodes can depend on subworkflow and access its outputs
+
+**Benefits:**
+- Reusable workflow components
+- Cleaner separation of concerns
+- Version management per workflow
+- Easier testing and maintenance
+
+**Use Cases:**
+- Reusable analysis patterns
+- Standard processing steps
+- Complex workflows as building blocks
+
+---
+
+## Node Output Access
+
+All node outputs are stored in workflow context and accessible to dependent nodes:
+
+```
+{{$nodes.node_id.field_name}}
+```
+
+**Examples:**
+```text
+{{$nodes.fetch_data.markdown}}           // From firecrawl node
+{{$nodes.analyze.output}}                 // From plai_agent node
+{{$nodes.fetch_api.body.price}}          // From http node
+{{$nodes.analyze_urls[0].analyze}}       // From loop node (array access)
+{{$nodes.market_analysis.output}}        // From subworkflow node
+```
+
+---
+
+## Choosing Node Types
+
+| Task | Node Type |
+|------|-----------|
+| Call an agent | `plai_agent` |
+| Scrape a website | `firecrawl` |
+| Call an API | `http` |
+| Process multiple items in parallel | `parallel` container |
+| Process items sequentially | `sequential` container |
+| Iterate over an array | `loop` container |
+| Generate a report | `markdown_report` |
+| Reuse another workflow | `subworkflow` |
+
+---
+
+## Next Steps
+
+- **[Dependencies](./dependencies.mdx)** - Define execution order between nodes
+- **[Execution Variables](./execution-variables.mdx)** - Access data across nodes
+- **[Input Variables](./input-variables.mdx)** - Define workflow inputs

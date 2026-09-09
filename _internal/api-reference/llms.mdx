@@ -1,0 +1,354 @@
+---
+title: "LLMs"
+description: "API endpoints for managing and retrieving language model information"
+---
+
+## List LLMs
+
+<api-endpoint method="GET" path="/llms" />
+
+List all available language models and their configurations.
+
+### Response
+
+<ResponseField name="models" type="object">
+  Object containing all available language models, keyed by model identifier
+  <Expandable title="Model Object">
+    <ResponseField name="display_name" type="string">
+      Human-readable name of the model
+    </ResponseField>
+    <ResponseField name="providers" type="array">
+      Array of provider names that support this model (OPENAI, ANTHROPIC, TOGETHERAI, BEDROCK, GROQ, OPENROUTER, COHERE, PERPLEXITY, GOOGLE, ROUTELLM)
+    </ResponseField>
+    <ResponseField name="category" type="string">
+      Model category (speech-to-text, embedding, completion)
+    </ResponseField>
+    <ResponseField name="allows_tools" type="boolean">
+      Whether the model supports tool/function calling
+    </ResponseField>
+    <ResponseField name="allows_streaming" type="boolean">
+      Whether the model supports streaming responses
+    </ResponseField>
+    <ResponseField name="allows_temperature" type="boolean">
+      Whether the model supports temperature parameter adjustment
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request GET 'https://api.plaisolutions.com/llms'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.plaisolutions.com/llms', {
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
+
+const models = await response.json();
+console.log(models);
+```
+
+```python Python
+import requests
+
+url = "https://api.plaisolutions.com/llms"
+headers = {
+    "Content-Type": "application/json"
+}
+
+response = requests.get(url, headers=headers)
+models = response.json()
+print(models)
+```
+
+</CodeGroup>
+
+<ResponseExample>
+
+```json Example Response
+{
+  "OPENAI_GPT_4_O": {
+    "display_name": "GPT-4o",
+    "providers": ["OPENAI"],
+    "category": "completion",
+    "allows_tools": true,
+    "allows_streaming": true,
+    "allows_temperature": true
+  },
+  "ANTHROPIC_CLAUDE_3_5_SONNET_V1": {
+    "display_name": "Claude 3.5 Sonnet",
+    "providers": ["ANTHROPIC"],
+    "category": "completion",
+    "allows_tools": true,
+    "allows_streaming": true,
+    "allows_temperature": true
+  },
+  "OPENAI_TEXT_EMBEDDING_3_LARGE": {
+    "display_name": "Text Embedding 3 Large",
+    "providers": ["OPENAI"],
+    "category": "embedding",
+    "allows_tools": false,
+    "allows_streaming": false,
+    "allows_temperature": false
+  },
+  "OPENAI_WHISPER": {
+    "display_name": "Whisper",
+    "providers": ["OPENAI"],
+    "category": "speech-to-text",
+    "allows_tools": false,
+    "allows_streaming": false,
+    "allows_temperature": false
+  }
+}
+```
+
+</ResponseExample>
+
+---
+
+## Get LLM
+
+<api-endpoint method="GET" path="/llms/{llm}" />
+
+Get information about a specific language model.
+
+### Path Parameters
+
+<ParamField path="llm" type="string" required>
+  The model identifier (e.g., "OPENAI_GPT_4_O", "ANTHROPIC_CLAUDE_3_5_SONNET_V1")
+</ParamField>
+
+### Response
+
+<ResponseField name="display_name" type="string">
+  Human-readable name of the model
+</ResponseField>
+
+<ResponseField name="providers" type="array">
+  Array of provider names that support this model
+</ResponseField>
+
+<ResponseField name="category" type="string">
+  Model category (speech-to-text, embedding, completion)
+</ResponseField>
+
+<ResponseField name="allows_tools" type="boolean">
+  Whether the model supports tool/function calling
+</ResponseField>
+
+<ResponseField name="allows_streaming" type="boolean">
+  Whether the model supports streaming responses
+</ResponseField>
+
+<ResponseField name="allows_temperature" type="boolean">
+  Whether the model supports temperature parameter adjustment
+</ResponseField>
+
+<CodeGroup>
+
+```bash cURL
+curl --location --request GET 'https://api.plaisolutions.com/llms/OPENAI_GPT_4_O'
+```
+
+```javascript JavaScript
+const modelId = 'OPENAI_GPT_4_O';
+const response = await fetch(`https://api.plaisolutions.com/llms/${modelId}`, {
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
+
+const model = await response.json();
+console.log(model);
+```
+
+```python Python
+import requests
+
+model_id = "OPENAI_GPT_4_O"
+url = f"https://api.plaisolutions.com/llms/{model_id}"
+headers = {
+    "Content-Type": "application/json"
+}
+
+response = requests.get(url, headers=headers)
+model = response.json()
+print(model)
+```
+
+</CodeGroup>
+
+<ResponseExample>
+
+```json Example Response
+{
+  "display_name": "GPT-4o",
+  "providers": ["OPENAI"],
+  "category": "completion",
+  "allows_tools": true,
+  "allows_streaming": true,
+  "allows_temperature": true
+}
+```
+
+</ResponseExample>
+
+---
+
+## Available Models
+
+The PLai Framework supports a wide range of language models across different providers and categories:
+
+### Completion Models
+
+<AccordionGroup>
+  <Accordion title="OpenAI Models">
+    - **GPT-4o** (`OPENAI_GPT_4_O`) - Latest multimodal model
+    - **GPT-4o mini** (`OPENAI_GPT_4_O_MINI`) - Faster, cost-effective version
+    - **GPT-4 Turbo** (`OPENAI_GPT_4_TURBO`) - Enhanced GPT-4 with longer context
+    - **GPT-3.5 Turbo** (`OPENAI_GPT_3_5_TURBO`) - Fast and efficient model
+    - **o1** (`OPENAI_O1`) - Advanced reasoning model
+    - **o1-mini** (`OPENAI_O1_MINI`) - Smaller reasoning model
+  </Accordion>
+  
+  <Accordion title="Anthropic Models">
+    - **Claude 3.5 Sonnet** (`ANTHROPIC_CLAUDE_3_5_SONNET_V1`) - Balanced performance
+    - **Claude 3.5 Haiku** (`ANTHROPIC_CLAUDE_3_5_HAIKU_20241022`) - Fast responses
+    - **Claude 3 Sonnet** (`ANTHROPIC_CLAUDE_3_SONNET_V1`) - Previous generation
+    - **Claude 3 Haiku** (`ANTHROPIC_CLAUDE_3_HAIKU_V1`) - Previous generation fast model
+  </Accordion>
+  
+  <Accordion title="Meta Llama Models">
+    - **Llama 3.1 405B** (`META_LLAMA_3_1_405B_INSTRUCT_TURBO`) - Largest model
+    - **Llama 3.1 70B** (`META_LLAMA_3_1_70B_INSTRUCT_TURBO`) - High performance
+    - **Llama 3.1 8B** (`META_LLAMA_3_1_8B_INSTRUCT_TURBO`) - Efficient model
+    - **Llama 3.2 90B Vision** (`META_LLAMA_3_2_90B_VISION`) - Multimodal capabilities
+  </Accordion>
+  
+  <Accordion title="Google Models">
+    - **Gemini 2.0 Flash** (`GOOGLE_GEMINI_2_FLASH`) - Latest fast model
+    - **Gemma 2 9B** (`GOOGLE_GEMMA_2_9B_IT`) - Open model
+    - **Gemma 1.1 7B** (`GOOGLE_GEMMA_1_1_7B_IT`) - Lightweight model
+  </Accordion>
+  
+  <Accordion title="Groq Models">
+    - **Llama 3 Groq 70B** (`GROQ_LLAMA_3_GROQ_70B_Tool_Use`) - Tool-optimized
+    - **Llama 3.1 70B** (`GROQ_LLAMA_3_1_70B_VERSATILE`) - Versatile model
+    - **Llama 3.3 70B** (`GROQ_LLAMA_3_3_70B_VERSATILE`) - Latest version
+  </Accordion>
+</AccordionGroup>
+
+### Embedding Models
+
+<CardGroup cols={2}>
+  <Card title="Text Embedding 3 Large" icon="vector-square">
+    `OPENAI_TEXT_EMBEDDING_3_LARGE` - High-quality embeddings with 3072 dimensions
+  </Card>
+  <Card title="Text Embedding 3 Small" icon="cube">
+    `OPENAI_TEXT_EMBEDDING_3_SMALL` - Efficient embeddings with 1536 dimensions
+  </Card>
+  <Card title="Ada 002" icon="database">
+    `OPENAI_EMBEDDING_ADA_002` - Legacy embedding model
+  </Card>
+</CardGroup>
+
+### Speech-to-Text Models
+
+<Card title="Whisper" icon="microphone">
+  `OPENAI_WHISPER` - Advanced speech recognition with multilingual support
+</Card>
+
+---
+
+## Model Categories
+
+<Tabs>
+  <Tab title="Completion Models">
+    These models generate text completions and are ideal for:
+    - Chat applications
+    - Content generation
+    - Question answering
+    - Code generation
+    - Text analysis
+    
+    **Features:**
+    - Tool/function calling support (most models)
+    - Streaming responses
+    - Temperature control for creativity
+    - Context length varies by model (4K to 128K+ tokens)
+  </Tab>
+  
+  <Tab title="Embedding Models">
+    These models convert text into vector representations for:
+    - Semantic search
+    - Text similarity comparison
+    - Document clustering
+    - Recommendation systems
+    
+    **Features:**
+    - High-dimensional vector output
+    - Consistent representations
+    - No streaming or temperature support
+    - Optimized for retrieval tasks
+  </Tab>
+  
+  <Tab title="Speech-to-Text Models">
+    These models convert audio to text for:
+    - Voice assistants
+    - Meeting transcription
+    - Audio content analysis
+    - Accessibility features
+    
+    **Features:**
+    - Multiple audio format support
+    - Multilingual recognition
+    - Timestamp generation
+    - Speaker identification (some models)
+  </Tab>
+</Tabs>
+
+---
+
+## Model Selection Guidelines
+
+### Performance vs Cost
+
+<Steps>
+  <Step title="High Performance">
+    Use GPT-4o, Claude 3.5 Sonnet, or Llama 3.1 405B for complex reasoning tasks
+  </Step>
+  <Step title="Balanced">
+    Use GPT-4o mini, Claude 3.5 Haiku, or Llama 3.1 70B for general applications  
+  </Step>
+  <Step title="Cost-Effective">
+    Use GPT-3.5 Turbo, Llama 3.1 8B, or Gemma models for simple tasks
+  </Step>
+</Steps>
+
+### Feature Requirements
+
+<Warning>
+  Not all models support all features. Check the `allows_tools`, `allows_streaming`, and `allows_temperature` properties before implementation.
+</Warning>
+
+<Tip>
+  Use the [List LLMs](#list-llms) endpoint to programmatically check model capabilities and build dynamic model selection interfaces.
+</Tip>
+
+### Provider Considerations
+
+Different providers may offer:
+- **Latency**: Groq typically offers faster inference
+- **Cost**: Together AI and OpenRouter often have competitive pricing
+- **Reliability**: OpenAI and Anthropic provide highly stable APIs
+- **Privacy**: Some providers offer enhanced privacy features
+
+<Note>
+  Model availability and pricing may vary by provider. Check your API service configurations for specific model access.
+</Note>

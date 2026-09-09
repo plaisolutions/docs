@@ -1,0 +1,262 @@
+---
+title: "What is a Datasource?"
+description: "Knowledge bases that agents can access and query"
+icon: "database"
+---
+
+# What is a Datasource?
+
+A **Datasource** is a knowledge base that provides agents with access to external information. Datasources enable agents to retrieve relevant context and knowledge when responding to questions or performing tasks.
+
+---
+
+## Core Concept
+
+```
+DATASOURCE = Knowledge Base + Search + Retrieval
+
+┌──────────────────────────┐
+│    Datasource            │
+├──────────────────────────┤
+│ • Files (PDFs, Docs)     │
+│ • Web Content (URLs)     │
+│ • Manual Text            │
+│ • Google Drive Files     │
+│ • Metadata & Indexing    │
+│          ↓               │
+│    Vector Search         │
+│          ↓               │
+│ Relevant Context         │
+└──────────────────────────┘
+```
+
+---
+
+## Datasource Capabilities
+
+Every datasource can:
+
+<CardGroup cols={2}>
+  <Card title="Store Knowledge" icon="database">
+    Hold large amounts of structured and unstructured information
+  </Card>
+  <Card title="Enable Search" icon="magnifying-glass">
+    Find relevant information using semantic search
+  </Card>
+  <Card title="Scale Content" icon="stack">
+    Support multiple files, URLs, and manual content entries
+  </Card>
+  <Card title="Connect to Agents" icon="link">
+    Be referenced by multiple agents for shared knowledge
+  </Card>
+</CardGroup>
+
+---
+
+## Key Features
+
+### Knowledge Storage
+
+Datasources can store various types of content:
+
+- **Files**: PDF documents, Word documents, text files, spreadsheets
+- **Web Content**: URLs, entire websites, sitemaps
+- **Manual Content**: Text entered directly in the interface
+- **Cloud Storage**: Google Drive files and folders
+- **Metadata**: Custom tags, descriptions, document properties
+
+### Vector Search & Retrieval
+
+<Tabs>
+  <Tab title="How It Works">
+    ```
+    1. Content is ingested into the datasource
+    2. Text is converted to vector embeddings
+    3. Embeddings are indexed for fast retrieval
+    4. When an agent queries, similar vectors are found
+    5. Most relevant content is returned to agent
+    ```
+  </Tab>
+  <Tab title="Configuration">
+    - **Top K**: Number of results to retrieve (default: 10)
+    - **Reranking**: Optional AI-powered result refinement
+    - **Similarity Threshold**: Minimum relevance score
+    - **Multi-Query**: Generate query variations for better coverage
+  </Tab>
+</Tabs>
+
+### Shared Access
+
+Datasources can be:
+- **Assigned to multiple agents** - Share knowledge across your team
+- **Updated centrally** - Changes reflect immediately for all agents
+- **Managed by admins** - Control access and permissions
+- **Organized by project** - Keep knowledge organized by context
+
+---
+
+## Datasource Types
+
+### Manual Datasources
+
+Self-managed knowledge bases where you add content directly:
+
+```
+Manual Datasource
+├── Upload Files
+├── Add URLs
+└── Enter Text Content
+```
+
+**Best for:**
+- Company policies and documentation
+- Custom training materials
+- Internal knowledge bases
+- Proprietary information
+
+### Google Drive Datasources
+
+Connected directly to Google Drive folders:
+
+```
+Google Drive Integration
+├── Authenticate with Google
+├── Select Folders
+└── Auto-sync Files
+```
+
+**Best for:**
+- Shared team documents
+- Living documentation
+- Multi-author content
+- Automatic updates
+
+---
+
+## Common Use Cases
+
+<CardGroup cols={2}>
+  <Card title="Customer Support" icon="headset">
+    Store FAQ, knowledge base, and troubleshooting guides
+  </Card>
+  <Card title="Product Knowledge" icon="book">
+    Maintain documentation, API specs, and feature guides
+  </Card>
+  <Card title="Company Policies" icon="scroll">
+    Reference HR policies, procedures, and guidelines
+  </Card>
+  <Card title="Training Materials" icon="graduation-cap">
+    Store courses, onboarding docs, and best practices
+  </Card>
+</CardGroup>
+
+---
+
+## How Agents Use Datasources
+
+### Configuration
+
+When creating an agent:
+
+1. **Select Datasources** - Choose which knowledge bases the agent can access
+2. **Configure Search** - Set retrieval parameters (Top K, reranking, etc.)
+3. **Test Queries** - Verify the agent can find relevant information
+
+### Runtime Behavior
+
+When an agent receives a question:
+
+```
+Question: "How do I reset my password?"
+        ↓
+Agent searches datasources
+        ↓
+Finds: "Password Reset Guide.pdf" and FAQ entry
+        ↓
+Retrieves top 10 relevant sections
+        ↓
+Includes in context for response
+        ↓
+Agent responds with confidence
+```
+
+---
+
+## Datasource Organization
+
+### Metadata
+
+Each datasource can have:
+
+- **Name**: Descriptive identifier
+- **Description**: Purpose and contents
+- **Tags**: Categorization (e.g., "public", "beta", "deprecated")
+- **Visibility**: Public or private
+- **Ownership**: Which team member created it
+
+### Resources
+
+Each datasource contains multiple resources:
+
+- **Files**: Uploaded documents
+- **URLs**: Web pages and sitemaps
+- **Content**: Manual text entries
+- **Metadata**: File properties, indexing status
+
+### Shared Datasources
+
+<Tip>
+**Team Collaboration**: Create shared datasources that multiple agents can reference. This ensures consistent information and reduces duplication.
+</Tip>
+
+- Centrally managed by admins
+- Accessible to multiple agents
+- Updated once, used everywhere
+- Audit trail of changes
+
+---
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Organized Structure" icon="folder">
+    Group related content into separate datasources
+  </Card>
+  <Card title="Clear Naming" icon="tag">
+    Use descriptive names for datasources and files
+  </Card>
+  <Card title="Regular Updates" icon="refresh">
+    Keep information current and remove outdated content
+  </Card>
+  <Card title="Test Retrieval" icon="search">
+    Verify agents can find the information they need
+  </Card>
+</CardGroup>
+
+### Content Quality
+
+- **Clear Structure**: Use headings, lists, and sections
+- **Complete Information**: Provide full context, not snippets
+- **Consistent Formatting**: Standardize document structure
+- **Remove Duplicates**: Avoid storing the same content multiple times
+
+---
+
+## Datasources vs Agents
+
+| Aspect | Datasource | Agent |
+|--------|-----------|-------|
+| **Purpose** | Store knowledge | Process queries |
+| **Input** | Content (files, URLs, text) | Questions/prompts |
+| **Output** | Relevant context | Responses |
+| **Reusability** | Shared across agents | Individual configuration |
+| **Update** | Central updates | Per-agent settings |
+
+---
+
+## Next Steps
+
+- **[Types of Datasources](./datasource-types.mdx)** - Learn about Manual and Google Drive datasources
+- **[Resource Types](./resource-types.mdx)** - Understand files, URLs, and content
+- **[Shared Datasources](./shared-datasources.mdx)** - Collaborate with your team
+- **[Agent Configuration](../agents/configuration.mdx)** - Connect datasources to agents

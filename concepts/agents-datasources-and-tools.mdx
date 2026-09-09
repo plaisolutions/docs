@@ -1,0 +1,380 @@
+---
+title: "Agents, Datasources & Tools"
+description: "Learn the core building blocks for creating AI automation in PLai Framework"
+icon: "robot"
+---
+
+# Agents, Datasources & Tools
+
+These are the three core building blocks you use to create AI automation in PLai Framework. Agents are the AI workers, Tools extend their capabilities, and Datasources provide them with knowledge.
+
+---
+
+## Agents: Your AI Workers
+
+An **Agent** is an AI assistant that performs specific tasks. Each agent has its own configuration, capabilities, and personality.
+
+### Agent Anatomy
+
+```
+AGENT = AI Model + Configuration + Tools + Datasources
+
+┌──────────────────────────┐
+│      AGENT: Support Bot  │
+├──────────────────────────┤
+│ Model: Claude 3.5 Sonnet │
+│ Role: Answer customer Q's│
+├──────────────────────────┤
+│ Tools:                   │
+│ • Help Desk API          │
+│ • Email Tool             │
+│ • Knowledge Base Search   │
+├──────────────────────────┤
+│ Datasources:             │
+│ • FAQ Database           │
+│ • Product Docs           │
+│ • Customer Guidelines    │
+├──────────────────────────┤
+│ Guardrails:              │
+│ • No sensitive data      │
+│ • Max 2000 chars         │
+│ • Rate limit: 100/hour   │
+└──────────────────────────┘
+```
+
+### Agent Configuration
+
+When you create an agent, you configure:
+
+<Tabs>
+  <Tab title="Basic Info">
+    - **Name**: Unique identifier (e.g., "Support Bot")
+    - **Description**: What this agent does
+    - **Model**: Which LLM to use (Claude, GPT-4, etc.)
+  </Tab>
+  <Tab title="Behavior">
+    - **System Instructions**: Agent's personality and guidelines
+    - **Example**: "You are a helpful support agent. Be concise and friendly."
+  </Tab>
+  <Tab title="Capabilities">
+    - **Tools**: What services the agent can call (APIs, web search, etc.)
+    - **Datasources**: What knowledge it can reference
+  </Tab>
+  <Tab title="Safety">
+    - **Guardrails**: Constraints and safety rules
+    - **Answer Filters**: Content filtering rules
+    - **Rate Limits**: Usage restrictions
+  </Tab>
+</Tabs>
+
+### Agent Capabilities
+
+| Capability | What It Does | Example |
+|-----------|------------|---------|
+| **Access Knowledge** | Reference datasources | "Customer: Who are your sales hours?" Agent: (looks in FAQ datasource) |
+| **Call APIs** | Use external tools | Send emails, query databases, call webhooks |
+| **Search Web** | Use web search tool | Find current information, recent events |
+| **Browse & Scrape** | Use browser tool | Extract data from websites |
+| **Run Code** | Execute code snippets | Process data, calculate values |
+
+---
+
+## Tools: Extending Agent Power
+
+A **Tool** is an external service or capability that an agent can use.
+
+### Tool Categories
+
+<AccordionGroup>
+  <Accordion title="API Requests">
+    Connect to REST APIs. Examples:
+    - CRM systems (Salesforce, HubSpot)
+    - Email services (Gmail, SendGrid)
+    - Webhooks
+    - Custom APIs
+    
+    **Use when:** You need to integrate with external systems
+  </Accordion>
+
+  <Accordion title="Web Search">
+    Use Perplexity AI to search the web. 
+    
+    **Use when:** Agent needs current information, recent events, or data outside your datasources
+  </Accordion>
+
+  <Accordion title="Browser Tool">
+    Automate web interactions and scraping.
+    
+    **Use when:** You need to navigate websites, extract data, or perform automated actions
+  </Accordion>
+
+  <Accordion title="MCP Servers">
+    Connect via Model Context Protocol. Advanced integrations with:
+    - Custom protocols
+    - Specialized services
+    - Complex integrations
+    
+    **Use when:** Building advanced, standardized integrations
+  </Accordion>
+
+  <Accordion title="Code Interpreter">
+    Execute Python code in secure sandboxes.
+    
+    **Use when:** Data processing, calculations, or complex transformations
+  </Accordion>
+
+  <Accordion title="External Datasource">
+    Access external databases and datasources.
+    
+    **Use when:** Agent needs real-time data from databases or external systems
+  </Accordion>
+</AccordionGroup>
+
+### Tool Setup Process
+
+<Steps>
+  <Step title="Select Tool Type">
+    Choose which type of tool you need (API, Web Search, Browser, etc.)
+  </Step>
+  <Step title="Configure Credentials">
+    Provide authentication details (API keys, tokens, etc.)
+  </Step>
+  <Step title="Set Parameters">
+    Define how the tool works (endpoints, methods, etc.)
+  </Step>
+  <Step title="Assign to Agent">
+    Choose which agents can use this tool
+  </Step>
+  <Step title="Test">
+    Verify the tool works correctly before production
+  </Step>
+</Steps>
+
+### Tool Credentials
+
+All tools that need authentication use **Credentials** - securely stored API keys, tokens, and passwords.
+
+- ✅ Encrypted storage
+- ✅ Audit logged (who accessed what, when)
+- ✅ Scoped access (only agents you assign can use them)
+- ✅ Rotatable (update without recreating tools)
+
+🔗 **Learn more:** [Security & Compliance](./security-and-compliance.mdx#credentials)
+
+---
+
+## Datasources: Agent Knowledge Bases
+
+A **Datasource** is a collection of documents, files, or data that agents can search and reference.
+
+### Datasource Types
+
+| Type | What You Upload | Best For |
+|------|----------------|----------|
+| **Files** | PDFs, Word docs, text files, images | Company docs, manuals, guidelines |
+| **URLs & Sitemaps** | Web page links, sitemap URLs | Website content, documentation sites |
+| **Content** | Direct text input | FAQs, knowledge entries, structured data |
+| **Google Drive** | Sync folders from Google Drive | Collaborative document management |
+| **Manual** | Manually add entries | Custom knowledge bases |
+
+### How Agents Use Datasources
+
+```
+AGENT "FAQ Bot" needs to answer: "What are your hours?"
+
+┌──────────────────────────────┐
+│ Search in Datasources:       │
+├──────────────────────────────┤
+│ 1. FAQ Database              │
+│    → Found: "Hours: 9-5 EST" │
+│                              │
+│ 2. Company Handbook          │
+│    → Found: "Contact hours"  │
+│                              │
+│ 3. Website Content           │
+│    → Found: "Support hours"  │
+└──────────────────────────────┘
+         ↓
+Agent combines results and responds:
+"We're open 9 AM to 5 PM EST, Monday-Friday"
+```
+
+### Datasource Features
+
+<CardGroup cols={2}>
+  <Card title="Search" icon="magnifying-glass">
+    Agents search datasources to find relevant information
+  </Card>
+  <Card title="Context" icon="lightbulb">
+    Information from datasources becomes part of agent context
+  </Card>
+  <Card title="Metadata" icon="tag">
+    Tag and categorize documents for better search results
+  </Card>
+  <Card title="Versioning" icon="history">
+    Track changes and maintain document versions
+  </Card>
+</CardGroup>
+
+### Creating a Datasource
+
+<Steps>
+  <Step title="Create Datasource">
+    Go to your project and create a new datasource
+  </Step>
+  <Step title="Choose Type">
+    Select the datasource type (Files, URLs, Content, etc.)
+  </Step>
+  <Step title="Add Resources">
+    Upload files, add URLs, or enter content
+  </Step>
+  <Step title="Add Metadata">
+    Tag and categorize for better searching
+  </Step>
+  <Step title="Assign to Agents">
+    Choose which agents can access this datasource
+  </Step>
+</Steps>
+
+---
+
+## How They Work Together
+
+### Example: Customer Support Agent
+
+```
+CUSTOMER QUERY: "How do I reset my password?"
+
+     ↓
+
+┌─────────────────────────────────────────┐
+│         AGENT: Support Bot              │
+│  (Claude 3.5 Sonnet, support role)      │
+└─────────────────────────────────────────┘
+          ↓ Uses ↓
+   ┌──────┴──────┐
+   │             │
+   ▼             ▼
+
+TOOL: Help Desk API       DATASOURCE: FAQ Database
+(Send tickets)            (Search for answer)
+   │                          │
+   └──────────┬───────────────┘
+              │
+              ▼
+         RESPONSE:
+    "Click Settings → Security → 
+     Reset Password. Check your 
+     email for confirmation link."
+```
+
+### Example: Data Processing Agent
+
+```
+TASK: Process daily sales data
+
+     ↓
+
+┌─────────────────────────────────────────┐
+│      AGENT: Data Processor              │
+│  (Claude + Python execution)            │
+└─────────────────────────────────────────┘
+          ↓ Uses ↓
+   ┌──────┴──────┐
+   │             │
+   ▼             ▼
+
+TOOL: Code Interpreter    TOOL: Database API
+(Transform data)          (Load/save data)
+   │                          │
+   └──────────┬───────────────┘
+              │
+              ▼
+         RESULTS:
+    • Processed: 1,245 records
+    • Valid: 1,200 (96.4%)
+    • Invalid: 45 (3.6%)
+    • Saved to database
+```
+
+---
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card title="One Agent = One Role" icon="focus">
+    Each agent should have a clear, focused purpose
+  </Card>
+  <Card title="Organized Datasources" icon="folder">
+    Group related documents in datasources, use metadata tags
+  </Card>
+  <Card title="Test Before Use" icon="check">
+    Test agent + tools + datasource combinations before production
+  </Card>
+  <Card title="Monitor Performance" icon="chart-line">
+    Track agent accuracy, speed, and tool usage
+  </Card>
+</CardGroup>
+
+### Agent Naming Convention
+
+Use descriptive names that indicate purpose and scope:
+
+✅ **Good names:**
+- "Support Bot - FAQ"
+- "Data Processor - Daily Sales"
+- "Content Summarizer - Blog Posts"
+- "Lead Scorer - Sales Pipeline"
+
+❌ **Poor names:**
+- "Agent 1"
+- "Bot"
+- "Process"
+- "Tool"
+
+---
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Agent can't find information">
+    **Solutions:**
+    - Check datasource has the information
+    - Review datasource metadata and tags
+    - Verify agent has access to datasource
+    - Improve search query or agent instructions
+  </Accordion>
+
+  <Accordion title="Tool integration failing">
+    **Solutions:**
+    - Verify credentials are correct
+    - Check API endpoint is accessible
+    - Review tool configuration
+    - Check agent has permission to use tool
+  </Accordion>
+
+  <Accordion title="Datasource not updating">
+    **Solutions:**
+    - For Files: Re-upload the document
+    - For URLs: Check website is accessible
+    - For Content: Manually update entries
+    - For Google Drive: Re-sync folder
+  </Accordion>
+
+  <Accordion title="Agent giving wrong information">
+    **Solutions:**
+    - Add correct information to datasource
+    - Update agent system instructions
+    - Remove conflicting datasources
+    - Test with different prompts
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Next Steps
+
+- **[Create Your First Agent](../../guides/first-agent.mdx)** - Build an agent step-by-step
+- **[Workflows, Jobs & Triggers](./workflows-jobs-and-triggers.mdx)** - Chain multiple agents
+- **[Security & Compliance](./security-and-compliance.mdx)** - Secure credentials and set guardrails
+- **[Monitoring](./monitoring.mdx)** - Track agent performance

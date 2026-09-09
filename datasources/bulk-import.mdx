@@ -1,0 +1,537 @@
+---
+title: "Bulk Import JSON"
+description: "Import and create multiple resources from JSON data"
+icon: "file-json"
+---
+
+# Bulk Import JSON
+
+**Bulk Import** allows you to import hundreds of resources at once from JSON files. Each item in your JSON becomes a separate resource with automatically assigned metadata and optional translations.
+
+---
+
+## Overview
+
+Bulk Import is ideal for:
+
+- Migrating content from other systems
+- Loading large document collections
+- Populating a datasource with pre-structured data
+- Batch creation with consistent metadata
+
+```
+JSON File
+(array of objects)
+    ↓
+Validation against Metadata Schema
+    ↓
+Default Values Assignment
+    ↓
+Content Mapping
+    ↓
+Optional Translation
+    ↓
+Batch Creation
+    ↓
+Resource Monitoring
+```
+
+---
+
+## Key Differences: Upload vs Import
+
+<Tabs>
+  <Tab title="Drag & Drop Upload">
+    **For**: Individual or bulk file uploads
+    - Upload files (PDF, images, etc.)
+    - Minimal configuration needed
+    - Fast for a few dozen files
+    - Example: Upload 10 PDFs at once
+  </Tab>
+  <Tab title="Bulk Import">
+    **For**: Structured data import
+    - Import JSON array of objects
+    - Map JSON fields to metadata
+    - Validate against schema
+    - Optional auto-translation
+    - Example: Import 500 articles with author, category, tags
+  </Tab>
+</Tabs>
+
+---
+
+## Bulk Import Workflow
+
+### Step 1: Prepare JSON File
+
+Create a JSON file with an array of objects:
+
+```json
+[
+  {
+    "title": "Getting Started",
+    "description": "Introduction to our platform",
+    "author": "John Doe",
+    "category": "Tutorials",
+    "tags": ["onboarding", "basics"]
+  },
+  {
+    "title": "Advanced Configuration",
+    "description": "Deep dive into system configuration",
+    "author": "Jane Smith",
+    "category": "Guides"
+    // Note: "tags" field missing
+  }
+]
+```
+
+**Requirements:**
+- Valid JSON format (array at root level)
+- Maximum 1,000 items per file
+- Maximum 10 MB file size
+
+### Step 2: Validation Against Metadata Schema
+
+The system compares your JSON fields against the datasource's `metadata_schema`:
+
+```
+Datasource Schema:
+├── author (str, required)
+├── category (str, required)
+└── tags (str, optional)
+
+Item 1: ✅ Has all required fields
+Item 2: ⚠️ Missing "tags" field (optional - will use default)
+```
+
+**Validation Results:**
+```typescript
+{
+  isValid: boolean;
+  missingRequiredFields: string[];    // "tags" not here (optional)
+  extraFields: string[];              // Any JSON fields not in schema
+  typeErrors: Array<{
+    field: string;
+    expectedType: string;
+    actualType: string;
+  }>;
+}
+```
+
+### Step 3: Assign Default Values
+
+Provide default values for missing optional fields:
+
+```json
+{
+  "defaultValues": {
+    "author": "Bulk Import",
+    "category": "General",
+    "tags": []
+  },
+  "contentField": "description",
+  "translationConfig": {
+    "enabled": false
+  }
+}
+```
+
+**Configuration Fields:**
+
+| Field | Purpose |
+|-------|---------|
+| **defaultValues** | Values for missing optional fields |
+| **contentField** | Which JSON field becomes the resource content |
+| **translationConfig** | Optional auto-translation settings |
+
+### Step 4: Resource Creation
+
+The system processes your JSON in batches:
+
+**Processing Details:**
+- Batch size: 10 resources simultaneously
+- Retry attempts: 3 with exponential backoff
+- Rate limit: 10 resources/second per project
+- Translation: Optional via core agent
+
+**Resource Payload:**
+```python
+{
+    "name": item.get("title") or f"Resource {uuid}",
+    "summary": item.get("description")[:200],
+    "type": datasource.type,
+    "datasource_id": datasource_id,
+    
+    # Metadata from JSON + defaults
+    "metadata": {
+        **item,              # All JSON fields
+        **defaultValues      # + Default values
+    },
+    
+    # Track bulk import
+    "extra_info": {
+        "bulk_import_id": task_id,
+        "original_content_field": "description",
+        "translated": true_or_false
+    },
+    
+    # Store the content
+    "store": true
+}
+```
+
+### Step 5: Monitor & Download Results
+
+Real-time progress tracking:
+
+```
+Processing Items
+├── Queued: 500
+├── Processing: 47
+├── Successful: 453
+└── Failed: 0
+```
+
+Export detailed logs in JSON for auditing:
+- Item-by-item status
+- Error messages for failures
+- Success confirmations
+- Retry history
+
+---
+
+## JSON Schema Validation
+
+### Example Datasource Schema
+
+```json
+{
+  "entries": [
+    {
+      "name": "author",
+      "type": "str",
+      "optional": false  // Required
+    },
+    {
+      "name": "category",
+      "type": "str",
+      "optional": false  // Required
+    },
+    {
+      "name": "priority",
+      "type": "int",
+      "optional": true   // Optional
+    }
+  ]
+}
+```
+
+### Example JSON to Import
+
+```json
+[
+  {
+    "title": "Article A",
+    "description": "Content here",
+    "author": "John",
+    "category": "Tech",
+    "priority": 5
+    // ✅ All fields present and correct types
+  },
+  {
+    "title": "Article B",
+    "description": "More content",
+    "author": "Jane",
+    "category": "Science"
+    // ⚠️ Missing "priority" (optional - will use default)
+  },
+  {
+    "title": "Article C",
+    "description": "Other content",
+    "author": "Bob"
+    // ❌ Missing "category" (required!)
+  }
+]
+```
+
+### Validation Output
+
+```typescript
+{
+  isValid: false,  // Item C fails validation
+  
+  missingRequiredFields: ["category"],  // Item C missing required field
+  
+  extraFields: ["internalId"],  // Field not in schema
+  
+  typeErrors: [
+    {
+      field: "priority",
+      expectedType: "int",
+      actualType: "string"  // "5" instead of 5
+    }
+  ]
+}
+```
+
+---
+
+## Feature: Auto-Translation
+
+Enable optional automatic translation during import:
+
+### Configuration
+
+```json
+{
+  "translationConfig": {
+    "enabled": true,
+    "targetLanguage": "es"  // Translate to Spanish
+  }
+}
+```
+
+### How It Works
+
+1. For each JSON item, the content field is translated
+2. Translation is done via the core agent translator
+3. Original language metadata is preserved
+4. Marked as `translated: true` in extra_info
+
+### Processing Impact
+
+- **Time**: +20-40% per item (includes API latency)
+- **Tokens**: Uses LLM tokens from your project
+- **Cost**: Charged to your project's consumption
+
+---
+
+## Example Workflows
+
+### Scenario 1: Blog Articles
+
+**JSON structure:**
+```json
+[
+  {
+    "title": "Article Title",
+    "content": "Article body text",
+    "author": "Author Name",
+    "published_date": "2024-09-01",
+    "tags": ["tag1", "tag2"]
+  }
+]
+```
+
+**Datasource schema:**
+```json
+{
+  "entries": [
+    {"name": "author", "type": "str", "optional": false},
+    {"name": "published_date", "type": "str", "optional": false},
+    {"name": "tags", "type": "str", "optional": true}
+  ]
+}
+```
+
+**Configuration:**
+```json
+{
+  "defaultValues": {
+    "tags": []
+  },
+  "contentField": "content",
+  "translationConfig": {"enabled": false}
+}
+```
+
+### Scenario 2: Product Catalog
+
+**JSON structure:**
+```json
+[
+  {
+    "sku": "PROD-001",
+    "name": "Product Name",
+    "description": "Full product description",
+    "category": "Category",
+    "price": 99.99,
+    "in_stock": true
+  }
+]
+```
+
+**Datasource schema:**
+```json
+{
+  "entries": [
+    {"name": "sku", "type": "str", "optional": false},
+    {"name": "category", "type": "str", "optional": false},
+    {"name": "in_stock", "type": "bool", "optional": false}
+  ]
+}
+```
+
+**Configuration:**
+```json
+{
+  "defaultValues": {
+    "category": "Uncategorized",
+    "in_stock": false
+  },
+  "contentField": "description"
+}
+```
+
+### Scenario 3: Multilingual Content
+
+**JSON structure:**
+```json
+[
+  {
+    "title": "Título en Español",
+    "content": "Contenido del artículo",
+    "language": "es",
+    "author": "Juan"
+  }
+]
+```
+
+**Configuration:**
+```json
+{
+  "defaultValues": {
+    "author": "System"
+  },
+  "contentField": "content",
+  "translationConfig": {
+    "enabled": true,
+    "targetLanguage": "en"  // Translate Spanish → English
+  }
+}
+```
+
+---
+
+## Limits & Constraints
+
+<CardGroup cols={2}>
+  <Card title="File Size" icon="database">
+    Maximum 10 MB per import file
+  </Card>
+  <Card title="Item Count" icon="list">
+    Maximum 1,000 items per file
+  </Card>
+  <Card title="Batch Size" icon="layers">
+    10 resources processed simultaneously
+  </Card>
+  <Card title="Rate Limit" icon="gauge">
+    10 resources/second per project
+  </Card>
+</CardGroup>
+
+### Field Limits
+
+- **String fields**: Max 10,000 characters
+- **Number fields**: Standard JSON number limits
+- **Array fields**: Max 100 items per array
+
+### Error Handling
+
+- **Retry attempts**: 3 per failed resource
+- **Backoff strategy**: Exponential (1s, 2s, 4s)
+- **Failed items**: Retryable separately
+
+---
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Validate JSON First" icon="check">
+    Use a JSON validator before importing
+  </Card>
+  <Card title="Test Small Batch" icon="test-tube">
+    Import 10-20 items first to verify
+  </Card>
+  <Card title="Meaningful Content Field" icon="pen">
+    Choose the field with main content
+  </Card>
+  <Card title="Smart Defaults" icon="sliders">
+    Provide sensible default values
+  </Card>
+</CardGroup>
+
+### Preparation Checklist
+
+- ✅ Valid JSON format (valid array)
+- ✅ All required metadata schema fields present
+- ✅ Correct data types for fields
+- ✅ Content field contains meaningful text
+- ✅ File size under 10 MB
+- ✅ Item count under 1,000
+- ✅ Default values for optional fields
+- ✅ Translation language selected (if enabled)
+
+---
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Invalid JSON Format">
+    **Symptom**: Upload fails immediately
+    
+    **Solution**:
+    - Validate JSON syntax at jsonlint.com
+    - Ensure array at root level: `[...]`
+    - Check no trailing commas
+    - Verify all quotes are proper JSON quotes
+  </Accordion>
+
+  <Accordion title="Missing Required Fields">
+    **Symptom**: Item validation fails
+    
+    **Solution**:
+    - Check datasource metadata schema
+    - Provide default value for missing field
+    - Or add field to JSON items
+    - Verify field names match exactly (case-sensitive)
+  </Accordion>
+
+  <Accordion title="Type Mismatch">
+    **Symptom**: "expectedType: int, actualType: string"
+    
+    **Solution**:
+    - Convert value to correct type in JSON
+    - Example: `"priority": 5` (not `"5"`)
+    - For booleans: `true`/`false` (not `"true"`)
+  </Accordion>
+
+  <Accordion title="Some Resources Failed">
+    **Symptom**: 950 succeeded, 50 failed
+    
+    **Solution**:
+    - Check error logs for failed items
+    - Fix issues in those specific items
+    - Re-import failed items separately
+    - Verify API connectivity for external lookups
+  </Accordion>
+
+  <Accordion title="Slow Processing">
+    **Symptom**: Import taking very long
+    
+    **Solution**:
+    - Translation enabled? Disable for speed
+    - Network bandwidth available?
+    - Consider splitting into smaller batches
+    - 10 resources/sec is expected rate
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Next Steps
+
+- **[Resource Types](./resource-types.mdx)** - Understand resource categories
+- **[Resource Metadata](./resource-metadata.mdx)** - Configure metadata fields
+- **[Datasource Schema](./datasource-metadata.mdx)** - Define metadata schema
+- **[Agent Configuration](../agents/configuration.mdx)** - Query imported resources

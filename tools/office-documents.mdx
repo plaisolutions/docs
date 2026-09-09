@@ -1,0 +1,540 @@
+---
+title: "Office Documents Tool"
+description: "Generate and edit office documents from agents"
+icon: "file-text"
+---
+
+# Office Documents Tool
+
+The **Office Documents Tool** allows agents to generate and edit office documents programmatically. This enables agents to create professional reports, spreadsheets, presentations, and PDFs with dynamic content.
+
+---
+
+## What is an Office Documents Tool?
+
+An Office Documents Tool lets you:
+
+- ✅ Generate Word documents (.docx)
+- ✅ Create Excel spreadsheets (.xlsx)
+- ✅ Build PowerPoint presentations (.pptx)
+- ✅ Generate PDF documents
+- ✅ Edit existing documents
+- ✅ Populate templates with dynamic data
+- ✅ Use AI-powered document generation
+
+```
+Agent Process:
+┌──────────────────────────┐
+│ Agent prepares data      │
+├──────────────────────────┤
+│ Calls Office Doc Tool    │
+│ • Document type          │
+│ • Template               │
+│ • Content                │
+│     ↓                    │
+│ Office Processor         │
+│ (Claude + Skills)        │
+│     ↓                    │
+│ Document generated       │
+│ (docx/xlsx/pptx/pdf)     │
+│     ↓                    │
+│ Returns to agent         │
+└──────────────────────────┘
+```
+
+---
+
+## Supported Document Types
+
+### Word Documents (.docx)
+
+Create professional reports, contracts, and written content:
+
+- ✅ Formatted text with styles
+- ✅ Tables and lists
+- ✅ Headers and footers
+- ✅ Page breaks
+- ✅ Images and diagrams
+- ✅ Metadata (title, author, etc.)
+
+**Use Cases:**
+- Report generation
+- Contract generation
+- Meeting minutes
+- Technical documentation
+
+### Excel Spreadsheets (.xlsx)
+
+Generate data-rich spreadsheets with formulas:
+
+- ✅ Multiple sheets
+- ✅ Formulas and calculations
+- ✅ Cell formatting
+- ✅ Charts and graphs
+- ✅ Pivot tables
+- ✅ Data validation
+
+**Use Cases:**
+- Financial reports
+- Data analysis
+- Inventory tracking
+- Performance dashboards
+
+### PowerPoint Presentations (.pptx)
+
+Create dynamic presentations with slides:
+
+- ✅ Multiple slide layouts
+- ✅ Text formatting
+- ✅ Images and shapes
+- ✅ Charts and tables
+- ✅ Animations
+- ✅ Speaker notes
+
+**Use Cases:**
+- Sales presentations
+- Training materials
+- Executive reports
+- Project updates
+
+### PDF Documents
+
+Generate portable PDF files:
+
+- ✅ Convert from other formats
+- ✅ Create from templates
+- ✅ Add watermarks and signatures
+- ✅ Merge documents
+- ✅ Extract content
+
+**Use Cases:**
+- Reports and forms
+- Contracts and agreements
+- Certificates
+- Published documents
+
+---
+
+## Use Cases
+
+### Financial Report Generation
+
+Agent receives quarterly data and generates a report:
+
+```
+Agent Process:
+1. Receives financial data
+2. Calls Office Documents Tool
+3. Generates Word document with:
+   - Executive summary
+   - Formatted tables
+   - Charts
+   - Analysis and conclusions
+4. Returns report to user
+```
+
+### Invoice Generation
+
+Sales agent creates invoices programmatically:
+
+```
+Agent Process:
+1. Receives order information
+2. Extracts line items and totals
+3. Calls Office Documents Tool
+4. Generates professional invoice
+5. Includes company branding
+6. Returns PDF to send to customer
+```
+
+### Data Analysis Report
+
+Analysis agent processes dataset:
+
+```
+Agent Process:
+1. Analyzes data
+2. Creates summary statistics
+3. Generates Excel spreadsheet with:
+   - Raw data in sheets
+   - Pivot tables
+   - Charts and graphs
+   - Summary analysis
+4. Returns to stakeholders
+```
+
+### Meeting Summary Document
+
+Support agent documents meeting outcomes:
+
+```
+Agent Process:
+1. Receives meeting notes
+2. Organizes information
+3. Calls Office Documents Tool
+4. Generates Word document with:
+   - Attendees
+   - Agenda items
+   - Decisions made
+   - Action items
+   - Follow-up dates
+5. Distributes to team
+```
+
+---
+
+## Configuration
+
+### Adding Office Documents Tool to an Agent
+
+<Steps>
+  <Step title="Go to Agent Settings">
+    Open the agent where you want to use the Office Documents Tool
+  </Step>
+  <Step title="Open Tools Tab">
+    Navigate to the Tools configuration section
+  </Step>
+  <Step title="Add New Tool">
+    Click "Add Tool" and select "Office Documents"
+  </Step>
+  <Step title="Select Document Types">
+    Choose which document types to enable:
+    - Word (DOCX)
+    - Excel (XLSX)
+    - PowerPoint (PPTX)
+    - PDF
+  </Step>
+  <Step title="Choose Model">
+    Select the AI model for document generation:
+    - Claude Sonnet 4.6 (recommended)
+    - Claude Opus 4.6 (more capable)
+  </Step>
+  <Step title="Save">
+    Office Documents Tool is now available
+  </Step>
+</Steps>
+
+### Tool Configuration
+
+```yaml
+Name: "Document Generator"
+Description: "Generate professional reports and documents"
+
+Document Types:
+  - DOCX (Word documents)
+  - XLSX (Excel spreadsheets)
+  - PPTX (PowerPoint presentations)
+  - PDF (Portable documents)
+
+Model: Claude Sonnet 4.6
+(Handles document generation with AI capabilities)
+```
+
+### Skill Selection
+
+The tool can use different skills depending on document type:
+
+| Document Type | Skill | Use |
+|---------------|-------|-----|
+| Word (.docx) | docx | Create and edit documents |
+| Excel (.xlsx) | xlsx | Generate spreadsheets |
+| PowerPoint (.pptx) | pptx | Create presentations |
+| PDF | pdf | Generate PDF documents |
+
+---
+
+## How to Use
+
+### Basic Document Generation
+
+Agent provides document specifications:
+
+```json
+{
+  "document_type": "docx",
+  "title": "Monthly Sales Report",
+  "content": {
+    "sections": [
+      {
+        "heading": "Executive Summary",
+        "text": "..."
+      },
+      {
+        "heading": "Sales by Region",
+        "table": {
+          "headers": ["Region", "Sales", "Growth"],
+          "rows": [...]
+        }
+      }
+    ]
+  }
+}
+```
+
+### Template-Based Generation
+
+Agent uses predefined templates:
+
+```json
+{
+  "document_type": "docx",
+  "template": "report",
+  "data": {
+    "company_name": "Acme Corp",
+    "report_date": "2024-09-08",
+    "total_sales": 150000,
+    "growth_rate": 15.5
+  }
+}
+```
+
+### Excel with Formulas
+
+Generate spreadsheet with calculations:
+
+```json
+{
+  "document_type": "xlsx",
+  "sheets": [
+    {
+      "name": "Sales",
+      "columns": ["Product", "Q1", "Q2", "Q3", "Q4", "Total"],
+      "rows": [
+        ["Product A", 100, 120, 150, 180],
+        ["Product B", 80, 90, 100, 110]
+      ],
+      "formulas": {
+        "Total": "=SUM(B2:E2)"
+      }
+    }
+  ]
+}
+```
+
+### PowerPoint Presentation
+
+Create slides dynamically:
+
+```json
+{
+  "document_type": "pptx",
+  "slides": [
+    {
+      "layout": "title",
+      "title": "Quarterly Review",
+      "subtitle": "Q3 2024"
+    },
+    {
+      "layout": "content",
+      "title": "Key Metrics",
+      "content": "..."
+    }
+  ]
+}
+```
+
+---
+
+## Response Format
+
+After generating a document, the tool returns:
+
+```json
+{
+  "status": "success",
+  "document_id": "doc_12345",
+  "document_type": "docx",
+  "file_name": "sales_report_2024.docx",
+  "file_path": "s3://bucket/documents/...",
+  "file_size": 245000,
+  "download_url": "https://...",
+  "expires_in": 86400
+}
+```
+
+---
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Clear Structure" icon="layout-grid">
+    Organize documents logically with sections and headings
+  </Card>
+  <Card title="Professional Formatting" icon="palette">
+    Use consistent styles and branding
+  </Card>
+  <Card title="Dynamic Data" icon="database">
+    Populate templates with accurate data
+  </Card>
+  <Card title="Error Handling" icon="alert">
+    Handle generation failures gracefully
+  </Card>
+</CardGroup>
+
+### Document Generation Example
+
+```
+Agent Prompt Example:
+
+"When generating reports:
+1. Start with an executive summary
+2. Include relevant data in tables
+3. Add charts for visual impact
+4. Include recommendations
+5. End with next steps
+
+Use professional formatting and branding."
+```
+
+### Template Strategy
+
+```
+Benefits:
+- Consistent formatting
+- Faster generation
+- Brand compliance
+- Reusable across agents
+
+Use templates for:
+- Regular reports
+- Standard forms
+- Branded documents
+- Complex layouts
+```
+
+---
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Document generation fails">
+    **Symptoms**: Error when calling Office Documents Tool
+    
+    **Solutions:**
+    - Check document data is properly formatted
+    - Verify document type is supported
+    - Review data completeness
+    - Simplify content if too complex
+    - Check model token limits
+  </Accordion>
+
+  <Accordion title="Generated document looks wrong">
+    **Symptoms**: Document structure or formatting is incorrect
+    
+    **Solutions:**
+    - Review template structure
+    - Check data formatting
+    - Adjust styling in template
+    - Test with simpler content first
+    - Use consistent formatting patterns
+  </Accordion>
+
+  <Accordion title="Document too large or slow">
+    **Symptoms**: Large file or slow generation
+    
+    **Solutions:**
+    - Split large documents into multiple files
+    - Reduce data complexity
+    - Use simpler formatting
+    - Generate in batches
+    - Optimize template structure
+  </Accordion>
+
+  <Accordion title="Formula errors in Excel">
+    **Symptoms**: Excel formulas not working correctly
+    
+    **Solutions:**
+    - Verify formula syntax
+    - Check cell references
+    - Use absolute references if needed
+    - Test formulas in Excel first
+    - Simplify complex calculations
+  </Accordion>
+
+  <Accordion title="File not accessible after generation">
+    **Symptoms**: Can't download or access generated document
+    
+    **Solutions:**
+    - Check download URL is valid
+    - Verify file hasn't expired
+    - Check storage permissions
+    - Regenerate if expired
+    - Verify storage is configured
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Advanced Usage
+
+### Dynamic Report Generation
+
+```
+Agent Process:
+1. Query database for data
+2. Generate Excel with raw data
+3. Add pivot tables
+4. Create Word summary
+5. Export as PDF
+6. Send to stakeholders
+```
+
+### Batch Document Generation
+
+```
+For multiple documents:
+1. Iterate through data
+2. Generate doc for each record
+3. Store in document repository
+4. Return batch results
+5. Send confirmation
+```
+
+### Template Personalization
+
+```
+Agent receives template and data:
+1. Load predefined template
+2. Replace placeholders
+3. Add dynamic sections
+4. Format based on data
+5. Generate final document
+```
+
+### Document Workflow Integration
+
+```
+Workflow Process:
+1. Step 1: Collect data
+2. Step 2: Call Agent with Office Tool
+3. Step 3: Agent generates document
+4. Step 4: Email document to recipient
+5. Step 5: Archive for records
+```
+
+---
+
+## Model Selection
+
+### Claude Sonnet 4.6
+
+- **Default choice** for most use cases
+- Good balance of speed and capability
+- Handles complex document structures
+- Recommended for production use
+
+### Claude Opus 4.6
+
+- **Most capable** model
+- Better for complex content generation
+- Higher token usage
+- Use for premium/complex documents
+
+---
+
+## Next Steps
+
+- **[Agent Configuration](../agents/configuration.mdx)** - Add tools to agents
+- **[Tool Examples](./api-requests.mdx)** - See how other tools work
+- **[Create Your First Agent](../../guides/first-agent.mdx)** - Get started with agents
+- **[Workflows](../concepts/workflows-jobs-and-triggers.mdx)** - Use Office Tool in workflows

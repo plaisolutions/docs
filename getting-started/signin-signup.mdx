@@ -1,0 +1,371 @@
+---
+title: "Sign In & Sign Up"
+description: "Learn how to create an account and join an organization through invitations"
+icon: "user-plus"
+---
+
+# Sign In & Sign Up
+
+PLai Framework uses an invitation-based onboarding system. This ensures secure access control and organized team membership. This guide walks you through the complete sign-up and sign-in process.
+
+<CardGroup cols={2}>
+  <Card title="For New Users" icon="user">
+    Complete account creation through invitation
+  </Card>
+  <Card title="For Existing Users" icon="log-in">
+    Sign in to your account and manage invitations
+  </Card>
+</CardGroup>
+
+---
+
+## Understanding the Invitation Flow
+
+PLai Framework uses **invitations** to manage organization access. Here's the overview:
+
+<Frame>
+  <div className="bg-gray-100 p-6 rounded-lg text-center text-sm">
+    Múltiplo creates Organization → Invites OWNER/ADMIN → OWNER/ADMIN invites members → Members receive email → Join organization
+  </div>
+</Frame>
+
+---
+
+## Step 1: OWNER/ADMIN Invites You
+
+An OWNER or ADMIN from your organization will send you an invitation to join.
+
+### How Organizations Send Invitations
+
+**From Organization Settings:**
+
+1. Go to **Settings** → **Invitations**
+2. Click **"New Invitation"**
+3. Enter your email address
+4. Select your organization role (VIEWER, ADMIN, OWNER)
+5. Select a project to join
+6. Select your project role
+7. Click **"Send Invitation"**
+
+The system sends you an email with a unique invitation link.
+
+<Tip>
+An OWNER or ADMIN must have access to the organization settings to send invitations.
+</Tip>
+
+---
+
+## Step 2: Receive the Invitation Email
+
+You'll receive an email from PLai Framework with the subject:
+
+> "You've been invited to join [Organization Name]"
+
+**What the email contains:**
+- Organization name
+- Your assigned role (e.g., "ADMIN")
+- A link to accept the invitation
+
+Click the link in the email to continue.
+
+---
+
+## Step 3: Access the Invitation Page
+
+When you click the email link, you'll be taken to the invitation page showing:
+
+```
+[Organization Name] has invited you to join
+As a [ADMIN] of the organization
+```
+
+You have two options:
+- **Sign In** - If you already have a PLai account
+- **Register** - If this is your first time
+
+### If You Already Have an Account
+
+<Steps>
+  <Step title="Click Sign In">
+    Select the "Sign In" button on the invitation page
+  </Step>
+  <Step title="Enter Your Credentials">
+    Use your registered email and password
+  </Step>
+  <Step title="Complete Sign In">
+    You're now logged in to your account
+  </Step>
+  <Step title="Accept Invitation">
+    You'll be redirected to view your pending invitations
+  </Step>
+</Steps>
+
+### If You're a New User
+
+You have two options to create your account:
+
+**Option 1: Sign Up with Google**
+
+<Steps>
+  <Step title="Click Register">
+    Select the "Register" button on the invitation page
+  </Step>
+  <Step title="Click Google Login">
+    Select the "Sign up with Google" button
+  </Step>
+  <Step title="Complete Google Authentication">
+    Follow Google's sign-in flow
+  </Step>
+  <Step title="Accept Invitation">
+    You'll be redirected to view your pending invitations
+  </Step>
+</Steps>
+
+**Option 2: Sign Up with Email & Password**
+
+<Steps>
+  <Step title="Click Register">
+    Select the "Register" button on the invitation page
+  </Step>
+  <Step title="Create Your Account">
+    <ParamField path="email" type="string" required>
+      Your email address (pre-filled from invitation)
+    </ParamField>
+    <ParamField path="password" type="string" required>
+      Create a strong password (min. 8 characters, must include uppercase, lowercase, number, symbol)
+    </ParamField>
+    <ParamField path="full_name" type="string" required>
+      Your full name
+    </ParamField>
+  </Step>
+  <Step title="Verify Your Email">
+    Check your email inbox for a verification link and click it
+  </Step>
+  <Step title="Sign In">
+    Return to sign in with your new credentials
+  </Step>
+  <Step title="Accept Invitation">
+    You'll be redirected to view your pending invitations
+  </Step>
+</Steps>
+
+---
+
+## Step 4: Review Your Invitations
+
+After signing in, navigate to **My Account** → **Invitations** to see all pending invitations.
+
+### Invitations Dashboard
+
+You'll see a table with your pending invitations showing:
+
+| Column | Description |
+|--------|-------------|
+| **Organization** | Name of the organization inviting you |
+| **Organization Role** | Your assigned role (VIEWER, ADMIN, OWNER) |
+| **Project** | Project name and your project role |
+| **Sent** | When the invitation was created |
+| **Actions** | Accept or Decline buttons |
+
+### If You Have No Invitations
+
+If you don't see any invitations, the page displays:
+
+> "There are no invitations for you"
+> 
+> "Here you'll find your organization and project invitations."
+
+In this case:
+- Contact your organization's OWNER or ADMIN
+- Ask them to send you an invitation
+- Check your email (including spam folder)
+
+---
+
+## Step 5: Accept the Invitation
+
+Once you've reviewed your pending invitations, you can accept them.
+
+<Steps>
+  <Step title="View Your Invitations">
+    Go to **My Account** → **Invitations**
+  </Step>
+  <Step title="Review Invitation Details">
+    Check the organization, your assigned role, and the project
+  </Step>
+  <Step title="Click Accept">
+    Select the **Accept** button for the invitation
+  </Step>
+  <Step title="Confirm">
+    You're now a member of the organization and project
+  </Step>
+</Steps>
+
+**After accepting:** You'll be redirected to your organization's projects page and can start working immediately.
+
+<Tip>
+You can accept multiple invitations to join different organizations and projects.
+</Tip>
+
+---
+
+## What Happens After Accepting
+
+Once you accept an invitation:
+
+✅ You become a member of the organization  
+✅ You're added to the selected project  
+✅ Your role is set to what the invitation specified  
+✅ You can access agents, tools, and datasources (based on your permissions)  
+✅ You appear in the organization's members list  
+
+You can now:
+- Create and manage agents
+- Configure tools and datasources
+- Collaborate with team members
+- Access organization settings (if you have ADMIN/OWNER role)
+
+---
+
+## Invitation Roles Explained
+
+### Organization Roles
+
+| Role | Permissions |
+|------|-------------|
+| **VIEWER** | Read-only access to organization resources |
+| **ADMIN** | Full access to organization settings, can invite members |
+| **OWNER** | Full control, including billing and license management |
+
+### Project Roles
+
+| Role | Permissions |
+|------|-------------|
+| **VIEWER** | Read-only access to project resources |
+| **EDITOR** | Can create and edit agents, tools, datasources |
+| **ADMIN** | Full project control, including member management |
+
+---
+
+## Managing Your Invitations
+
+### Decline an Invitation
+
+If you don't want to join an organization:
+
+1. Go to **My Account** → **Invitations**
+2. Find the invitation you want to decline
+3. Click the **Decline** button
+4. The invitation will be removed from your list
+
+<Warning>
+Declining an invitation cannot be undone. Contact the OWNER/ADMIN if you change your mind.
+</Warning>
+
+### Accept Invitations Later
+
+You can accept invitations at any time. They remain in your pending list until you accept or decline them.
+
+---
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="I didn't receive the invitation email">
+    **Solutions:**
+    - Check your spam or junk folder
+    - Ask the OWNER/ADMIN to resend the invitation
+    - Verify your email address is correct
+    - Check if there's a typo in the email address they used
+    - Wait a few minutes (emails can take time to arrive)
+  </Accordion>
+
+  <Accordion title="The invitation link is invalid or expired">
+    **Solutions:**
+    - Ask the OWNER/ADMIN to send you a new invitation
+    - Make sure you're clicking the correct link from the email
+    - Check if you're using the right email address to sign in
+  </Accordion>
+
+  <Accordion title="I'm getting 'already a member' error">
+    **Cause:** You're already a member of that organization/project
+    
+    **Solution:**
+    - Decline the duplicate invitation
+    - Go to the organization dashboard to access the project
+  </Accordion>
+
+  <Accordion title="Password requirements not met">
+    **Requirements:**
+    - Minimum 8 characters
+    - At least one uppercase letter (A-Z)
+    - At least one lowercase letter (a-z)
+    - At least one number (0-9)
+    - At least one special character (!@#$%^&*)
+    
+    **Example valid password:** `SecurePass123!`
+  </Accordion>
+
+  <Accordion title="I forgot my password">
+    **Reset your password:**
+    1. Go to the [login page](/auth/login)
+    2. Click "Forgot password?"
+    3. Enter your email address
+    4. Check your email for reset instructions
+    5. Create a new password
+    6. Sign in with your new password
+  </Accordion>
+
+  <Accordion title="How do I leave an organization?">
+    **Note:** Currently, you must contact your organization's OWNER or ADMIN to remove your membership.
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Next Steps
+
+After successfully joining an organization:
+
+- **[Create Your First Agent](../guides/first-agent.mdx)** - Start building with a step-by-step tutorial
+- **[Understand Core Concepts](../concepts/overview.mdx)** - Learn about organizations, projects, and agents
+- **[Explore Tools](../tools/que-es-una-tool.mdx)** - Connect external services to your agents
+- **[Manage Datasources](../datasources/overview.mdx)** - Add knowledge bases to your agents
+
+---
+
+## Security Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Protect Your Account" icon="shield">
+    Use a strong, unique password. Enable 2FA if available.
+  </Card>
+  <Card title="Verify Emails" icon="mail-check">
+    Always verify invitation emails are from @plaisolutions.com
+  </Card>
+  <Card title="Share Carefully" icon="lock">
+    Only share invitations with trusted team members
+  </Card>
+  <Card title="Monitor Access" icon="users">
+    Review your organization members regularly for security
+  </Card>
+</CardGroup>
+
+---
+
+## FAQ
+
+**Q: Can I be invited to multiple organizations?**  
+A: Yes, you can receive and accept invitations to multiple organizations and projects.
+
+**Q: Can I change my email address?**  
+A: Contact your organization's OWNER or ADMIN to update your email in your profile.
+
+**Q: What if I need admin access to manage invitations?**  
+A: Ask your current OWNER or ADMIN to grant you the ADMIN role in the organization.
+
+**Q: How long is an invitation valid?**  
+A: Invitations remain valid until you accept or decline them, or until the OWNER/ADMIN deletes them.
+
+**Q: Can I invite people to my organization?**  
+A: Yes, if you have OWNER or ADMIN role. See the "Invite Organization Members" step above.

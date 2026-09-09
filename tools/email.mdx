@@ -1,0 +1,408 @@
+---
+title: "Email Tool"
+description: "Send emails from agents"
+icon: "mail"
+---
+
+# Email Tool
+
+The **Email Tool** allows agents to send email messages through configured email providers. This enables agents to communicate directly with users, stakeholders, and external systems.
+
+---
+
+## What is an Email Tool?
+
+An Email Tool lets you:
+
+- ✅ Send emails from agents
+- ✅ Use configured email providers
+- ✅ Support dynamic recipients
+- ✅ Include rich content
+- ✅ Track email delivery
+- ✅ Integrate with customer communications
+
+```
+Agent Process:
+┌─────────────────────────┐
+│ Agent generates email   │
+├─────────────────────────┤
+│ Calls Email Tool        │
+│  • To: recipient        │
+│  • Subject: text        │
+│  • Body: content        │
+│     ↓                   │
+│ Email Provider sends    │
+│     ↓                   │
+│ Email delivered         │
+└─────────────────────────┘
+```
+
+---
+
+## Use Cases
+
+### Customer Support Notifications
+
+An agent resolves a support ticket and sends a confirmation:
+
+```
+Agent Process:
+1. Receives support request
+2. Resolves the issue
+3. Calls Email Tool to send confirmation
+4. Recipient: customer email
+5. Subject: "Your support ticket has been resolved"
+6. Body: Issue summary and solution
+```
+
+### Order Confirmations
+
+An e-commerce agent processes a purchase:
+
+```
+Agent Process:
+1. Validates order
+2. Processes payment
+3. Uses Email Tool to send order confirmation
+4. Recipient: customer email
+5. Includes order details and tracking info
+6. Sends receipt
+```
+
+### Alert Notifications
+
+An agent detects an important event:
+
+```
+Agent Process:
+1. Monitors data/metrics
+2. Detects anomaly
+3. Uses Email Tool to alert stakeholders
+4. Recipients: admin, team lead
+5. Subject: "Alert: Unusual activity detected"
+6. Includes details and recommended actions
+```
+
+### Follow-up Communications
+
+An agent initiates a workflow requiring follow-up:
+
+```
+Agent Process:
+1. Completes initial task
+2. Sends email with next steps
+3. Includes links for user actions
+4. Schedules follow-up
+5. Recipient: user or team member
+```
+
+---
+
+## Configuration
+
+### Adding Email Tool to an Agent
+
+<Steps>
+  <Step title="Go to Agent Settings">
+    Open the agent where you want to use the Email Tool
+  </Step>
+  <Step title="Open Tools Tab">
+    Navigate to the Tools configuration section
+  </Step>
+  <Step title="Add New Tool">
+    Click "Add Tool" and select "Email"
+  </Step>
+  <Step title="Configure Tool">
+    - Name: Descriptive identifier (e.g., "Send Notification")
+    - Description: What this tool does
+    - Email provider should be configured at project level
+  </Step>
+  <Step title="Save">
+    Email Tool is now available to the agent
+  </Step>
+</Steps>
+
+### Email Provider Configuration
+
+Email providers are configured at the **project level**, not per-tool:
+
+1. Go to **Project Settings**
+2. Find **Email Configuration**
+3. Select email provider (SMTP, SendGrid, AWS SES, etc.)
+4. Enter credentials
+5. Verify connection
+
+Once configured, all agents in the project can use the Email Tool.
+
+---
+
+## How to Use
+
+### Email Parameters
+
+When calling the Email Tool, agents specify:
+
+```json
+{
+  "to": "recipient@example.com",
+  "subject": "Your support request has been resolved",
+  "body": "We've successfully resolved your issue...",
+  "cc": "supervisor@example.com",
+  "bcc": "archive@example.com",
+  "reply_to": "support@example.com"
+}
+```
+
+### Required Fields
+
+- **To**: Recipient email address (required)
+- **Subject**: Email subject line (required)
+- **Body**: Email content (required)
+
+### Optional Fields
+
+- **CC**: Carbon copy recipients (optional)
+- **BCC**: Blind carbon copy (optional)
+- **Reply-To**: Reply address (optional)
+- **Attachments**: Files to attach (optional)
+- **HTML Body**: Rich HTML formatting (optional)
+
+### Dynamic Recipients
+
+The agent can use context to determine recipients:
+
+```
+Agent Prompt Example:
+
+"When sending an email:
+1. Ask the user for their email if not provided
+2. Verify email format looks valid
+3. Use Email Tool with that address as 'to'
+4. Confirm email was sent"
+```
+
+### Email Content Best Practices
+
+**Subject Line:**
+- Clear and specific
+- Includes action or status
+- Example: "Your order #12345 has shipped"
+
+**Body:**
+- Professional greeting
+- Clear explanation of purpose
+- Specific details (order numbers, dates, etc.)
+- Call to action if needed
+- Professional closing
+
+---
+
+## Email Tool vs Workflow Email Node
+
+| Aspect | Email Tool | Workflow Email Node |
+|--------|-----------|-------------------|
+| **Usage** | From agents | In workflows |
+| **Flexibility** | Agent-controlled | Workflow-defined |
+| **Dynamic Content** | High flexibility | Template-based |
+| **Recipient** | Agent specifies | Workflow specifies |
+| **Use Case** | Agent responses | Automated notifications |
+
+---
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Verify Recipients" icon="check">
+    Always verify email addresses before sending
+  </Card>
+  <Card title="Clear Subject Lines" icon="target">
+    Use descriptive subjects for easy identification
+  </Card>
+  <Card title="Professional Content" icon="pen">
+    Keep emails clear, concise, and professional
+  </Card>
+  <Card title="Error Handling" icon="alert">
+    Handle delivery failures gracefully
+  </Card>
+</CardGroup>
+
+### Example: Support Agent Sending Confirmation
+
+```
+Agent: Customer Support Bot
+Tools: Email Tool, Ticket API
+
+Scenario: Support ticket resolved
+
+1. Agent closes ticket
+2. Gets customer email from ticket
+3. Calls Email Tool with:
+   - to: customer_email
+   - subject: "Ticket #[ticket_id] resolved"
+   - body: "Your issue has been resolved..."
+4. Email sent successfully
+5. Agent confirms to customer
+```
+
+### Email Template Example
+
+```
+Subject: Your Support Request Has Been Resolved
+
+Dear [Customer Name],
+
+Your support request (Ticket #[TICKET_ID]) has been 
+successfully resolved.
+
+Issue: [Brief description]
+Resolution: [What was done]
+Reference: [Ticket link]
+
+If you have any questions or concerns, please reply 
+to this email or contact our support team.
+
+Best regards,
+Support Team
+```
+
+---
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Email not sending">
+    **Symptoms**: Email Tool executes but email doesn't arrive
+    
+    **Solutions:**
+    - Verify email provider is configured correctly
+    - Check recipient email address is valid
+    - Review project email settings
+    - Check email logs for errors
+    - Verify email credentials haven't expired
+  </Accordion>
+
+  <Accordion title="Invalid email address">
+    **Symptoms**: Error when sending to provided address
+    
+    **Solutions:**
+    - Validate email format in agent prompt
+    - Ask user to confirm email if unclear
+    - Implement email verification in agent
+    - Check for typos in dynamic email addresses
+  </Accordion>
+
+  <Accordion title="Email delivery delayed">
+    **Symptoms**: Email takes a long time to arrive
+    
+    **Solutions:**
+    - Check email provider status
+    - Review email size/content
+    - Check recipient's spam folder
+    - Verify sender reputation
+    - Review provider rate limits
+  </Accordion>
+
+  <Accordion title="Agent not calling Email Tool">
+    **Symptoms**: Agent has tool but doesn't use it
+    
+    **Solutions:**
+    - Add to agent prompt when to use email
+    - Include examples in prompt
+    - Test with explicit instruction
+    - Verify tool is properly configured
+  </Accordion>
+
+  <Accordion title="Email provider errors">
+    **Symptoms**: Error messages from email service
+    
+    **Solutions:**
+    - Verify credentials are correct
+    - Check API key or token hasn't expired
+    - Review provider's rate limits
+    - Ensure sender address is verified
+    - Contact email provider support if needed
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Advanced Usage
+
+### Rich HTML Emails
+
+Send formatted emails with HTML:
+
+```
+Agent can include:
+- Formatted text
+- Images and logos
+- Links with styling
+- Tables for data display
+- Colors and fonts
+```
+
+### Conditional Email Logic
+
+```
+Agent Prompt Example:
+
+"When responding to customers:
+- If issue resolved: Send confirmation email
+- If escalation needed: Send to supervisor email
+- If follow-up required: Send with action items
+- Always include ticket reference number"
+```
+
+### Email with Context
+
+```
+Agent Process:
+1. Gathers context from conversation
+2. Formats email with relevant details
+3. Sends to appropriate recipient
+4. Logs email in conversation history
+5. Confirms action to user
+```
+
+---
+
+## Integration Examples
+
+### Support Workflow
+
+```
+Support Agent receives ticket → 
+Gathers information → 
+Resolves issue → 
+Calls Email Tool to confirm → 
+Customer receives confirmation
+```
+
+### Order Processing
+
+```
+Order Agent processes order → 
+Validates payment → 
+Calls Email Tool with confirmation → 
+Customer receives receipt → 
+Calls Workflow for fulfillment
+```
+
+### Alert System
+
+```
+Monitoring Agent detects issue → 
+Analyzes severity → 
+Calls Email Tool to alert team → 
+Team receives notification → 
+Takes appropriate action
+```
+
+---
+
+## Next Steps
+
+- **[Email Tool Configuration](../getting-started/first-project.mdx)** - Set up email provider
+- **[Agent Configuration](../agents/configuration.mdx)** - Add tools to agents
+- **[Workflows with Email](../concepts/workflows-jobs-and-triggers.mdx)** - Use email in workflows
+- **[Create Your First Agent](../../guides/first-agent.mdx)** - Get started with agents
