@@ -3,9 +3,7 @@ title: "Agent Settings"
 description: "Complete guide to configuring your AI agents in PLai Framework"
 ---
 
-# Agent Settings
-
-This guide provides a comprehensive overview of all configuration options available when setting up and managing your AI agents in PLai Framework. Agent settings are organized into four main tabs: Agent, Model, Datasources, and Tools.
+Agent settings are organized into four tabs — **Agent**, **Model**, **Datasources**, and **Tools** — each covering a distinct part of your agent's setup, from personality and instructions to model behavior, knowledge sources, and tool access.
 
 ## Overview
 
@@ -844,18 +842,15 @@ Instead of searching the datasource using only the user's original query, Multi-
 
 **How It Works:**
 
-```
-User Query: "What's the password reset process?"
-
-Multi-Query RAG generates:
-├─ Original: "What's the password reset process?"
-├─ Variant 1: "How do I reset my password?"
-├─ Variant 2: "Password reset instructions"
-├─ Variant 3: "Forgot password procedure"
-└─ Variant 4: "Change account password"
-
-All variants are searched → Results combined and deduplicated → Agent uses comprehensive results
-```
+1. **User query**: "What's the password reset process?"
+2. **Multi-Query RAG generates**:
+   - Original: "What's the password reset process?"
+   - Variant 1: "How do I reset my password?"
+   - Variant 2: "Password reset instructions"
+   - Variant 3: "Forgot password procedure"
+   - Variant 4: "Change account password"
+3. **All variants are searched** — results are combined and deduplicated
+4. **Agent uses the comprehensive, combined results**
 
 **Benefits:**
 
@@ -1021,22 +1016,17 @@ Google models provide access to built-in tools such as:
 
 **Example:**
 
-```
-Google Model: gemini-2.0-flash
+Google Model: `gemini-2.0-flash`
 
-Google Built-in Tools:
-├─ Google Search: ✅ Enabled
-├─ Location Services: ❌ Disabled
-├─ Link Preview: ✅ Enabled
-└─ Device Info: ❌ Disabled
-
-Custom Tools (from Tools Selection):
-├─ API Request: ✅ Enabled
-├─ BigQuery: ✅ Enabled
-
-Result: Agent can use Google Search, Link Preview, 
-        plus custom tools (API, BigQuery, Code)
-```
+- **Google Built-in Tools**:
+  - Google Search: Enabled
+  - Location Services: Disabled
+  - Link Preview: Enabled
+  - Device Info: Disabled
+- **Custom Tools** (from Tools Selection):
+  - API Request: Enabled
+  - BigQuery: Enabled
+- **Result**: Agent can use Google Search, Link Preview, plus custom tools (API, BigQuery, Code)
 
 **Best Practices with Google Built-in Tools:**
 

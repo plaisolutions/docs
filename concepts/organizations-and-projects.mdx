@@ -3,8 +3,6 @@ title: "Organizations & Projects"
 description: "Understand team structure, workspace management, and roles in PLai Framework"
 ---
 
-# Organizations & Projects
-
 Organizations are the top-level containers that hold your team, projects, and settings. Projects are isolated workspaces where you actually build and run your agents. This guide explains how to structure and manage both.
 
 ---
@@ -70,23 +68,19 @@ A **Project** is an isolated workspace within an organization where you create a
 
 ### Multiple Projects Scenario
 
-```
-ORGANIZATION: Acme Corp
+**Organization: Acme Corp**
 
-├─ Project: Customer Support
-│   ├─ Agent: Support Bot
-│   ├─ Agent: FAQ Assistant
-│   └─ Tool: Help Desk API
-│
-├─ Project: Data Processing
-│   ├─ Agent: Data Validator
-│   ├─ Agent: CSV Processor
-│   └─ Workflow: Nightly ETL
-│
-└─ Project: Internal Tools
-    ├─ Agent: Document Summarizer
-    └─ Tool: File Storage
-```
+- **Project: Customer Support**
+  - Agent: Support Bot
+  - Agent: FAQ Assistant
+  - Tool: Help Desk API
+- **Project: Data Processing**
+  - Agent: Data Validator
+  - Agent: CSV Processor
+  - Workflow: Nightly ETL
+- **Project: Internal Tools**
+  - Agent: Document Summarizer
+  - Tool: File Storage
 
 ---
 
@@ -206,33 +200,28 @@ Inside each project, you can configure:
 
 ### Example: Three-Level Permission System
 
-```
-ORGANIZATION LEVEL
-├─ Alice: OWNER
-│   → Can: Manage all, create projects, invite members
-│   → Sees: Everything in the organization
-│
-├─ Bob: ADMIN
-│   → Can: Manage projects, invite members
-│   → Sees: Everything in the organization
-│
-└─ Charlie: VIEWER
-    → Can: View resources only
-    → Sees: Only projects they're invited to
+**Organization level**:
 
-PROJECT "Support" LEVEL
-├─ Alice: (inherited OWNER access)
-│   → Can: Edit, delete, manage project settings
-│
-├─ Bob: (inherited ADMIN access)
-│   → Can: Edit, delete, manage project settings
-│
-├─ Charlie: (inherited VIEWER)
-│   → Can: View agents and results only
-│
-└─ Diana: MEMBER (added at project level)
-    → Can: Create and edit agents, run workflows
-```
+- **Alice: OWNER**
+  - Can: Manage all, create projects, invite members
+  - Sees: Everything in the organization
+- **Bob: ADMIN**
+  - Can: Manage projects, invite members
+  - Sees: Everything in the organization
+- **Charlie: VIEWER**
+  - Can: View resources only
+  - Sees: Only projects they're invited to
+
+**Project "Support" level**:
+
+- **Alice** (inherited OWNER access)
+  - Can: Edit, delete, manage project settings
+- **Bob** (inherited ADMIN access)
+  - Can: Edit, delete, manage project settings
+- **Charlie** (inherited VIEWER)
+  - Can: View agents and results only
+- **Diana: MEMBER** (added at project level)
+  - Can: Create and edit agents, run workflows
 
 ### Permission Inheritance
 

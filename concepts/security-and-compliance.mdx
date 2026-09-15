@@ -3,8 +3,6 @@ title: "Security & Compliance"
 description: "Protect your data, control access, and ensure safety in PLai Framework"
 ---
 
-# Security & Compliance
-
 Security is built into PLai Framework at every level. This guide covers access control, credential management, safety guardrails, and compliance features.
 
 ---
@@ -15,18 +13,14 @@ RBAC determines who can do what in your organization and projects.
 
 ### How RBAC Works
 
-```
-ORGANIZATION LEVEL
-├─ OWNER: Full access
-├─ ADMIN: Full access (except billing)
-└─ VIEWER: Read-only
-
-         ↓ (members join projects)
-
-PROJECT LEVEL (within each project)
-├─ MEMBER: Create and edit resources
-└─ VIEWER: Read-only access
-```
+1. **Organization level**
+   - **OWNER** — full access
+   - **ADMIN** — full access (except billing)
+   - **VIEWER** — read-only
+2. Members join projects
+3. **Project level** (within each project)
+   - **MEMBER** — create and edit resources
+   - **VIEWER** — read-only access
 
 ### Access Matrix
 
@@ -168,21 +162,14 @@ Never put credentials directly in agent instructions or datasources. Always use 
 
 **Answer Filters** are specific guardrails for agent responses.
 
-```
-AGENT generates response
-         ↓
-┌─────────────────────────┐
-│   Answer Filters Apply  │
-├─────────────────────────┤
-│ ✓ Check length         │
-│ ✓ Check tone           │
-│ ✓ Scan for PII         │
-│ ✓ Validate accuracy    │
-│ ✓ Check confidence     │
-└─────────────────────────┘
-         ↓
-Response sent or blocked
-```
+1. **Agent generates response**
+2. **Answer filters apply**:
+   - Check length
+   - Check tone
+   - Scan for PII
+   - Validate accuracy
+   - Check confidence
+3. **Response sent or blocked**
 
 ### Configuring Guardrails
 

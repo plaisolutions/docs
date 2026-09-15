@@ -3,8 +3,6 @@ title: "Agents, Datasources & Tools"
 description: "Learn the core building blocks for creating AI automation in PLai Framework"
 ---
 
-# Agents, Datasources & Tools
-
 These are the three core building blocks you use to create AI automation in PLai Framework. Agents are the AI workers, Tools extend their capabilities, and Datasources provide them with knowledge.
 
 ---
@@ -15,31 +13,23 @@ An **Agent** is an AI assistant that performs specific tasks. Each agent has its
 
 ### Agent Anatomy
 
-```
-AGENT = AI Model + Configuration + Tools + Datasources
+**AGENT = AI Model + Configuration + Tools + Datasources**
 
-┌──────────────────────────┐
-│      AGENT: Support Bot  │
-├──────────────────────────┤
-│ Model: Claude 3.5 Sonnet │
-│ Role: Answer customer Q's│
-├──────────────────────────┤
-│ Tools:                   │
-│ • Help Desk API          │
-│ • Email Tool             │
-│ • Knowledge Base Search   │
-├──────────────────────────┤
-│ Datasources:             │
-│ • FAQ Database           │
-│ • Product Docs           │
-│ • Customer Guidelines    │
-├──────────────────────────┤
-│ Guardrails:              │
-│ • No sensitive data      │
-│ • Max 2000 chars         │
-│ • Rate limit: 100/hour   │
-└──────────────────────────┘
-```
+- **AGENT: Support Bot**
+  - **Model**: Claude 3.5 Sonnet
+  - **Role**: Answer customer Q's
+  - **Tools**:
+    - Help Desk API
+    - Email Tool
+    - Knowledge Base Search
+  - **Datasources**:
+    - FAQ Database
+    - Product Docs
+    - Customer Guidelines
+  - **Guardrails**:
+    - No sensitive data
+    - Max 2000 chars
+    - Rate limit: 100/hour
 
 ### Agent Configuration
 
@@ -172,25 +162,13 @@ A **Datasource** is a collection of documents, files, or data that agents can se
 
 ### How Agents Use Datasources
 
-```
-AGENT "FAQ Bot" needs to answer: "What are your hours?"
+Agent "FAQ Bot" needs to answer: "What are your hours?"
 
-┌──────────────────────────────┐
-│ Search in Datasources:       │
-├──────────────────────────────┤
-│ 1. FAQ Database              │
-│    → Found: "Hours: 9-5 EST" │
-│                              │
-│ 2. Company Handbook          │
-│    → Found: "Contact hours"  │
-│                              │
-│ 3. Website Content           │
-│    → Found: "Support hours"  │
-└──────────────────────────────┘
-         ↓
-Agent combines results and responds:
-"We're open 9 AM to 5 PM EST, Monday-Friday"
-```
+1. **Search in Datasources**:
+   - **FAQ Database** — found: "Hours: 9-5 EST"
+   - **Company Handbook** — found: "Contact hours"
+   - **Website Content** — found: "Support hours"
+2. **Agent combines results and responds**: "We're open 9 AM to 5 PM EST, Monday-Friday"
 
 ### Datasource Features
 
@@ -235,60 +213,23 @@ Agent combines results and responds:
 
 ### Example: Customer Support Agent
 
-```
-CUSTOMER QUERY: "How do I reset my password?"
-
-     ↓
-
-┌─────────────────────────────────────────┐
-│         AGENT: Support Bot              │
-│  (Claude 3.5 Sonnet, support role)      │
-└─────────────────────────────────────────┘
-          ↓ Uses ↓
-   ┌──────┴──────┐
-   │             │
-   ▼             ▼
-
-TOOL: Help Desk API       DATASOURCE: FAQ Database
-(Send tickets)            (Search for answer)
-   │                          │
-   └──────────┬───────────────┘
-              │
-              ▼
-         RESPONSE:
-    "Click Settings → Security → 
-     Reset Password. Check your 
-     email for confirmation link."
-```
+1. **Customer query**: "How do I reset my password?"
+2. **Agent: Support Bot** (Claude 3.5 Sonnet, support role) uses:
+   - **Tool: Help Desk API** — send tickets
+   - **Datasource: FAQ Database** — search for answer
+3. **Response**: "Click Settings → Security → Reset Password. Check your email for confirmation link."
 
 ### Example: Data Processing Agent
 
-```
-TASK: Process daily sales data
-
-     ↓
-
-┌─────────────────────────────────────────┐
-│      AGENT: Data Processor              │
-│  (Claude + Python execution)            │
-└─────────────────────────────────────────┘
-          ↓ Uses ↓
-   ┌──────┴──────┐
-   │             │
-   ▼             ▼
-
-TOOL: Agent Tool    TOOL: Database API
-(Transform data)          (Load/save data)
-   │                          │
-   └──────────┬───────────────┘
-              │
-              ▼
-         RESULTS:
-    • Processed: 1,245 records
-    • Valid: 1,200 (96.4%)
-    • Invalid: 45 (3.6%)
-    • Saved to database
-```
+1. **Task**: Process daily sales data
+2. **Agent: Data Processor** (Claude + Python execution) uses:
+   - **Tool: Agent Tool** — transform data
+   - **Tool: Database API** — load/save data
+3. **Results**:
+   - Processed: 1,245 records
+   - Valid: 1,200 (96.4%)
+   - Invalid: 45 (3.6%)
+   - Saved to database
 
 ---
 

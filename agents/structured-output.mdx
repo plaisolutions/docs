@@ -3,9 +3,7 @@ title: "Structured Output"
 description: "Using non-streaming agents as tools, in workflows, and via API"
 ---
 
-# Structured Output
-
-When you disable **streaming** for an agent, it returns **structured JSON responses** instead of streamed text. This mode is designed for automation, integration, and programmatic use.
+When you disable **streaming** for an agent, it returns **structured JSON responses** instead of streamed text. You can optionally define a response schema so the JSON shape stays predictable and machine-readable every time, rather than open-ended prose.
 
 ---
 
@@ -41,24 +39,12 @@ Output (Structured JSON):
 
 Use one agent as a **tool** that another agent can call:
 
-```
-SCENARIO: Sales Agent needs help with lead scoring
+Scenario: Sales Agent needs help with lead scoring.
 
-┌─────────────────────┐
-│   Sales Agent       │
-│                     │
-│ Receives lead info  │
-│       ↓             │
-│ Calls "Lead Scorer" │
-│ agent as a tool     │
-│       ↓             │
-│ Gets structured     │
-│ score & analysis    │
-│       ↓             │
-│ Uses score to       │
-│ prioritize lead     │
-└─────────────────────┘
-```
+1. **Sales Agent receives lead info**
+2. **Calls "Lead Scorer" agent as a tool**
+3. **Gets structured score & analysis** back
+4. **Uses the score to prioritize the lead**
 
 **Configuration:**
 - Main Agent: Has "Lead Scorer" as a tool
@@ -77,28 +63,13 @@ Main Agent workflow:
 
 Use agent in **workflows** for multi-step automation:
 
-```
-SCENARIO: Daily data processing workflow
+Scenario: Daily data processing workflow.
 
-Workflow Steps:
-┌─────────────────────────────┐
-│ 1. Extract Data             │
-│    (API → Raw data)         │
-│         ↓                   │
-│ 2. Validate Agent           │
-│    (Non-streaming)          │
-│    → { valid: true, ... }   │
-│         ↓                   │
-│ 3. Transform Agent          │
-│    (Non-streaming)          │
-│    → { normalized: {...} }  │
-│         ↓                   │
-│ 4. Load to Database         │
-│    (API call)               │
-│         ↓                   │
-│ RESULT: Clean data loaded   │
-└─────────────────────────────┘
-```
+1. **Extract Data** (API → Raw data)
+2. **Validate Agent** (Non-streaming) → `{ valid: true, ... }`
+3. **Transform Agent** (Non-streaming) → `{ normalized: {...} }`
+4. **Load to Database** (API call)
+5. **Result**: Clean data loaded
 
 **Use cases:**
 - Data validation and cleaning
@@ -208,31 +179,24 @@ Benefits:
 
 ### Example: Agent Calling Agent
 
-```
-Scenario: Support Bot needs Lead Scoring Agent
+Scenario: Support Bot needs Lead Scoring Agent.
 
-Support Bot Config:
-├─ Name: Support Bot
-├─ Tools:
-│  ├─ Help Desk API (for creating tickets)
-│  ├─ Email Tool (for sending emails)
-│  └─ Lead Scorer Agent (for evaluating customers)
-│
-└─ Prompt: "If customer mentions a sales opportunity,
-            use the Lead Scorer agent to evaluate
-            whether they're a good sales lead"
+- **Support Bot Config**:
+  - Name: Support Bot
+  - Tools:
+    - Help Desk API (for creating tickets)
+    - Email Tool (for sending emails)
+    - Lead Scorer Agent (for evaluating customers)
+  - Prompt: "If customer mentions a sales opportunity, use the Lead Scorer agent to evaluate whether they're a good sales lead"
 
-Flow Example:
-User: "I'm interested in your enterprise plan"
-      ↓
-Support Bot thinks: "This is a sales opportunity"
-      ↓
-Support Bot calls: Lead Scorer Agent
-Input: "Customer details and interest"
-Output: { lead_score: 9, category: "hot", rec: "route_to_sales" }
-      ↓
-Support Bot responds: "Great! I'm connecting you with our sales team"
-```
+Flow example:
+
+1. **User**: "I'm interested in your enterprise plan"
+2. **Support Bot thinks**: "This is a sales opportunity"
+3. **Support Bot calls Lead Scorer Agent**
+   - Input: "Customer details and interest"
+   - Output: `{ lead_score: 9, category: "hot", rec: "route_to_sales" }`
+4. **Support Bot responds**: "Great! I'm connecting you with our sales team"
 
 ---
 
@@ -240,48 +204,39 @@ Support Bot responds: "Great! I'm connecting you with our sales team"
 
 ### Workflow Integration
 
-```
-Example Workflow: Customer Feedback Analysis
+Example workflow: Customer Feedback Analysis
 
-Step 1: Receive Feedback
-├─ Input: Customer feedback text
-└─ Variable: customer_feedback
-
-Step 2: Analyze with Agent
-├─ Agent: "Feedback Analyzer" (non-streaming)
-├─ Input: customer_feedback
-└─ Output: { sentiment, topics, action_needed }
-
-Step 3: Route Based on Analysis
-├─ If action_needed == true:
-│  └─ Create ticket in Help Desk
-├─ If sentiment == "negative":
-│  └─ Alert support team
-└─ Else: Archive
-
-Step 4: Notify Stakeholders
-├─ Send report with analysis
-└─ Done
-```
+1. **Receive Feedback**
+   - Input: Customer feedback text
+   - Variable: `customer_feedback`
+2. **Analyze with Agent**
+   - Agent: "Feedback Analyzer" (non-streaming)
+   - Input: `customer_feedback`
+   - Output: `{ sentiment, topics, action_needed }`
+3. **Route Based on Analysis**
+   - If `action_needed == true` — create ticket in Help Desk
+   - If `sentiment == "negative"` — alert support team
+   - Else — archive
+4. **Notify Stakeholders**
+   - Send report with analysis
+   - Done
 
 ### Conditional Routing with Agent Output
 
-```
 Agent returns:
+
+```json
 {
   "priority": "high",
   "category": "billing",
   "needs_escalation": true
 }
+```
 
 Workflow routes:
-├─ If priority == "high" AND needs_escalation:
-│  └─ Escalate to manager
-├─ Elif category == "billing":
-│  └─ Route to billing team
-└─ Else:
-   └─ Route to general support
-```
+- If `priority == "high"` AND `needs_escalation` — escalate to manager
+- Elif `category == "billing"` — route to billing team
+- Else — route to general support
 
 ---
 

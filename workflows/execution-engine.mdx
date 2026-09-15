@@ -3,57 +3,20 @@ title: "Execution Engine"
 description: "Tick-based scheduling and asynchronous execution"
 ---
 
-# Workflow Execution Engine
-
 The PLai Framework's workflow execution engine is built on a **tick-based scheduling model** driven by Pub/Sub messaging. This design enables asynchronous, scalable execution of complex multi-step workflows.
 
 ---
 
 ## Execution Model Overview
 
-```
-┌─────────────────────────────────────────────────────────┐
-│  1. Client executes workflow                            │
-│     POST /workflows/{id}/execute                        │
-└──────────────────┬──────────────────────────────────────┘
-                   │
-                   ▼
-┌─────────────────────────────────────────────────────────┐
-│  2. Create TrackedExecution (status: PENDING)          │
-│     Publish message to Pub/Sub                          │
-└──────────────────┬──────────────────────────────────────┘
-                   │
-                   ▼
-┌─────────────────────────────────────────────────────────┐
-│  3. Pub/Sub triggers → ProcessWorkflow                  │
-│     Engine processes "tick" (ready nodes)               │
-└──────────────────┬──────────────────────────────────────┘
-                   │
-        ┌──────────┴──────────┐
-        │                     │
-        ▼                     ▼
-┌──────────────────┐  ┌──────────────────┐
-│ Sync Nodes       │  │ Async Nodes      │
-│ (plai_agent,     │  │ (firecrawl)      │
-│  http,           │  │                  │
-│  markdown_report)│  │ → Mark RUNNING   │
-│                  │  │ → Wait webhook   │
-│ → Complete       │  │ → Webhook →     │
-│   immediately    │  │   complete_node()│
-│                  │  │ → Pub/Sub →     │
-│                  │  │   New tick       │
-└──────────────────┘  └──────────────────┘
-        │                     │
-        └──────────┬──────────┘
-                   │
-                   ▼
-     ┌─────────────────────────┐
-     │ More work?              │
-     ├─────────────────────────┤
-     │ YES: Republish to Pub/Sub│
-     │ NO: Workflow COMPLETED   │
-     └─────────────────────────┘
-```
+1. **Client executes workflow** — `POST /workflows/{id}/execute`
+2. **Create `TrackedExecution`** (status `PENDING`) — publish message to Pub/Sub
+3. **Pub/Sub triggers `ProcessWorkflow`** — engine processes a tick (ready nodes)
+   - **Sync nodes** (`plai_agent`, `http`, `markdown_report`) — complete immediately
+   - **Async nodes** (`firecrawl`) — marked `RUNNING`, wait for a webhook, then call `complete_node()`
+4. **More work?**
+   - **Yes** — republish to Pub/Sub and repeat from step 3
+   - **No** — workflow is `COMPLETED`
 
 ---
 
@@ -129,14 +92,13 @@ Engine loads the execution and:
 4. Updates step execution records
 
 **Example first tick:**
-```
+
 Status after tick 1:
-├── fetch_data: COMPLETED
-├── search_web: COMPLETED
-├── analyze_a: PENDING (waiting for fetch_data)
-├── analyze_b: PENDING (waiting for fetch_data)
-└── analyze_c: PENDING (waiting for search_web)
-```
+- `fetch_data`: COMPLETED
+- `search_web`: COMPLETED
+- `analyze_a`: PENDING (waiting for `fetch_data`)
+- `analyze_b`: PENDING (waiting for `fetch_data`)
+- `analyze_c`: PENDING (waiting for `search_web`)
 
 ### Step 3: Subsequent Ticks
 
@@ -146,15 +108,14 @@ Each tick:
 3. Repeats until terminal state
 
 **Example later tick:**
-```
+
 Status after tick 2:
-├── fetch_data: COMPLETED
-├── search_web: COMPLETED
-├── analyze_a: COMPLETED
-├── analyze_b: COMPLETED
-├── analyze_c: RUNNING (async firecrawl)
-└── report: PENDING (waiting for analyze_a, analyze_b, analyze_c)
-```
+- `fetch_data`: COMPLETED
+- `search_web`: COMPLETED
+- `analyze_a`: COMPLETED
+- `analyze_b`: COMPLETED
+- `analyze_c`: RUNNING (async firecrawl)
+- `report`: PENDING (waiting for `analyze_a`, `analyze_b`, `analyze_c`)
 
 ### Step 4: Async Completion
 
@@ -175,16 +136,14 @@ For firecrawl nodes:
 
 ### Step 5: Workflow Completion
 
-```
 Final state:
-├── All sync nodes: COMPLETED
-├── All async nodes: COMPLETED or FAILED
-└── Workflow status: COMPLETED or FAILED
+- All sync nodes: COMPLETED
+- All async nodes: COMPLETED or FAILED
+- Workflow status: COMPLETED or FAILED
 
 Terminal conditions:
-- COMPLETED: All nodes succeeded
-- FAILED: At least one node failed
-```
+- **COMPLETED**: All nodes succeeded
+- **FAILED**: At least one node failed
 
 ---
 
@@ -309,36 +268,25 @@ GET /usage/executions/{execution_id}/logs
 ### Example Timings
 
 **Scenario 1: Sequential Pipeline**
-```
-Node A: 3 seconds
-  ↓
-Node B: 2 seconds
-  ↓
-Node C: 4 seconds
-
-Total: 9 seconds (3 + 2 + 4)
-Ticks: 3 (A, B, C)
-```
+- Node A: 3 seconds
+- Node B: 2 seconds — runs after Node A
+- Node C: 4 seconds — runs after Node B
+- **Total**: 9 seconds (3 + 2 + 4)
+- **Ticks**: 3 (A, B, C)
 
 **Scenario 2: Parallel Operations**
-```
-Node A: 3 seconds ──┐
-Node B: 2 seconds ─┼─ All in Tick 1
-Node C: 4 seconds ──┘
-
-Total: 4 seconds (max of all)
-Ticks: 1
-```
+- Node A: 3 seconds — all run in Tick 1 (parallel)
+- Node B: 2 seconds — all run in Tick 1 (parallel)
+- Node C: 4 seconds — all run in Tick 1 (parallel)
+- **Total**: 4 seconds (max of all)
+- **Ticks**: 1
 
 **Scenario 3: Mixed**
-```
-Tick 1: A (3s), B (2s)
-Tick 2: C (depends on A+B, 4s)
-Tick 3: D (depends on C, 2s)
-
-Total: 9 seconds
-Ticks: 3
-```
+- Tick 1: A (3s), B (2s)
+- Tick 2: C (depends on A+B, 4s)
+- Tick 3: D (depends on C, 2s)
+- **Total**: 9 seconds
+- **Ticks**: 3
 
 ---
 

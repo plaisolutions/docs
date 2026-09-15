@@ -3,32 +3,24 @@ title: "Node Types"
 description: "Agent, integration, and container nodes"
 ---
 
-# Workflow Node Types
-
 PLai Framework supports **8 node types** for building workflows. Each type handles different kinds of work: calling agents, making API requests, processing data, and organizing execution flow.
 
 ---
 
 ## Node Types Overview
 
-```
-Workflow Nodes
-├── Agent Nodes
-│  └── plai_agent: Invoke an AI agent
-│
-├── Integration Nodes
-│  ├── firecrawl: Scrape and crawl websites
-│  └── http: Make API requests
-│
-├── Data Nodes
-│  └── markdown_report: Generate formatted reports
-│
-└── Container Nodes
-   ├── parallel: Run nodes concurrently
-   ├── sequential: Run nodes in order
-   ├── loop: Iterate over arrays
-   └── subworkflow: Reuse another workflow
-```
+- **Agent Nodes**
+  - `plai_agent`: Invoke an AI agent
+- **Integration Nodes**
+  - `firecrawl`: Scrape and crawl websites
+  - `http`: Make API requests
+- **Data Nodes**
+  - `markdown_report`: Generate formatted reports
+- **Container Nodes**
+  - `parallel`: Run nodes concurrently
+  - `sequential`: Run nodes in order
+  - `loop`: Iterate over arrays
+  - `subworkflow`: Reuse another workflow
 
 ---
 
@@ -309,15 +301,12 @@ Run child nodes **concurrently** based on their dependencies.
 ```
 
 **Execution Timeline:**
-```
-prepare_data: ────────●
-                       │
-                       ├─ source_a_analysis: ────────●
-                       ├─ source_b_analysis: ─────●
-                       └─ source_c_analysis: ───────●
-
-Total time: Time of longest child
-```
+- `prepare_data` completes
+- Then, in parallel:
+  - `source_a_analysis`
+  - `source_b_analysis`
+  - `source_c_analysis`
+- **Total time**: time of the longest child
 
 **Use Cases:**
 - Parallel processing of multiple items
@@ -382,15 +371,10 @@ Run child nodes **one after another** in order.
 ```
 
 **Execution Timeline:**
-```
-fetch_data: ────────●
-                     │
-                     └─ analyze: ─────●
-                                       │
-                                       └─ generate_report: ───●
-
-Total time: Sum of all steps (3 + 2 + 1 = 6 time units)
-```
+- `fetch_data` runs first
+- `analyze` runs after `fetch_data` completes
+- `generate_report` runs after `analyze` completes
+- **Total time**: sum of all steps (3 + 2 + 1 = 6 time units)
 
 **Use Cases:**
 - Data processing pipelines
@@ -446,15 +430,12 @@ Iterate over array items, running child nodes for each.
 - `{{loop.index}}`: Current iteration number (0-based)
 
 **Execution Timeline with Parallel Mode:**
-```
-items: [URL1, URL2, URL3]
-
-Iteration 1: fetch(URL1) → analyze(URL1)
-Iteration 2: fetch(URL2) → analyze(URL2)    } All parallel
-Iteration 3: fetch(URL3) → analyze(URL3)
-
-Total time: Time of longest iteration
-```
+- `items`: `[URL1, URL2, URL3]`
+- All iterations run in parallel:
+  - Iteration 1: `fetch(URL1)` → `analyze(URL1)`
+  - Iteration 2: `fetch(URL2)` → `analyze(URL2)`
+  - Iteration 3: `fetch(URL3)` → `analyze(URL3)`
+- **Total time**: time of the longest iteration
 
 **Output:** Array of outputs from all iterations
 ```json

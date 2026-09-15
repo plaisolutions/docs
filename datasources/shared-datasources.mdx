@@ -3,22 +3,17 @@ title: "Shared Datasources"
 description: "Collaborate and share knowledge across your team"
 ---
 
-# Cross-Project Datasource Sharing
-
 A **Shared Datasource** is a knowledge base created in one Project that can be shared with other Projects. This enables multiple teams to maintain a single source of truth and ensure consistent information across all agents in different projects.
 
 ---
 
 ## What Makes a Datasource Shared?
 
-```
-Shared Datasource
-├── Single Knowledge Base
-├── Multiple Agents Access
-├── Centralized Management
-├── Consistent Updates
-└── Team Collaboration
-```
+- Single Knowledge Base
+- Multiple Agents Access
+- Centralized Management
+- Consistent Updates
+- Team Collaboration
 
 A datasource is "shared" when it's assigned to multiple agents in your project. All assigned agents can:
 - Search the same content
@@ -51,16 +46,11 @@ A datasource is "shared" when it's assigned to multiple agents in your project. 
 
 ### Single Agent vs Shared
 
-```
-Single-Use Datasource:
-Agent A --> Datasource X
-Agent B --> Datasource Y (separate copy)
-
-Shared Datasource:
-Agent A ──┐
-Agent B ──├─→ Datasource X (single copy)
-Agent C ──┘
-```
+- **Single-use datasource**:
+  - Agent A → Datasource X
+  - Agent B → Datasource Y (separate copy)
+- **Shared datasource**:
+  - Agent A, Agent B, and Agent C → Datasource X (single copy)
 
 ### Benefits of Consolidation
 
@@ -144,15 +134,10 @@ Testing Shared Datasource:
 
 When you update a shared datasource:
 
-```
-Update Content
-      ↓
-All Agents Notified
-      ↓
-Changes Available Immediately
-      ↓
-All Responses Use New Content
-```
+1. **Update Content**
+2. **All Agents Notified**
+3. **Changes Available Immediately**
+4. **All Responses Use New Content**
 
 **Timeline:**
 1. Edit datasource (add/remove files or content)
@@ -186,17 +171,12 @@ Track how agents use your shared datasource:
 
 Datasources are created in a **Primary Project** and can be shared with other **Secondary Projects**:
 
-```
-Organization
-├── Project A (Primary - creates datasource)
-│   └── Datasource X (owned here)
-│
-├── Project B (Secondary - can use Datasource X)
-│   └── References Datasource X
-│
-└── Project C (Secondary - can use Datasource X)
-    └── References Datasource X
-```
+- **Project A** (Primary — creates datasource)
+  - Datasource X (owned here)
+- **Project B** (Secondary — can use Datasource X)
+  - References Datasource X
+- **Project C** (Secondary — can use Datasource X)
+  - References Datasource X
 
 ### Access Control
 
@@ -232,17 +212,14 @@ All roles in secondary projects have:
 
 ### Scenario 1: Support Team
 
-```
-Company FAQ Datasource
-├── Product FAQ
-├── Troubleshooting Guides
-└── Support Procedures
-
-Used by:
-├── Customer Support Agent
-├── Technical Support Agent
-└── Sales Support Agent
-```
+- **Company FAQ Datasource**:
+  - Product FAQ
+  - Troubleshooting Guides
+  - Support Procedures
+- **Used by**:
+  - Customer Support Agent
+  - Technical Support Agent
+  - Sales Support Agent
 
 **Benefits:**
 - All agents answer from same FAQ
@@ -252,19 +229,16 @@ Used by:
 
 ### Scenario 2: Company Knowledge Base
 
-```
-Company Datasource
-├── Employee Handbook
-├── Policies & Procedures
-├── Benefits Information
-└── Internal Processes
-
-Used by:
-├── HR Assistant Agent
-├── Onboarding Agent
-├── Employee Support Agent
-└── HR Reporting Agent
-```
+- **Company Datasource**:
+  - Employee Handbook
+  - Policies & Procedures
+  - Benefits Information
+  - Internal Processes
+- **Used by**:
+  - HR Assistant Agent
+  - Onboarding Agent
+  - Employee Support Agent
+  - HR Reporting Agent
 
 **Benefits:**
 - Centralized HR information
@@ -274,19 +248,16 @@ Used by:
 
 ### Scenario 3: Product Documentation
 
-```
-Product Docs Datasource
-├── User Guide
-├── API Documentation
-├── Release Notes
-└── Troubleshooting
-
-Used by:
-├── Customer Support Agent
-├── Product Assistant Agent
-├── Sales Support Agent
-└── Developer Relations Agent
-```
+- **Product Docs Datasource**:
+  - User Guide
+  - API Documentation
+  - Release Notes
+  - Troubleshooting
+- **Used by**:
+  - Customer Support Agent
+  - Product Assistant Agent
+  - Sales Support Agent
+  - Developer Relations Agent
 
 **Benefits:**
 - Keep documentation current

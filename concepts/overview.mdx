@@ -3,36 +3,30 @@ title: "Concepts Overview"
 description: "Understand PLai Framework's architecture and how concepts fit together"
 ---
 
-# Concepts Overview
-
-PLai Framework is built on a clear hierarchy of concepts that work together to enable you to build, deploy, and manage AI agents. This guide maps how everything connects.
+Everything nests inside something else: an organization holds one or more projects, and each project holds the agents, tools, datasources, and automation that use them. The hierarchy below starts at the top and drills down to the pieces you'll configure day to day.
 
 ---
 
 ## PLai Architecture
 
-```
-ORGANIZATION LEVEL
-├── Organizations (Teams)
-├── Projects (Workspaces)
-├── Members & Roles
-└── Organization Settings
-    ├── Invitations
-    ├── Billing
-    └── Team Management
-
-PROJECT LEVEL (Inside Each Project)
-├── Agents (AI Workers)
-├── Tools (Service Integrations)
-├── Datasources (Knowledge Bases)
-├── Workflows (Multi-step Automation)
-├── Jobs (Scheduled Execution)
-├── Triggers (Event-based Automation)
-└── Monitor (Project Analytics & Metrics)
-
-USER LEVEL (Global)
-└── Profile & Account Settings
-```
+- **Organization Level**
+  - Organizations (Teams)
+  - Projects (Workspaces)
+  - Members & Roles
+  - Organization Settings
+    - Invitations
+    - Billing
+    - Team Management
+- **Project Level** (Inside Each Project)
+  - Agents (AI Workers)
+  - Tools (Service Integrations)
+  - Datasources (Knowledge Bases)
+  - Workflows (Multi-step Automation)
+  - Jobs (Scheduled Execution)
+  - Triggers (Event-based Automation)
+  - Monitor (Project Analytics & Metrics)
+- **User Level** (Global)
+  - Profile & Account Settings
 
 ---
 
@@ -199,47 +193,36 @@ How you understand what's happening:
 ## Key Mental Models
 
 ### Model 1: Container Nesting
-```
-Organization
-  └─ Project 1
-      ├─ Agent A
-      ├─ Tool X
-      └─ Datasource D
-  └─ Project 2
-      ├─ Agent B
-      ├─ Agent C
-      └─ Tool Y
-```
+- **Organization**
+  - **Project 1**
+    - Agent A
+    - Tool X
+    - Datasource D
+  - **Project 2**
+    - Agent B
+    - Agent C
+    - Tool Y
 
 **Rule:** Members of Organization see all Projects they're invited to. Members of a Project see only that Project's resources.
 
 ### Model 2: Separation of Concerns
-```
-ORG LEVEL (Who + What Access)
-  ├─ Organizations & Projects
-  ├─ Members & Roles
-  └─ Organization Settings
-
-PROJECT LEVEL (What You Build & Run)
-  ├─ Agents, Tools, Datasources
-  ├─ Workflows, Jobs, Triggers
-  └─ Monitor (Performance)
-
-SECURITY (Spans Both)
-  ├─ Credentials
-  ├─ Guardrails
-  └─ Activity Logs
-```
+- **Org Level** (Who + What Access)
+  - Organizations & Projects
+  - Members & Roles
+  - Organization Settings
+- **Project Level** (What You Build & Run)
+  - Agents, Tools, Datasources
+  - Workflows, Jobs, Triggers
+  - Monitor (Performance)
+- **Security** (Spans Both)
+  - Credentials
+  - Guardrails
+  - Activity Logs
 
 ### Model 3: Data Flow
-```
-Datasource (Knowledge) ──┐
-                         ├─→ Agent ──→ Tool ──→ External Service
-User Input ──────────────┤              ↑
-                         └──→ Guardrails (Filter/Validate)
-
-Result ──→ Monitor (Track) ──→ Analytics Dashboard
-```
+1. **Datasource (Knowledge)** and **User Input** feed into the **Agent**
+2. **Agent → Tool → External Service** — filtered/validated by **Guardrails** along the way
+3. **Result → Monitor** (Track) **→ Analytics Dashboard**
 
 ---
 

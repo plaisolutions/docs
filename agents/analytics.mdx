@@ -3,9 +3,7 @@ title: "Agent Analytics"
 description: "Track conversations, executions, and performance metrics for your agents"
 ---
 
-# Agent Analytics
-
-Agent Analytics shows detailed information about how your agents are being used, including conversations, execution logs, and performance metrics. This data helps you understand agent behavior and troubleshoot issues.
+If an agent's success rate drops or a user reports a wrong answer, Agent Analytics lets you drill into the exact conversation and execution log to see what happened and why, rather than guessing from aggregate numbers alone.
 
 ---
 
@@ -56,60 +54,48 @@ A **conversation** is an interaction with your agent. It includes:
 
 ### Conversation List
 
-```
-Agent: Support Bot
+Agent: Support Bot — recent conversations:
 
-Recent Conversations:
-
-1. Sep 7, 2:45 PM
-   ├─ Input: "How do I reset my password?"
-   ├─ Status: Success ✅
-   ├─ Duration: 1.2 seconds
-   ├─ Tokens: 145 input + 67 output
-   └─ Member: alice@company.com
-
-2. Sep 7, 2:30 PM
-   ├─ Input: "What are your hours?"
-   ├─ Status: Success ✅
-   ├─ Duration: 0.8 seconds
-   ├─ Tokens: 98 input + 45 output
-   └─ Member: bob@company.com
-
-3. Sep 7, 2:15 PM
-   ├─ Input: "I need to talk to someone"
-   ├─ Status: Success ✅
-   ├─ Duration: 1.5 seconds
-   ├─ Tokens: 156 input + 89 output
-   └─ Member: charlie@company.com
-```
+1. **Sep 7, 2:45 PM**
+   - Input: "How do I reset my password?"
+   - Status: Success ✅
+   - Duration: 1.2 seconds
+   - Tokens: 145 input + 67 output
+   - Member: alice@company.com
+2. **Sep 7, 2:30 PM**
+   - Input: "What are your hours?"
+   - Status: Success ✅
+   - Duration: 0.8 seconds
+   - Tokens: 98 input + 45 output
+   - Member: bob@company.com
+3. **Sep 7, 2:15 PM**
+   - Input: "I need to talk to someone"
+   - Status: Success ✅
+   - Duration: 1.5 seconds
+   - Tokens: 156 input + 89 output
+   - Member: charlie@company.com
 
 ### Viewing Conversation Details
 
 Click on a conversation to see:
 
-```
-Conversation Details:
+**Conversation Details**
 
-Input:
-"How do I reset my password?"
-
-Output (Agent Response):
-"You can reset your password by:
-1. Going to Settings
-2. Click 'Security'
-3. Choose 'Change Password'
-4. Follow the email confirmation link"
-
-Metadata:
-├─ Started: Sep 7, 2:45 PM
-├─ Completed: Sep 7, 2:45:01 PM
-├─ Duration: 1.2 seconds
-├─ Status: Success ✅
-├─ Input Tokens: 145
-├─ Output Tokens: 67
-├─ Model: Claude 3.5 Sonnet
-└─ Member: alice@company.com
-```
+- **Input**: "How do I reset my password?"
+- **Output (Agent Response)**: "You can reset your password by:
+  1. Going to Settings
+  2. Click 'Security'
+  3. Choose 'Change Password'
+  4. Follow the email confirmation link"
+- **Metadata**:
+  - Started: Sep 7, 2:45 PM
+  - Completed: Sep 7, 2:45:01 PM
+  - Duration: 1.2 seconds
+  - Status: Success ✅
+  - Input Tokens: 145
+  - Output Tokens: 67
+  - Model: Claude 3.5 Sonnet
+  - Member: alice@company.com
 
 ---
 
@@ -119,30 +105,25 @@ Metadata:
 
 The **execution log** shows the detailed steps the agent took:
 
-```
-Execution Log for Conversation #1234:
+Execution log for Conversation #1234:
 
-Step 1: Parse Input (0.1s)
-├─ Input received: "How do I reset my password?"
-├─ Detected intent: password_reset
-└─ Confidence: 0.98
-
-Step 2: Search Datasources (0.3s)
-├─ Searching "FAQ Database"
-├─ Found: 3 matching results
-└─ Selected: Top match (confidence: 0.95)
-
-Step 3: Generate Response (0.8s)
-├─ Model: Claude 3.5 Sonnet
-├─ Input tokens: 145
-├─ Output tokens: 67
-├─ Generated response
-└─ Applied guardrails: ✓
-
-Step 4: Return Result (0.02s)
-├─ Status: Success
-└─ Total duration: 1.22s
-```
+1. **Parse Input** (0.1s)
+   - Input received: "How do I reset my password?"
+   - Detected intent: password_reset
+   - Confidence: 0.98
+2. **Search Datasources** (0.3s)
+   - Searching "FAQ Database"
+   - Found: 3 matching results
+   - Selected: Top match (confidence: 0.95)
+3. **Generate Response** (0.8s)
+   - Model: Claude 3.5 Sonnet
+   - Input tokens: 145
+   - Output tokens: 67
+   - Generated response
+   - Applied guardrails: ✓
+4. **Return Result** (0.02s)
+   - Status: Success
+   - Total duration: 1.22s
 
 ### Understanding Log Levels
 
@@ -190,28 +171,18 @@ Step 4: Return Result (0.02s)
 
 ### Filter Examples
 
-```
-Example 1: Find all failures from last week
-
-Filters:
-├─ Date: Last 7 days
-├─ Status: Failed
-└─ Result: 3 conversations
-
-Example 2: Check specific member's usage
-
-Filters:
-├─ Member: alice@company.com
-├─ Date: Last 30 days
-└─ Result: 487 conversations
-
-Example 3: Find slow responses
-
-Filters:
-├─ Performance: Slow (>5s)
-├─ Date: Last 24 hours
-└─ Result: 12 conversations (need optimization)
-```
+- **Example 1: Find all failures from last week**
+  - Date: Last 7 days
+  - Status: Failed
+  - Result: 3 conversations
+- **Example 2: Check specific member's usage**
+  - Member: alice@company.com
+  - Date: Last 30 days
+  - Result: 487 conversations
+- **Example 3: Find slow responses**
+  - Performance: Slow (>5s)
+  - Date: Last 24 hours
+  - Result: 12 conversations (need optimization)
 
 ---
 
@@ -229,25 +200,22 @@ Filters:
 
 ### Metrics Example
 
-```
 Agent: Support Bot (Last 7 days)
 
-Performance Summary:
-├─ Total Conversations: 1,245
-├─ Success Rate: 97.8% ✅
-├─ Error Rate: 2.2%
-├─ Avg Response Time: 1.3 seconds
-├─ Median Response Time: 0.9 seconds
-├─ Slowest Response: 15.2 seconds
-├─ Fastest Response: 0.2 seconds
-├─ Avg Tokens per Conversation: 245
-└─ Total Tokens Used: 305,025
-
-Breakdown by Hour:
-├─ Peak usage: 2-3 PM (234 conversations)
-├─ Off-peak: 3-4 AM (12 conversations)
-└─ Busiest day: Wednesday (201 conversations)
-```
+- **Performance Summary**:
+  - Total Conversations: 1,245
+  - Success Rate: 97.8% ✅
+  - Error Rate: 2.2%
+  - Avg Response Time: 1.3 seconds
+  - Median Response Time: 0.9 seconds
+  - Slowest Response: 15.2 seconds
+  - Fastest Response: 0.2 seconds
+  - Avg Tokens per Conversation: 245
+  - Total Tokens Used: 305,025
+- **Breakdown by Hour**:
+  - Peak usage: 2-3 PM (234 conversations)
+  - Off-peak: 3-4 AM (12 conversations)
+  - Busiest day: Wednesday (201 conversations)
 
 ---
 
@@ -255,54 +223,45 @@ Breakdown by Hour:
 
 ### Scenario: High Error Rate
 
-```
-PROBLEM: Agent error rate 8% (should be <5%)
+**Problem**: Agent error rate 8% (should be `<5%`)
 
-STEPS:
 1. Go to Agent Analytics
 2. Filter: Status = Failed
 3. Review failed conversations
 4. Identify pattern:
-   ├─ Most failures between 2-3 PM
-   ├─ Error type: "API Timeout"
-   └─ External service overloaded
+   - Most failures between 2-3 PM
+   - Error type: "API Timeout"
+   - External service overloaded
 5. Solution: Add retry logic or use backup service
-```
 
 ### Scenario: Slow Responses
 
-```
-PROBLEM: Avg response time 4.2s (should be <2s)
+**Problem**: Avg response time 4.2s (should be `<2s`)
 
-STEPS:
 1. Filter: Performance = Slow (>5s)
 2. Review execution logs of slow conversations
 3. Identified bottleneck:
-   ├─ Step 2: Datasource search taking 2.1s
-   └─ Datasource too large
-4. Solution: 
-   ├─ Archive old data from datasource
-   ├─ Or use filters to narrow search
-   └─ Retest - now 1.2s average
-```
+   - Step 2: Datasource search taking 2.1s
+   - Datasource too large
+4. Solution:
+   - Archive old data from datasource
+   - Or use filters to narrow search
+   - Retest - now 1.2s average
 
 ### Scenario: Unexpected Cost Increase
 
-```
-PROBLEM: Agent using 50% more tokens than before
+**Problem**: Agent using 50% more tokens than before
 
-STEPS:
 1. Filter: Date = Last 7 days (vs previous week)
 2. Check metrics:
-   ├─ More conversations? No, about the same
-   ├─ Longer responses? Yes, avg 2x longer
-   └─ Agent configuration changed
+   - More conversations? No, about the same
+   - Longer responses? Yes, avg 2x longer
+   - Agent configuration changed
 3. Investigation:
-   ├─ System prompt made more verbose
-   ├─ Datasource context increased
-   └─ Each request now uses more tokens
+   - System prompt made more verbose
+   - Datasource context increased
+   - Each request now uses more tokens
 4. Solution: Simplify prompt, reduce context
-```
 
 ---
 
@@ -353,27 +312,23 @@ Set up recurring reports:
 
 Analytics can be filtered by which organization member used the agent:
 
-```
 Organization: Acme Corp
 
-Members:
-├─ alice@company.com
-├─ bob@company.com
-├─ charlie@company.com
-└─ diana@company.com
-
-Filter by member to see:
-├─ Which conversations each member triggered
-├─ Each member's usage patterns
-├─ Peak usage times by person
-└─ Performance metrics per member
-
-Example:
-├─ alice: 245 conversations (19% of total)
-├─ bob: 189 conversations (15%)
-├─ charlie: 567 conversations (46%)
-└─ diana: 244 conversations (20%)
-```
+- **Members**:
+  - alice@company.com
+  - bob@company.com
+  - charlie@company.com
+  - diana@company.com
+- **Filter by member to see**:
+  - Which conversations each member triggered
+  - Each member's usage patterns
+  - Peak usage times by person
+  - Performance metrics per member
+- **Example**:
+  - alice: 245 conversations (19% of total)
+  - bob: 189 conversations (15%)
+  - charlie: 567 conversations (46%)
+  - diana: 244 conversations (20%)
 
 ### Use Cases
 
@@ -392,42 +347,45 @@ For programmatic access to analytics:
 
 ```
 GET /api/agents/{agentId}/conversations
-Query params:
-├─ start_date: 2024-09-01
-├─ end_date: 2024-09-07
-├─ member_id: alice@company.com
-├─ status: success
-└─ limit: 100
 ```
+
+Query params:
+- `start_date`: 2024-09-01
+- `end_date`: 2024-09-07
+- `member_id`: alice@company.com
+- `status`: success
+- `limit`: 100
 
 ### Query Execution Logs via API
 
 ```
 GET /api/conversations/{conversationId}/logs
-Returns:
-├─ All execution steps
-├─ Timestamps
-├─ Token usage
-├─ Errors/warnings
-└─ Full trace
 ```
+
+Returns:
+- All execution steps
+- Timestamps
+- Token usage
+- Errors/warnings
+- Full trace
 
 ### Get Metrics via API
 
 ```
 GET /api/agents/{agentId}/metrics
+```
+
 Query params:
-├─ start_date: 2024-09-01
-├─ end_date: 2024-09-07
-└─ granularity: hourly|daily|weekly
+- `start_date`: 2024-09-01
+- `end_date`: 2024-09-07
+- `granularity`: hourly|daily|weekly
 
 Returns:
-├─ Success rate
-├─ Avg response time
-├─ Error rates
-├─ Token usage
-└─ Conversation count
-```
+- Success rate
+- Avg response time
+- Error rates
+- Token usage
+- Conversation count
 
 ---
 

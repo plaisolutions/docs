@@ -3,8 +3,6 @@ title: "Bulk Import JSON"
 description: "Import and create multiple resources from JSON data"
 ---
 
-# Bulk Import JSON
-
 **Bulk Import** allows you to import hundreds of resources at once from JSON files. Each item in your JSON becomes a separate resource with automatically assigned metadata and optional translations.
 
 ---
@@ -18,22 +16,13 @@ Bulk Import is ideal for:
 - Populating a datasource with pre-structured data
 - Batch creation with consistent metadata
 
-```
-JSON File
-(array of objects)
-    ↓
-Validation against Metadata Schema
-    ↓
-Default Values Assignment
-    ↓
-Content Mapping
-    ↓
-Optional Translation
-    ↓
-Batch Creation
-    ↓
-Resource Monitoring
-```
+1. **JSON File** — array of objects
+2. **Validation** — checked against the metadata schema
+3. **Default Values Assignment** — fills in missing optional fields
+4. **Content Mapping** — selects which field becomes resource content
+5. **Optional Translation** — translates content if enabled
+6. **Batch Creation** — creates resources in batches
+7. **Resource Monitoring** — tracks progress in real time
 
 ---
 
@@ -93,15 +82,13 @@ Create a JSON file with an array of objects:
 
 The system compares your JSON fields against the datasource's `metadata_schema`:
 
-```
-Datasource Schema:
-├── author (str, required)
-├── category (str, required)
-└── tags (str, optional)
-
-Item 1: ✅ Has all required fields
-Item 2: ⚠️ Missing "tags" field (optional - will use default)
-```
+- **Datasource schema**:
+  - `author` (str, required)
+  - `category` (str, required)
+  - `tags` (str, optional)
+- **Validation results**:
+  - Item 1: Has all required fields
+  - Item 2: Missing `tags` field (optional — will use default)
 
 **Validation Results:**
 ```typescript
@@ -183,13 +170,10 @@ The system processes your JSON in batches:
 
 Real-time progress tracking:
 
-```
-Processing Items
-├── Queued: 500
-├── Processing: 47
-├── Successful: 453
-└── Failed: 0
-```
+- **Queued**: 500
+- **Processing**: 47
+- **Successful**: 453
+- **Failed**: 0
 
 Export detailed logs in JSON for auditing:
 - Item-by-item status

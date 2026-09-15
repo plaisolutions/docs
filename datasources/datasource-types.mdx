@@ -3,9 +3,7 @@ title: "Types of Datasources"
 description: "Manual and Google Drive datasources"
 ---
 
-# Types of Datasources
-
-PLai Framework supports two primary datasource types: **Manual** datasources that you manage directly, and **Google Drive** datasources that sync automatically from your Google Drive.
+You choose a type when you create the datasource, and it can't be changed afterward — pick **Manual** for full control over content, or **Google Drive** when your source files already live in a shared folder you want to keep syncing from.
 
 ---
 
@@ -34,19 +32,17 @@ A **Manual Datasource** is a self-managed knowledge base where you have full con
 
 Manual datasources can contain:
 
-```
-Manual Datasource
-├── Files
-│  ├── PDF documents
-│  ├── Word documents (.docx)
-│  ├── Text files (.txt)
-│  └── Spreadsheets (.xlsx, .csv)
-├── URLs
-│  ├── Single web pages
-│  ├── Website sitemaps
-└── Manual Content
-   └── Text entered directly
-```
+- **Manual Datasource**:
+  - **Files**
+    - PDF documents
+    - Word documents (.docx)
+    - Text files (.txt)
+    - Spreadsheets (.xlsx, .csv)
+  - **URLs**
+    - Single web pages
+    - Website sitemaps
+  - **Manual Content**
+    - Text entered directly
 
 ### Creating a Manual Datasource
 
@@ -172,15 +168,10 @@ Google Drive datasources can index the following file types:
 ### Synchronization
 
 **Automatic Updates:**
-```
-Google Drive Folder Changes
-        ↓
-Detected by PLai
-        ↓
-Files Re-indexed
-        ↓
-Changes Available to Agents
-```
+1. **Google Drive folder changes**
+2. **Detected by PLai**
+3. **Files re-indexed**
+4. **Changes available to agents**
 
 **Sync Frequency:**
 - Real-time detection for new files

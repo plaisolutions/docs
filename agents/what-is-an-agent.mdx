@@ -3,27 +3,20 @@ title: "What is an Agent?"
 description: "Understand agents and the two ways to use them in PLai Framework"
 ---
 
-# What is an Agent?
-
 An **Agent** is an AI assistant you create and configure to perform specific tasks. Agents can chat with users, use tools, access knowledge bases, and integrate into workflows.
 
 ---
 
 ## Core Concept
 
-```
-AGENT = AI Model + Configuration + Tools + Datasources + Safety Rules
+**Agent = AI Model + Configuration + Tools + Datasources + Safety Rules**
 
-┌──────────────────────────────┐
-│    Your Agent                │
-├──────────────────────────────┤
-│ • LLM Model (Claude, GPT-4)  │
-│ • System Instructions        │
-│ • Tools & Integrations       │
-│ • Knowledge Bases            │
-│ • Safety Guardrails          │
-└──────────────────────────────┘
-```
+Your agent is made up of:
+- LLM Model (Claude, GPT-4)
+- System Instructions
+- Tools & Integrations
+- Knowledge Bases
+- Safety Guardrails
 
 ---
 
@@ -54,25 +47,19 @@ Agents can be used in two fundamentally different ways:
 
 ### 1. Streaming Enabled: Conversational Chat
 
-```
-Use case: Chat interface, interactive conversations
+Use case: Chat interface, interactive conversations.
 
-┌─────────────────────────────┐
-│   Chat Conversational       │
-├─────────────────────────────┤
-│ • Real-time streaming       │
-│ • Interactive chat UI       │
-│ • Conversation history      │
-│ • Multiple agent tabs       │
-│ • Best for: User interaction│
-└─────────────────────────────┘
-        ↓
-    User Types Question
-        ↓
-    Agent Streams Response
-        ↓
-    User Sees Real-time Answer
-```
+**Chat Conversational**:
+- Real-time streaming
+- Interactive chat UI
+- Conversation history
+- Multiple agent tabs
+- Best for: User interaction
+
+Flow:
+1. User types question
+2. Agent streams response
+3. User sees real-time answer
 
 **When to use:** Customer support chatbots, conversational assistants, interactive Q&A
 
@@ -82,25 +69,19 @@ Use case: Chat interface, interactive conversations
 
 ### 2. Streaming Disabled: Structured Output
 
-```
-Use case: Structured responses, integrations, automation
+Use case: Structured responses, integrations, automation.
 
-┌─────────────────────────────┐
-│  Structured Output          │
-├─────────────────────────────┤
-│ • Complete JSON response    │
-│ • As tools in other agents  │
-│ • In workflows              │
-│ • Via API calls             │
-│ • Best for: Automation      │
-└─────────────────────────────┘
-        ↓
-    Invoke Agent (tool/workflow/API)
-        ↓
-    Agent Processes
-        ↓
-    Returns Complete Response
-```
+**Structured Output**:
+- Complete JSON response
+- As tools in other agents
+- In workflows
+- Via API calls
+- Best for: Automation
+
+Flow:
+1. Invoke agent (tool/workflow/API)
+2. Agent processes
+3. Returns complete response
 
 **When to use:** Data processing, API integrations, workflow automation, batch processing
 
@@ -145,27 +126,23 @@ Use case: Structured responses, integrations, automation
 
 ### Example: Customer Support Agent
 
-```
-CONFIGURATION:
-├─ Name: "Support Bot"
-├─ Model: Claude 3.5 Sonnet
-├─ System Instructions: "Help customers with product issues"
-├─ Datasources: FAQ database, product docs
-├─ Tools: Help desk API, email
-└─ Guardrails: No sensitive data exposure
-
-INVOCATION (via Chat):
-├─ Customer: "How do I reset my password?"
-├─ Agent: (Searches FAQ) "Found answer..."
-├─ Agent: (Streams response) "You can reset by..."
-└─ Result: Customer sees real-time answer
-
-INVOCATION (as Tool in Workflow):
-├─ Workflow receives customer message
-├─ Calls Support Bot as tool
-├─ Gets complete response (JSON)
-├─ Workflow routes to escalation if needed
-```
+- **Configuration**:
+  - Name: "Support Bot"
+  - Model: Claude 3.5 Sonnet
+  - System Instructions: "Help customers with product issues"
+  - Datasources: FAQ database, product docs
+  - Tools: Help desk API, email
+  - Guardrails: No sensitive data exposure
+- **Invocation (via Chat)**:
+  - Customer: "How do I reset my password?"
+  - Agent: (Searches FAQ) "Found answer..."
+  - Agent: (Streams response) "You can reset by..."
+  - Result: Customer sees real-time answer
+- **Invocation (as Tool in Workflow)**:
+  - Workflow receives customer message
+  - Calls Support Bot as tool
+  - Gets complete response (JSON)
+  - Workflow routes to escalation if needed
 
 ---
 
@@ -205,33 +182,26 @@ offer to escalate to a human specialist."
 
 ## Agent Lifecycle
 
-```
-Create → Configure → Deploy → Monitor → Improve
+The agent lifecycle moves through five stages: Create, Configure, Deploy, Monitor, Improve.
 
-1. CREATE
-   └─ Set up agent basics (name, description)
-
-2. CONFIGURE
-   ├─ Add system instructions
-   ├─ Select model
-   ├─ Connect datasources
-   ├─ Add tools
-   └─ Set guardrails
-
-3. DEPLOY
-   ├─ If streaming: Enable chat in PLai
-   └─ If non-streaming: Use in workflows/API
-
-4. MONITOR
-   ├─ View conversations (streaming)
-   ├─ Track performance metrics
-   └─ Review analytics
-
-5. IMPROVE
-   ├─ Optimize prompts
-   ├─ Update datasources
-   └─ Adjust configuration
-```
+1. **Create** — set up agent basics (name, description)
+2. **Configure**
+   - Add system instructions
+   - Select model
+   - Connect datasources
+   - Add tools
+   - Set guardrails
+3. **Deploy**
+   - If streaming: Enable chat in PLai
+   - If non-streaming: Use in workflows/API
+4. **Monitor**
+   - View conversations (streaming)
+   - Track performance metrics
+   - Review analytics
+5. **Improve**
+   - Optimize prompts
+   - Update datasources
+   - Adjust configuration
 
 ---
 

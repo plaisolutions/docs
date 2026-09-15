@@ -3,9 +3,7 @@ title: "Workflow Tool"
 description: "Trigger workflows from agents"
 ---
 
-# Workflow Tool
-
-The **Workflow Tool** allows agents to trigger and execute predefined workflows with custom input. This enables agents to orchestrate complex multi-step processes and integrate with workflow automation.
+Unlike most tools, the call is synchronous: the agent pauses until the workflow finishes running and gets its result back before continuing. This makes it a good fit for multi-step logic (like enrichment, validation, or aggregation across several APIs) that you'd rather maintain once as a workflow than duplicate inside an agent's instructions.
 
 ---
 
@@ -19,21 +17,13 @@ A Workflow Tool lets you:
 - ✅ Chain multiple workflows together
 - ✅ Reuse workflow logic across agents
 
-```
 Agent Process:
-┌─────────────────────────┐
-│ Agent receives request  │
-├─────────────────────────┤
-│ Calls Workflow Tool     │
-│     ↓                   │
-│ Workflow executes       │
-│ (multiple steps)        │
-│     ↓                   │
-│ Returns result to agent │
-│     ↓                   │
-│ Agent continues         │
-└─────────────────────────┘
-```
+
+1. **Agent receives request**
+2. **Calls Workflow Tool**
+3. **Workflow executes** (multiple steps)
+4. **Returns result to agent**
+5. **Agent continues**
 
 ---
 

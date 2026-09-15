@@ -3,8 +3,6 @@ title: "Workflows, Jobs & Triggers"
 description: "Learn how to automate and scale your agents with workflows, scheduled jobs, and event-based triggers"
 ---
 
-# Workflows, Jobs & Triggers
-
 Once you have agents, tools, and datasources set up, the next level is **automation**. Workflows let you chain multiple agents together, Jobs let you schedule execution, and Triggers let you respond to events automatically.
 
 ---
@@ -17,30 +15,16 @@ A **Workflow** is a multi-step sequence that combines multiple agents, tools, an
 
 Instead of single agent handling everything, workflows let different agents specialize:
 
-```
-SINGLE AGENT (Limited):
-Customer → Support Bot → Answer or Escalate
+**Single agent (limited)**: Customer → Support Bot → Answer or Escalate
 
-WORKFLOW (Powerful):
-Customer Input
-     ↓
-┌─────────────────────┐
-│ Agent 1: Classifier │ → Is this a FAQ question?
-└─────────────────────┘
-     ↓ YES / NO
-     │
-  ┌──┴──┐
-  │     │
-  ▼     ▼
-Workflow splits →
-  │     │
-  ▼     ▼
-FAQ Bot   Support Ticket Agent
-  │           │
-  └────┬──────┘
-       ▼
-   RESPONSE
-```
+**Workflow (powerful)**:
+
+1. **Customer Input**
+2. **Agent 1: Classifier** — Is this a FAQ question? (Yes / No)
+3. **Workflow splits**:
+   - **Yes** → FAQ Bot
+   - **No** → Support Ticket Agent
+4. **Response**
 
 ### Workflow Components
 
@@ -66,36 +50,32 @@ FAQ Bot   Support Ticket Agent
   <Accordion title="Branching Workflow">
     Route based on conditions:
     
-    ```
-    Check type?
-      ├─ If Sales → Route to Sales Agent
-      ├─ If Support → Route to Support Agent
-      └─ If Admin → Route to Admin Agent
-    ```
+    **Check type?**
+    - If Sales → Route to Sales Agent
+    - If Support → Route to Support Agent
+    - If Admin → Route to Admin Agent
   </Accordion>
 
   <Accordion title="Parallel Workflow">
     Run multiple steps simultaneously:
     
-    ```
-    Input
-      ├─ Agent A (processes data)
-      ├─ Agent B (checks quality)
-      └─ Agent C (generates report)
-    Combine results
-    ```
+    **Input** runs in parallel across:
+    - Agent A (processes data)
+    - Agent B (checks quality)
+    - Agent C (generates report)
+
+    Then combine results.
   </Accordion>
 
   <Accordion title="Error Handling Workflow">
     Handle failures gracefully:
     
-    ```
-    Try Step 1
-      ├─ Success → Continue to Step 2
-      └─ Failure → Run Fallback Agent
-                   Log error
-                   Alert team
-    ```
+    **Try Step 1**:
+    - **Success** → Continue to Step 2
+    - **Failure** →
+      - Run Fallback Agent
+      - Log error
+      - Alert team
   </Accordion>
 </AccordionGroup>
 
@@ -137,19 +117,15 @@ A **Job** runs a workflow or agent on a schedule.
 
 ### Job Scheduling
 
-```
-Workflow: "Daily Sales Report"
+**Workflow**: "Daily Sales Report"
 
-Run: Every day at 2:00 AM
-├─ Process yesterday's sales data
-├─ Generate report
-├─ Email to team
-└─ Log results
-
-Next run: Tomorrow 2:00 AM
-Next run: Day after 2:00 AM
-(continues indefinitely or until disabled)
-```
+- **Run**: Every day at 2:00 AM
+  - Process yesterday's sales data
+  - Generate report
+  - Email to team
+  - Log results
+- **Next run**: Tomorrow 2:00 AM
+- **Next run**: Day after 2:00 AM (continues indefinitely or until disabled)
 
 ### Job Configuration
 
@@ -185,23 +161,19 @@ Next run: Day after 2:00 AM
 
 ### Job Status & Monitoring
 
-```
-Job: "Daily Report"
+**Job**: "Daily Report"
 
-Last Run:
-├─ Status: Success ✅
-├─ Started: 2:00 AM
-├─ Duration: 3 min 42 sec
-└─ Records processed: 1,245
-
-Next Run:
-└─ Scheduled: Tomorrow 2:00 AM
-
-History:
-├─ Yesterday: Success (3m 15s)
-├─ 2 days ago: Success (3m 51s)
-└─ 3 days ago: Failed (timeout)
-```
+- **Last Run**:
+  - Status: Success ✅
+  - Started: 2:00 AM
+  - Duration: 3 min 42 sec
+  - Records processed: 1,245
+- **Next Run**:
+  - Scheduled: Tomorrow 2:00 AM
+- **History**:
+  - Yesterday: Success (3m 15s)
+  - 2 days ago: Success (3m 51s)
+  - 3 days ago: Failed (timeout)
 
 ---
 
@@ -228,22 +200,13 @@ A **Trigger** automatically runs a workflow or agent when something happens.
 
 ### Webhook Trigger Example
 
-```
-External System         PLai Framework
-    │                       │
-    └─→ HTTP POST           │
-         (new customer) ────→├─ Webhook Trigger
-                            │
-                            ├─ Run Workflow:
-                            │  "Onboard Customer"
-                            │
-                            ├─ Agent: Send welcome email
-                            ├─ Agent: Create account
-                            ├─ Agent: Log to CRM
-                            │
-Response ←───────────────────┘
-(Workflow started)
-```
+1. **External System** sends an HTTP POST (new customer) to PLai Framework
+2. **PLai Framework** receives it via the **Webhook Trigger**
+3. **Run Workflow**: "Onboard Customer"
+   - Agent: Send welcome email
+   - Agent: Create account
+   - Agent: Log to CRM
+4. **Response** sent back to External System: "Workflow started"
 
 ### Trigger Configuration
 
@@ -268,53 +231,46 @@ Response ←───────────────────┘
 
 ### Example 1: Lead Scoring Pipeline
 
-```
-TRIGGER: New form submission (webhook)
+**Trigger**: New form submission (webhook)
 
-WORKFLOW: Lead Scoring
-├─ Agent 1: Extract info (name, company, industry)
-├─ Agent 2: Score lead (1-10 based on data)
-├─ Agent 3: Route to sales rep
-├─ Tool: Send email to sales rep
-└─ Tool: Log to CRM
+**Workflow: Lead Scoring**:
+- Agent 1: Extract info (name, company, industry)
+- Agent 2: Score lead (1-10 based on data)
+- Agent 3: Route to sales rep
+- Tool: Send email to sales rep
+- Tool: Log to CRM
 
-Result: Within seconds, lead scored and routed
-```
+**Result**: Within seconds, lead scored and routed
 
 ### Example 2: Nightly Data Processing
 
-```
-JOB: Daily data ETL
-Schedule: Every day at 2:00 AM
+**Job**: Daily data ETL — Schedule: Every day at 2:00 AM
 
-WORKFLOW:
-├─ Agent 1: Extract data from API
-├─ Agent 2: Transform/clean data
-├─ Agent 3: Validate quality
-├─ Tool: Load to data warehouse
-└─ Tool: Generate report and email
+**Workflow**:
+- Agent 1: Extract data from API
+- Agent 2: Transform/clean data
+- Agent 3: Validate quality
+- Tool: Load to data warehouse
+- Tool: Generate report and email
 
-Result: Every morning, team has fresh data
-```
+**Result**: Every morning, team has fresh data
 
 ### Example 3: Multi-Step Support Process
 
-```
-TRIGGER: Customer submits support ticket (email or form)
+**Trigger**: Customer submits support ticket (email or form)
 
-WORKFLOW: Support Process
-├─ Agent 1: Classify issue
-│  ├─ If FAQ → Route to FAQ Bot
-│  └─ If urgent → Route to support team
-├─ If FAQ issue:
-│   └─ Agent 2: Answer from FAQ
-└─ If urgent:
-    ├─ Agent 3: Create ticket
-    ├─ Tool: Send to support queue
-    └─ Tool: Notify team
+**Workflow: Support Process**:
+1. **Agent 1: Classify issue**
+   - **If FAQ** → Route to FAQ Bot
+   - **If urgent** → Route to support team
+2. **If FAQ issue**:
+   - Agent 2: Answer from FAQ
+3. **If urgent**:
+   - Agent 3: Create ticket
+   - Tool: Send to support queue
+   - Tool: Notify team
 
-Result: Automated FAQs, urgent issues escalated immediately
-```
+**Result**: Automated FAQs, urgent issues escalated immediately
 
 ---
 
@@ -355,26 +311,13 @@ Result: Automated FAQs, urgent issues escalated immediately
 
 ### Viewing Execution History
 
-```
-Workflow: "Lead Scoring"
+**Workflow**: "Lead Scoring"
 
-Run #1245 (Today 2:45 PM)
-├─ Status: Success ✅
-├─ Completed in: 12 seconds
-├─ Input: Customer form data
-└─ Output: Lead score 8/10, assigned to rep
-
-Run #1244 (Today 2:30 PM)
-├─ Status: Failed ❌
-├─ Error: API timeout on CRM lookup
-├─ Duration: 5 seconds
-└─ Action: Will retry at next trigger
-
-Run #1243 (Today 2:15 PM)
-├─ Status: Success ✅
-├─ Completed in: 8 seconds
-└─ Output: Lead score 5/10, assigned to rep
-```
+| Run | Status | Duration | Details |
+|-----|--------|----------|---------|
+| #1245 (Today 2:45 PM) | Success ✅ | 12 seconds | Input: Customer form data → Output: Lead score 8/10, assigned to rep |
+| #1244 (Today 2:30 PM) | Failed ❌ | 5 seconds | Error: API timeout on CRM lookup. Action: Will retry at next trigger |
+| #1243 (Today 2:15 PM) | Success ✅ | 8 seconds | Output: Lead score 5/10, assigned to rep |
 
 ### Debugging Common Issues
 

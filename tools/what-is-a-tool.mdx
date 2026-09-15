@@ -3,8 +3,6 @@ title: "Tools Overview"
 description: "Extend your agents with powerful tools and integrations"
 ---
 
-# Tools Overview
-
 Tools are the building blocks that give your agents the ability to interact with external systems, process data, and perform complex operations. PLai Framework supports various tool types, each designed for specific use cases.
 
 ## Available Tool Types
@@ -310,14 +308,10 @@ Most tools share these configuration elements:
 
 Tools can implement various caching mechanisms:
 
-```mermaid
-graph TD
-    A[Agent Request] --> B{Cache Check}
-    B -->|Hit| C[Return Cached Result]
-    B -->|Miss| D[Execute Tool]
-    D --> E[Cache Result]
-    E --> F[Return Result]
-```
+1. **Agent Request**
+2. **Cache Check**
+   - **Hit** — return the cached result
+   - **Miss** — execute the tool, cache the result, then return the result
 
 ### Rate Limiting
 

@@ -3,9 +3,7 @@ title: "Answer Filters Overview"
 description: "Learn how to control and refine your agent's responses with Answer Filters"
 ---
 
-# Answer Filters Overview
-
-Answer Filters are a powerful feature in PLai Framework that allow you to define specific response patterns for your agents. They enable you to control what your agent should or shouldn't say when users ask certain types of questions, ensuring consistent, accurate, and brand-appropriate responses.
+Answer Filters are a powerful feature in PLai Framework that allow you to define specific response patterns for your agents. For example, you could create one so that whenever a customer asks about your refund policy, the agent always returns the same pre-approved answer instead of composing a new one from scratch each time.
 
 ## What are Answer Filters?
 
@@ -38,17 +36,14 @@ Think of Answer Filters as training wheels that help your agent stay on track, e
 
 Answer Filters operate using a similarity-based matching system:
 
-```mermaid
-graph LR
-    A[User Query] --> B{Similarity Check}
-    B --> C{Above Threshold?}
-    C -->|Yes| D[Apply Filter]
-    C -->|No| E[Normal Response]
-    D --> F[Use Good Responses]
-    D --> G[Avoid Bad Responses]
-    F --> H[Final Response]
-    G --> H
-```
+1. **User Query** is received
+2. **Similarity Check** — compares the query against the filter's defined trigger examples
+3. **Above threshold?**
+   - **Yes** — apply the filter:
+     - Use Good Responses
+     - Avoid Bad Responses
+     - Both paths produce the **Final Response**
+   - **No** — fall back to the agent's Normal Response
 
 ### Key Components
 

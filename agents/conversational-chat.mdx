@@ -3,9 +3,7 @@ title: "Conversational Chat"
 description: "Using streaming agents with the PLai chat interface"
 ---
 
-# Conversational Chat
-
-When you enable **streaming** for an agent, you can interact with it through the **Conversational Chat** interface in PLai. This is the interactive chat experience for users and team members.
+With streaming on, an agent's replies appear token-by-token in real time, similar to typing, instead of arriving all at once. Streaming is enabled by default and is mutually exclusive with Structured Output — turning one on automatically turns the other off.
 
 ---
 
@@ -52,41 +50,25 @@ When you enable **streaming** for an agent, you can interact with it through the
 
 ### Main Components
 
-```
-┌─────────────────────────────────────────────┐
-│ Agent Tabs (Multiple agents open)           │
-├─────────────────────────────────────────────┤
-│ Conversation History                        │
-│                                             │
-│ User: "How do I reset my password?"        │
-│                                             │
-│ Agent: "You can reset by going to...       │
-│        (response streams in real-time)     │
-│                                             │
-│ User: "Can I do it via email?"             │
-│                                             │
-│ Agent: "Yes, here's how..."                │
-├─────────────────────────────────────────────┤
-│ Input Field: [Type your message...] [Send] │
-└─────────────────────────────────────────────┘
-```
+The chat interface is organized into three areas, top to bottom:
+
+1. **Agent Tabs** — multiple agents can be open at once
+2. **Conversation History** — the message thread, for example:
+   - User: "How do I reset my password?"
+   - Agent: "You can reset by going to..." (response streams in real-time)
+   - User: "Can I do it via email?"
+   - Agent: "Yes, here's how..."
+3. **Input Field** — type your message and click Send
 
 ### Agent Tabs
 
 You can have **multiple agent chats open simultaneously**:
 
-```
-Agents Open:
-├─ [Support Bot]  [Billing Bot]  [FAQ Bot]  [+]
-│                   ↑ (currently viewing)
-│
-├─ Conversation with Billing Bot:
-│
-│  User: "How do I update my payment?"
-│  Agent: "You can update in account settings..."
-│
-└─ Switch tabs to talk to different agents
-```
+- **Agents open**: Support Bot, Billing Bot, FAQ Bot, plus a button to add more
+  - Currently viewing: Billing Bot
+    - User: "How do I update my payment?"
+    - Agent: "You can update in account settings..."
+- Switch tabs to talk to different agents
 
 **Benefits:**
 - ✅ Compare agent responses
@@ -102,50 +84,38 @@ Agents Open:
 
 Each conversation includes:
 
-```
-Conversation Entry:
-├─ Timestamp: When the message was sent
-├─ Sender: User or Agent
-├─ Content: The message text
-├─ Metadata:
-│  ├─ Tokens used
-│  ├─ Response time
-│  ├─ Any errors
-│  └─ Tools called (if any)
-```
+- **Conversation Entry**:
+  - Timestamp: When the message was sent
+  - Sender: User or Agent
+  - Content: The message text
+  - Metadata:
+    - Tokens used
+    - Response time
+    - Any errors
+    - Tools called (if any)
 
 ### Viewing Conversation History
 
 **Left Panel - Conversation List:**
-```
-Conversations:
-├─ Sep 7, 2:45 PM - "How do I reset?"
-├─ Sep 7, 2:30 PM - "What are your hours?"
-├─ Sep 6, 4:15 PM - "I need help with..."
-└─ Sep 5, 10:00 AM - "Tell me about..."
-```
+- Sep 7, 2:45 PM - "How do I reset?"
+- Sep 7, 2:30 PM - "What are your hours?"
+- Sep 6, 4:15 PM - "I need help with..."
+- Sep 5, 10:00 AM - "Tell me about..."
 
 Click any conversation to view full history.
 
 ### Conversation Details
 
-```
 Conversation Details (Sep 7, 2:45 PM):
 
-Input:
-"How do I reset my password?"
-
-Agent Response (Streaming):
-"You can reset your password by..."
-(Real-time streaming of response)
-
-Metadata:
-├─ Duration: 1.2 seconds
-├─ Input tokens: 145
-├─ Output tokens: 67
-├─ Model: Claude 3.5 Sonnet
-└─ Status: Success ✅
-```
+- **Input**: "How do I reset my password?"
+- **Agent Response (Streaming)**: "You can reset your password by..." (real-time streaming of response)
+- **Metadata**:
+  - Duration: 1.2 seconds
+  - Input tokens: 145
+  - Output tokens: 67
+  - Model: Claude 3.5 Sonnet
+  - Status: Success ✅
 
 ---
 
@@ -153,19 +123,13 @@ Metadata:
 
 ### How Streaming Works
 
-```
-You type:        "Write a poem about AI"
-                 ↓
-Agent processes ↓
-                 ↓
-Response starts immediately...
-"In circuits deep, electric thought flows..."
-"A mind of math, in patterns wrought..."
-"Emerging consciousness, so bright..."
-                 ↓ (tokens arrive continuously)
-                 ↓
-Complete response appears
-```
+1. **You type**: "Write a poem about AI"
+2. **Agent processes** the request
+3. **Response starts immediately** — tokens arrive continuously:
+   - "In circuits deep, electric thought flows..."
+   - "A mind of math, in patterns wrought..."
+   - "Emerging consciousness, so bright..."
+4. **Complete response appears**
 
 ### Advantages of Streaming
 
@@ -209,17 +173,10 @@ You can optionally share conversation links with:
 
 When an agent uses tools during chat:
 
-```
-User: "Fetch the latest sales data"
-      ↓
-Agent: "I'll look that up for you..."
-      ↓
-      [Calling sales API...]
-      ↓
-Agent Response: "Here's the data:
-                 Total sales today: $45,320
-                 ..."
-```
+1. **User**: "Fetch the latest sales data"
+2. **Agent**: "I'll look that up for you..."
+3. **Agent calls the sales API**
+4. **Agent Response**: "Here's the data: Total sales today: $45,320 ..."
 
 From chat, you see:
 - ✅ Tool calls made

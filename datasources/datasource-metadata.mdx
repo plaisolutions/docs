@@ -3,8 +3,6 @@ title: "Datasource Schema & Configuration"
 description: "Define metadata schema and configure datasource properties"
 ---
 
-# Datasource Schema & Configuration
-
 **Datasource Metadata Schema** defines the structure of metadata that every resource in your datasource must follow. This ensures consistency and enables powerful filtering capabilities.
 
 ---
@@ -15,17 +13,14 @@ description: "Define metadata schema and configure datasource properties"
 
 A **Metadata Schema** defines a JSON structure that **every resource in your datasource must follow**. It's like a contract:
 
-```
-Datasource with Metadata Schema
-├── Field 1: department (type: str, required)
-├── Field 2: priority (type: int, optional)
-└── Field 3: version (type: str, optional)
-
-Every resource MUST provide:
-✅ department (string)
-✅ priority (number) - optional, can be empty
-✅ version (string) - optional, can be empty
-```
+- **Datasource with metadata schema**:
+  - Field 1: `department` (type: `str`, required)
+  - Field 2: `priority` (type: `int`, optional)
+  - Field 3: `version` (type: `str`, optional)
+- **Every resource must provide**:
+  - `department` (string)
+  - `priority` (number) — optional, can be empty
+  - `version` (string) — optional, can be empty
 
 ### Schema Field Definition
 
@@ -320,14 +315,14 @@ Shows how much content is in the datasource:
 | **Content** | Manually entered text |
 | **Total** | Sum of all resources |
 
-**Example:**
-```
-Customer Support Datasource:
-├── Files: 12 (Product guides, FAQs)
-├── URLs: 5 (Help center, knowledge base)
-├── Content: 8 (Manual entries, quick answers)
-└── Total: 25 resources
-```
+**Example: Customer Support Datasource**
+
+| Type | Count | Details |
+|------|-------|---------|
+| Files | 12 | Product guides, FAQs |
+| URLs | 5 | Help center, knowledge base |
+| Content | 8 | Manual entries, quick answers |
+| **Total** | **25** | resources |
 
 ### Storage Size
 
@@ -339,14 +334,11 @@ Total size of all resources in the datasource.
 - Consider splitting if very large
 - Archive old resources
 
-**Optimization:**
-```
-Large Datasource (500 MB):
-├── Archive old versions
-├── Remove duplicates
-├── Split by topic
-└── Target: Under 200 MB
-```
+**Optimization (Large Datasource, 500 MB):**
+- Archive old versions
+- Remove duplicates
+- Split by topic
+- Target: under 200 MB
 
 ### Last Updated
 
@@ -374,18 +366,15 @@ Number of agents using this datasource.
 - Wider impact of changes
 - More careful updates needed
 
-**Example:**
-```
-Customer Support FAQ (Used by 8 agents):
-├── Support Bot
-├── Email Agent
-├── Chat Assistant
-├── Knowledge Base Bot
-├── Escalation Agent
-├── FAQ Agent
-├── Billing Support
-└── Technical Support
-```
+**Example: Customer Support FAQ (used by 8 agents)**
+- Support Bot
+- Email Agent
+- Chat Assistant
+- Knowledge Base Bot
+- Escalation Agent
+- FAQ Agent
+- Billing Support
+- Technical Support
 
 ---
 
@@ -481,60 +470,20 @@ Examples:
 
 ### Example 1: Support Team Structure
 
-```
-Customer Basics
-├── Name: Basic Product Info
-├── Description: Getting started guides
-├── Tags: support, customer-facing
-├── Visibility: Public
-├── Owner: Support Manager
-└── Status: Active
-
-Customer FAQs
-├── Name: Frequently Asked Questions
-├── Description: Common customer questions
-├── Tags: support, faq, customer-facing
-├── Visibility: Public
-├── Owner: Support Manager
-└── Status: Active
-
-Internal Procedures
-├── Name: Support Team Procedures
-├── Description: Internal team guidelines
-├── Tags: support, internal, procedures
-├── Visibility: Team
-├── Owner: Support Manager
-└── Status: Active
-```
+| Group | Name | Description | Tags | Visibility | Owner | Status |
+|-------|------|--------------|------|------------|-------|--------|
+| Customer Basics | Basic Product Info | Getting started guides | support, customer-facing | Public | Support Manager | Active |
+| Customer FAQs | Frequently Asked Questions | Common customer questions | support, faq, customer-facing | Public | Support Manager | Active |
+| Internal Procedures | Support Team Procedures | Internal team guidelines | support, internal, procedures | Team | Support Manager | Active |
 
 ### Example 2: Product Documentation
 
-```
-User Documentation
-├── Name: Product User Guide
-├── Tags: documentation, user, v2.0
-├── Visibility: Public
-├── Owner: Documentation Team
-
-Developer Documentation
-├── Name: API Reference
-├── Tags: documentation, developer, v3.0
-├── Visibility: Public
-├── Owner: Developer Relations
-
-Internal Documentation
-├── Name: Development Guide
-├── Tags: documentation, internal
-├── Visibility: Team
-├── Owner: Engineering Lead
-
-Legacy Documentation
-├── Name: v1.0 Documentation
-├── Tags: documentation, archived, legacy
-├── Visibility: Private
-├── Owner: Documentation Team
-└── Status: Archived
-```
+| Group | Name | Tags | Visibility | Owner | Status |
+|-------|------|------|------------|-------|--------|
+| User Documentation | Product User Guide | documentation, user, v2.0 | Public | Documentation Team | — |
+| Developer Documentation | API Reference | documentation, developer, v3.0 | Public | Developer Relations | — |
+| Internal Documentation | Development Guide | documentation, internal | Team | Engineering Lead | — |
+| Legacy Documentation | v1.0 Documentation | documentation, archived, legacy | Private | Documentation Team | Archived |
 
 ---
 
@@ -565,27 +514,22 @@ Monthly Review:
 
 ### Lifecycle Management
 
-```
-Creation:
-├── Set appropriate status (Active)
-├── Clear owner assignment
-└── Document purpose in description
-
-Growth:
-├── Monitor size and resource count
-├── Keep metadata current
-└── Update as content changes
-
-Decline:
-├── Mark as Archived if no longer used
-├── Set Deprecated if replaced
-└── Plan for eventual deletion
-
-Retirement:
-├── Final update to metadata
-├── Archive for compliance
-└── Delete if not needed
-```
+- **Creation**:
+  - Set appropriate status (Active)
+  - Clear owner assignment
+  - Document purpose in description
+- **Growth**:
+  - Monitor size and resource count
+  - Keep metadata current
+  - Update as content changes
+- **Decline**:
+  - Mark as Archived if no longer used
+  - Set Deprecated if replaced
+  - Plan for eventual deletion
+- **Retirement**:
+  - Final update to metadata
+  - Archive for compliance
+  - Delete if not needed
 
 ---
 

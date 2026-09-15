@@ -3,9 +3,7 @@ title: "Email Tool"
 description: "Send emails from agents"
 ---
 
-# Email Tool
-
-The **Email Tool** allows agents to send email messages through configured email providers. This enables agents to communicate directly with users, stakeholders, and external systems.
+Email providers (such as SMTP, SendGrid, or AWS SES) are configured once at the project level, not per tool, so every agent in the project sends through the same connection. This keeps credentials centralized and makes it easy to swap providers without touching individual agents.
 
 ---
 
@@ -20,21 +18,15 @@ An Email Tool lets you:
 - ✅ Track email delivery
 - ✅ Integrate with customer communications
 
-```
 Agent Process:
-┌─────────────────────────┐
-│ Agent generates email   │
-├─────────────────────────┤
-│ Calls Email Tool        │
-│  • To: recipient        │
-│  • Subject: text        │
-│  • Body: content        │
-│     ↓                   │
-│ Email Provider sends    │
-│     ↓                   │
-│ Email delivered         │
-└─────────────────────────┘
-```
+
+1. **Agent generates email**
+2. **Calls Email Tool**
+   - To: recipient
+   - Subject: text
+   - Body: content
+3. **Email Provider sends**
+4. **Email delivered**
 
 ---
 

@@ -3,8 +3,6 @@ title: "Guardrails Overview"
 description: "Learn how to protect your agents and users with intelligent content filtering and safety controls"
 ---
 
-# Guardrails Overview
-
 Guardrails are intelligent safety and content filtering mechanisms in PLai Framework that protect both your agents and users by detecting, blocking, or masking inappropriate, sensitive, or harmful content in real-time. Powered by Amazon Bedrock Guardrails, they provide enterprise-grade AI safety and compliance controls.
 
 ## What are Guardrails?
@@ -28,20 +26,16 @@ Unlike Answer Filters which guide specific responses to queries, Guardrails enfo
 
 Guardrails inspect content in real-time using advanced detection models:
 
-```mermaid
-graph LR
-    A[User Input] --> B{INPUT Guardrails}
-    B -->|Pass| C[AI Model]
-    B -->|Block| D[Blocked Message]
-    B -->|Mask| E[Masked Input]
-    E --> C
-    C --> F[AI Response]
-    F --> G{OUTPUT Guardrails}
-    G -->|Pass| H[User Receives Response]
-    G -->|Block| I[Safety Message]
-    G -->|Mask| J[Masked Response]
-    J --> H
-```
+1. **User Input** arrives
+2. **INPUT Guardrails** evaluate it
+   - **Pass** — input goes to the AI Model unchanged
+   - **Mask** — sensitive parts become a Masked Input, which then goes to the AI Model
+   - **Block** — the interaction stops with a Blocked Message
+3. **AI Model** generates an AI Response
+4. **OUTPUT Guardrails** evaluate the response
+   - **Pass** — the user receives the response as-is
+   - **Mask** — sensitive parts become a Masked Response, which the user then receives
+   - **Block** — the user receives a Safety Message instead
 
 ### Action Types
 

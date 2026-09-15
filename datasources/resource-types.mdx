@@ -3,28 +3,24 @@ title: "Resource Types"
 description: "Files, URLs, and manual content in datasources"
 ---
 
-# Resource Types
-
 A **Datasource** is composed of multiple **Resources**. Each resource is a unit of content that agents can search and retrieve. PLai Framework supports three types of resources: Files, URLs/Sitemaps, and Manual Content.
 
 ---
 
 ## Resource Types Overview
 
-```
-Datasource
-├── Files
-│  ├── PDF Documents
-│  ├── Word Documents
-│  ├── Text Files
-│  └── Spreadsheets
-├── URLs & Sitemaps
-│  ├── Single Pages
-│  ├── Website Crawls
-│  └── Sitemap Indexing
-└── Manual Content
-   └── Direct Text Entry
-```
+- **Datasource**:
+  - **Files**
+    - PDF Documents
+    - Word Documents
+    - Text Files
+    - Spreadsheets
+  - **URLs & Sitemaps**
+    - Single Pages
+    - Website Crawls
+    - Sitemap Indexing
+  - **Manual Content**
+    - Direct Text Entry
 
 ---
 
@@ -86,19 +82,12 @@ Bulk Upload:
 
 When you upload a file:
 
-```
-Upload File
-     ↓
-Extract Text
-     ↓
-Split into Chunks
-     ↓
-Generate Embeddings
-     ↓
-Index for Search
-     ↓
-Ready for Queries
-```
+1. **Upload File**
+2. **Extract Text**
+3. **Split into Chunks**
+4. **Generate Embeddings**
+5. **Index for Search**
+6. **Ready for Queries**
 
 **Processing Time:**
 - Text extraction: Depends on file size (typically 1-5 seconds)
@@ -196,21 +185,13 @@ Add an entire website using its sitemap:
 
 When you add a URL:
 
-```
-URL Request
-     ↓
-Fetch Web Content
-     ↓
-Extract Main Text
-     ↓
-Remove HTML/Styling
-     ↓
-Split into Chunks
-     ↓
-Generate Embeddings
-     ↓
-Index for Search
-```
+1. **URL Request**
+2. **Fetch Web Content**
+3. **Extract Main Text**
+4. **Remove HTML/Styling**
+5. **Split into Chunks**
+6. **Generate Embeddings**
+7. **Index for Search**
 
 **Processing Considerations:**
 - Dynamic content: May need JavaScript rendering
@@ -364,32 +345,23 @@ Our 30-day return policy allows customers to return...
 ### Text Entry Workflows
 
 **Workflow 1: Policy Documentation**
-```
-Manual Content:
-├── Policy Statement
-├── Eligibility Rules
-├── Process Steps
-└── Contact Information
-```
+- Policy Statement
+- Eligibility Rules
+- Process Steps
+- Contact Information
 
 **Workflow 2: Procedures**
-```
-Manual Content:
-├── Overview
-├── Prerequisites
-├── Step-by-step Instructions
-├── Troubleshooting
-└── Escalation Path
-```
+- Overview
+- Prerequisites
+- Step-by-step Instructions
+- Troubleshooting
+- Escalation Path
 
 **Workflow 3: FAQ Entries**
-```
-Manual Content:
-├── Question
-├── Answer
-├── Related Topics
-└── See Also Links
-```
+- Question
+- Answer
+- Related Topics
+- See Also Links
 
 ### Content Management
 
@@ -461,20 +433,14 @@ Each resource has associated metadata:
 
 When an agent searches a datasource:
 
-```
-Agent Query: "How do I reset my password?"
-        ↓
-Search all resources:
-├── PDF: User Guide
-├── URL: FAQ Page
-├── Text: Reset Procedure
-        ↓
-Find similar content
-        ↓
-Return top results
-        ↓
-Agent uses for response
-```
+1. **Agent query** — e.g. "How do I reset my password?"
+2. **Search all resources**, such as:
+   - PDF: User Guide
+   - URL: FAQ Page
+   - Text: Reset Procedure
+3. **Find similar content**
+4. **Return top results**
+5. **Agent uses for response**
 
 ### Search Configuration
 
@@ -500,32 +466,26 @@ Monitor resource quality:
 
 ### By Content Type
 
-```
-Datasource Structure:
-├── Files/
-│  ├── Product Guides
-│  ├── API Documentation
-│  └── Policies
-├── URLs/
-│  ├── Blog Articles
-│  ├── Knowledge Base
-│  └── Help Center
-└── Manual/
-   ├── Quick Answers
-   ├── FAQs
-   └── Common Issues
-```
+- **Files/**
+  - Product Guides
+  - API Documentation
+  - Policies
+- **URLs/**
+  - Blog Articles
+  - Knowledge Base
+  - Help Center
+- **Manual/**
+  - Quick Answers
+  - FAQs
+  - Common Issues
 
 ### By Topic
 
-```
-Datasource Structure:
-├── Getting Started/
-├── Product Features/
-├── Troubleshooting/
-├── Billing/
-└── Policies/
-```
+- Getting Started/
+- Product Features/
+- Troubleshooting/
+- Billing/
+- Policies/
 
 ---
 

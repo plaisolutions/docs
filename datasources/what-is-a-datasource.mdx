@@ -3,31 +3,22 @@ title: "What is a Datasource?"
 description: "Knowledge bases that agents can access and query"
 ---
 
-# What is a Datasource?
-
-A **Datasource** is a knowledge base that provides agents with access to external information. Datasources enable agents to retrieve relevant context and knowledge when responding to questions or performing tasks.
+Rather than hardcoding reference material into an agent's instructions, you attach a datasource so the agent can look up current information at query time — from uploaded files, crawled web pages, pasted text, or a connected Google Drive folder.
 
 ---
 
 ## Core Concept
 
-```
-DATASOURCE = Knowledge Base + Search + Retrieval
+**DATASOURCE = Knowledge Base + Search + Retrieval**
 
-┌──────────────────────────┐
-│    Datasource            │
-├──────────────────────────┤
-│ • Files (PDFs, Docs)     │
-│ • Web Content (URLs)     │
-│ • Manual Text            │
-│ • Google Drive Files     │
-│ • Metadata & Indexing    │
-│          ↓               │
-│    Vector Search         │
-│          ↓               │
-│ Relevant Context         │
-└──────────────────────────┘
-```
+- **Datasource** contents:
+  - Files (PDFs, Docs)
+  - Web Content (URLs)
+  - Manual Text
+  - Google Drive Files
+  - Metadata & Indexing
+- **Vector Search** — searches across the datasource contents
+- **Relevant Context** — returned to the agent
 
 ---
 
@@ -100,12 +91,9 @@ Datasources can be:
 
 Self-managed knowledge bases where you add content directly:
 
-```
-Manual Datasource
-├── Upload Files
-├── Add URLs
-└── Enter Text Content
-```
+- Upload Files
+- Add URLs
+- Enter Text Content
 
 **Best for:**
 - Company policies and documentation
@@ -117,12 +105,9 @@ Manual Datasource
 
 Connected directly to Google Drive folders:
 
-```
-Google Drive Integration
-├── Authenticate with Google
-├── Select Folders
-└── Auto-sync Files
-```
+- Authenticate with Google
+- Select Folders
+- Auto-sync Files
 
 **Best for:**
 - Shared team documents
@@ -165,19 +150,12 @@ When creating an agent:
 
 When an agent receives a question:
 
-```
-Question: "How do I reset my password?"
-        ↓
-Agent searches datasources
-        ↓
-Finds: "Password Reset Guide.pdf" and FAQ entry
-        ↓
-Retrieves top 10 relevant sections
-        ↓
-Includes in context for response
-        ↓
-Agent responds with confidence
-```
+1. **Question** — e.g. "How do I reset my password?"
+2. **Agent searches datasources**
+3. **Finds** — e.g. "Password Reset Guide.pdf" and FAQ entry
+4. **Retrieves top 10 relevant sections**
+5. **Includes in context for response**
+6. **Agent responds with confidence**
 
 ---
 

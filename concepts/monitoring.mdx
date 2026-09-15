@@ -3,9 +3,7 @@ title: "Monitoring"
 description: "Track token consumption, resource usage, and costs in your PLai projects"
 ---
 
-# Monitoring
-
-Monitoring shows you resource consumption and costs across your project. It provides visibility into how many tokens are being used, which services are consuming resources, and what everything costs.
+Costs vary widely by model and provider, and a single expensive workflow can quietly drive up your bill without anyone noticing. Monitoring aggregates usage as it happens so you can catch spikes early instead of finding out at invoice time.
 
 ---
 
@@ -29,47 +27,32 @@ Monitor shows CONSUMPTION and COSTS. For detailed analytics about agent performa
 
 ### Understanding Your Costs
 
-```
-COST STRUCTURE:
+**Cost structure**:
 
-LLM Services (Claude, GPT-4, etc.)
-├─ Based on tokens consumed
-├─ Different rates for input vs output
-└─ Rates vary by model
-
-Tool Services (Web Search, Code Execution, etc.)
-├─ Based on usage (searches, executions, calls)
-├─ Per-unit pricing or flat fees
-└─ Varies by service
-
-External Services (via API tools)
-├─ Billing by external provider
-├─ PLai may charge platform fee
-└─ Check service docs for pricing
-```
+- **LLM Services** (Claude, GPT-4, etc.)
+  - Based on tokens consumed
+  - Different rates for input vs output
+  - Rates vary by model
+- **Tool Services** (Web Search, Code Execution, etc.)
+  - Based on usage (searches, executions, calls)
+  - Per-unit pricing or flat fees
+  - Varies by service
+- **External Services** (via API tools)
+  - Billing by external provider
+  - PLai may charge platform fee
+  - Check service docs for pricing
 
 ### Cost Per Agent/Workflow
 
 Track which agents or workflows are most expensive:
 
-```
 Estimated Cost Breakdown:
 
-Support Bot Agent:
-├─ Daily cost: $8.50
-├─ Avg cost per request: $0.15
-└─ Weekly cost: $59.50
-
-Data Processing Workflow:
-├─ Daily cost: $12.30
-├─ Avg cost per execution: $2.50
-└─ Weekly cost: $86.10
-
-Lead Scoring Agent:
-├─ Daily cost: $3.20
-├─ Avg cost per lead: $0.32
-└─ Weekly cost: $22.40
-```
+| Agent / Workflow | Daily Cost | Avg Cost | Weekly Cost |
+|-------------------|------------|----------|-------------|
+| Support Bot Agent | $8.50 | $0.15 per request | $59.50 |
+| Data Processing Workflow | $12.30 | $2.50 per execution | $86.10 |
+| Lead Scoring Agent | $3.20 | $0.32 per lead | $22.40 |
 
 <Tip>
 These are estimated breakdowns. For exact per-agent costs and usage details, check [Agent Analytics](../agents/analytics.mdx).
@@ -81,20 +64,14 @@ These are estimated breakdowns. For exact per-agent costs and usage details, che
 
 ### Optimize Token Usage
 
-```
-BEFORE (Expensive):
-├─ System prompt: 1,000 tokens (verbose)
-├─ Full datasource context: 2,000 tokens
-├─ User input: 100 tokens
-└─ Total input: 3,100 tokens → Cost: $0.0093
+| | Before (Expensive) | After (Optimized) |
+|---|---|---|
+| System prompt | 1,000 tokens (verbose) | 200 tokens (concise) |
+| Datasource context | 2,000 tokens (full context) | 400 tokens (relevant excerpts only) |
+| User input | 100 tokens | 100 tokens |
+| **Total input** | **3,100 tokens → Cost: $0.0093** | **700 tokens → Cost: $0.0021** |
 
-AFTER (Optimized):
-├─ System prompt: 200 tokens (concise)
-├─ Relevant excerpts only: 400 tokens
-├─ User input: 100 tokens
-└─ Total input: 700 tokens → Cost: $0.0021
 Savings: 77% reduction
-```
 
 ### Best Practices
 
@@ -115,19 +92,16 @@ Savings: 77% reduction
 
 ### Example Optimization
 
-```
-Email Support Bot:
+**Email Support Bot**:
 
-PROBLEM:
-├─ Current: 500 requests/day
-├─ Avg input tokens: 1,500 per request
-├─ Daily token cost: $2.25 (500 × 1,500 × $3/1M)
-
-OPTIMIZATION:
-├─ Reduce context from 1,500 to 500 tokens
-├─ New daily token cost: $0.75 (500 × 500 × $3/1M)
-└─ Monthly savings: $45 (66% reduction)
-```
+- **Problem**:
+  - Current: 500 requests/day
+  - Avg input tokens: 1,500 per request
+  - Daily token cost: $2.25 (500 × 1,500 × $3/1M)
+- **Optimization**:
+  - Reduce context from 1,500 to 500 tokens
+  - New daily token cost: $0.75 (500 × 500 × $3/1M)
+  - Monthly savings: $45 (66% reduction)
 
 ---
 

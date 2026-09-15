@@ -36,20 +36,8 @@ Every `.mdx` file must start with this frontmatter:
 ---
 title: "Page Title"
 description: "Brief one-line description for SEO and navigation"
-icon: "icon-name"
 ---
 ```
-
-### Common Icons
-- `robot` - Agents
-- `wrench` - Tools
-- `database` - Datasources
-- `flow` - Workflows
-- `list-check` - Jobs
-- `zap` - Triggers
-- `chart-line` - Monitor
-- `play` - Getting started
-- `book-open` - Guides
 
 ---
 
@@ -221,6 +209,49 @@ const example = "code";
 
 ---
 
+## 📊 Diagrams, Flows & Sequences
+
+**Never use ASCII box-drawing diagrams (`┌─┐│└▼`) or Mermaid (` ```mermaid `) to explain a flow, sequence, or architecture.** Both break in practice:
+
+- **ASCII art** depends on every character — including Unicode box-drawing glyphs — rendering at identical width. Fonts vary, so boxes misalign; on mobile the code block scrolls horizontally instead of wrapping, so the diagram is never visible in one view; screen readers read the box characters as noise instead of content.
+- **Mermaid** renders as a real diagram, but its markdown-in-label parser breaks on unrelated things (e.g. a node label starting with `"1. "` throws `Unsupported markdown: list`), and it adds a client-side rendering dependency for something a list says just as clearly.
+
+**Use a nested Markdown list instead.** It always renders correctly, needs no special component or font, and is accessible by default.
+
+### Before/after example
+
+ASCII (don't):
+```
+┌───────────────┐
+│ Step 1: Fetch │
+└──────┬────────┘
+       ▼
+┌───────────────┐
+│ Step 2: Parse │
+└───────────────┘
+```
+
+Nested list (do):
+```mdx
+1. **Fetch** — retrieves the raw resource
+2. **Parse** — extracts structured fields from the fetched resource
+```
+
+For branching or parallel flows, nest bullets under the step where the branch happens instead of drawing side-by-side boxes:
+
+```mdx
+1. **Engine processes a tick** — evaluates which nodes are ready
+   - **Sync nodes** (`plai_agent`, `http`, `markdown_report`) — complete immediately
+   - **Async nodes** (`firecrawl`) — marked `RUNNING`, wait for a webhook, then call `complete_node()`
+2. **More work?**
+   - **Yes** — republish to Pub/Sub and repeat from step 1
+   - **No** — workflow is `COMPLETED`
+```
+
+If the content is genuinely comparative or tabular (states, parameters, timings) rather than sequential, use a Markdown table instead of a list — see `triggers/overview.mdx` for the pattern.
+
+---
+
 ## 📄 Do's and Don'ts
 
 ### ✅ DO
@@ -233,15 +264,17 @@ const example = "code";
 - Keep sentences short and clear
 - Use bullet points for lists
 - Test links before committing
+- Use nested Markdown lists (or tables for comparative data) to explain flows and diagrams — see "Diagrams, Flows & Sequences" above
 
 ### ❌ DON'T
 
 - Use overly technical language without explanation
-- Mix Spanish and English (choose one language per file)
+- Use custom emoticons in any list or page
+- Mix Spanish and English (always in English)
 - Create orphaned pages (not linked from docs.json or other pages)
 - Use H1 headers (# is reserved for page title)
 - Add comments or meta-documentation to user-facing docs
-- Include screenshots of UI that changes frequently (use diagrams instead)
+- Use ASCII box-drawing diagrams or Mermaid definitions — see "Diagrams, Flows & Sequences" above
 - Write stories or narratives longer than 2-3 sentences
 - Use "we", "our", "you" inconsistently - pick a tone and stick with it
 

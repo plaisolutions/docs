@@ -78,15 +78,15 @@
           },
           {
             "group": "Jobs",
-            "pages": []
+            "pages": ["jobs/overview"]
           },
           {
             "group": "Triggers",
-            "pages": []
+            "pages": ["triggers/overview"]
           },
           {
             "group": "Monitor",
-            "pages": []
+            "pages": ["monitor/overview"]
           }
         ]
       },

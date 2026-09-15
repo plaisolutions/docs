@@ -3,9 +3,7 @@ title: "Agent Tool"
 description: "Enable agents to invoke and collaborate with other agents"
 ---
 
-# Agent Tool
-
-The Agent Tool enables your agents to invoke and collaborate with other agents, creating powerful multi-agent workflows and specialized task delegation. This tool transforms individual agents into a coordinated team of AI specialists.
+Under the hood, invoking an agent works like calling a function: the target agent runs independently with its own instructions and tools, then its output is returned to the calling agent. You can target either an agent from your current project or a system-wide core agent.
 
 <Note>
 This tool has **Default** status, meaning it's production-ready and available on all subscription plans.
@@ -176,21 +174,10 @@ System-wide specialized agents available across projects:
 
 ### Hierarchical Architecture
 
-```mermaid
-graph TD
-    A[Orchestrator Agent] --> B[Research Agent]
-    A --> C[Analysis Agent]
-    A --> D[Writing Agent]
-    
-    B --> B1[Web Search Tool]
-    B --> B2[Database Tool]
-    
-    C --> C1[Data Processing Tool]
-    C --> C2[Analytics Tool]
-    
-    D --> D1[Content Templates]
-    D --> D2[Style Guidelines]
-```
+- **Orchestrator Agent** delegates to:
+  - **Research Agent** — uses the Web Search Tool and the Database Tool
+  - **Analysis Agent** — uses the Data Processing Tool and the Analytics Tool
+  - **Writing Agent** — uses Content Templates and Style Guidelines
 
 **Pattern**: Single orchestrator delegates to specialized agents
 **Benefits**: Clear responsibility, easy to maintain
@@ -198,14 +185,12 @@ graph TD
 
 ### Collaborative Architecture
 
-```mermaid
-graph LR
-    A[Agent 1: Intake] --> B[Agent 2: Processing]
-    B --> C[Agent 3: Quality Check]
-    C --> D[Agent 4: Delivery]
-    C -.feedback.-> B
-    D -.review.-> C
-```
+1. **Agent 1: Intake**
+2. **Agent 2: Processing**
+3. **Agent 3: Quality Check**
+4. **Agent 4: Delivery**
+
+There are two feedback loops on top of this sequence: Quality Check can send work back to Processing (feedback), and Delivery can send work back to Quality Check (review).
 
 **Pattern**: Agents pass work sequentially with feedback loops
 **Benefits**: Quality control, iterative improvement
@@ -213,18 +198,11 @@ graph LR
 
 ### Specialist Pool Architecture
 
-```mermaid
-graph TD
-    A[Router Agent] --> B[Technical Agent]
-    A --> C[Sales Agent]
-    A --> D[Billing Agent]
-    A --> E[General Agent]
-    
-    B --> F[Issue Resolution]
-    C --> G[Opportunity Mgmt]
-    D --> H[Payment Processing]
-    E --> I[General Inquiries]
-```
+- **Router Agent** routes to:
+  - **Technical Agent** — handles Issue Resolution
+  - **Sales Agent** — handles Opportunity Mgmt
+  - **Billing Agent** — handles Payment Processing
+  - **General Agent** — handles General Inquiries
 
 **Pattern**: Router agent directs to appropriate specialist
 **Benefits**: Efficient routing, specialized expertise
@@ -512,21 +490,14 @@ Efficiency Metrics:
 
 Monitor agent interaction patterns:
 
-```mermaid
-graph TD
-    A[User Query] --> B[Router Agent]
-    B -->|40%| C[General Agent]
-    B -->|35%| D[Technical Agent]
-    B -->|15%| E[Billing Agent]
-    B -->|10%| F[Sales Agent]
-    
-    D -->|20%| G[Engineering Escalation]
-    E -->|5%| H[Manager Approval]
-    
-    style B fill:#f9f,stroke:#333
-    style D fill:#bbf,stroke:#333
-    style G fill:#fbb,stroke:#333
-```
+1. **User Query** arrives at the **Router Agent**
+2. **Router Agent** distributes queries to:
+   - **General Agent** — 40% of queries
+   - **Technical Agent** — 35% of queries
+     - Escalates 20% of its queries to **Engineering Escalation**
+   - **Billing Agent** — 15% of queries
+     - Escalates 5% of its queries to **Manager Approval**
+   - **Sales Agent** — 10% of queries
 
 ## Troubleshooting
 

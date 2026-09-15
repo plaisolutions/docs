@@ -3,9 +3,7 @@ title: "MCP Server Tool"
 description: "Connect to Model Context Protocol servers for extended functionality"
 ---
 
-# MCP Server Tool
-
-The MCP Server tool enables agents to connect to remote Model Context Protocol (MCP) servers, extending their capabilities with external services, tools, and data sources through a standardized protocol.
+MCP defines a common way for any compliant server to expose its tools and resources, so you don't need a custom integration for each external service. PLai connects to these servers over HTTPS using either OAuth 2.0 or token-based authentication.
 
 <Note>
 This tool has **Preview** status, meaning it's nearly ready for production with potential minor adjustments based on user feedback.
@@ -274,24 +272,10 @@ Access custom business logic and calculations:
 
 MCP servers can provide various types of resources:
 
-```mermaid
-graph TD
-    A[MCP Server] --> B[Resources]
-    A --> C[Tools]
-    A --> D[Prompts]
-    
-    B --> B1[Files]
-    B --> B2[Databases]
-    B --> B3[APIs]
-    
-    C --> C1[Calculators]
-    C --> C2[Processors]
-    C --> C3[Analyzers]
-    
-    D --> D1[Templates]
-    D --> D2[Instructions]
-    D --> D3[Examples]
-```
+- **MCP Server** exposes:
+  - **Resources** — Files, Databases, APIs
+  - **Tools** — Calculators, Processors, Analyzers
+  - **Prompts** — Templates, Instructions, Examples
 
 ### Tool Discovery
 

@@ -3,8 +3,6 @@ title: "BigQuery Data Source"
 description: "Connect your agents to Google BigQuery for natural language data warehouse queries"
 ---
 
-# BigQuery Data Source
-
 The BigQuery Data Source tool enables your agents to query Google BigQuery data warehouses using natural language. Your agents can ask questions in plain English, and the tool automatically converts them to BigQuery SQL, executes the query, and returns structured results.
 
 <Note>
@@ -44,14 +42,14 @@ The BigQuery Data Source tool combines the power of Google BigQuery's analytics 
 
 ### How It Works
 
-```mermaid
-graph LR
-    A[Natural Language Query] --> B[GPT-4 Model]
-    B --> C[BigQuery SQL]
-    C --> D[Execute on BigQuery]
-    D --> E[JSON Results]
-    E --> F[Agent Response]
-```
+1. **Natural Language Query**
+2. **GPT-4 Model**
+3. **BigQuery SQL**
+4. **Execute on BigQuery**
+5. **JSON Results**
+6. **Agent Response**
+
+In more detail:
 
 1. Your agent receives a natural language question from a user
 2. The question is sent to GPT-4 (`gpt-4.1-2025-04-14`) along with your BigQuery schema

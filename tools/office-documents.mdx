@@ -3,9 +3,7 @@ title: "Office Documents Tool"
 description: "Generate and edit office documents from agents"
 ---
 
-# Office Documents Tool
-
-The **Office Documents Tool** allows agents to generate and edit office documents programmatically. This enables agents to create professional reports, spreadsheets, presentations, and PDFs with dynamic content.
+Under the hood, the agent sends the document type, an optional template, and the content to an AI-powered document processor, which assembles the file and returns it to the agent. This means documents can be populated with data the agent just generated, instead of relying on a static template alone.
 
 ---
 
@@ -21,25 +19,16 @@ An Office Documents Tool lets you:
 - ✅ Populate templates with dynamic data
 - ✅ Use AI-powered document generation
 
-```
 Agent Process:
-┌──────────────────────────┐
-│ Agent prepares data      │
-├──────────────────────────┤
-│ Calls Office Doc Tool    │
-│ • Document type          │
-│ • Template               │
-│ • Content                │
-│     ↓                    │
-│ Office Processor         │
-│ (Claude + Skills)        │
-│     ↓                    │
-│ Document generated       │
-│ (docx/xlsx/pptx/pdf)     │
-│     ↓                    │
-│ Returns to agent         │
-└──────────────────────────┘
-```
+
+1. **Agent prepares data**
+2. **Calls Office Doc Tool**
+   - Document type
+   - Template
+   - Content
+3. **Office Processor** (Claude + Skills)
+4. **Document generated** (docx/xlsx/pptx/pdf)
+5. **Returns to agent**
 
 ---
 
