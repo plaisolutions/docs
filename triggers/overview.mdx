@@ -1,0 +1,126 @@
+---
+title: "Triggers Overview"
+description: "Run workflows or call webhooks automatically when platform events occur"
+---
+
+A **Trigger** runs a **Workflow** or calls a **Webhook URL** automatically when something happens in your project — no schedule, no manual click. Today, triggers react to resource processing events, optionally scoped to a specific datasource and filtered by conditions on the event data.
+
+<Tip>
+Triggers are event-based. If you need a workflow to run at specific times instead (daily, weekly, cron), use [Jobs](../jobs/overview.mdx). Jobs and Triggers are independent, parallel ways to invoke a workflow without a human clicking "Run."
+</Tip>
+
+---
+
+## Creating a Trigger
+
+Click **Add Trigger** to open a step-by-step wizard: **Event → Source → Conditions → Action → Name**. The Source step only appears for events that support it (currently, resource events).
+
+### 1. Event
+
+Pick which platform event fires the trigger. There are currently **two** events, both tied to datasource resource processing:
+
+| Event | Fires when |
+|---|---|
+| `resource.ready` | A resource finishes processing and vectorization completes |
+| `resource.failed` | A resource fails to process |
+
+<Info>
+The event list is fetched live from the platform, so more events may appear here over time as they're wired up (e.g. workflow or job lifecycle events are on the roadmap but not active yet).
+</Info>
+
+### 2. Source (datasource filter)
+
+Optionally scope the trigger to a **single datasource** — "Filter by datasource (optional)." Leave it as "Any datasource" to match the event regardless of which datasource produced it. You can't currently filter by multiple datasources at once; it's one datasource or all of them.
+
+### 3. Conditions
+
+Build additional filters on properties of the event (e.g. the resource's type, name, or URL). Every condition uses **AND** logic — a trigger with conditions only fires when *all* of them match; leave conditions empty to match every occurrence of the event.
+
+For each condition you pick:
+- **Field** — from a fixed list based on the selected event (e.g. resource type, name, URL, metadata, extra info).
+- **Operator** — depends on the field's type: `equals` / `not equals` / `contains` / `starts with` / `ends with` for text, `is one of` / `is not one of` for enums, `greater than (or equal)` / `less than (or equal)` for numbers, `is true` / `is false` for booleans.
+- **Value** — a text box, number box, or multi-select depending on the field and operator.
+
+For metadata and extra-info fields (marked "dynamic"), you can additionally type a sub-path (e.g. `opengraph.title`) to reach into nested values.
+
+<Warning>
+**Known issue: conditions do not currently filter anything.** There's a mismatch between how condition fields are named in this step and how they're evaluated internally — as a result, a trigger with one or more conditions will never fire, regardless of the actual event data. Until this is fixed, treat the Conditions step as **not functional**: leave it empty and rely on the Event + Source (datasource) filter instead, or your trigger simply won't run.
+</Warning>
+
+### 4. Action
+
+Choose what the trigger does:
+
+<Tabs>
+  <Tab title="Workflow">
+    - **Workflow** — the workflow to run.
+    - **Input mapping** — map each of the workflow's input fields to either a value from the event (e.g. the resource's name or URL) or a fixed manual value you type in.
+
+    <Info>
+    Workflow-type triggers are only available at the project level — they can't be created as organization-wide triggers.
+    </Info>
+  </Tab>
+  <Tab title="Webhook">
+    - **Webhook URL** — the URL that receives an HTTP POST when the trigger fires.
+    - **Secret (optional)** — a value you can store alongside the trigger.
+
+    <Warning>
+    **Known issue: the secret isn't used yet.** The field is intended for HMAC-SHA256 request signing so you can verify a delivery really came from PLai, but that signing isn't implemented yet — deliveries are sent without any signature header. Don't rely on the secret for verification today; if you need to trust the source of a webhook call, use a private/unguessable URL in the meantime.
+    </Warning>
+
+    The webhook body is the raw event payload as JSON, with these headers: `Content-Type: application/json`, `X-Plai-Event` (e.g. `resource.ready`), `X-Plai-Delivery` (a delivery id), and `X-Plai-Timestamp`. Deliveries are always sent as **POST**; there's no method or custom-header configuration.
+  </Tab>
+</Tabs>
+
+### 5. Name
+
+Give the trigger a name and description (auto-suggested from the event and action type, but editable), and set it **Enabled** — disabled triggers are not evaluated at all.
+
+---
+
+## Managing Triggers
+
+The Triggers list shows each trigger's event, action (workflow name, or `POST <host>` for webhooks), and an enabled toggle. From the row actions you can edit, delete, or (webhook triggers only) view delivery history.
+
+### Webhook Delivery History
+
+For webhook-type triggers, opening **View deliveries** shows every attempt with:
+
+- **Status** — Pending, Delivered, Failed, or Retrying
+- The event and payload sent
+- The response status and any error, when available
+
+Failed deliveries are retried automatically up to 3 attempts, with increasing delay between retries.
+
+<Info>
+Workflow-type triggers don't have an equivalent dedicated history view. Each firing shows up as a normal execution of the target workflow, tagged internally as triggered rather than run manually — check the workflow's own execution history to see it.
+</Info>
+
+---
+
+## Permissions
+
+| Permission | Grants |
+|---|---|
+| `view_triggers` | See the Triggers page and list |
+| `create_trigger` | Create new triggers |
+| `update_trigger` | Edit triggers and toggle enabled/disabled |
+| `delete_trigger` | Delete triggers |
+
+---
+
+## Key Takeaways
+
+✅ **Event-based** — triggers react to things happening in your project, currently resource processing success/failure.
+✅ **Scope to one datasource** — or leave it open to match any datasource.
+✅ **Two actions** — run a workflow (with input mapping from the event) or call a webhook.
+⚠️ **Conditions don't filter yet** — leave the Conditions step empty until this is fixed.
+⚠️ **Webhook secret isn't signing anything yet** — don't rely on it for verifying delivery authenticity.
+
+---
+
+## Related Topics
+
+- **[Jobs](../jobs/overview.mdx)** — Time-based (scheduled) workflow invocation
+- **[What is a Workflow?](../workflows/what-is-a-workflow.mdx)** — What a Trigger can run
+- **[What is a Datasource?](../datasources/what-is-a-datasource.mdx)** — Where resource events come from

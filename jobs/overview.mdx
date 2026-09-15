@@ -1,0 +1,123 @@
+---
+title: "Jobs Overview"
+description: "Schedule workflows to run automatically on a recurring cron schedule"
+---
+
+A **Job** schedules a **Workflow** to run automatically at specific points in time — daily, weekly, on a custom recurrence, or any standard cron expression — instead of being triggered manually or by an event.
+
+<Tip>
+Jobs are time-based. If you need a workflow to react to an event or condition instead (e.g. a webhook, a record change), use [Triggers](../triggers/overview.mdx) instead. Jobs and Triggers are independent, parallel ways to invoke a workflow without a human clicking "Run."
+</Tip>
+
+---
+
+## Creating a Job
+
+Click **Schedule Job** on the Jobs page to open the job form. It asks for:
+
+- **Name** and **Description** — for your own reference in the Jobs list.
+- **Workflow** — the workflow this job will invoke.
+- **Invocation input** — if the selected workflow declares an input schema, a form is generated from it so you can configure the payload the job will send on every run. If the workflow has no input schema, this section is skipped.
+- **Schedule** — see below.
+- **Run as** — see below.
+- **Enabled** — disabled jobs are skipped by the scheduler entirely (they don't run, they don't even get skipped-with-a-reason; the scheduler ignores them).
+
+---
+
+## Setting the Schedule
+
+The schedule builder offers several frequency modes:
+
+| Frequency | What you configure |
+|---|---|
+| Every N minutes | An interval in minutes |
+| Every N hours | An interval in hours |
+| Every day | A time of day |
+| Every week | One or more days of the week + a time of day |
+| Every month | A day of the month + a time of day |
+| Every N days | An interval in days |
+| Advanced | A raw 5-field cron expression (`minute hour day month weekday`) |
+
+For every mode except "Every N minutes," you also pick a **timezone**. Times are interpreted in that timezone, and the scheduler converts them to UTC automatically — so a "daily at 09:00, Europe/Madrid" job keeps firing at 9am Madrid time across DST changes.
+
+As you configure the schedule, the form shows a plain-language description of the cron expression and a preview of the next 5 times it will run, so you can confirm it does what you expect before saving.
+
+---
+
+## Run As: Running in a Member's Context
+
+Because a scheduled job has no human triggering it, every Job must run **in the context of a project member** — this is the **Run as** field in the form.
+
+- By default, **Run as** is set to whoever creates the job, but it can be changed to any other member of the project.
+- The description under the field says it plainly: *"The job runs in this member's context."*
+
+<Warning>
+**Run as controls attribution, not access.** Selecting a member does **not** restrict or expand what the workflow can do — datasources, tools, and integration credentials used by the workflow are scoped to the **project/organization**, not to an individual member. Every member's "Run as" runs the workflow with the exact same access to the project's resources.
+
+What "Run as" actually determines:
+- **Attribution** — the job's executions (and any threads/agent runs the workflow creates) are recorded as belonging to that member.
+- **Notifications** — completion and failure emails for the job's runs are sent to that member's email address.
+
+There is currently no validation that the selected member still belongs to the project, and no automatic reassignment if they're removed — the job keeps running "as" that member. If the member's account is deleted outright, the job itself is deleted along with it, since jobs are tied to their "Run as" member at the database level.
+</Warning>
+
+<Tip>
+Because Run as only affects attribution and notifications, pick whichever member should receive the "did this job succeed?" emails — you don't need to worry about giving them extra access for the job to work.
+</Tip>
+
+---
+
+## Managing Jobs
+
+The Jobs list shows, per job: enabled toggle, name/description, target workflow, schedule (human-readable, with the raw cron in a tooltip), next run, and last run. From the row actions menu you can:
+
+- **Run now** — triggers an immediate, one-off execution without changing the schedule.
+- **Edit** — reopens the form, including the schedule and Run as member.
+- **Delete** — removes the job.
+
+Toggling **Enabled** directly in the list pauses or resumes the schedule without deleting the job.
+
+### Execution History
+
+Opening a job and switching to its **History** tab shows a paginated list of every scheduled tick, each with:
+
+- **Scheduled time**
+- **Status** — Pending, Running, Completed, Failed, or Skipped
+- A link to the underlying workflow execution, when one was produced
+
+A run can be **Skipped** instead of executing, for one of these reasons:
+
+- **Overlap** — the previous run of this job was still in progress.
+- **Entity disabled** — the job was disabled at the exact moment it was due to run.
+- **Invocation error** — the workflow couldn't be invoked (e.g. its input schema changed and the stored invocation no longer matches).
+
+---
+
+## Permissions
+
+Jobs use a full CRUD + execute permission set (rather than a single view permission):
+
+| Permission | Grants |
+|---|---|
+| `view_jobs` | See the Jobs page and list |
+| `create_job` | Schedule new jobs |
+| `update_job` | Edit jobs and toggle enabled/disabled |
+| `delete_job` | Delete jobs |
+| `execute_job` | Use "Run now" |
+
+---
+
+## Key Takeaways
+
+✅ **Jobs run workflows on a schedule** — cron-based, with a friendly builder for common recurrences.
+✅ **Run as sets attribution and notifications**, not permissions — the workflow's access to project resources is unaffected by which member is selected.
+✅ **Skips are visible** — overlapping, disabled, or misconfigured runs show up in the history with a clear reason instead of silently failing.
+✅ **Independent from Triggers** — Jobs are time-based; Triggers are event-based. Both can invoke the same workflows.
+
+---
+
+## Related Topics
+
+- **[What is a Workflow?](../workflows/what-is-a-workflow.mdx)** — What a Job actually invokes
+- **[Triggers](../triggers/overview.mdx)** — Event-based workflow invocation
+- **[Organizations & Projects](../concepts/organizations-and-projects.mdx)** — Members and roles

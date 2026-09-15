@@ -1,0 +1,94 @@
+---
+title: "Monitor Overview"
+description: "Track requests, threads, and consumption costs for your project"
+---
+
+Monitor is a **project-level dashboard** that shows how much your project is being used and what it costs. It combines request and thread volume with a detailed, per-service cost breakdown for a selected date range.
+
+<Tip>
+Monitor shows **consumption and costs**. For per-agent conversations, executions, and performance metrics, see [Agent Analytics](../agents/analytics.mdx).
+</Tip>
+
+---
+
+## Accessing Monitor
+
+Monitor lives in the project sidebar and requires the **View Project Analytics** permission. If your role doesn't have it, the page shows an "Unauthorized" state instead of the dashboard.
+
+---
+
+## Date Range Filter
+
+At the top of the page, a date range picker lets you choose the period to analyze.
+
+- **Default range**: the last 7 days.
+- **Maximum range**: up to 3 months back from today (roughly the last 90 days) — earlier dates are disabled in the picker.
+- Click **Filter** to apply the selected range, or **Clear** to reset the filter.
+
+The selected range drives every chart and table on the page: requests, threads, and the billing summary all recompute for that period.
+
+---
+
+## Top Row: Requests, Threads & Billing Summary
+
+<CardGroup cols={3}>
+  <Card title="Total Requests" icon="chart-column">
+    Bar chart of total API requests per day, with the total request count for the selected range shown above it.
+  </Card>
+  <Card title="Total Threads" icon="chart-column">
+    Bar chart of total threads created per day, with the total thread count for the selected range shown above it.
+  </Card>
+  <Card title="Billing Summary" icon="chart-pie">
+    Donut chart breaking down total cost by service type, with the overall total shown in the center panel (tax not included).
+  </Card>
+</CardGroup>
+
+The Billing Summary donut has one slice per service type (see below), each with its own color. The legend next to the donut lists every type with its cost for the period.
+
+<Info>
+Costs are shown in the project's currency, defaulting to **EUR (€)** if none is configured.
+</Info>
+
+---
+
+## Service Usage Tables
+
+Below the summary, Monitor lists every service type your project consumed during the period as a separate table. Each table shows one row per model/API used within that type, with these columns:
+
+- **Model** — the underlying service or model (e.g. `openai`, `anthropic_claude_sonnet_4_6`).
+- **Type** — where the usage came from, e.g. `Agent` (an agent execution) or `Datasource` (e.g. embedding/reranking triggered by a datasource).
+- One or more **consumption columns**, specific to the service type (see table below).
+- **Cost** — the cost for that row in the project's currency.
+
+Each table ends with a total row summing the cost for that entire service type.
+
+| Service Type | Consumption columns |
+|---|---|
+| **LLM Models** | Prompt Tokens, Completion Tokens, Cached Tokens |
+| **Rerank Models** | Search Units |
+| **Embeddings Models** | Prompt Tokens |
+| **Web Search** | Prompt Tokens, Completion Tokens, Search Queries |
+| **Scraping** | Credits |
+| **Transcription** | Minutes |
+| **Document Validations** | Credits |
+| **Document Conversions** | Credits |
+
+<Note>
+A table only appears if there is usage of that type in the selected date range — if your project never used, say, Transcription, that table simply won't show up.
+</Note>
+
+---
+
+## Key Takeaways
+
+✅ **Project-level** — Monitor aggregates the whole project, not a single agent.
+✅ **Date-scoped** — every number and table reflects the selected date range (up to the last 3 months).
+✅ **Full cost breakdown** — from the overall total down to per-model, per-service consumption units.
+✅ **Currency-aware** — costs display in the project's configured currency, defaulting to EUR.
+
+---
+
+## Related Topics
+
+- **[Agent Analytics](../agents/analytics.mdx)** — Conversations, executions, and performance per agent
+- **[Organizations & Projects](../concepts/organizations-and-projects.mdx)** — Project-level management
