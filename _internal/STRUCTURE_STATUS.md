@@ -67,7 +67,6 @@
 - [ ] Tipos de Tools (resumen)
 - [ ] Credenciales
 - [ ] Configuración básica de una Tool
-- [ ] Code Interpreter (parece falta)
 
 ---
 

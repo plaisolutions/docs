@@ -1,7 +1,6 @@
 ---
 title: "Security & Compliance"
 description: "Protect your data, control access, and ensure safety in PLai Framework"
-icon: "shield"
 ---
 
 # Security & Compliance
@@ -25,7 +24,7 @@ ORGANIZATION LEVEL
          ↓ (members join projects)
 
 PROJECT LEVEL (within each project)
-├─ EDITOR: Create and edit resources
+├─ MEMBER: Create and edit resources
 └─ VIEWER: Read-only access
 ```
 
@@ -46,7 +45,7 @@ PROJECT LEVEL (within each project)
 
 <CardGroup cols={2}>
   <Card title="Least Privilege" icon="minimize">
-    Grant only the minimum access needed. Default to VIEWER, grant EDITOR when necessary.
+    Grant only the minimum access needed. Default to VIEWER, grant MEMBER when necessary.
   </Card>
   <Card title="Regular Audits" icon="audit">
     Periodically review who has access and remove unnecessary members
@@ -67,11 +66,11 @@ PROJECT LEVEL (within each project)
 
 ### What Can Be Stored as Credentials
 
-- 🔑 **API Keys** - For external services (SendGrid, Stripe, etc.)
-- 🎫 **Tokens** - OAuth tokens, bearer tokens
-- 🔐 **Passwords** - Database passwords, service accounts
-- 📝 **Connection Strings** - Database URLs, connection info
-- 🪑 **Certificates** - SSL certificates, authentication certs
+- **API Keys** - For external services (SendGrid, Stripe, etc.)
+- **Tokens** - OAuth tokens, bearer tokens
+- **Passwords** - Database passwords, service accounts
+- **Connection Strings** - Database URLs, connection info
+- **Certificates** - SSL certificates, authentication certs
 
 ### Credential Security
 

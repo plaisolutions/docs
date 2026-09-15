@@ -1,7 +1,6 @@
 ---
 title: "Sign In & Sign Up"
 description: "Learn how to create an account and join an organization through invitations"
-icon: "user-plus"
 ---
 
 # Sign In & Sign Up
@@ -23,11 +22,11 @@ PLai Framework uses an invitation-based onboarding system. This ensures secure a
 
 PLai Framework uses **invitations** to manage organization access. Here's the overview:
 
-<Frame>
-  <div className="bg-gray-100 p-6 rounded-lg text-center text-sm">
-    Múltiplo creates Organization → Invites OWNER/ADMIN → OWNER/ADMIN invites members → Members receive email → Join organization
-  </div>
-</Frame>
+1. Múltiplo creates Organization
+2. Múltiplo invites OWNER/ADMIN
+3. New Organization OWNER/ADMIN invites OWNER/ADMIN
+4. Members receive email
+5. Members Join organization
 
 ---
 
@@ -42,7 +41,7 @@ An OWNER or ADMIN from your organization will send you an invitation to join.
 1. Go to **Settings** → **Invitations**
 2. Click **"New Invitation"**
 3. Enter your email address
-4. Select your organization role (VIEWER, ADMIN, OWNER)
+4. Select your organization role (VIEWER, MEMBER, ADMIN, OWNER)
 5. Select a project to join
 6. Select your project role
 7. Click **"Send Invitation"**
@@ -81,7 +80,7 @@ As a [ADMIN] of the organization
 
 You have two options:
 - **Sign In** - If you already have a PLai account
-- **Register** - If this is your first time
+- **Sign Up** - If this is your first time
 
 ### If You Already Have an Account
 
@@ -90,7 +89,7 @@ You have two options:
     Select the "Sign In" button on the invitation page
   </Step>
   <Step title="Enter Your Credentials">
-    Use your registered email and password
+    Use your sign up email and password
   </Step>
   <Step title="Complete Sign In">
     You're now logged in to your account
@@ -107,8 +106,8 @@ You have two options to create your account:
 **Option 1: Sign Up with Google**
 
 <Steps>
-  <Step title="Click Register">
-    Select the "Register" button on the invitation page
+  <Step title="Click Sign Up">
+    Select the "Sign Up" button on the invitation page
   </Step>
   <Step title="Click Google Login">
     Select the "Sign up with Google" button
@@ -124,8 +123,8 @@ You have two options to create your account:
 **Option 2: Sign Up with Email & Password**
 
 <Steps>
-  <Step title="Click Register">
-    Select the "Register" button on the invitation page
+  <Step title="Click Sign Up">
+    Select the "Sign Up" button on the invitation page
   </Step>
   <Step title="Create Your Account">
     <ParamField path="email" type="string" required>
@@ -162,7 +161,7 @@ You'll see a table with your pending invitations showing:
 | Column | Description |
 |--------|-------------|
 | **Organization** | Name of the organization inviting you |
-| **Organization Role** | Your assigned role (VIEWER, ADMIN, OWNER) |
+| **Organization Role** | Your assigned role (VIEWER, MEMBER, ADMIN, OWNER) |
 | **Project** | Project name and your project role |
 | **Sent** | When the invitation was created |
 | **Actions** | Accept or Decline buttons |
@@ -234,6 +233,7 @@ You can now:
 | Role | Permissions |
 |------|-------------|
 | **VIEWER** | Read-only access to organization resources |
+| **MEMBER** | Read-only access to organization resources |
 | **ADMIN** | Full access to organization settings, can invite members |
 | **OWNER** | Full control, including billing and license management |
 
@@ -242,8 +242,9 @@ You can now:
 | Role | Permissions |
 |------|-------------|
 | **VIEWER** | Read-only access to project resources |
-| **EDITOR** | Can create and edit agents, tools, datasources |
+| **MEMBER** | Can create and edit agents, tools, datasources |
 | **ADMIN** | Full project control, including member management |
+| **OWNER** | Full project control, including member management |
 
 ---
 

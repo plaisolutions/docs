@@ -29,7 +29,7 @@
             ]
           },
           {
-            "group": "🤖 Agents",
+            "group": "Agents",
             "pages": [
               "agents/what-is-an-agent",
               "agents/configuration",
@@ -39,7 +39,7 @@
             ]
           },
           {
-            "group": "🔧 Tools",
+            "group": "Tools",
             "pages": [
               "tools/what-is-a-tool",
               "tools/agents",
@@ -54,7 +54,7 @@
             ]
           },
           {
-            "group": "🗄️ Datasources",
+            "group": "Datasources",
             "pages": [
               "datasources/what-is-a-datasource",
               "datasources/datasource-types",
@@ -66,7 +66,7 @@
             ]
           },
           {
-            "group": "🔄 Workflows",
+            "group": "Workflows",
             "pages": [
               "workflows/what-is-a-workflow",
               "workflows/execution-engine",
@@ -77,15 +77,15 @@
             ]
           },
           {
-            "group": "📋 Jobs",
+            "group": "Jobs",
             "pages": []
           },
           {
-            "group": "⚡ Triggers",
+            "group": "Triggers",
             "pages": []
           },
           {
-            "group": "📊 Monitor",
+            "group": "Monitor",
             "pages": []
           }
         ]
@@ -112,8 +112,8 @@
     "global": {
       "anchors": [
         {
-          "anchor": "PLai Solutions",
-          "href": "https://plaisolutions.com",
+          "anchor": "Múltiplo",
+          "href": "https://www.multiplo.ai/",
           "icon": "house"
         }
       ]
@@ -134,8 +134,8 @@
   },
   "footer": {
     "socials": {
-      "website": "https://plaisolutions.com",
-      "linkedin": "https://www.linkedin.com/company/plai-solutions"
+      "website": "https://www.multiplo.ai/",
+      "linkedin": "https://www.linkedin.com/company/multiplo"
     }
   },
   "api": {

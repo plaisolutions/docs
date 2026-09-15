@@ -1,7 +1,6 @@
 ---
 title: "Organizations & Projects"
 description: "Understand team structure, workspace management, and roles in PLai Framework"
-icon: "building"
 ---
 
 # Organizations & Projects
@@ -103,6 +102,7 @@ Applied at the organization level:
 |------|--------|-----------|-------------------|-----------------|----------------|
 | **OWNER** | Full access to org + all projects | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Yes |
 | **ADMIN** | Full access to org + all projects | ✅ Yes | ✅ Yes | ❌ No | ❌ No |
+| **MEMBER** | Read-only access to org | ❌ No | ❌ No | ❌ No | ❌ No |
 | **VIEWER** | Read-only access to org | ❌ No | ❌ No | ❌ No | ❌ No |
 
 ### Project Roles
@@ -111,7 +111,9 @@ Applied within individual projects:
 
 | Role | Can View | Can Edit | Can Create | Can Delete | Admin Settings |
 |------|----------|----------|-----------|-----------|-----------------|
-| **EDITOR** | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Yes | ❌ No |
+| **OWNER** | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Yes |
+| **ADMIN** | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Yes |
+| **MEMBER** | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Yes | ❌ No |
 | **VIEWER** | ✅ Yes | ❌ No | ❌ No | ❌ No | ❌ No |
 
 <Tip>
@@ -228,7 +230,7 @@ PROJECT "Support" LEVEL
 ├─ Charlie: (inherited VIEWER)
 │   → Can: View agents and results only
 │
-└─ Diana: EDITOR (added at project level)
+└─ Diana: MEMBER (added at project level)
     → Can: Create and edit agents, run workflows
 ```
 
@@ -236,8 +238,11 @@ PROJECT "Support" LEVEL
 
 - Organization **OWNER** has full access to all projects
 - Organization **ADMIN** has full access to all projects
+- Organization **MEMBER** has read-only access to projects they're in
 - Organization **VIEWER** has read-only access to projects they're in
-- Project **EDITOR** can create and edit resources in that project
+- Project **OWNER** has full access to all project features
+- Project **ADMIN** has full access to all project features
+- Project **MEMBER** can create and edit resources in that project
 - Project **VIEWER** can only read resources in that project
 
 ---
@@ -252,7 +257,7 @@ PROJECT "Support" LEVEL
     Group related work into separate projects (e.g., Support, Analytics, Automations)
   </Card>
   <Card title="Principle of Least Privilege" icon="shield">
-    Grant only the minimum role needed. Use VIEWER as default, EDITOR when needed.
+    Grant only the minimum role needed. Use VIEWER as default, MEMBER when needed.
   </Card>
   <Card title="Regular Audits" icon="audit">
     Periodically review who has access to what and remove unused members.
@@ -271,16 +276,16 @@ Members:
 
 Projects:
 - "Lead Scoring"
-  - Sales Reps: EDITOR (can run lead analyzer)
+  - Sales Reps: MEMBER (can run lead analyzer)
   - Finance Team: VIEWER (can see results)
 
 - "CRM Integration"
-  - Dev Team: EDITOR (can configure)
+  - Dev Team: MEMBER (can configure)
   - Sales Manager: ADMIN (full control)
   - Sales Reps: VIEWER (read-only)
 
 - "Internal Tools"
-  - Dev Team only: EDITOR
+  - Dev Team only: MEMBER
 ```
 
 ---
@@ -315,7 +320,7 @@ Projects:
 
 ✅ **Organizations** - Team containers (one per company/entity)  
 ✅ **Projects** - Isolated workspaces (multiple per organization)  
-✅ **Roles** - Control access (OWNER, ADMIN, VIEWER at org level; EDITOR, VIEWER at project level)  
+✅ **Roles** - Control access (OWNER, ADMIN, VIEWER at org level; MEMBER, VIEWER at project level)  
 ✅ **Invitations** - How members join (email-based)  
 ✅ **Access Control** - Hierarchical (org roles flow down to projects)  
 

@@ -1,7 +1,6 @@
 ---
 title: "Agents, Datasources & Tools"
 description: "Learn the core building blocks for creating AI automation in PLai Framework"
-icon: "robot"
 ---
 
 # Agents, Datasources & Tools
@@ -115,12 +114,6 @@ A **Tool** is an external service or capability that an agent can use.
     - Complex integrations
     
     **Use when:** Building advanced, standardized integrations
-  </Accordion>
-
-  <Accordion title="Code Interpreter">
-    Execute Python code in secure sandboxes.
-    
-    **Use when:** Data processing, calculations, or complex transformations
   </Accordion>
 
   <Accordion title="External Datasource">
@@ -284,7 +277,7 @@ TASK: Process daily sales data
    │             │
    ▼             ▼
 
-TOOL: Code Interpreter    TOOL: Database API
+TOOL: Agent Tool    TOOL: Database API
 (Transform data)          (Load/save data)
    │                          │
    └──────────┬───────────────┘

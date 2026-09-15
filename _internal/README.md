@@ -402,4 +402,4 @@ This documentation is licensed under the MIT License. See the main PLai Framewor
 
 ---
 
-For questions or support, contact the PLai Solutions team at support@plaisolutions.com or join our Discord community.
+For questions or support, contact the PLai Solutions team at support@plaisolutions.com.

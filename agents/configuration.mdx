@@ -761,20 +761,6 @@ After initial vector search, a specialized reranking model re-evaluates the retr
 - ✅ Reduced hallucinations
 - ✅ More relevant context for the agent
 
-**Process:**
-```mermaid
-graph LR
-    A[User Query] --> B[Vector Search]
-    B --> C[Top K Documents]
-    C --> D{Rerank Enabled?}
-    D -->|Yes| E[Reranking Model]
-    D -->|No| F[Direct to Agent]
-    E --> G[Reordered Results]
-    G --> H[Top N Results]
-    H --> I[Agent Response]
-    F --> I
-```
-
 <Warning>
 Reranking adds latency (~100-300ms) and additional costs. Use when accuracy is more important than speed.
 </Warning>
@@ -990,7 +976,6 @@ Tools extend your agent's capabilities beyond conversation. They allow the agent
 
 **Available Tool Types:**
 1. **API Request**: Make HTTP requests to external APIs
-2. **Code Interpreter**: Execute Python code for calculations and data processing
 3. **Web Search (Perplexity AI)**: Search the internet for current information
 4. **External Datasource**: Query external data sources
 5. **Agent Tool**: Call another agent as a tool
@@ -1020,10 +1005,10 @@ When using Google Gemini models, the interface provides **built-in tools** that 
 **Google Built-in Tools Available:**
 
 Google models provide access to built-in tools such as:
-- 🔍 **Google Search**: Real-time web search
-- 📍 **Location Services**: Geographic/location data
-- 🔗 **Link Preview**: Extract information from URLs
-- 📱 **Device Info**: Access to device capabilities
+- **Google Search**: Real-time web search
+- **Location Services**: Geographic/location data
+- **Link Preview**: Extract information from URLs
+- **Device Info**: Access to device capabilities
 - And other Google-native integrations
 
 **How to Configure:**
@@ -1048,7 +1033,6 @@ Google Built-in Tools:
 Custom Tools (from Tools Selection):
 ├─ API Request: ✅ Enabled
 ├─ BigQuery: ✅ Enabled
-└─ Code Interpreter: ✅ Enabled
 
 Result: Agent can use Google Search, Link Preview, 
         plus custom tools (API, BigQuery, Code)
@@ -1106,7 +1090,6 @@ Result: Agent can use Google Search, Link Preview,
   <Tab title="Data Analyst">
     **Enabled Tools:**
     - BigQuery (database queries)
-    - Code Interpreter (data analysis)
     - API Request (fetch external data)
     
     **Max Steps:** 10-15
@@ -1115,8 +1098,8 @@ Result: Agent can use Google Search, Link Preview,
     ```
     User: "Show me sales trends for Q4"
     Step 1: BigQuery → Fetch sales data
-    Step 2: Code Interpreter → Calculate trends
-    Step 3: Code Interpreter → Generate chart
+    Step 2: Agent → Calculate trends
+    Step 3: Agent → Generate chart (JSON Format)
     Step 4: Format and present analysis
     ```
   </Tab>
@@ -1124,7 +1107,6 @@ Result: Agent can use Google Search, Link Preview,
     **Enabled Tools:**
     - Web Search (Perplexity AI)
     - External Datasource (research papers)
-    - Code Interpreter (data processing)
     
     **Max Steps:** 8-12
     
@@ -1133,7 +1115,7 @@ Result: Agent can use Google Search, Link Preview,
     User: "What are the latest developments in quantum computing?"
     Step 1: Web Search → Find recent articles
     Step 2: External Datasource → Search academic papers
-    Step 3: Code Interpreter → Extract key points
+    Step 3: Agent → Extract key points
     Step 4-5: Additional searches for specific topics
     Step 6: Synthesize and summarize findings
     ```

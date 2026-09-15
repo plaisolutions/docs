@@ -146,7 +146,7 @@ icon: "settings"
 
 Use these Mintlify components for rich documentation:
 
-```mdx
+````mdx
 <!-- Card Groups -->
 <CardGroup cols={2}>
   <Card title="Feature A" icon="star">
@@ -217,7 +217,7 @@ const example = "code";
   <br />**Example**: `value`
   <br />**Default**: `default_value`
 </ParamField>
-```
+````
 
 ---
 
