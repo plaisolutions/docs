@@ -8,39 +8,39 @@ Tools are the building blocks that give your agents the ability to interact with
 ## Available Tool Types
 
 <CardGroup cols={2}>
-  <Card title="Agent Tool" icon="bot" href="/tools/agents">
+  <Card title="Agent Tool" href="/tools/agents">
     Trigger another agent as a tool
     <Badge variant="default">Default</Badge>
   </Card>
-  <Card title="Workflow" icon="workflow" href="/tools/workflow">
+  <Card title="Workflow" href="/tools/workflow">
     Run a predefined workflow with custom input
     <Badge variant="default">Default</Badge>
   </Card>
-  <Card title="API Request" icon="cloud" href="/tools/api-requests">
+  <Card title="API Request" href="/tools/api-requests">
     Make HTTP requests to any REST API with full configuration control
     <Badge variant="default">Default</Badge>
   </Card>
-  <Card title="Email" icon="mail" href="/tools/email">
+  <Card title="Email" href="/tools/email">
     Send email messages through configured providers
     <Badge variant="default">Default</Badge>
   </Card>
-  <Card title="Perplexity AI" icon="magnifying-glass" href="/tools/perplexity-ai">
+  <Card title="Perplexity AI" href="/tools/perplexity-ai">
     Web search and research capabilities powered by Perplexity AI
     <Badge variant="pro">Pro</Badge>
   </Card>
-  <Card title="Browser" icon="globe" href="/tools/browser-tool">
+  <Card title="Web Search & Browser" href="/tools/browser-tool">
     Web scraping and browser automation with ScraperAPI integration
     <Badge variant="default">Default</Badge>
   </Card>
-  <Card title="Office Documents" icon="file-text" href="/tools/office-documents">
+  <Card title="Office Documents" href="/tools/office-documents">
     Generate and edit Word, Excel, PowerPoint, and PDF documents
     <Badge variant="default">Default</Badge>
   </Card>
-  <Card title="External Data Source" icon="database" href="/tools/external-datasource">
+  <Card title="External Data Source" href="/tools/external-datasource">
     Connect to external databases and data sources
     <Badge variant="pro">Pro</Badge>
   </Card>
-  <Card title="MCP Server" icon="server" href="/tools/mcp-servers">
+  <Card title="MCP Server" href="/tools/mcp-servers">
     Connect to Model Context Protocol servers for extended functionality
     <Badge variant="preview">Preview</Badge>
   </Card>
@@ -302,26 +302,6 @@ Most tools share these configuration elements:
 - **Monitor Usage**: Track tool usage for unusual activity
 - **Audit Logs**: Maintain logs of all tool interactions
 
-## Performance Optimization
-
-### Caching Strategies
-
-Tools can implement various caching mechanisms:
-
-1. **Agent Request**
-2. **Cache Check**
-   - **Hit** — return the cached result
-   - **Miss** — execute the tool, cache the result, then return the result
-
-### Rate Limiting
-
-Effective rate limiting strategies:
-
-- **Tool-Level Limits**: Per-tool rate limiting
-- **Agent-Level Limits**: Per-agent usage controls
-- **Organization-Level Limits**: Global usage caps
-- **Dynamic Adjustment**: Automatic limit adjustment based on usage
-
 ## Troubleshooting
 
 ### Common Issues
@@ -355,37 +335,6 @@ Effective rate limiting strategies:
     - Implement proper error handling
   </Accordion>
 </AccordionGroup>
-
-## Tool Development
-
-### Custom Tool Creation
-
-While PLai Framework provides built-in tools, you can extend functionality:
-
-1. **MCP Server Development**: Create custom MCP servers for specialized functionality
-2. **API Wrapper Tools**: Build tools that interact with specific APIs
-3. **Data Processing Tools**: Develop tools for custom data transformations
-4. **Integration Tools**: Create tools for enterprise system integration
-
-### Tool Testing
-
-Comprehensive testing ensures tool reliability:
-
-```typescript
-// Example tool test
-describe('API Request Tool', () => {
-  test('should make successful GET request', async () => {
-    const tool = new APIRequestTool(config);
-    const result = await tool.execute({
-      method: 'GET',
-      url: 'https://api.example.com/data'
-    });
-    
-    expect(result.status).toBe(200);
-    expect(result.data).toBeDefined();
-  });
-});
-```
 
 ## Next Steps
 
