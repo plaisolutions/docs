@@ -315,6 +315,17 @@ You can accept invitations at any time. They remain in your pending list until y
     6. Sign in with your new password
   </Accordion>
 
+  <Accordion title="Google shows 'Access blocked' or 'Error 400: invalid_request'">
+    **Cause:** Your email belongs to a Google Workspace domain (for example, a company address) whose administrator restricts third-party apps. Google blocks the sign-in before it reaches PLai, so PLai cannot show its own error message. Personal `@gmail.com` accounts are not affected.
+
+    **Solution:**
+    - Ask your Google Workspace administrator to allow the PLai Framework app. They can do this in the Admin Console under **Security → Access and data control → API controls → Manage Third-Party App Access**.
+    - If you are the administrator, add the PLai Framework OAuth client ID provided by Múltiplo and mark it as trusted.
+    - Alternatively, sign in with email and password if your account was created that way.
+
+    Changes made by an administrator can take a few minutes to a few hours to apply.
+  </Accordion>
+
   <Accordion title="How do I leave an organization?">
     **Note:** Currently, you must contact your organization's OWNER or ADMIN to remove your membership.
   </Accordion>
